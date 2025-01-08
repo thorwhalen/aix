@@ -34,7 +34,7 @@ for _gen_ai_module in genai_modules:
 
 for _model in chat_models.keys():
     # get a version of _model (str) that is a valid python identifier
-    _model_identifier = re.compile('\W+').sub('_', _model)
+    _model_identifier = re.compile(r'\W+').sub('_', _model)
     setattr(chat_models, _model_identifier, _model)
     setattr(chat_funcs, _model_identifier, chat_funcs[_model])
 
