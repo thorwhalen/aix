@@ -1,0 +1,4 @@
+aix.np
+======
+.. automodule:: aix.np
+   :members:

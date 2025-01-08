@@ -1,0 +1,4 @@
+aix.pd
+======
+.. automodule:: aix.pd
+   :members:

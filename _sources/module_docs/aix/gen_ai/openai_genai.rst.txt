@@ -1,0 +1,4 @@
+aix.gen_ai.openai_genai
+=======================
+.. automodule:: aix.gen_ai.openai_genai
+   :members:

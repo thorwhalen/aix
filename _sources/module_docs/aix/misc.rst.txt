@@ -1,0 +1,4 @@
+aix.misc
+========
+.. automodule:: aix.misc
+   :members:
