@@ -45,7 +45,6 @@ chat_funcs['o1-mini']
 
 
 
-
     functools.partial(<function chat at 0x1355f68c0>, model='o1-mini')
 
 

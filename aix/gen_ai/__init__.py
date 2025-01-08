@@ -1,4 +1,6 @@
-"""Generative AI modules."""
+"""
+Generative AI modules.
+"""
 
 import re
 from collections import UserDict
