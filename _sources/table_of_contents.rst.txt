@@ -3,6 +3,7 @@
    :caption: Contents:
 
    module_docs/aix
+   module_docs/aix/contexts
    module_docs/aix/gen_ai
    module_docs/aix/gen_ai/google_genai
    module_docs/aix/gen_ai/openai_genai

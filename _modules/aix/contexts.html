@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.contexts &mdash; aix 0.0.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/np.html">aix.np</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/pd.html">aix.pd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/sk.html">aix.sk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.contexts</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.contexts</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tools to make contexts (knowledge bases for AI agents)&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="n">DFLT_SAVE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/Downloads&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="download_articles">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.download_articles">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">download_articles</span><span class="p">(</span>
+    <span class="n">md_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_SAVE_DIR</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">save_non_pdf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloads articles from the given markdown string and saves them as PDF files.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        md_string (str): The markdown-style string containing titles and URLs.</span>
+<span class="sd">        save_dir (str): The root directory to save the downloaded PDFs. Defaults to &#39;~/Downloads&#39;.</span>
+<span class="sd">        save_non_pdf (bool): Whether to save non-PDF content. Defaults to False.</span>
+<span class="sd">        verbose (bool): Whether to print detailed messages. Defaults to True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list of URLs that failed to download or were invalid PDFs.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; md_string = &#39;&#39;&#39;</span>
+<span class="sd">    ... - **[Valid PDF](https://example.com/file.pdf)**: A valid PDF file.</span>
+<span class="sd">    ... - **[Invalid PDF](https://example.com/file.html)**: An HTML page, not a PDF.</span>
+<span class="sd">    ... &#39;&#39;&#39;  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; download_articles(md_string, save_non_pdf=True)  # doctest: +SKIP</span>
+<span class="sd">    Downloaded: Valid PDF -&gt; ~/Downloads/Valid_PDF.pdf</span>
+<span class="sd">    Skipped (HTML or non-PDF): Invalid PDF from https://example.com/file.html</span>
+<span class="sd">    Non-PDF content saved to: ~/Downloads/Invalid_PDF_non_pdf.html</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Assert the save_dir exists</span>
+    <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">save_dir</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Directory not found: </span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">clog</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Regex to extract titles and URLs from the markdown string</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;- \*\*\[(.*?)\]\((.*?)\)\*\*&quot;</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">md_string</span><span class="p">)</span>
+
+    <span class="n">failed_urls</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">title</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="c1"># Sanitize title to create a valid filename</span>
+        <span class="n">sanitized_title</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\-_\. ]&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sanitized_title</span><span class="si">}</span><span class="s2">.pdf&quot;</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+            <span class="c1"># Check Content-Type header</span>
+            <span class="n">content_type</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;application/pdf&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+                <span class="n">clog</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Skipped (HTML or non-PDF): </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> (Content-Type: </span><span class="si">{</span><span class="n">content_type</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">save_non_pdf</span><span class="p">:</span>
+                    <span class="c1"># Save non-PDF content with a different extension</span>
+                    <span class="n">non_pdf_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sanitized_title</span><span class="si">}</span><span class="s2">_non_pdf.html&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">non_pdf_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
+                            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                    <span class="n">clog</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Non-PDF content saved to: </span><span class="si">{</span><span class="n">non_pdf_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">failed_urls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Verify PDF content by checking the first few bytes</span>
+            <span class="n">first_chunk</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">first_chunk</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;%PDF&#39;</span><span class="p">):</span>
+                <span class="n">clog</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid PDF content: </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">save_non_pdf</span><span class="p">:</span>
+                    <span class="c1"># Save invalid PDF content with a different extension</span>
+                    <span class="n">invalid_pdf_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sanitized_title</span><span class="si">}</span><span class="s2">_invalid.pdf&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">invalid_pdf_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">first_chunk</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
+                            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                    <span class="n">clog</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid PDF content saved to: </span><span class="si">{</span><span class="n">invalid_pdf_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">failed_urls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Save the content as a PDF file</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">first_chunk</span><span class="p">)</span>  <span class="c1"># Write the first chunk already read</span>
+                <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+            <span class="n">clog</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded: </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">clog</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to download </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">failed_urls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">failed_urls</span></div>
+
+
+
+<div class="viewcode-block" id="download_articles_by_section">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.download_articles_by_section">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">download_articles_by_section</span><span class="p">(</span>
+    <span class="n">md_string</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_non_pdf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">section_marker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;###&quot;</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloads articles from a markdown string organized by sections into subdirectories.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        md_string (str): The markdown string with sections and articles.</span>
+<span class="sd">        rootdir (str): The root directory where subdirectories for sections will be created.</span>
+<span class="sd">                       Defaults to &#39;~/Downloads&#39;.</span>
+<span class="sd">        save_non_pdf (bool): Whether to save non-PDF content. Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: A dictionary with section names as keys and lists of failed URLs as values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">rootdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rootdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/Downloads&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Ensure the root directory exists</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Parse sections and their content</span>
+    <span class="n">section_pattern</span> <span class="o">=</span> <span class="n">section_marker</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; (.*?)\n(.*?)(?=\n&quot;</span> <span class="o">+</span> <span class="n">section_marker</span> <span class="o">+</span> <span class="s2">&quot;|\Z)&quot;</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">section_pattern</span><span class="p">,</span> <span class="n">md_string</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+
+    <span class="n">failed_urls_by_section</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">section_title</span><span class="p">,</span> <span class="n">section_content</span> <span class="ow">in</span> <span class="n">sections</span><span class="p">:</span>
+        <span class="c1"># Create a snake-case directory name for the section</span>
+        <span class="n">sanitized_section_title</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\s]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">section_title</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">section_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">sanitized_section_title</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">section_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Processing section: </span><span class="si">{</span><span class="n">section_title</span><span class="si">}</span><span class="s2"> (Directory: </span><span class="si">{</span><span class="n">section_dir</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Download articles for this section</span>
+        <span class="n">failed_urls</span> <span class="o">=</span> <span class="n">download_articles</span><span class="p">(</span>
+            <span class="n">section_content</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">section_dir</span><span class="p">,</span> <span class="n">save_non_pdf</span><span class="o">=</span><span class="n">save_non_pdf</span>
+        <span class="p">)</span>
+        <span class="n">failed_urls_by_section</span><span class="p">[</span><span class="n">section_title</span><span class="p">]</span> <span class="o">=</span> <span class="n">failed_urls</span>
+
+    <span class="k">return</span> <span class="n">failed_urls_by_section</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
