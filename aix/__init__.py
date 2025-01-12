@@ -28,16 +28,19 @@ Choose a chat function and chat with it:
 
 from aix.gen_ai import chat, chat_models, chat_funcs
 
+
+
+
 # TODO: Change this so that there's a load_pkg function that loads the packages dynamically
 #   if and when use wants.
 
-from aix.pd import *
-from aix.np import *
-from aix.sk import *
+# from aix.pd import *
+# from aix.np import *
+# from aix.sk import *
 
-from aix import pd
-from aix import np
-from aix import sk
+# from aix import pd
+# from aix import np
+# from aix import sk
 
 
 #
