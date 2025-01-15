@@ -154,3 +154,194 @@ def download_articles_by_section(
         failed_urls_by_section[section_title] = failed_urls
 
     return failed_urls_by_section
+
+
+def verify_urls(md_string):
+    """
+    Verifies URLs in a markdown string by checking their status codes.
+
+    Args:
+        md_string (str): The markdown string containing URLs.
+
+    Returns:
+        dict: A dictionary with URLs as keys and their status codes as values.
+    """
+    # Regex to extract URLs from the markdown string
+    pattern = r"\[(.*?)\]\((.*?)\)"
+    matches = re.findall(pattern, md_string)
+
+    url_status_codes = {}
+
+    for title, url in matches:
+        try:
+            response = requests.head(url, allow_redirects=True)
+            url_status_codes[url] = response.status_code
+        except Exception as e:
+            url_status_codes[url] = str(e)
+
+    return url_status_codes
+
+
+# --------------------------------------------------------------------------------------
+# Code
+
+from typing import Mapping
+import os
+from typing import Any, Union, Callable
+from dol import store_aggregate, TextFiles, filt_iter, cached_keys
+
+DirectoryPathString = str
+GithubUrl = str
+RegexString = str
+CodeSource = Union[DirectoryPathString, GithubUrl, Mapping]
+
+
+def code_aggregate(md_string):
+    return store_aggregate(md_string.splitlines())
+
+
+def resolve_code_source_dir_path(code_src: CodeSource) -> DirectoryPathString:
+    """
+    Resolves code_src to a directory path string.
+
+    I
+    Args:
+        code_src (Any): The source of the code. Can be
+            a directory path string,
+            a GitHub URL,
+            or an imported package (must contain a __path__ atribute)
+
+    Returns:
+        The resolved directory path.
+
+    Raises:
+        AssertionError: If the resolved path is not a valid directory.
+    """
+    if isinstance(code_src, str):
+        # If it's a string, check if it's a directory
+        if os.path.isdir(code_src):
+            return os.path.abspath(code_src)  # Return absolute path if it's a directory
+        elif '\n' not in code_src and 'github' in code_src:
+            from hubcap import ensure_repo_folder  # pip install hubcap
+
+            # If it's a GitHub URL, download the repository
+            repo_url = code_src
+            repo_path = ensure_repo_folder(repo_url)
+            return repo_path
+        else:
+            raise ValueError(f"Unsupported string format or non-directory: {code_src}")
+    # If it's not a string, check for __path__ attribute
+    elif hasattr(code_src, "__path__"):
+        path_list = list(code_src.__path__)
+        assert len(path_list) == 1, (
+            f"The __path__ attribute should contain exactly one path, "
+            f"but found: {path_list}"
+        )
+        return os.path.abspath(path_list[0])
+
+    # If no valid resolution was found
+    raise ValueError(
+        f"Unable to resolve code_src to a valid directory path: {code_src}"
+    )
+
+
+def resolve_code_source(
+    code_src: CodeSource, keys_filt: Callable = lambda x: x.endswith('.py')
+) -> Mapping:
+    """
+    Will resolve code_src to a Mapping whose values are the code strings
+
+    Args:
+        code_src: The source of the code. Can be an explicit `Mapping`,
+            a directory path string,
+            a GitHub URL,
+            or an imported package (must contain a __path__ atribute)
+        keys_filt (Callable): A function to filter the keys. Defaults to lambda x: x.endswith('.py').
+
+    """
+    if isinstance(code_src, Mapping):
+        return code_src
+    else:
+        code_src_rootdir = resolve_code_source_dir_path(code_src)
+        return cached_keys(
+            filt_iter(TextFiles(code_src_rootdir), filt=keys_filt), keys_cache=sorted
+        )
+
+
+def identity(x):
+    return x
+
+
+def aggregate_code(
+    code_src: CodeSource,
+    *,
+    egress: Union[Callable, str] = lambda x: x,
+    kv_to_item=lambda k, v: f"## {k}\n\n```python\n{v.strip()}\n```",
+    **store_aggregate_kwargs,
+) -> Any:
+    """
+    Aggregates all code segments from the given code source (folder, github url, store).
+
+    Args:
+        code_src (dict): A dictionary where keys are references to the code (e.g., paths)
+                         and values are code snippets or content.
+        egress (Union[Callable, str]): A function to apply to the aggregate before returning.
+                                       If a string, the aggregate will be saved to the file.
+        kv_to_item (Callable): A function that converts a key-value pairs to the
+                               items that should be aggregated.
+        **store_aggregate_kwargs: Additional keyword arguments to pass to store_aggregate.
+
+    See dol.store_aggregate for more details.
+
+    Returns:
+        Any: The aggregated code content, or the result of the egress function.
+
+    Example:
+
+    >>> code_src = {
+    ...     'module1.py': 'def foo(): pass',
+    ...     'module2.py': 'def bar(): pass',
+    ...     'module3.py': 'class Baz: pass',
+    ... }
+    >>> print(aggregate_code(code_src))
+    ## module1.py
+    <BLANKLINE>
+    ```python
+    def foo(): pass
+    ```
+    <BLANKLINE>
+    ## module2.py
+    <BLANKLINE>
+    ```python
+    def bar(): pass
+    ```
+    <BLANKLINE>
+    ## module3.py
+    <BLANKLINE>
+    ```python
+    class Baz: pass
+    ```
+
+    Here, let's input an imported (third party) package, and have the function save the
+    result to a temporary file
+
+    >>> from tempfile import NamedTemporaryFile
+    >>> temp_file_name = NamedTemporaryFile().name
+    >>> import aix
+    >>> _  = aggregate_code(aix, egress=temp_file_name)
+    >>> print(open(temp_file_name).read(25))
+    ## __init__.py
+    <BLANKLINE>
+    ```python
+
+    If you have hubcap installed, you can even get an aggregate of code from a GitHub
+    repository.
+
+    >>> string = aggregate_code('https://github.com/thorwhalen/aix')  # doctest: +SKIP
+
+
+    """
+    code_store = resolve_code_source(code_src)
+    return store_aggregate(
+        code_store, egress=egress, kv_to_item=kv_to_item, **store_aggregate_kwargs
+    )

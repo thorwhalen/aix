@@ -27,9 +27,7 @@ Choose a chat function and chat with it:
 """
 
 from aix.gen_ai import chat, chat_models, chat_funcs
-
-
-
+from aix import contexts
 
 # TODO: Change this so that there's a load_pkg function that loads the packages dynamically
 #   if and when use wants.
