@@ -51,8 +51,12 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../aix.html">aix</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aix.contexts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.aggregate_code"><code class="docutils literal notranslate"><span class="pre">aggregate_code()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.download_articles"><code class="docutils literal notranslate"><span class="pre">download_articles()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.download_articles_by_section"><code class="docutils literal notranslate"><span class="pre">download_articles_by_section()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.resolve_code_source"><code class="docutils literal notranslate"><span class="pre">resolve_code_source()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.resolve_code_source_dir_path"><code class="docutils literal notranslate"><span class="pre">resolve_code_source_dir_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.verify_urls"><code class="docutils literal notranslate"><span class="pre">verify_urls()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="gen_ai.html">aix.gen_ai</a></li>
@@ -92,6 +96,77 @@
   <section id="module-aix.contexts">
 <span id="aix-contexts"></span><h1>aix.contexts<a class="headerlink" href="#module-aix.contexts" title="Link to this heading"></a></h1>
 <p>Tools to make contexts (knowledge bases for AI agents)</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.aggregate_code">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">aggregate_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code_src:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.Mapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">egress:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kv_to_item=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**store_aggregate_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#aggregate_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.aggregate_code" title="Link to this definition"></a></dt>
+<dd><p>Aggregates all code segments from the given code source (folder, github url, store).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>code_src</strong> (<em>dict</em>) – A dictionary where keys are references to the code (e.g., paths)
+and values are code snippets or content.</p></li>
+<li><p><strong>egress</strong> (<em>Union</em><em>[</em><em>Callable</em><em>, </em><em>str</em><em>]</em>) – A function to apply to the aggregate before returning.
+If a string, the aggregate will be saved to the file.</p></li>
+<li><p><strong>kv_to_item</strong> (<em>Callable</em>) – A function that converts a key-value pairs to the
+items that should be aggregated.</p></li>
+<li><p><strong>**store_aggregate_kwargs</strong> – Additional keyword arguments to pass to store_aggregate.</p></li>
+</ul>
+</dd>
+</dl>
+<p>See dol.store_aggregate for more details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The aggregated code content, or the result of the egress function.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">code_src</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">&#39;module1.py&#39;</span><span class="p">:</span> <span class="s1">&#39;def foo(): pass&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;module2.py&#39;</span><span class="p">:</span> <span class="s1">&#39;def bar(): pass&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;module3.py&#39;</span><span class="p">:</span> <span class="s1">&#39;class Baz: pass&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">aggregate_code</span><span class="p">(</span><span class="n">code_src</span><span class="p">))</span>
+<span class="go">## module1.py</span>
+
+<span class="go">```python</span>
+<span class="go">def foo(): pass</span>
+<span class="go">```</span>
+
+<span class="go">## module2.py</span>
+
+<span class="go">```python</span>
+<span class="go">def bar(): pass</span>
+<span class="go">```</span>
+
+<span class="go">## module3.py</span>
+
+<span class="go">```python</span>
+<span class="go">class Baz: pass</span>
+<span class="go">```</span>
+</pre></div>
+</div>
+<p>Here, let’s input an imported (third party) package, and have the function save the
+result to a temporary file</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tempfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTemporaryFile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp_file_name</span> <span class="o">=</span> <span class="n">NamedTemporaryFile</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">aix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span>  <span class="o">=</span> <span class="n">aggregate_code</span><span class="p">(</span><span class="n">aix</span><span class="p">,</span> <span class="n">egress</span><span class="o">=</span><span class="n">temp_file_name</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">temp_file_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">25</span><span class="p">))</span>
+<span class="go">## __init__.py</span>
+
+<span class="go">```python</span>
+</pre></div>
+</div>
+<p>If you have hubcap installed, you can even get an aggregate of code from a GitHub
+repository.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="n">aggregate_code</span><span class="p">(</span><span class="s1">&#39;https://github.com/thorwhalen/aix&#39;</span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.contexts.download_articles">
 <span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">download_articles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'/home/runner/Downloads'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_non_pdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#download_articles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.download_articles" title="Link to this definition"></a></dt>
@@ -140,6 +215,61 @@ Defaults to ‘~/Downloads’.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A dictionary with section names as keys and lists of failed URLs as values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.resolve_code_source">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">resolve_code_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code_src:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.Mapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_filt:</span> <span class="pre">~typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Mapping</span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#resolve_code_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.resolve_code_source" title="Link to this definition"></a></dt>
+<dd><p>Will resolve code_src to a Mapping whose values are the code strings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>code_src</strong> – The source of the code. Can be an explicit <cite>Mapping</cite>,
+a directory path string,
+a GitHub URL,
+or an imported package (must contain a __path__ atribute)</p></li>
+<li><p><strong>keys_filt</strong> (<em>Callable</em>) – A function to filter the keys. Defaults to lambda x: x.endswith(‘.py’).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.resolve_code_source_dir_path">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">resolve_code_source_dir_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code_src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Mapping</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#resolve_code_source_dir_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.resolve_code_source_dir_path" title="Link to this definition"></a></dt>
+<dd><p>Resolves code_src to a directory path string.</p>
+<p>I
+:param code_src: The source of the code. Can be</p>
+<blockquote>
+<div><p>a directory path string,
+a GitHub URL,
+or an imported package (must contain a __path__ atribute)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The resolved directory path.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If the resolved path is not a valid directory.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.verify_urls">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">verify_urls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#verify_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.verify_urls" title="Link to this definition"></a></dt>
+<dd><p>Verifies URLs in a markdown string by checking their status codes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>md_string</strong> (<em>str</em>) – The markdown string containing URLs.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with URLs as keys and their status codes as values.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>

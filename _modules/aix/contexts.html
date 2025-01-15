@@ -245,6 +245,209 @@
 
     <span class="k">return</span> <span class="n">failed_urls_by_section</span></div>
 
+
+
+<div class="viewcode-block" id="verify_urls">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.verify_urls">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">verify_urls</span><span class="p">(</span><span class="n">md_string</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Verifies URLs in a markdown string by checking their status codes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        md_string (str): The markdown string containing URLs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: A dictionary with URLs as keys and their status codes as values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Regex to extract URLs from the markdown string</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\[(.*?)\]\((.*?)\)&quot;</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">md_string</span><span class="p">)</span>
+
+    <span class="n">url_status_codes</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">title</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">url_status_codes</span><span class="p">[</span><span class="n">url</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">url_status_codes</span><span class="p">[</span><span class="n">url</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">url_status_codes</span></div>
+
+
+
+<span class="c1"># --------------------------------------------------------------------------------------</span>
+<span class="c1"># Code</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">store_aggregate</span><span class="p">,</span> <span class="n">TextFiles</span><span class="p">,</span> <span class="n">filt_iter</span><span class="p">,</span> <span class="n">cached_keys</span>
+
+<span class="n">DirectoryPathString</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">GithubUrl</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">RegexString</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">CodeSource</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">DirectoryPathString</span><span class="p">,</span> <span class="n">GithubUrl</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">code_aggregate</span><span class="p">(</span><span class="n">md_string</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">store_aggregate</span><span class="p">(</span><span class="n">md_string</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="resolve_code_source_dir_path">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.resolve_code_source_dir_path">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_code_source_dir_path</span><span class="p">(</span><span class="n">code_src</span><span class="p">:</span> <span class="n">CodeSource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DirectoryPathString</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Resolves code_src to a directory path string.</span>
+
+<span class="sd">    I</span>
+<span class="sd">    Args:</span>
+<span class="sd">        code_src (Any): The source of the code. Can be</span>
+<span class="sd">            a directory path string,</span>
+<span class="sd">            a GitHub URL,</span>
+<span class="sd">            or an imported package (must contain a __path__ atribute)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The resolved directory path.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        AssertionError: If the resolved path is not a valid directory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">code_src</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># If it&#39;s a string, check if it&#39;s a directory</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">code_src</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">code_src</span><span class="p">)</span>  <span class="c1"># Return absolute path if it&#39;s a directory</span>
+        <span class="k">elif</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">code_src</span> <span class="ow">and</span> <span class="s1">&#39;github&#39;</span> <span class="ow">in</span> <span class="n">code_src</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">hubcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">ensure_repo_folder</span>  <span class="c1"># pip install hubcap</span>
+
+            <span class="c1"># If it&#39;s a GitHub URL, download the repository</span>
+            <span class="n">repo_url</span> <span class="o">=</span> <span class="n">code_src</span>
+            <span class="n">repo_path</span> <span class="o">=</span> <span class="n">ensure_repo_folder</span><span class="p">(</span><span class="n">repo_url</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">repo_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported string format or non-directory: </span><span class="si">{</span><span class="n">code_src</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># If it&#39;s not a string, check for __path__ attribute</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">code_src</span><span class="p">,</span> <span class="s2">&quot;__path__&quot;</span><span class="p">):</span>
+        <span class="n">path_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">code_src</span><span class="o">.</span><span class="n">__path__</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">path_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The __path__ attribute should contain exactly one path, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;but found: </span><span class="si">{</span><span class="n">path_list</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># If no valid resolution was found</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Unable to resolve code_src to a valid directory path: </span><span class="si">{</span><span class="n">code_src</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="resolve_code_source">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.resolve_code_source">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_code_source</span><span class="p">(</span>
+    <span class="n">code_src</span><span class="p">:</span> <span class="n">CodeSource</span><span class="p">,</span> <span class="n">keys_filt</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Will resolve code_src to a Mapping whose values are the code strings</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        code_src: The source of the code. Can be an explicit `Mapping`,</span>
+<span class="sd">            a directory path string,</span>
+<span class="sd">            a GitHub URL,</span>
+<span class="sd">            or an imported package (must contain a __path__ atribute)</span>
+<span class="sd">        keys_filt (Callable): A function to filter the keys. Defaults to lambda x: x.endswith(&#39;.py&#39;).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">code_src</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">code_src</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">code_src_rootdir</span> <span class="o">=</span> <span class="n">resolve_code_source_dir_path</span><span class="p">(</span><span class="n">code_src</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cached_keys</span><span class="p">(</span>
+            <span class="n">filt_iter</span><span class="p">(</span><span class="n">TextFiles</span><span class="p">(</span><span class="n">code_src_rootdir</span><span class="p">),</span> <span class="n">filt</span><span class="o">=</span><span class="n">keys_filt</span><span class="p">),</span> <span class="n">keys_cache</span><span class="o">=</span><span class="nb">sorted</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">identity</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+
+<div class="viewcode-block" id="aggregate_code">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.aggregate_code">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">aggregate_code</span><span class="p">(</span>
+    <span class="n">code_src</span><span class="p">:</span> <span class="n">CodeSource</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">egress</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+    <span class="n">kv_to_item</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;## </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">```python</span><span class="se">\n</span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">```&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">store_aggregate_kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Aggregates all code segments from the given code source (folder, github url, store).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        code_src (dict): A dictionary where keys are references to the code (e.g., paths)</span>
+<span class="sd">                         and values are code snippets or content.</span>
+<span class="sd">        egress (Union[Callable, str]): A function to apply to the aggregate before returning.</span>
+<span class="sd">                                       If a string, the aggregate will be saved to the file.</span>
+<span class="sd">        kv_to_item (Callable): A function that converts a key-value pairs to the</span>
+<span class="sd">                               items that should be aggregated.</span>
+<span class="sd">        **store_aggregate_kwargs: Additional keyword arguments to pass to store_aggregate.</span>
+
+<span class="sd">    See dol.store_aggregate for more details.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Any: The aggregated code content, or the result of the egress function.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; code_src = {</span>
+<span class="sd">    ...     &#39;module1.py&#39;: &#39;def foo(): pass&#39;,</span>
+<span class="sd">    ...     &#39;module2.py&#39;: &#39;def bar(): pass&#39;,</span>
+<span class="sd">    ...     &#39;module3.py&#39;: &#39;class Baz: pass&#39;,</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; print(aggregate_code(code_src))</span>
+<span class="sd">    ## module1.py</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+<span class="sd">    ```python</span>
+<span class="sd">    def foo(): pass</span>
+<span class="sd">    ```</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+<span class="sd">    ## module2.py</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+<span class="sd">    ```python</span>
+<span class="sd">    def bar(): pass</span>
+<span class="sd">    ```</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+<span class="sd">    ## module3.py</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+<span class="sd">    ```python</span>
+<span class="sd">    class Baz: pass</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    Here, let&#39;s input an imported (third party) package, and have the function save the</span>
+<span class="sd">    result to a temporary file</span>
+
+<span class="sd">    &gt;&gt;&gt; from tempfile import NamedTemporaryFile</span>
+<span class="sd">    &gt;&gt;&gt; temp_file_name = NamedTemporaryFile().name</span>
+<span class="sd">    &gt;&gt;&gt; import aix</span>
+<span class="sd">    &gt;&gt;&gt; _  = aggregate_code(aix, egress=temp_file_name)</span>
+<span class="sd">    &gt;&gt;&gt; print(open(temp_file_name).read(25))</span>
+<span class="sd">    ## __init__.py</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+<span class="sd">    ```python</span>
+
+<span class="sd">    If you have hubcap installed, you can even get an aggregate of code from a GitHub</span>
+<span class="sd">    repository.</span>
+
+<span class="sd">    &gt;&gt;&gt; string = aggregate_code(&#39;https://github.com/thorwhalen/aix&#39;)  # doctest: +SKIP</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">code_store</span> <span class="o">=</span> <span class="n">resolve_code_source</span><span class="p">(</span><span class="n">code_src</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">store_aggregate</span><span class="p">(</span>
+        <span class="n">code_store</span><span class="p">,</span> <span class="n">egress</span><span class="o">=</span><span class="n">egress</span><span class="p">,</span> <span class="n">kv_to_item</span><span class="o">=</span><span class="n">kv_to_item</span><span class="p">,</span> <span class="o">**</span><span class="n">store_aggregate_kwargs</span>
+    <span class="p">)</span></div>
+
 </pre></div>
 
            </div>
