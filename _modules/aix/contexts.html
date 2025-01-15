@@ -281,6 +281,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">store_aggregate</span><span class="p">,</span> <span class="n">TextFiles</span><span class="p">,</span> <span class="n">filt_iter</span><span class="p">,</span> <span class="n">cached_keys</span>
 
@@ -290,8 +291,16 @@
 <span class="n">CodeSource</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">DirectoryPathString</span><span class="p">,</span> <span class="n">GithubUrl</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">]</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">code_aggregate</span><span class="p">(</span><span class="n">md_string</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">store_aggregate</span><span class="p">(</span><span class="n">md_string</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+<div class="viewcode-block" id="is_local_pkg_name">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.is_local_pkg_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_local_pkg_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if and only if name is the name of a local package.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
 
 
 <div class="viewcode-block" id="resolve_code_source_dir_path">
@@ -324,10 +333,12 @@
             <span class="n">repo_url</span> <span class="o">=</span> <span class="n">code_src</span>
             <span class="n">repo_path</span> <span class="o">=</span> <span class="n">ensure_repo_folder</span><span class="p">(</span><span class="n">repo_url</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">repo_path</span>
+        <span class="k">elif</span> <span class="n">is_local_pkg_name</span><span class="p">(</span><span class="n">code_src</span><span class="p">):</span>
+            <span class="n">code_src</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">code_src</span><span class="p">)</span>  <span class="c1"># import the package</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported string format or non-directory: </span><span class="si">{</span><span class="n">code_src</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="c1"># If it&#39;s not a string, check for __path__ attribute</span>
-    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">code_src</span><span class="p">,</span> <span class="s2">&quot;__path__&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">code_src</span><span class="p">,</span> <span class="s2">&quot;__path__&quot;</span><span class="p">):</span>
         <span class="n">path_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">code_src</span><span class="o">.</span><span class="n">__path__</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">path_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;The __path__ attribute should contain exactly one path, &quot;</span>
@@ -372,9 +383,9 @@
     <span class="k">return</span> <span class="n">x</span>
 
 
-<div class="viewcode-block" id="aggregate_code">
-<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.aggregate_code">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">aggregate_code</span><span class="p">(</span>
+<div class="viewcode-block" id="code_aggregate">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.code_aggregate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">code_aggregate</span><span class="p">(</span>
     <span class="n">code_src</span><span class="p">:</span> <span class="n">CodeSource</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">egress</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
@@ -383,6 +394,9 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Aggregates all code segments from the given code source (folder, github url, store).</span>
+
+<span class="sd">    This is useful when you want to use AI to search and respond to questions about a</span>
+<span class="sd">    specific code base.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        code_src (dict): A dictionary where keys are references to the code (e.g., paths)</span>
@@ -405,7 +419,7 @@
 <span class="sd">    ...     &#39;module2.py&#39;: &#39;def bar(): pass&#39;,</span>
 <span class="sd">    ...     &#39;module3.py&#39;: &#39;class Baz: pass&#39;,</span>
 <span class="sd">    ... }</span>
-<span class="sd">    &gt;&gt;&gt; print(aggregate_code(code_src))</span>
+<span class="sd">    &gt;&gt;&gt; print(code_aggregate(code_src))</span>
 <span class="sd">    ## module1.py</span>
 <span class="sd">    &lt;BLANKLINE&gt;</span>
 <span class="sd">    ```python</span>
@@ -430,16 +444,19 @@
 <span class="sd">    &gt;&gt;&gt; from tempfile import NamedTemporaryFile</span>
 <span class="sd">    &gt;&gt;&gt; temp_file_name = NamedTemporaryFile().name</span>
 <span class="sd">    &gt;&gt;&gt; import aix</span>
-<span class="sd">    &gt;&gt;&gt; _  = aggregate_code(aix, egress=temp_file_name)</span>
-<span class="sd">    &gt;&gt;&gt; print(open(temp_file_name).read(25))</span>
+<span class="sd">    &gt;&gt;&gt; _  = code_aggregate(aix, egress=temp_file_name)</span>
+<span class="sd">    &gt;&gt;&gt; print(open(temp_file_name).read(15))</span>
 <span class="sd">    ## __init__.py</span>
 <span class="sd">    &lt;BLANKLINE&gt;</span>
-<span class="sd">    ```python</span>
+
+<span class="sd">    Tip: You can also import directly from the name (string) of the package by doing</span>
+<span class="sd">    `code_aggregate(__import__(&#39;aix&#39;))` or more robustly,</span>
+<span class="sd">    `importlib.import_module(&#39;aix&#39;)`.</span>
 
 <span class="sd">    If you have hubcap installed, you can even get an aggregate of code from a GitHub</span>
 <span class="sd">    repository.</span>
 
-<span class="sd">    &gt;&gt;&gt; string = aggregate_code(&#39;https://github.com/thorwhalen/aix&#39;)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; string = code_aggregate(&#39;https://github.com/thorwhalen/aix&#39;)  # doctest: +SKIP</span>
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
