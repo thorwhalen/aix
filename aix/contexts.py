@@ -187,6 +187,7 @@ def verify_urls(md_string):
 
 from typing import Mapping
 import os
+import importlib
 from typing import Any, Union, Callable
 from dol import store_aggregate, TextFiles, filt_iter, cached_keys
 
@@ -196,8 +197,13 @@ RegexString = str
 CodeSource = Union[DirectoryPathString, GithubUrl, Mapping]
 
 
-def code_aggregate(md_string):
-    return store_aggregate(md_string.splitlines())
+def is_local_pkg_name(name: str) -> bool:
+    """Returns True if and only if name is the name of a local package."""
+    try:
+        importlib.import_module(name)
+        return True
+    except ImportError:
+        return False
 
 
 def resolve_code_source_dir_path(code_src: CodeSource) -> DirectoryPathString:
@@ -228,10 +234,12 @@ def resolve_code_source_dir_path(code_src: CodeSource) -> DirectoryPathString:
             repo_url = code_src
             repo_path = ensure_repo_folder(repo_url)
             return repo_path
+        elif is_local_pkg_name(code_src):
+            code_src = importlib.import_module(code_src)  # import the package
         else:
             raise ValueError(f"Unsupported string format or non-directory: {code_src}")
     # If it's not a string, check for __path__ attribute
-    elif hasattr(code_src, "__path__"):
+    if hasattr(code_src, "__path__"):
         path_list = list(code_src.__path__)
         assert len(path_list) == 1, (
             f"The __path__ attribute should contain exactly one path, "
@@ -272,7 +280,7 @@ def identity(x):
     return x
 
 
-def aggregate_code(
+def code_aggregate(
     code_src: CodeSource,
     *,
     egress: Union[Callable, str] = lambda x: x,
@@ -281,6 +289,9 @@ def aggregate_code(
 ) -> Any:
     """
     Aggregates all code segments from the given code source (folder, github url, store).
+
+    This is useful when you want to use AI to search and respond to questions about a
+    specific code base.
 
     Args:
         code_src (dict): A dictionary where keys are references to the code (e.g., paths)
@@ -303,7 +314,7 @@ def aggregate_code(
     ...     'module2.py': 'def bar(): pass',
     ...     'module3.py': 'class Baz: pass',
     ... }
-    >>> print(aggregate_code(code_src))
+    >>> print(code_aggregate(code_src))
     ## module1.py
     <BLANKLINE>
     ```python
@@ -328,16 +339,19 @@ def aggregate_code(
     >>> from tempfile import NamedTemporaryFile
     >>> temp_file_name = NamedTemporaryFile().name
     >>> import aix
-    >>> _  = aggregate_code(aix, egress=temp_file_name)
-    >>> print(open(temp_file_name).read(25))
+    >>> _  = code_aggregate(aix, egress=temp_file_name)
+    >>> print(open(temp_file_name).read(15))
     ## __init__.py
     <BLANKLINE>
-    ```python
+
+    Tip: You can also import directly from the name (string) of the package by doing
+    `code_aggregate(__import__('aix'))` or more robustly,
+    `importlib.import_module('aix')`.
 
     If you have hubcap installed, you can even get an aggregate of code from a GitHub
     repository.
 
-    >>> string = aggregate_code('https://github.com/thorwhalen/aix')  # doctest: +SKIP
+    >>> string = code_aggregate('https://github.com/thorwhalen/aix')  # doctest: +SKIP
 
 
     """
