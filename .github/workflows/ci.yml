@@ -64,6 +64,14 @@ jobs:
       - name: Format Source Code
         uses: i2mint/isee/actions/format-source-code@master
 
+      # - name: Update version number
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip -q install axblack twine wads isee
+      #     isee install-requires
+      #     export VERSION=$(isee gen-semver)
+      #     echo "VERSION=$VERSION" >> $GITHUB_ENV
+      #     isee update-setup-cfg
       - name: Update Version Number
         uses: i2mint/isee/actions/bump-version-number@master
 
