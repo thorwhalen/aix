@@ -1,4 +1,90 @@
-"""Tools to make contexts (knowledge bases for AI agents)"""
+"""
+Tools to make contexts (knowledge bases for AI agents)
+
+Examples:
+
+Download all articles from a markdown string and save them as PDF files:
+
+>>> download_articles(md_string)  # doctest: +SKIP
+
+Verify URLs in a markdown string by checking their status codes 
+(useful when trying to verify if AI hallucinated the urls)
+
+>>> verify_urls(md_string)  # doctest: +SKIP
+
+Make an md file with all the code in a directory:
+
+>>> md_string = code_aggregate(package_or_folder_or_github_url)  # doctest: +SKIP
+
+"""
+
+# --------------------------------------------------------------------------------------
+# General utilities
+
+from functools import partial
+from pathlib import Path
+from dol import written_key
+
+
+def save_to_file_and_return_file(obj=None, *, encoder=lambda x: x, rootdir=None):
+    """
+    Save `encoder(obj)` to a file using a random name in `rootdir` (or a temp directory if not provided).
+    Returns the full path to the saved file.
+    If `obj` is None, returns a partial function with preconfigured `encoder` and
+    `rootdir`.
+
+    :param obj: The object to save. If None, return a partial function.
+    :param encoder: A function to encode the object into text or bytes. Defaults to identity.
+    :param rootdir: Directory where the file will be saved. Uses a temporary directory if None.
+
+    :return: Full path to the saved file, or a partial function if `obj` is None.
+
+    >>> from pathlib import Path
+    >>> filepath = save_to_file_and_return_file("hello world")
+    >>> import os
+    >>> Path(filepath).read_text()
+    'hello world'
+
+    The default encoder is identity, so you can save binary data as well:
+
+    >>> filepath = save_to_file_and_return_file(b"binary data", encoder=lambda x: x)
+    >>> Path(filepath).read_bytes()
+    b'binary data'
+
+    But when your object is neither text nor bytes, you can specify a custom encoder
+    that transforms your object into text or bytes.
+    Also, see how if you don't specify the obj to save, you get a partial function that
+    you can use later. This is useful when you want to save many objects with the same
+    encoder.
+
+    See below how to make a json_save_and_get_path
+
+    >>> import json
+    >>> json_save_and_get_path = save_to_file_and_return_file(encoder=json.dumps)
+    >>> filepath = json_save_and_get_path({"key": "value"})
+    >>> json.loads(Path(filepath).read_text())
+    {'key': 'value'}
+
+    """
+    if obj is None:
+        return partial(save_to_file_and_return_file, encoder=encoder, rootdir=rootdir)
+
+    writer = lambda obj, key: (
+        Path(key).write_bytes(obj)
+        if isinstance(obj, bytes)
+        else Path(key).write_text(obj)
+    )
+    return written_key(encoder(obj), writer=writer, key=None)
+
+
+# --------------------------------------------------------------------------------------
+# Download articles from a markdown string and save them as PDF files
+
+# TODO: Make download_articles more general:
+#       - Allowed file types should be handled by plugin dependency injection
+#       - There should be a separate title/url extractor that can be passed in
+#       - When title is missing, some url_to_filenae should be used (see graze)?
+#       - download_articles_by_section should be merged with download_articles
 
 import os
 import re
@@ -36,6 +122,13 @@ def download_articles(
     Downloaded: Valid PDF -> ~/Downloads/Valid_PDF.pdf
     Skipped (HTML or non-PDF): Invalid PDF from https://example.com/file.html
     Non-PDF content saved to: ~/Downloads/Invalid_PDF_non_pdf.html
+
+    Tips:
+
+    - When you knowledge base will have a lot of files, some AI systems have a hard time
+        processing the large number of files. In such cases, it might be better to
+        aggregate many files into a single file. See pdfdol.concat_pdfs to do this.
+
 
     """
     # Assert the save_dir exists
@@ -115,6 +208,9 @@ def download_articles_by_section(
 ):
     """
     Downloads articles from a markdown string organized by sections into subdirectories.
+
+    This is useful, for example, when you have a large knowledge base and you want to
+    organize of aggregate the articles by sections.
 
     Args:
         md_string (str): The markdown string with sections and articles.
