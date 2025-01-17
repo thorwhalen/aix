@@ -57,6 +57,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.is_local_pkg_name"><code class="docutils literal notranslate"><span class="pre">is_local_pkg_name()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.resolve_code_source"><code class="docutils literal notranslate"><span class="pre">resolve_code_source()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.resolve_code_source_dir_path"><code class="docutils literal notranslate"><span class="pre">resolve_code_source_dir_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.save_to_file_and_return_file"><code class="docutils literal notranslate"><span class="pre">save_to_file_and_return_file()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.verify_urls"><code class="docutils literal notranslate"><span class="pre">verify_urls()</span></code></a></li>
 </ul>
 </li>
@@ -97,6 +98,20 @@
   <section id="module-aix.contexts">
 <span id="aix-contexts"></span><h1>aix.contexts<a class="headerlink" href="#module-aix.contexts" title="Link to this heading"></a></h1>
 <p>Tools to make contexts (knowledge bases for AI agents)</p>
+<p>Examples:</p>
+<p>Download all articles from a markdown string and save them as PDF files:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">download_articles</span><span class="p">(</span><span class="n">md_string</span><span class="p">)</span>  
+</pre></div>
+</div>
+<p>Verify URLs in a markdown string by checking their status codes
+(useful when trying to verify if AI hallucinated the urls)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">verify_urls</span><span class="p">(</span><span class="n">md_string</span><span class="p">)</span>  
+</pre></div>
+</div>
+<p>Make an md file with all the code in a directory:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">md_string</span> <span class="o">=</span> <span class="n">code_aggregate</span><span class="p">(</span><span class="n">package_or_folder_or_github_url</span><span class="p">)</span>  
+</pre></div>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.contexts.code_aggregate">
 <span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">code_aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code_src:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.Mapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">egress:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kv_to_item=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**store_aggregate_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#code_aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.code_aggregate" title="Link to this definition"></a></dt>
@@ -202,12 +217,23 @@ repository.</p>
 <span class="go">Non-PDF content saved to: ~/Downloads/Invalid_PDF_non_pdf.html</span>
 </pre></div>
 </div>
+<p>Tips:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>When you knowledge base will have a lot of files, some AI systems have a hard time</dt><dd><p>processing the large number of files. In such cases, it might be better to
+aggregate many files into a single file. See pdfdol.concat_pdfs to do this.</p>
+</dd>
+</dl>
+</li>
+</ul>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.contexts.download_articles_by_section">
 <span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">download_articles_by_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_non_pdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_marker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'###'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#download_articles_by_section"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.download_articles_by_section" title="Link to this definition"></a></dt>
 <dd><p>Downloads articles from a markdown string organized by sections into subdirectories.</p>
+<p>This is useful, for example, when you have a large knowledge base and you want to
+organize of aggregate the articles by sections.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -268,6 +294,53 @@ or an imported package (must contain a __path__ atribute)</p>
 <dd class="field-even"><p><strong>AssertionError</strong> – If the resolved path is not a valid directory.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.save_to_file_and_return_file">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">save_to_file_and_return_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#save_to_file_and_return_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.save_to_file_and_return_file" title="Link to this definition"></a></dt>
+<dd><p>Save <cite>encoder(obj)</cite> to a file using a random name in <cite>rootdir</cite> (or a temp directory if not provided).
+Returns the full path to the saved file.
+If <cite>obj</cite> is None, returns a partial function with preconfigured <cite>encoder</cite> and
+<cite>rootdir</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – The object to save. If None, return a partial function.</p></li>
+<li><p><strong>encoder</strong> – A function to encode the object into text or bytes. Defaults to identity.</p></li>
+<li><p><strong>rootdir</strong> – Directory where the file will be saved. Uses a temporary directory if None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Full path to the saved file, or a partial function if <cite>obj</cite> is None.</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="n">save_to_file_and_return_file</span><span class="p">(</span><span class="s2">&quot;hello world&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+<span class="go">&#39;hello world&#39;</span>
+</pre></div>
+</div>
+<p>The default encoder is identity, so you can save binary data as well:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="n">save_to_file_and_return_file</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;binary data&quot;</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+<span class="go">b&#39;binary data&#39;</span>
+</pre></div>
+</div>
+<p>But when your object is neither text nor bytes, you can specify a custom encoder
+that transforms your object into text or bytes.
+Also, see how if you don’t specify the obj to save, you get a partial function that
+you can use later. This is useful when you want to save many objects with the same
+encoder.</p>
+<p>See below how to make a json_save_and_get_path</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json_save_and_get_path</span> <span class="o">=</span> <span class="n">save_to_file_and_return_file</span><span class="p">(</span><span class="n">encoder</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span> <span class="o">=</span> <span class="n">json_save_and_get_path</span><span class="p">({</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
+<span class="go">{&#39;key&#39;: &#39;value&#39;}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">

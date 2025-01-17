@@ -83,7 +83,96 @@
            <div itemprop="articleBody">
              
   <h1>Source code for aix.contexts</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Tools to make contexts (knowledge bases for AI agents)&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Tools to make contexts (knowledge bases for AI agents)</span>
+
+<span class="sd">Examples:</span>
+
+<span class="sd">Download all articles from a markdown string and save them as PDF files:</span>
+
+<span class="sd">&gt;&gt;&gt; download_articles(md_string)  # doctest: +SKIP</span>
+
+<span class="sd">Verify URLs in a markdown string by checking their status codes </span>
+<span class="sd">(useful when trying to verify if AI hallucinated the urls)</span>
+
+<span class="sd">&gt;&gt;&gt; verify_urls(md_string)  # doctest: +SKIP</span>
+
+<span class="sd">Make an md file with all the code in a directory:</span>
+
+<span class="sd">&gt;&gt;&gt; md_string = code_aggregate(package_or_folder_or_github_url)  # doctest: +SKIP</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># --------------------------------------------------------------------------------------</span>
+<span class="c1"># General utilities</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">written_key</span>
+
+
+<div class="viewcode-block" id="save_to_file_and_return_file">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.save_to_file_and_return_file">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_to_file_and_return_file</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save `encoder(obj)` to a file using a random name in `rootdir` (or a temp directory if not provided).</span>
+<span class="sd">    Returns the full path to the saved file.</span>
+<span class="sd">    If `obj` is None, returns a partial function with preconfigured `encoder` and</span>
+<span class="sd">    `rootdir`.</span>
+
+<span class="sd">    :param obj: The object to save. If None, return a partial function.</span>
+<span class="sd">    :param encoder: A function to encode the object into text or bytes. Defaults to identity.</span>
+<span class="sd">    :param rootdir: Directory where the file will be saved. Uses a temporary directory if None.</span>
+
+<span class="sd">    :return: Full path to the saved file, or a partial function if `obj` is None.</span>
+
+<span class="sd">    &gt;&gt;&gt; from pathlib import Path</span>
+<span class="sd">    &gt;&gt;&gt; filepath = save_to_file_and_return_file(&quot;hello world&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; import os</span>
+<span class="sd">    &gt;&gt;&gt; Path(filepath).read_text()</span>
+<span class="sd">    &#39;hello world&#39;</span>
+
+<span class="sd">    The default encoder is identity, so you can save binary data as well:</span>
+
+<span class="sd">    &gt;&gt;&gt; filepath = save_to_file_and_return_file(b&quot;binary data&quot;, encoder=lambda x: x)</span>
+<span class="sd">    &gt;&gt;&gt; Path(filepath).read_bytes()</span>
+<span class="sd">    b&#39;binary data&#39;</span>
+
+<span class="sd">    But when your object is neither text nor bytes, you can specify a custom encoder</span>
+<span class="sd">    that transforms your object into text or bytes.</span>
+<span class="sd">    Also, see how if you don&#39;t specify the obj to save, you get a partial function that</span>
+<span class="sd">    you can use later. This is useful when you want to save many objects with the same</span>
+<span class="sd">    encoder.</span>
+
+<span class="sd">    See below how to make a json_save_and_get_path</span>
+
+<span class="sd">    &gt;&gt;&gt; import json</span>
+<span class="sd">    &gt;&gt;&gt; json_save_and_get_path = save_to_file_and_return_file(encoder=json.dumps)</span>
+<span class="sd">    &gt;&gt;&gt; filepath = json_save_and_get_path({&quot;key&quot;: &quot;value&quot;})</span>
+<span class="sd">    &gt;&gt;&gt; json.loads(Path(filepath).read_text())</span>
+<span class="sd">    {&#39;key&#39;: &#39;value&#39;}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">save_to_file_and_return_file</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">encoder</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)</span>
+
+    <span class="n">writer</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">obj</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
+        <span class="k">else</span> <span class="n">Path</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">written_key</span><span class="p">(</span><span class="n">encoder</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">writer</span><span class="o">=</span><span class="n">writer</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># --------------------------------------------------------------------------------------</span>
+<span class="c1"># Download articles from a markdown string and save them as PDF files</span>
+
+<span class="c1"># TODO: Make download_articles more general:</span>
+<span class="c1">#       - Allowed file types should be handled by plugin dependency injection</span>
+<span class="c1">#       - There should be a separate title/url extractor that can be passed in</span>
+<span class="c1">#       - When title is missing, some url_to_filenae should be used (see graze)?</span>
+<span class="c1">#       - download_articles_by_section should be merged with download_articles</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
@@ -123,6 +212,13 @@
 <span class="sd">    Downloaded: Valid PDF -&gt; ~/Downloads/Valid_PDF.pdf</span>
 <span class="sd">    Skipped (HTML or non-PDF): Invalid PDF from https://example.com/file.html</span>
 <span class="sd">    Non-PDF content saved to: ~/Downloads/Invalid_PDF_non_pdf.html</span>
+
+<span class="sd">    Tips:</span>
+
+<span class="sd">    - When you knowledge base will have a lot of files, some AI systems have a hard time</span>
+<span class="sd">        processing the large number of files. In such cases, it might be better to</span>
+<span class="sd">        aggregate many files into a single file. See pdfdol.concat_pdfs to do this.</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Assert the save_dir exists</span>
@@ -205,6 +301,9 @@
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Downloads articles from a markdown string organized by sections into subdirectories.</span>
+
+<span class="sd">    This is useful, for example, when you have a large knowledge base and you want to</span>
+<span class="sd">    organize of aggregate the articles by sections.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        md_string (str): The markdown string with sections and articles.</span>
