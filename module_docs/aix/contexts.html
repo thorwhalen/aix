@@ -298,7 +298,7 @@ or an imported package (must contain a __path__ atribute)</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.contexts.save_to_file_and_return_file">
-<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">save_to_file_and_return_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#save_to_file_and_return_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.save_to_file_and_return_file" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">save_to_file_and_return_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#save_to_file_and_return_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.save_to_file_and_return_file" title="Link to this definition"></a></dt>
 <dd><p>Save <cite>encoder(obj)</cite> to a file using a random name in <cite>rootdir</cite> (or a temp directory if not provided).
 Returns the full path to the saved file.
 If <cite>obj</cite> is None, returns a partial function with preconfigured <cite>encoder</cite> and
@@ -308,7 +308,14 @@ If <cite>obj</cite> is None, returns a partial function with preconfigured <cite
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>obj</strong> – The object to save. If None, return a partial function.</p></li>
 <li><p><strong>encoder</strong> – A function to encode the object into text or bytes. Defaults to identity.</p></li>
-<li><p><strong>rootdir</strong> – Directory where the file will be saved. Uses a temporary directory if None.</p></li>
+<li><p><strong>key</strong> – The key (by default, filepath) to write to.
+If None, a temporary file is created.
+If a string starting with ‘*’, the ‘*’ is replaced with a unique temporary filename.
+If a string that has a ‘*’ somewhere in the middle, what’s on the left of if is used as a directory
+and the ‘*’ is replaced with a unique temporary filename. For example
+‘/tmp/<a href="#id1"><span class="problematic" id="id2">*</span></a>_file.ext’ would be replaced with ‘/tmp/oiu8fj9873_file.ext’.
+If a callable, it will be called with obj as input to get the key. One use case
+is to use a function that generates a key based on the object.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

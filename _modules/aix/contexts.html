@@ -106,6 +106,7 @@
 <span class="c1"># --------------------------------------------------------------------------------------</span>
 <span class="c1"># General utilities</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">written_key</span>
@@ -113,7 +114,9 @@
 
 <div class="viewcode-block" id="save_to_file_and_return_file">
 <a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.save_to_file_and_return_file">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">save_to_file_and_return_file</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_to_file_and_return_file</span><span class="p">(</span>
+    <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Save `encoder(obj)` to a file using a random name in `rootdir` (or a temp directory if not provided).</span>
 <span class="sd">    Returns the full path to the saved file.</span>
@@ -122,7 +125,14 @@
 
 <span class="sd">    :param obj: The object to save. If None, return a partial function.</span>
 <span class="sd">    :param encoder: A function to encode the object into text or bytes. Defaults to identity.</span>
-<span class="sd">    :param rootdir: Directory where the file will be saved. Uses a temporary directory if None.</span>
+<span class="sd">    :param key: The key (by default, filepath) to write to.</span>
+<span class="sd">        If None, a temporary file is created.</span>
+<span class="sd">        If a string starting with &#39;*&#39;, the &#39;*&#39; is replaced with a unique temporary filename.</span>
+<span class="sd">        If a string that has a &#39;*&#39; somewhere in the middle, what&#39;s on the left of if is used as a directory</span>
+<span class="sd">        and the &#39;*&#39; is replaced with a unique temporary filename. For example</span>
+<span class="sd">        &#39;/tmp/*_file.ext&#39; would be replaced with &#39;/tmp/oiu8fj9873_file.ext&#39;.</span>
+<span class="sd">        If a callable, it will be called with obj as input to get the key. One use case</span>
+<span class="sd">        is to use a function that generates a key based on the object.</span>
 
 <span class="sd">    :return: Full path to the saved file, or a partial function if `obj` is None.</span>
 
@@ -153,15 +163,8 @@
 <span class="sd">    {&#39;key&#39;: &#39;value&#39;}</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">save_to_file_and_return_file</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">encoder</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)</span>
-
-    <span class="n">writer</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">obj</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="p">(</span>
-        <span class="n">Path</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
-        <span class="k">else</span> <span class="n">Path</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">written_key</span><span class="p">(</span><span class="n">encoder</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">writer</span><span class="o">=</span><span class="n">writer</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+    <span class="c1"># Note: Yes, it&#39;s just written_key from dol, but with a context-sensitive name</span>
+    <span class="k">return</span> <span class="n">written_key</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">encoder</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
 
 
 
@@ -482,12 +485,15 @@
     <span class="k">return</span> <span class="n">x</span>
 
 
+<span class="n">Filepath</span> <span class="o">=</span> <span class="nb">str</span>
+
+
 <div class="viewcode-block" id="code_aggregate">
 <a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.code_aggregate">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">code_aggregate</span><span class="p">(</span>
     <span class="n">code_src</span><span class="p">:</span> <span class="n">CodeSource</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">egress</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+    <span class="n">egress</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Filepath</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
     <span class="n">kv_to_item</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;## </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">```python</span><span class="se">\n</span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">```&quot;</span><span class="p">,</span>
     <span class="o">**</span><span class="n">store_aggregate_kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
