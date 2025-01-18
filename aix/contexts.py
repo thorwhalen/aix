@@ -21,12 +21,15 @@ Make an md file with all the code in a directory:
 # --------------------------------------------------------------------------------------
 # General utilities
 
+from typing import Union, Callable
 from functools import partial
 from pathlib import Path
 from dol import written_key
 
 
-def save_to_file_and_return_file(obj=None, *, encoder=lambda x: x, rootdir=None):
+def save_to_file_and_return_file(
+    obj=None, *, encoder=lambda x: x, key: Union[str, Callable] = None
+):
     """
     Save `encoder(obj)` to a file using a random name in `rootdir` (or a temp directory if not provided).
     Returns the full path to the saved file.
@@ -35,7 +38,14 @@ def save_to_file_and_return_file(obj=None, *, encoder=lambda x: x, rootdir=None)
 
     :param obj: The object to save. If None, return a partial function.
     :param encoder: A function to encode the object into text or bytes. Defaults to identity.
-    :param rootdir: Directory where the file will be saved. Uses a temporary directory if None.
+    :param key: The key (by default, filepath) to write to.
+        If None, a temporary file is created.
+        If a string starting with '*', the '*' is replaced with a unique temporary filename.
+        If a string that has a '*' somewhere in the middle, what's on the left of if is used as a directory
+        and the '*' is replaced with a unique temporary filename. For example
+        '/tmp/*_file.ext' would be replaced with '/tmp/oiu8fj9873_file.ext'.
+        If a callable, it will be called with obj as input to get the key. One use case
+        is to use a function that generates a key based on the object.
 
     :return: Full path to the saved file, or a partial function if `obj` is None.
 
@@ -66,15 +76,8 @@ def save_to_file_and_return_file(obj=None, *, encoder=lambda x: x, rootdir=None)
     {'key': 'value'}
 
     """
-    if obj is None:
-        return partial(save_to_file_and_return_file, encoder=encoder, rootdir=rootdir)
-
-    writer = lambda obj, key: (
-        Path(key).write_bytes(obj)
-        if isinstance(obj, bytes)
-        else Path(key).write_text(obj)
-    )
-    return written_key(encoder(obj), writer=writer, key=None)
+    # Note: Yes, it's just written_key from dol, but with a context-sensitive name
+    return written_key(obj, encoder=encoder, key=key)
 
 
 # --------------------------------------------------------------------------------------
@@ -376,10 +379,13 @@ def identity(x):
     return x
 
 
+Filepath = str
+
+
 def code_aggregate(
     code_src: CodeSource,
     *,
-    egress: Union[Callable, str] = lambda x: x,
+    egress: Union[Callable, Filepath] = lambda x: x,
     kv_to_item=lambda k, v: f"## {k}\n\n```python\n{v.strip()}\n```",
     **store_aggregate_kwargs,
 ) -> Any:
