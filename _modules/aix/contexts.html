@@ -106,10 +106,37 @@
 <span class="c1"># --------------------------------------------------------------------------------------</span>
 <span class="c1"># General utilities</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleType</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">written_key</span>
+
+
+<div class="viewcode-block" id="fullpath">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.fullpath">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fullpath</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the full path of the given path.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): The path to convert to a full path.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The full path.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; fullpath(&#39;~/Downloads&#39;)  # doctest: +SKIP</span>
+<span class="sd">    &#39;/home/user/Downloads&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; fullpath(&#39;.&#39;)  # doctest: +SKIP</span>
+<span class="sd">    &#39;/home/user/python_projects/aix/aix&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">path</span><span class="p">))</span></div>
+
 
 
 <div class="viewcode-block" id="save_to_file_and_return_file">
@@ -569,6 +596,57 @@
     <span class="k">return</span> <span class="n">store_aggregate</span><span class="p">(</span>
         <span class="n">code_store</span><span class="p">,</span> <span class="n">egress</span><span class="o">=</span><span class="n">egress</span><span class="p">,</span> <span class="n">kv_to_item</span><span class="o">=</span><span class="n">kv_to_item</span><span class="p">,</span> <span class="o">**</span><span class="n">store_aggregate_kwargs</span>
     <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PackageCodeContexts">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.PackageCodeContexts">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PackageCodeContexts</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manages aggregation and saves of the code of local packages&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_folder</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_folder</span> <span class="o">=</span> <span class="n">fullpath</span><span class="p">(</span><span class="n">save_folder</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_filepath</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">parts</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_folder</span><span class="p">,</span> <span class="o">*</span><span class="n">parts</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PackageCodeContexts.save_single">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.PackageCodeContexts.save_single">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModuleType</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aggregates and saves the code of a single local package.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        To save a single package&#39;s code in a single file, in the current folder:</span>
+
+<span class="sd">        &gt;&gt;&gt; PackageCodeContexts().save_single(&#39;aix&#39;)  # doctest: +SKIP</span>
+
+<span class="sd">        or, to save multiple package&#39;s code in a single file, in a specific folder.</span>
+
+<span class="sd">        &gt;&gt;&gt; PackageCodeContexts(&#39;some/folder/path&#39;).save_multiple_pkgs_code([&#39;aix&#39;, &#39;dol&#39;])  # doctest: +SKIP</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">pkg_name</span> <span class="o">=</span> <span class="n">pkg</span>
+            <span class="n">pkg</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">pkg_name</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">ModuleType</span><span class="p">):</span>
+            <span class="n">pkg_name</span> <span class="o">=</span> <span class="n">pkg</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported type for pkg: </span><span class="si">{</span><span class="n">pkg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_filepath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pkg_name</span><span class="si">}</span><span class="s1">.py.md&#39;</span><span class="p">)</span>
+        <span class="n">code_aggregate</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">egress</span><span class="o">=</span><span class="n">filepath</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_multiple_pkgs_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pkgs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pkg_secion_marker</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;The first argument must be a filepath: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">sections</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="n">pkgs</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pkg_secion_marker</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">pkg</span><span class="si">}</span><span class="se">\n\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">code_aggregate</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span>
+
+        <span class="n">md_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sections</span><span class="p">())</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_filepath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">.py.md&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">md_string</span><span class="p">)</span></div>
 
 </pre></div>
 

@@ -51,9 +51,14 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../aix.html">aix</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aix.contexts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.PackageCodeContexts"><code class="docutils literal notranslate"><span class="pre">PackageCodeContexts</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aix.contexts.PackageCodeContexts.save_single"><code class="docutils literal notranslate"><span class="pre">PackageCodeContexts.save_single()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.code_aggregate"><code class="docutils literal notranslate"><span class="pre">code_aggregate()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.download_articles"><code class="docutils literal notranslate"><span class="pre">download_articles()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.download_articles_by_section"><code class="docutils literal notranslate"><span class="pre">download_articles_by_section()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.fullpath"><code class="docutils literal notranslate"><span class="pre">fullpath()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.is_local_pkg_name"><code class="docutils literal notranslate"><span class="pre">is_local_pkg_name()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.resolve_code_source"><code class="docutils literal notranslate"><span class="pre">resolve_code_source()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.resolve_code_source_dir_path"><code class="docutils literal notranslate"><span class="pre">resolve_code_source_dir_path()</span></code></a></li>
@@ -112,6 +117,27 @@
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">md_string</span> <span class="o">=</span> <span class="n">code_aggregate</span><span class="p">(</span><span class="n">package_or_folder_or_github_url</span><span class="p">)</span>  
 </pre></div>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.contexts.PackageCodeContexts">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">PackageCodeContexts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#PackageCodeContexts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.PackageCodeContexts" title="Link to this definition"></a></dt>
+<dd><p>Manages aggregation and saves of the code of local packages</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.contexts.PackageCodeContexts.save_single">
+<span class="sig-name descname"><span class="pre">save_single</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ModuleType</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#PackageCodeContexts.save_single"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.PackageCodeContexts.save_single" title="Link to this definition"></a></dt>
+<dd><p>Aggregates and saves the code of a single local package.</p>
+<p>Example:</p>
+<p>To save a single package’s code in a single file, in the current folder:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PackageCodeContexts</span><span class="p">()</span><span class="o">.</span><span class="n">save_single</span><span class="p">(</span><span class="s1">&#39;aix&#39;</span><span class="p">)</span>  
+</pre></div>
+</div>
+<p>or, to save multiple package’s code in a single file, in a specific folder.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PackageCodeContexts</span><span class="p">(</span><span class="s1">&#39;some/folder/path&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">save_multiple_pkgs_code</span><span class="p">([</span><span class="s1">&#39;aix&#39;</span><span class="p">,</span> <span class="s1">&#39;dol&#39;</span><span class="p">])</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.contexts.code_aggregate">
 <span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">code_aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code_src:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.Mapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">egress:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kv_to_item=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**store_aggregate_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#code_aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.code_aggregate" title="Link to this definition"></a></dt>
@@ -250,6 +276,32 @@ Defaults to ‘~/Downloads’.</p></li>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.fullpath">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">fullpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#fullpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.fullpath" title="Link to this definition"></a></dt>
+<dd><p>Returns the full path of the given path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – The path to convert to a full path.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The full path.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fullpath</span><span class="p">(</span><span class="s1">&#39;~/Downloads&#39;</span><span class="p">)</span>  
+<span class="go">&#39;/home/user/Downloads&#39;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fullpath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>  
+<span class="go">&#39;/home/user/python_projects/aix/aix&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
