@@ -41,11 +41,14 @@ def fullpath(path: str) -> str:
 
     Example:
 
-    >>> fullpath('~/Downloads')
+    >>> fullpath('~/Downloads')  # doctest: +SKIP
     '/home/user/Downloads'
 
+    >>> fullpath('.')  # doctest: +SKIP
+    '/home/user/python_projects/aix/aix'
+
     """
-    return os.path.expanduser(os.path.abspath(path))
+    return os.path.abspath(os.path.expanduser(path))
 
 
 def save_to_file_and_return_file(
