@@ -21,10 +21,31 @@ Make an md file with all the code in a directory:
 # --------------------------------------------------------------------------------------
 # General utilities
 
+import os
 from typing import Union, Callable
+from types import ModuleType
 from functools import partial
 from pathlib import Path
 from dol import written_key
+
+
+def fullpath(path: str) -> str:
+    """
+    Returns the full path of the given path.
+
+    Args:
+        path (str): The path to convert to a full path.
+
+    Returns:
+        str: The full path.
+
+    Example:
+
+    >>> fullpath('~/Downloads')
+    '/home/user/Downloads'
+
+    """
+    return os.path.expanduser(os.path.abspath(path))
 
 
 def save_to_file_and_return_file(
@@ -461,3 +482,48 @@ def code_aggregate(
     return store_aggregate(
         code_store, egress=egress, kv_to_item=kv_to_item, **store_aggregate_kwargs
     )
+
+
+class PackageCodeContexts:
+    """Manages aggregation and saves of the code of local packages"""
+
+    def __init__(self, save_folder='.'):
+        self.save_folder = fullpath(save_folder)
+        self.save_filepath = lambda *parts: os.path.join(save_folder, *parts)
+
+    def save_single(self, pkg: Union[str, ModuleType]):
+        """
+        Aggregates and saves the code of a single local package.
+
+        Example:
+
+        To save a single package's code in a single file, in the current folder:
+
+        >>> PackageCodeContexts().save_single('aix')  # doctest: +SKIP
+
+        or, to save multiple package's code in a single file, in a specific folder.
+
+        >>> PackageCodeContexts('some/folder/path').save_multiple_pkgs_code(['aix', 'dol'])  # doctest: +SKIP
+
+        """
+        if isinstance(pkg, str):
+            pkg_name = pkg
+            pkg = importlib.import_module(pkg_name)
+        elif isinstance(pkg, ModuleType):
+            pkg_name = pkg.__name__
+        else:
+            raise ValueError(f"Unsupported type for pkg: {pkg}")
+
+        filepath = self.save_filepath(f'{pkg_name}.py.md')
+        code_aggregate(pkg, egress=filepath)
+
+    def save_multiple_pkgs_code(self, name: str, pkgs: list, *, pkg_secion_marker='#'):
+        assert isinstance(name, str), f"The first argument must be a filepath: {name}"
+
+        def sections():
+            for pkg in pkgs:
+                yield f'{pkg_secion_marker} {pkg}\n\n' + code_aggregate(pkg)
+
+        md_string = '\n\n'.join(sections())
+        with open(self.save_filepath(f'{name}.py.md'), 'w') as f:
+            f.write(md_string)
