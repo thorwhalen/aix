@@ -7,7 +7,7 @@ Download all articles from a markdown string and save them as PDF files:
 
 >>> download_articles(md_string)  # doctest: +SKIP
 
-Verify URLs in a markdown string by checking their status codes 
+Verify URLs in a markdown string by checking their status codes
 (useful when trying to verify if AI hallucinated the urls)
 
 >>> verify_urls(md_string)  # doctest: +SKIP
@@ -117,7 +117,7 @@ import os
 import re
 import requests
 
-DFLT_SAVE_DIR = os.path.expanduser('~/Downloads')
+DFLT_SAVE_DIR = os.path.expanduser("~/Downloads")
 
 
 def download_articles(
@@ -173,7 +173,7 @@ def download_articles(
 
     for title, url in matches:
         # Sanitize title to create a valid filename
-        sanitized_title = re.sub(r'[^\w\-_\. ]', '_', title)
+        sanitized_title = re.sub(r"[^\w\-_\. ]", "_", title)
         filename = f"{sanitized_title}.pdf"
         filepath = os.path.join(save_dir, filename)
 
@@ -182,8 +182,8 @@ def download_articles(
             response.raise_for_status()
 
             # Check Content-Type header
-            content_type = response.headers.get('Content-Type', '')
-            if 'application/pdf' not in content_type:
+            content_type = response.headers.get("Content-Type", "")
+            if "application/pdf" not in content_type:
                 clog(
                     f"Skipped (HTML or non-PDF): {title} from {url} (Content-Type: {content_type})"
                 )
@@ -192,7 +192,7 @@ def download_articles(
                     non_pdf_path = os.path.join(
                         save_dir, f"{sanitized_title}_non_pdf.html"
                     )
-                    with open(non_pdf_path, 'wb') as f:
+                    with open(non_pdf_path, "wb") as f:
                         for chunk in response.iter_content(chunk_size=8192):
                             f.write(chunk)
                     clog(f"Non-PDF content saved to: {non_pdf_path}")
@@ -201,14 +201,14 @@ def download_articles(
 
             # Verify PDF content by checking the first few bytes
             first_chunk = next(response.iter_content(chunk_size=8192))
-            if not first_chunk.startswith(b'%PDF'):
+            if not first_chunk.startswith(b"%PDF"):
                 clog(f"Invalid PDF content: {title} from {url}")
                 if save_non_pdf:
                     # Save invalid PDF content with a different extension
                     invalid_pdf_path = os.path.join(
                         save_dir, f"{sanitized_title}_invalid.pdf"
                     )
-                    with open(invalid_pdf_path, 'wb') as f:
+                    with open(invalid_pdf_path, "wb") as f:
                         f.write(first_chunk)
                         for chunk in response.iter_content(chunk_size=8192):
                             f.write(chunk)
@@ -217,7 +217,7 @@ def download_articles(
                 continue
 
             # Save the content as a PDF file
-            with open(filepath, 'wb') as f:
+            with open(filepath, "wb") as f:
                 f.write(first_chunk)  # Write the first chunk already read
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
@@ -249,7 +249,7 @@ def download_articles_by_section(
         dict: A dictionary with section names as keys and lists of failed URLs as values.
     """
     if rootdir is None:
-        rootdir = os.path.expanduser('~/Downloads')
+        rootdir = os.path.expanduser("~/Downloads")
 
     # Ensure the root directory exists
     os.makedirs(rootdir, exist_ok=True)
@@ -263,7 +263,7 @@ def download_articles_by_section(
     for section_title, section_content in sections:
         # Create a snake-case directory name for the section
         sanitized_section_title = (
-            re.sub(r'[^\w\s]', '', section_title).strip().replace(' ', '_').lower()
+            re.sub(r"[^\w\s]", "", section_title).strip().replace(" ", "_").lower()
         )
         section_dir = os.path.join(rootdir, sanitized_section_title)
         os.makedirs(section_dir, exist_ok=True)
@@ -350,7 +350,7 @@ def resolve_code_source_dir_path(code_src: CodeSource) -> DirectoryPathString:
         # If it's a string, check if it's a directory
         if os.path.isdir(code_src):
             return os.path.abspath(code_src)  # Return absolute path if it's a directory
-        elif '\n' not in code_src and 'github' in code_src:
+        elif "\n" not in code_src and "github" in code_src:
             from hubcap import ensure_repo_folder  # pip install hubcap
 
             # If it's a GitHub URL, download the repository
@@ -377,7 +377,7 @@ def resolve_code_source_dir_path(code_src: CodeSource) -> DirectoryPathString:
 
 
 def resolve_code_source(
-    code_src: CodeSource, keys_filt: Callable = lambda x: x.endswith('.py')
+    code_src: CodeSource, keys_filt: Callable = lambda x: x.endswith(".py")
 ) -> Mapping:
     """
     Will resolve code_src to a Mapping whose values are the code strings
@@ -490,7 +490,7 @@ def code_aggregate(
 class PackageCodeContexts:
     """Manages aggregation and saves of the code of local packages"""
 
-    def __init__(self, save_folder='.'):
+    def __init__(self, save_folder="."):
         self.save_folder = fullpath(save_folder)
         self.save_filepath = lambda *parts: os.path.join(save_folder, *parts)
 
@@ -517,16 +517,16 @@ class PackageCodeContexts:
         else:
             raise ValueError(f"Unsupported type for pkg: {pkg}")
 
-        filepath = self.save_filepath(f'{pkg_name}.py.md')
+        filepath = self.save_filepath(f"{pkg_name}.py.md")
         code_aggregate(pkg, egress=filepath)
 
-    def save_multiple_pkgs_code(self, name: str, pkgs: list, *, pkg_secion_marker='#'):
+    def save_multiple_pkgs_code(self, name: str, pkgs: list, *, pkg_secion_marker="#"):
         assert isinstance(name, str), f"The first argument must be a filepath: {name}"
 
         def sections():
             for pkg in pkgs:
-                yield f'{pkg_secion_marker} {pkg}\n\n' + code_aggregate(pkg)
+                yield f"{pkg_secion_marker} {pkg}\n\n" + code_aggregate(pkg)
 
-        md_string = '\n\n'.join(sections())
-        with open(self.save_filepath(f'{name}.py.md'), 'w') as f:
+        md_string = "\n\n".join(sections())
+        with open(self.save_filepath(f"{name}.py.md"), "w") as f:
             f.write(md_string)
