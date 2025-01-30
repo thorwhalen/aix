@@ -148,7 +148,7 @@ def notebook_to_markdown(
     write_encoding: str = "utf-8",
 ):
     """Converts a Jupyter notebook to Markdown, applying a output text processors."""
-    if 'nbconvert' not in installed_packages or 'nbformat' not in installed_packages:
+    if "nbconvert" not in installed_packages or "nbformat" not in installed_packages:
         raise ImportError("nbconvert and nbformat must both be installed.")
 
     class TruncateOutputPreprocessor(Preprocessor):
@@ -163,15 +163,15 @@ def notebook_to_markdown(
                 self.process_output = lambda x: x
 
         def preprocess_cell(self, cell, resources, index):
-            if 'outputs' in cell:
+            if "outputs" in cell:
                 for output in cell.outputs:
                     # Case 1: Traditional text output
                     if isinstance(output, dict):
-                        if 'text' in output:
-                            output['text'] = self.process_output(output['text'])
+                        if "text" in output:
+                            output["text"] = self.process_output(output["text"])
 
                         # Case 2: Rich MIME-based data (e.g. text/html, text/plain, etc.)
-                        if 'data' in output:
+                        if "data" in output:
                             # Clear all the existing fields
                             output.clear()
 
