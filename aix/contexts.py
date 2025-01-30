@@ -105,6 +105,109 @@ def save_to_file_and_return_file(
 
 
 # --------------------------------------------------------------------------------------
+
+import os
+from typing import Sequence, Callable
+from contextlib import suppress
+
+from dol import Pipe
+import lkj
+
+ignore_import_errors = suppress(ImportError, ModuleNotFoundError)
+
+installed_packages = set()
+
+with ignore_import_errors:
+    from nbconvert.preprocessors import Preprocessor
+    from nbconvert import MarkdownExporter
+
+    installed_packages.add("nbconvert")
+
+with ignore_import_errors:
+    import nbformat
+
+    installed_packages.add("nbformat")
+
+
+def truncate_text(text: str, *, max_chars=200) -> str:
+    if len(text) > max_chars:
+        cutoff = max_chars
+        first_part = text[: int(0.75 * cutoff)]
+        last_part = text[-int(0.25 * cutoff) :]
+        return f"{first_part}\n...\n{last_part}"
+    return text
+
+
+# TODO: Generalize to get more control over output (and source) transformation control
+def notebook_to_markdown(
+    src_notebook: str,
+    *,
+    target_file: str = "*.md",
+    output_processors: Sequence[Callable[[str], str]] = (truncate_text,),
+    read_encoding: str = "utf-8",
+    write_encoding: str = "utf-8",
+):
+    """Converts a Jupyter notebook to Markdown, applying a output text processors."""
+    if 'nbconvert' not in installed_packages or 'nbformat' not in installed_packages:
+        raise ImportError("nbconvert and nbformat must both be installed.")
+
+    class TruncateOutputPreprocessor(Preprocessor):
+        """Preprocessor that truncates long outputs in Jupyter Notebook cells."""
+
+        def __init__(self, output_processors, **kwargs):
+            super().__init__(**kwargs)
+            self.output_processors = output_processors
+            if self.output_processors:
+                self.process_output = Pipe(*output_processors)
+            else:
+                self.process_output = lambda x: x
+
+        def preprocess_cell(self, cell, resources, index):
+            if 'outputs' in cell:
+                for output in cell.outputs:
+                    # Case 1: Traditional text output
+                    if isinstance(output, dict):
+                        if 'text' in output:
+                            output['text'] = self.process_output(output['text'])
+
+                        # Case 2: Rich MIME-based data (e.g. text/html, text/plain, etc.)
+                        if 'data' in output:
+                            # Clear all the existing fields
+                            output.clear()
+
+                            # Convert it to a 'stream'-type output
+                            # 'text' is valid only when 'output_type' is 'stream' or 'error'
+                            output["output_type"] = "stream"
+                            output["name"] = "stdout"  # required for 'stream'
+                            output["text"] = "HTML output truncated. (Data removed)\n"
+            return cell, resources
+
+    if target_file.startswith("*"):
+        src_notebook_no_ext = os.path.splitext(src_notebook)[0]
+        target_file = target_file.replace("*", src_notebook_no_ext, 1)
+
+    # Load notebook
+    with open(src_notebook, "r", encoding=read_encoding) as f:
+        nb = nbformat.read(f, as_version=4)
+
+    # Configure exporter with preprocessor
+    exporter = MarkdownExporter()
+
+    exporter.register_preprocessor(
+        TruncateOutputPreprocessor(output_processors), enabled=True
+    )
+
+    # Convert notebook
+    body, _ = exporter.from_notebook_node(nb)
+
+    # Save markdown file
+    with open(target_file, "w", encoding=write_encoding) as f:
+        f.write(body)
+
+    return target_file
+
+
+# --------------------------------------------------------------------------------------
 # Download articles from a markdown string and save them as PDF files
 
 # TODO: Make download_articles more general:
