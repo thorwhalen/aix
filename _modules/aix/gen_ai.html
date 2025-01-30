@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.gen_ai &mdash; aix 0.0.4 documentation</title>
+  <title>aix.gen_ai &mdash; aix 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -99,21 +99,21 @@
 <span class="n">chat_funcs</span> <span class="o">=</span> <span class="n">UserDict</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">_gen_ai_module</span> <span class="ow">in</span> <span class="n">genai_modules</span><span class="p">:</span>
-    <span class="n">_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_gen_ai_module</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">_chat</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_gen_ai_module</span><span class="p">,</span> <span class="s1">&#39;chat&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">_chat_models</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_gen_ai_module</span><span class="p">,</span> <span class="s1">&#39;chat_models&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_gen_ai_module</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">_chat</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_gen_ai_module</span><span class="p">,</span> <span class="s2">&quot;chat&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">_chat_models</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_gen_ai_module</span><span class="p">,</span> <span class="s2">&quot;chat_models&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># add provider to the _chat_models values</span>
     <span class="k">for</span> <span class="n">_model</span> <span class="ow">in</span> <span class="n">_chat_models</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">_chat_models</span><span class="p">[</span><span class="n">_model</span><span class="p">][</span><span class="s1">&#39;provider&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_name</span>
+        <span class="n">_chat_models</span><span class="p">[</span><span class="n">_model</span><span class="p">][</span><span class="s2">&quot;provider&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_name</span>
 
     <span class="k">if</span> <span class="n">_chat_models</span><span class="p">:</span>
-        <span class="nb">locals</span><span class="p">()[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s1">_chat_models&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_chat_models</span>
+        <span class="nb">locals</span><span class="p">()[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2">_chat_models&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_chat_models</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: </span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2"> module is missing chat or chat_models.&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">_chat</span><span class="p">:</span>
-        <span class="nb">locals</span><span class="p">()[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s1">_chat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_chat</span>
+        <span class="nb">locals</span><span class="p">()[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2">_chat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_chat</span>
         <span class="n">chat_models</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_chat_models</span><span class="p">)</span>
         <span class="n">chat_funcs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="p">{</span><span class="n">model</span><span class="p">:</span> <span class="n">partial</span><span class="p">(</span><span class="n">_chat</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">_chat_models</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
@@ -121,7 +121,7 @@
 
 <span class="k">for</span> <span class="n">_model</span> <span class="ow">in</span> <span class="n">chat_models</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
     <span class="c1"># get a version of _model (str) that is a valid python identifier</span>
-    <span class="n">_model_identifier</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\W+&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">_model</span><span class="p">)</span>
+    <span class="n">_model_identifier</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W+&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">_model</span><span class="p">)</span>
     <span class="nb">setattr</span><span class="p">(</span><span class="n">chat_models</span><span class="p">,</span> <span class="n">_model_identifier</span><span class="p">,</span> <span class="n">_model</span><span class="p">)</span>
     <span class="nb">setattr</span><span class="p">(</span><span class="n">chat_funcs</span><span class="p">,</span> <span class="n">_model_identifier</span><span class="p">,</span> <span class="n">chat_funcs</span><span class="p">[</span><span class="n">_model</span><span class="p">])</span>
 
@@ -130,14 +130,13 @@
 <span class="c1">#     chat_functions[_model] = chat_function_for_model(_model)</span>
 
 
-
 <div class="viewcode-block" id="chat_function_for_model">
 <a class="viewcode-back" href="../../module_docs/aix/gen_ai.html#aix.gen_ai.chat_function_for_model">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">chat_function_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the chat function for the specified model.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">_gen_ai_module</span> <span class="ow">in</span> <span class="n">genai_modules</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_gen_ai_module</span><span class="p">,</span> <span class="s1">&#39;chat_models&#39;</span><span class="p">,</span> <span class="p">{}):</span>
-            <span class="n">chat_func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_gen_ai_module</span><span class="p">,</span> <span class="s1">&#39;chat&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_gen_ai_module</span><span class="p">,</span> <span class="s2">&quot;chat_models&quot;</span><span class="p">,</span> <span class="p">{}):</span>
+            <span class="n">chat_func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_gen_ai_module</span><span class="p">,</span> <span class="s2">&quot;chat&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">chat_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">chat_func</span>
             <span class="k">else</span><span class="p">:</span>

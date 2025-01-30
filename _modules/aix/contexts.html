@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.contexts &mdash; aix 0.0.4 documentation</title>
+  <title>aix.contexts &mdash; aix 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -92,7 +92,7 @@
 
 <span class="sd">&gt;&gt;&gt; download_articles(md_string)  # doctest: +SKIP</span>
 
-<span class="sd">Verify URLs in a markdown string by checking their status codes </span>
+<span class="sd">Verify URLs in a markdown string by checking their status codes</span>
 <span class="sd">(useful when trying to verify if AI hallucinated the urls)</span>
 
 <span class="sd">&gt;&gt;&gt; verify_urls(md_string)  # doctest: +SKIP</span>
@@ -196,6 +196,112 @@
 
 
 <span class="c1"># --------------------------------------------------------------------------------------</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">suppress</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lkj</span>
+
+<span class="n">ignore_import_errors</span> <span class="o">=</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">)</span>
+
+<span class="n">installed_packages</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">ignore_import_errors</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">nbconvert.preprocessors</span><span class="w"> </span><span class="kn">import</span> <span class="n">Preprocessor</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">nbconvert</span><span class="w"> </span><span class="kn">import</span> <span class="n">MarkdownExporter</span>
+
+    <span class="n">installed_packages</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;nbconvert&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">ignore_import_errors</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">nbformat</span>
+
+    <span class="n">installed_packages</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;nbformat&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">truncate_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">max_chars</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_chars</span><span class="p">:</span>
+        <span class="n">cutoff</span> <span class="o">=</span> <span class="n">max_chars</span>
+        <span class="n">first_part</span> <span class="o">=</span> <span class="n">text</span><span class="p">[:</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.75</span> <span class="o">*</span> <span class="n">cutoff</span><span class="p">)]</span>
+        <span class="n">last_part</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">*</span> <span class="n">cutoff</span><span class="p">)</span> <span class="p">:]</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">first_part</span><span class="si">}</span><span class="se">\n</span><span class="s2">...</span><span class="se">\n</span><span class="si">{</span><span class="n">last_part</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+
+<span class="c1"># TODO: Generalize to get more control over output (and source) transformation control</span>
+<div class="viewcode-block" id="notebook_to_markdown">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.notebook_to_markdown">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">notebook_to_markdown</span><span class="p">(</span>
+    <span class="n">src_notebook</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">target_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;*.md&quot;</span><span class="p">,</span>
+    <span class="n">output_processors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">truncate_text</span><span class="p">,),</span>
+    <span class="n">read_encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
+    <span class="n">write_encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a Jupyter notebook to Markdown, applying a output text processors.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;nbconvert&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">installed_packages</span> <span class="ow">or</span> <span class="s1">&#39;nbformat&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">installed_packages</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;nbconvert and nbformat must both be installed.&quot;</span><span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">TruncateOutputPreprocessor</span><span class="p">(</span><span class="n">Preprocessor</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Preprocessor that truncates long outputs in Jupyter Notebook cells.&quot;&quot;&quot;</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_processors</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_processors</span> <span class="o">=</span> <span class="n">output_processors</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_processors</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process_output</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="o">*</span><span class="n">output_processors</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process_output</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">resources</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;outputs&#39;</span> <span class="ow">in</span> <span class="n">cell</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+                    <span class="c1"># Case 1: Traditional text output</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="s1">&#39;text&#39;</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+                            <span class="n">output</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_output</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
+
+                        <span class="c1"># Case 2: Rich MIME-based data (e.g. text/html, text/plain, etc.)</span>
+                        <span class="k">if</span> <span class="s1">&#39;data&#39;</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+                            <span class="c1"># Clear all the existing fields</span>
+                            <span class="n">output</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+                            <span class="c1"># Convert it to a &#39;stream&#39;-type output</span>
+                            <span class="c1"># &#39;text&#39; is valid only when &#39;output_type&#39; is &#39;stream&#39; or &#39;error&#39;</span>
+                            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;output_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;stream&quot;</span>
+                            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;stdout&quot;</span>  <span class="c1"># required for &#39;stream&#39;</span>
+                            <span class="n">output</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;HTML output truncated. (Data removed)</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">return</span> <span class="n">cell</span><span class="p">,</span> <span class="n">resources</span>
+
+    <span class="k">if</span> <span class="n">target_file</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+        <span class="n">src_notebook_no_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">src_notebook</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">target_file</span> <span class="o">=</span> <span class="n">target_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">src_notebook_no_ext</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Load notebook</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">src_notebook</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">read_encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">nb</span> <span class="o">=</span> <span class="n">nbformat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">as_version</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="c1"># Configure exporter with preprocessor</span>
+    <span class="n">exporter</span> <span class="o">=</span> <span class="n">MarkdownExporter</span><span class="p">()</span>
+
+    <span class="n">exporter</span><span class="o">.</span><span class="n">register_preprocessor</span><span class="p">(</span>
+        <span class="n">TruncateOutputPreprocessor</span><span class="p">(</span><span class="n">output_processors</span><span class="p">),</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Convert notebook</span>
+    <span class="n">body</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">exporter</span><span class="o">.</span><span class="n">from_notebook_node</span><span class="p">(</span><span class="n">nb</span><span class="p">)</span>
+
+    <span class="c1"># Save markdown file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">target_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">write_encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">target_file</span></div>
+
+
+
+<span class="c1"># --------------------------------------------------------------------------------------</span>
 <span class="c1"># Download articles from a markdown string and save them as PDF files</span>
 
 <span class="c1"># TODO: Make download_articles more general:</span>
@@ -208,7 +314,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
-<span class="n">DFLT_SAVE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/Downloads&#39;</span><span class="p">)</span>
+<span class="n">DFLT_SAVE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/Downloads&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="download_articles">
@@ -266,7 +372,7 @@
 
     <span class="k">for</span> <span class="n">title</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
         <span class="c1"># Sanitize title to create a valid filename</span>
-        <span class="n">sanitized_title</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\-_\. ]&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+        <span class="n">sanitized_title</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^\w\-_\. ]&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sanitized_title</span><span class="si">}</span><span class="s2">.pdf&quot;</span>
         <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
 
@@ -275,8 +381,8 @@
             <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 
             <span class="c1"># Check Content-Type header</span>
-            <span class="n">content_type</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s1">&#39;application/pdf&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+            <span class="n">content_type</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;application/pdf&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
                 <span class="n">clog</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Skipped (HTML or non-PDF): </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> (Content-Type: </span><span class="si">{</span><span class="n">content_type</span><span class="si">}</span><span class="s2">)&quot;</span>
                 <span class="p">)</span>
@@ -285,7 +391,7 @@
                     <span class="n">non_pdf_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sanitized_title</span><span class="si">}</span><span class="s2">_non_pdf.html&quot;</span>
                     <span class="p">)</span>
-                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">non_pdf_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">non_pdf_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                         <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
                             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
                     <span class="n">clog</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Non-PDF content saved to: </span><span class="si">{</span><span class="n">non_pdf_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -294,14 +400,14 @@
 
             <span class="c1"># Verify PDF content by checking the first few bytes</span>
             <span class="n">first_chunk</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">))</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">first_chunk</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;%PDF&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">first_chunk</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;%PDF&quot;</span><span class="p">):</span>
                 <span class="n">clog</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid PDF content: </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">save_non_pdf</span><span class="p">:</span>
                     <span class="c1"># Save invalid PDF content with a different extension</span>
                     <span class="n">invalid_pdf_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sanitized_title</span><span class="si">}</span><span class="s2">_invalid.pdf&quot;</span>
                     <span class="p">)</span>
-                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">invalid_pdf_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">invalid_pdf_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">first_chunk</span><span class="p">)</span>
                         <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
                             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
@@ -310,7 +416,7 @@
                 <span class="k">continue</span>
 
             <span class="c1"># Save the content as a PDF file</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">first_chunk</span><span class="p">)</span>  <span class="c1"># Write the first chunk already read</span>
                 <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
@@ -345,7 +451,7 @@
 <span class="sd">        dict: A dictionary with section names as keys and lists of failed URLs as values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">rootdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rootdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~/Downloads&#39;</span><span class="p">)</span>
+        <span class="n">rootdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/Downloads&quot;</span><span class="p">)</span>
 
     <span class="c1"># Ensure the root directory exists</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -359,7 +465,7 @@
     <span class="k">for</span> <span class="n">section_title</span><span class="p">,</span> <span class="n">section_content</span> <span class="ow">in</span> <span class="n">sections</span><span class="p">:</span>
         <span class="c1"># Create a snake-case directory name for the section</span>
         <span class="n">sanitized_section_title</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\s]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">section_title</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^\w\s]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">section_title</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="p">)</span>
         <span class="n">section_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">sanitized_section_title</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">section_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -455,7 +561,7 @@
         <span class="c1"># If it&#39;s a string, check if it&#39;s a directory</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">code_src</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">code_src</span><span class="p">)</span>  <span class="c1"># Return absolute path if it&#39;s a directory</span>
-        <span class="k">elif</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">code_src</span> <span class="ow">and</span> <span class="s1">&#39;github&#39;</span> <span class="ow">in</span> <span class="n">code_src</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">code_src</span> <span class="ow">and</span> <span class="s2">&quot;github&quot;</span> <span class="ow">in</span> <span class="n">code_src</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">hubcap</span><span class="w"> </span><span class="kn">import</span> <span class="n">ensure_repo_folder</span>  <span class="c1"># pip install hubcap</span>
 
             <span class="c1"># If it&#39;s a GitHub URL, download the repository</span>
@@ -485,7 +591,7 @@
 <div class="viewcode-block" id="resolve_code_source">
 <a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.resolve_code_source">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">resolve_code_source</span><span class="p">(</span>
-    <span class="n">code_src</span><span class="p">:</span> <span class="n">CodeSource</span><span class="p">,</span> <span class="n">keys_filt</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">)</span>
+    <span class="n">code_src</span><span class="p">:</span> <span class="n">CodeSource</span><span class="p">,</span> <span class="n">keys_filt</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">)</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Will resolve code_src to a Mapping whose values are the code strings</span>
@@ -604,7 +710,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">PackageCodeContexts</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Manages aggregation and saves of the code of local packages&quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_folder</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_folder</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_folder</span> <span class="o">=</span> <span class="n">fullpath</span><span class="p">(</span><span class="n">save_folder</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_filepath</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">parts</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_folder</span><span class="p">,</span> <span class="o">*</span><span class="n">parts</span><span class="p">)</span>
 
@@ -633,19 +739,19 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported type for pkg: </span><span class="si">{</span><span class="n">pkg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="n">filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_filepath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pkg_name</span><span class="si">}</span><span class="s1">.py.md&#39;</span><span class="p">)</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_filepath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pkg_name</span><span class="si">}</span><span class="s2">.py.md&quot;</span><span class="p">)</span>
         <span class="n">code_aggregate</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="n">egress</span><span class="o">=</span><span class="n">filepath</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">save_multiple_pkgs_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pkgs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pkg_secion_marker</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_multiple_pkgs_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pkgs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pkg_secion_marker</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;The first argument must be a filepath: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">sections</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="n">pkgs</span><span class="p">:</span>
-                <span class="k">yield</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pkg_secion_marker</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">pkg</span><span class="si">}</span><span class="se">\n\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">code_aggregate</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pkg_secion_marker</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pkg</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">code_aggregate</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span>
 
-        <span class="n">md_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sections</span><span class="p">())</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_filepath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">.py.md&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">md_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sections</span><span class="p">())</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_filepath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.py.md&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">md_string</span><span class="p">)</span></div>
 
 </pre></div>
