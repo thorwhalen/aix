@@ -22,7 +22,7 @@ Make an md file with all the code in a directory:
 # General utilities
 
 import os
-from typing import Union, Callable
+from typing import Union, Callable, Optional, Iterable
 from types import ModuleType
 from functools import partial
 from pathlib import Path
@@ -595,7 +595,7 @@ class PackageCodeContexts:
 
     def __init__(self, save_folder="."):
         self.save_folder = fullpath(save_folder)
-        self.save_filepath = lambda *parts: os.path.join(save_folder, *parts)
+        self.save_filepath = lambda *parts: os.path.join(self.save_folder, *parts)
 
     def save_single(self, pkg: Union[str, ModuleType]):
         """
@@ -623,13 +623,43 @@ class PackageCodeContexts:
         filepath = self.save_filepath(f"{pkg_name}.py.md")
         code_aggregate(pkg, egress=filepath)
 
-    def save_multiple_pkgs_code(self, name: str, pkgs: list, *, pkg_secion_marker="#"):
-        assert isinstance(name, str), f"The first argument must be a filepath: {name}"
+    def multiple_pkgs_code(
+        self,
+        name: Optional[Union[str, Iterable]] = None,
+        pkgs: list = (),
+        *,
+        pkg_secion_marker="#",
+        section_sepator="\n\n\n",
+    ):
+        """
+        Aggregates the code of multiple local packages in separate sections.
+        Saves the result to a file if a name is provided.
+        """
+        if (
+            name is not None
+            and not isinstance(name, str)
+            and isinstance(name, Iterable)
+            and not pkgs
+        ):
+            # if the first argument is an iterable, assume it's the list of packages
+            pkgs = name  # the first argument is actually packages
+            name = None
 
         def sections():
             for pkg in pkgs:
                 yield f"{pkg_secion_marker} {pkg}\n\n" + code_aggregate(pkg)
 
-        md_string = "\n\n".join(sections())
-        with open(self.save_filepath(f"{name}.py.md"), "w") as f:
-            f.write(md_string)
+        md_string = section_sepator.join(sections())
+
+        if name is None:
+            return md_string
+        else:
+            assert isinstance(name, str), f"The first argument must a string: {name}"
+            # if not extension, add ".py.md" as the extension
+            if not os.path.splitext(name)[1]:
+                name = f"{name}.py.md"
+
+            with open(self.save_filepath(name), "w") as f:
+                f.write(md_string)
+
+    save_multiple_pkgs_code = multiple_pkgs_code  # backwards compatibility alias
