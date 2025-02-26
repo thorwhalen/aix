@@ -11,7 +11,7 @@ _extension_to_text_decoder = {}
 
 
 def get_extension(string):
-    m = re.search(r'\.([a-zA-Z0-9]+)$', string)
+    m = re.search(r"\.([a-zA-Z0-9]+)$", string)
     return m.group(1).lower() if m else None
 
 
@@ -47,13 +47,13 @@ def extension_based_decode_to_text(k, v):
         return _extension_to_text_decoder[ext](v)
     else:
         # Fallback to default UTF-8 decoding
-        return v.decode('utf-8')
+        return v.decode("utf-8")
 
 
 # --- Register decoders for common text-based file extensions ---
 # For plain text files, markdown files, and HTML, we can use the default decode.
-add_extension_based_decoder('txt', lambda v: v.decode('utf-8'))
-add_extension_based_decoder('md', lambda v: v.decode('utf-8'))
+add_extension_based_decoder("txt", lambda v: v.decode("utf-8"))
+add_extension_based_decoder("md", lambda v: v.decode("utf-8"))
 
 
 # # --- Optionally register a PDF decoder if the necessary package is available ---
