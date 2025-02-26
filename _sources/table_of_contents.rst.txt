@@ -11,4 +11,5 @@
    module_docs/aix/np
    module_docs/aix/pd
    module_docs/aix/sk
+   module_docs/aix/stores
    module_docs/aix/util

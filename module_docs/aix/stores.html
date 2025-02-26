@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.util &mdash; aix 0.0.16 documentation</title>
+  <title>aix.stores &mdash; aix 0.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -24,7 +24,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="aix.stores" href="stores.html" /> 
+    <link rel="next" title="aix.util" href="util.html" />
+    <link rel="prev" title="aix.sk" href="sk.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -57,8 +58,12 @@
 <li class="toctree-l1"><a class="reference internal" href="np.html">aix.np</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pd.html">aix.pd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sk.html">aix.sk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="stores.html">aix.stores</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">aix.util</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aix.stores</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.stores.add_extension_based_decoder"><code class="docutils literal notranslate"><span class="pre">add_extension_based_decoder()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.stores.extension_based_decode_to_text"><code class="docutils literal notranslate"><span class="pre">extension_based_decode_to_text()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">aix.util</a></li>
 </ul>
 
         </div>
@@ -75,9 +80,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">aix.util</li>
+      <li class="breadcrumb-item active">aix.stores</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/module_docs/aix/util.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/module_docs/aix/stores.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -85,16 +90,54 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-aix.util">
-<span id="aix-util"></span><h1>aix.util<a class="headerlink" href="#module-aix.util" title="Link to this heading"></a></h1>
-<p>Utils for AIX.</p>
+  <section id="module-aix.stores">
+<span id="aix-stores"></span><h1>aix.stores<a class="headerlink" href="#module-aix.stores" title="Link to this heading"></a></h1>
+<p>Storage layers for AIX.</p>
+<p>TODO: Finish this module</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.stores.add_extension_based_decoder">
+<span class="sig-prename descclassname"><span class="pre">aix.stores.</span></span><span class="sig-name descname"><span class="pre">add_extension_based_decoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ext</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decoder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/stores.html#add_extension_based_decoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.stores.add_extension_based_decoder" title="Link to this definition"></a></dt>
+<dd><p>Register a decoder function for a given file extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ext</strong> (<em>str</em>) – The file extension (without the leading dot), e.g., “pdf”.</p></li>
+<li><p><strong>decoder</strong> (<em>Callable</em><em>[</em><em>[</em><em>bytes</em><em>]</em><em>, </em><em>str</em><em>]</em>) – A function that takes bytes and returns a decoded string.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.stores.extension_based_decode_to_text">
+<span class="sig-prename descclassname"><span class="pre">aix.stores.</span></span><span class="sig-name descname"><span class="pre">extension_based_decode_to_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/stores.html#extension_based_decode_to_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.stores.extension_based_decode_to_text" title="Link to this definition"></a></dt>
+<dd><p>Decode the given bytes <cite>v</cite> to a string based on the file extension extracted from <cite>key</cite>.</p>
+<p>If a decoder is registered for the extension, it is used.
+Otherwise, the bytes are decoded using v.decode(‘utf-8’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – The key (typically a filename) from which to extract the extension.</p></li>
+<li><p><strong>v</strong> (<em>bytes</em>) – The value to decode.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The decoded text.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="stores.html" class="btn btn-neutral float-left" title="aix.stores" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sk.html" class="btn btn-neutral float-left" title="aix.sk" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="util.html" class="btn btn-neutral float-right" title="aix.util" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

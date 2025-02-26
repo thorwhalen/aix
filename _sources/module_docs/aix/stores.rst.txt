@@ -1,0 +1,4 @@
+aix.stores
+==========
+.. automodule:: aix.stores
+   :members:

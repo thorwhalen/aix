@@ -6,17 +6,17 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.contexts &mdash; aix 0.0.15 documentation</title>
+  <title>aix.contexts &mdash; aix 0.0.16 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=f0357c94"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/documentation_options.js?v=c7cdf6fe"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
       <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,6 +52,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../aix.html">aix</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aix.contexts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.PackageCodeContexts"><code class="docutils literal notranslate"><span class="pre">PackageCodeContexts</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aix.contexts.PackageCodeContexts.multiple_pkgs_code"><code class="docutils literal notranslate"><span class="pre">PackageCodeContexts.multiple_pkgs_code()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.contexts.PackageCodeContexts.save_multiple_pkgs_code"><code class="docutils literal notranslate"><span class="pre">PackageCodeContexts.save_multiple_pkgs_code()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aix.contexts.PackageCodeContexts.save_single"><code class="docutils literal notranslate"><span class="pre">PackageCodeContexts.save_single()</span></code></a></li>
 </ul>
 </li>
@@ -74,6 +76,7 @@
 <li class="toctree-l1"><a class="reference internal" href="np.html">aix.np</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pd.html">aix.pd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sk.html">aix.sk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">aix.stores</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">aix.util</a></li>
 </ul>
 
@@ -122,6 +125,20 @@
 <dt class="sig sig-object py" id="aix.contexts.PackageCodeContexts">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">PackageCodeContexts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#PackageCodeContexts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.PackageCodeContexts" title="Link to this definition"></a></dt>
 <dd><p>Manages aggregation and saves of the code of local packages</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.contexts.PackageCodeContexts.multiple_pkgs_code">
+<span class="sig-name descname"><span class="pre">multiple_pkgs_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg_secion_marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_sepator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\n\n\n'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#PackageCodeContexts.multiple_pkgs_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.PackageCodeContexts.multiple_pkgs_code" title="Link to this definition"></a></dt>
+<dd><p>Aggregates the code of multiple local packages in separate sections.
+Saves the result to a file if a name is provided.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.contexts.PackageCodeContexts.save_multiple_pkgs_code">
+<span class="sig-name descname"><span class="pre">save_multiple_pkgs_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg_secion_marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_sepator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\n\n\n'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aix.contexts.PackageCodeContexts.save_multiple_pkgs_code" title="Link to this definition"></a></dt>
+<dd><p>Aggregates the code of multiple local packages in separate sections.
+Saves the result to a file if a name is provided.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="aix.contexts.PackageCodeContexts.save_single">
 <span class="sig-name descname"><span class="pre">save_single</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ModuleType</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#PackageCodeContexts.save_single"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.PackageCodeContexts.save_single" title="Link to this definition"></a></dt>
