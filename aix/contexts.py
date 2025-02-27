@@ -118,7 +118,7 @@ def aggregate_store(
     max_num_characters: Optional[int] = None,
     exclude: Optional[Iterable] = None,
     chk_size=10,
-    egress: Optional[Union[str, Callable]] = 'store_aggregate_{:02.0f}.md',
+    egress: Optional[Union[str, Callable]] = "store_aggregate_{:02.0f}.md",
     **store_aggregate_kwargs,
 ):
     """
@@ -163,7 +163,7 @@ def aggregate_store(
 
     if len(wrappers) > 0:
         store_wrap = Pipe(
-            filt_iter(filt=lambda x: x.endswith('.md') and x not in exclude),
+            filt_iter(filt=lambda x: x.endswith(".md") and x not in exclude),
             remove_duplicate_lines,
             capped_num_characters,
         )
