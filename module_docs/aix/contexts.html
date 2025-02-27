@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.contexts &mdash; aix 0.0.16 documentation</title>
+  <title>aix.contexts &mdash; aix 0.0.17 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=c7cdf6fe"></script>
+      <script src="../../_static/documentation_options.js?v=63b572e7"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -57,6 +57,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#aix.contexts.PackageCodeContexts.save_single"><code class="docutils literal notranslate"><span class="pre">PackageCodeContexts.save_single()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.aggregate_store"><code class="docutils literal notranslate"><span class="pre">aggregate_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.code_aggregate"><code class="docutils literal notranslate"><span class="pre">code_aggregate()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.download_articles"><code class="docutils literal notranslate"><span class="pre">download_articles()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.download_articles_by_section"><code class="docutils literal notranslate"><span class="pre">download_articles_by_section()</span></code></a></li>
@@ -154,6 +155,25 @@ Saves the result to a file if a name is provided.</p>
 </div>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.aggregate_store">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">aggregate_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_number_of_duplicated_lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_characters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">egress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'store_aggregate_{:02.0f}.md'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">store_aggregate_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#aggregate_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.aggregate_store" title="Link to this definition"></a></dt>
+<dd><p>Aggregates and processes text files from a store.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>store</strong> – The source store (e.g., TextFiles instance)</p></li>
+<li><p><strong>min_number_of_duplicated_lines</strong> (<em>int</em>) – If not None, minimum block size for deduplication.</p></li>
+<li><p><strong>max_num_characters</strong> (<em>int</em>) – Maximum number of characters per file.</p></li>
+<li><p><strong>exclude</strong> (<em>set</em>) – Set of filenames to exclude.</p></li>
+<li><p><strong>chk_size</strong> (<em>int</em>) – Chunk size for aggregation.</p></li>
+<li><p><strong>egress</strong> (<em>str</em><em> or </em><em>callable</em>) – Template for output filenames or function to call on each chunk</p></li>
+<li><p><strong>**store_aggregate_kwargs</strong> – Additional keyword arguments to pass to store_aggregate.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
