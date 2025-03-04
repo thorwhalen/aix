@@ -242,7 +242,7 @@ def default_fallback(b: bytes, input_format: str) -> str:
         return f"# Conversion Error\n\nCould not convert {input_format}: {str(e)}"
 
 
-def convert_to_markdown(
+def bytes_to_markdown(
     b: bytes,
     input_format: str,
     *,
@@ -324,7 +324,7 @@ def _resolve_src_bytes_store_and_target_text_store(src_files, target_store):
     return src_files, target_store
 
 
-def convert_files_to_markdown(
+def bytes_store_to_markdown_store(
     src_files: Union[str, Mapping[str, bytes]],
     target_store: Union[str, MutableMapping[str, bytes]] = None,
     *,
@@ -342,14 +342,14 @@ def convert_files_to_markdown(
     src_files, target_store = _resolve_src_bytes_store_and_target_text_store(
         src_files, target_store
     )
-    _convert_to_markdown = partial(convert_to_markdown, converters=converters)
+    _bytes_to_markdown = partial(bytes_to_markdown, converters=converters)
 
     for src_key, src_bytes in src_files.items():
         if verbose:
             print(f"Converting {src_key} to markdown")
         ext = get_extension(src_key)
         target_key = old_to_new_key(src_key)
-        target_store[target_key] = _convert_to_markdown(src_bytes, ext)
+        target_store[target_key] = _bytes_to_markdown(src_bytes, ext)
 
     return target_store_egress(target_store)
 
