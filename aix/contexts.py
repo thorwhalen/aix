@@ -29,6 +29,10 @@ from pathlib import Path
 from dol import written_key
 
 
+def identity(x):
+    return x
+
+
 def fullpath(path: str) -> str:
     """
     Returns the full path of the given path.
@@ -52,7 +56,7 @@ def fullpath(path: str) -> str:
 
 
 def save_to_file_and_return_file(
-    obj=None, *, encoder=lambda x: x, key: Union[str, Callable] = None
+    obj=None, *, encoder=identity, key: Union[str, Callable] = None
 ):
     """
     Save `encoder(obj)` to a file using a random name in `rootdir` (or a temp directory if not provided).
@@ -105,6 +109,252 @@ def save_to_file_and_return_file(
 
 
 # --------------------------------------------------------------------------------------
+# Converting things to markdown
+
+import contextlib
+import base64
+import io
+import json
+from typing import Callable, Dict, Optional, Mapping, MutableMapping, Any
+
+from dol import Files, TextFiles
+
+# Import libraries with error suppression
+ignore_import_errors = contextlib.suppress(ImportError)
+
+# Initialize the default converters dictionary
+dflt_converters: Dict[str, Callable[[bytes], str]] = {}
+
+dflt_md_inner_file_header = '###'
+
+# PDF Conversion
+with ignore_import_errors:
+    import pypdf
+
+    def pdf_to_markdown(
+        pdf_bytes: bytes, *, md_inner_file_header=dflt_md_inner_file_header
+    ) -> str:
+        """Convert PDF to markdown text."""
+        pdf_reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
+        pages = []
+        for page in pdf_reader.pages:
+            text = page.extract_text()
+            pages.append(f"{md_inner_file_header} Page {len(pages) + 1}\n\n{text}")
+        return "\n\n".join(pages)
+
+    dflt_converters['pdf'] = pdf_to_markdown
+
+# Microsoft Office Conversion
+with ignore_import_errors:
+    import mammoth  # for .docx
+
+    def docx_to_markdown(docx_bytes: bytes) -> str:
+        """Convert DOCX to markdown."""
+        result = mammoth.convert_to_markdown(io.BytesIO(docx_bytes))
+        return result.value
+
+    dflt_converters['docx'] = docx_to_markdown
+    dflt_converters['doc'] = docx_to_markdown
+
+# Excel Conversion
+with ignore_import_errors:
+    import pandas as pd
+
+    def excel_to_markdown(
+        excel_bytes: bytes, *, md_inner_file_header=dflt_md_inner_file_header
+    ) -> str:
+        """Convert Excel files to markdown tables."""
+        # Support both xls and xlsx
+        dfs = pd.read_excel(io.BytesIO(excel_bytes), sheet_name=None)
+        markdown_output = []
+
+        for sheet_name, df in dfs.items():
+            markdown_output.append(f"{md_inner_file_header} Sheet: {sheet_name}\n")
+            # Convert DataFrame to markdown table
+            markdown_output.append(df.to_markdown(index=False))
+            markdown_output.append("\n")
+
+        return "\n".join(markdown_output)
+
+    dflt_converters['xlsx'] = excel_to_markdown
+    dflt_converters['xls'] = excel_to_markdown
+
+# PowerPoint Conversion
+with ignore_import_errors:
+    import pptx
+
+    def pptx_to_markdown(
+        pptx_bytes: bytes, *, md_inner_file_header=dflt_md_inner_file_header
+    ) -> str:
+        """Convert PowerPoint to markdown."""
+        presentation = pptx.Presentation(io.BytesIO(pptx_bytes))
+        slides = []
+
+        for i, slide in enumerate(presentation.slides, 1):
+            slide_text = [f"{md_inner_file_header} Slide {i}\n"]
+
+            # Extract text from various elements
+            for shape in slide.shapes:
+                if hasattr(shape, "text"):
+                    slide_text.append(shape.text)
+
+            slides.append("\n".join(slide_text))
+
+        return "\n\n".join(slides)
+
+    dflt_converters['pptx'] = pptx_to_markdown
+    dflt_converters['ppt'] = pptx_to_markdown
+
+# HTML Conversion
+with ignore_import_errors:
+    import html2text
+
+    def html_to_markdown(html_bytes: bytes) -> str:
+        """Convert HTML to markdown."""
+        # Decode bytes to string
+        html_str = html_bytes.decode('utf-8', errors='ignore')
+
+        # Create HTML to Markdown converter
+        h = html2text.HTML2Text()
+        h.ignore_links = False
+        h.ignore_images = False
+
+        return h.handle(html_str)
+
+    dflt_converters['html'] = html_to_markdown
+
+
+# Fallback converter (default)
+def default_fallback(b: bytes, input_format: str) -> str:
+    """Fallback converter that attempts basic text extraction."""
+    try:
+        # Try decoding with different encodings
+        encodings = ['utf-8', 'latin-1', 'ascii', 'utf-16']
+        for encoding in encodings:
+            try:
+                return b.decode(encoding)
+            except UnicodeDecodeError:
+                continue
+
+        # If decoding fails, convert to base64 for preservation
+        return f"# Conversion Failed for {input_format}\n\n```\n{base64.b64encode(b).decode('utf-8')}\n```"
+    except Exception as e:
+        return f"# Conversion Error\n\nCould not convert {input_format}: {str(e)}"
+
+
+def convert_to_markdown(
+    b: bytes,
+    input_format: str,
+    *,
+    converters: Dict[str, Callable[[bytes], str]] = dflt_converters,
+    fallback: Callable = default_fallback,
+) -> str:
+    """
+    Convert bytes of a given format to markdown text.
+
+    Args:
+        b (bytes): Input bytes to convert
+        input_format (str): Format of the input (e.g., 'pdf', 'docx')
+        converters (Dict[str, Callable]): Dictionary of format-specific converters
+        fallback (Callable): Fallback conversion method
+
+    Returns:
+        str: Markdown-formatted text
+    """
+    converter = converters.get(input_format.lower(), None)
+    if converter is not None:
+        return converter(b)
+    else:
+        return fallback(b, input_format)
+
+
+def add_dflt_converter(input_format: str, converter: Callable[[bytes], str]):
+    """Add (or change) a default converter for a given input format."""
+    dflt_converters[input_format.lower()] = converter
+
+
+def get_extension(path: str) -> str:
+    """Get the extension of a file path."""
+    return Path(path).suffix.lstrip(".").lower()
+
+
+def extensions_not_supported_by_converters(
+    paths: Union[str, Iterable[str]], converters: Iterable = dflt_converters
+):
+    """
+    Returns a set of file extensions that are not supported by the given converters.
+
+    Args:
+        paths (str or Iterable): A list of file paths or the root directory to check for paths.
+        converters (dict): An iterable of extensions supported by the converters.
+            By default, it's the default converters (a dict, so keys are considered).
+
+    Returns:
+        set: A set of file extensions that are not supported by the given converters.
+
+    """
+    if isinstance(paths, str):
+        paths = Files(paths)
+
+    paths_extensions = {get_extension(path) for path in paths}
+    supported_extensions = set(converters)
+
+    return paths_extensions - supported_extensions
+
+
+def _resolve_src_bytes_store_and_target_text_store(src_files, target_store):
+    """
+    Resolves the source bytes store and target text store.
+    """
+    if isinstance(src_files, str):
+        src_rootdir = fullpath(src_files)
+        src_files = Files(src_rootdir)
+    else:
+        if hasattr(src_files, 'rootdir'):
+            src_rootdir = src_files.rootdir
+        else:
+            src_rootdir = None
+
+    if target_store is None:
+        target_store = dict()
+
+    if isinstance(target_store, str):
+        target_store = TextFiles(target_store)
+
+    return src_files, target_store
+
+
+def convert_files_to_markdown(
+    src_files: Union[str, Mapping[str, bytes]],
+    target_store: Union[str, MutableMapping[str, bytes]] = None,
+    *,
+    converters: Dict[str, Callable[[bytes], str]] = dflt_converters,
+    verbose: bool = False,
+    old_to_new_key: Callable[[str], str] = lambda x: x + ".md",
+    target_store_egress: Callable[[Mapping], Any] = identity,
+):
+    """
+    Converts files to markdown using the specified converters.
+
+    Tip: You can use `target_store_egress=aggregate_store` to get an aggregate string
+    as your output.
+    """
+    src_files, target_store = _resolve_src_bytes_store_and_target_text_store(
+        src_files, target_store
+    )
+    _convert_to_markdown = partial(convert_to_markdown, converters=converters)
+
+    for src_key, src_bytes in src_files.items():
+        if verbose:
+            print(f"Converting {src_key} to markdown")
+        ext = get_extension(src_key)
+        target_key = old_to_new_key(src_key)
+        target_store[target_key] = _convert_to_markdown(src_bytes, ext)
+
+    return target_store_egress(target_store)
+
+
+# --------------------------------------------------------------------------------------
 # Store aggregation
 
 from typing import Optional, Mapping, Iterable, Union
@@ -117,26 +367,22 @@ def aggregate_store(
     min_number_of_duplicated_lines: Optional[int] = None,
     max_num_characters: Optional[int] = None,
     exclude: Optional[Iterable] = None,
-    chk_size=10,
-    egress: Optional[Union[str, Callable]] = "store_aggregate_{:02.0f}.md",
+    chk_size=None,
+    egress: Optional[Union[str, Callable]] = None,
     **store_aggregate_kwargs,
 ):
     """
     Aggregates and processes text files from a store.
-
-
 
     Parameters:
         store: The source store (e.g., TextFiles instance)
         min_number_of_duplicated_lines (int): If not None, minimum block size for deduplication.
         max_num_characters (int): Maximum number of characters per file.
         exclude (set): Set of filenames to exclude.
-        chk_size (int): Chunk size for aggregation.
+        chk_size (int): Chunk size for aggregation. If None, won't chunk
         egress (str or callable): Template for output filenames or function to call on each chunk
         **store_aggregate_kwargs: Additional keyword arguments to pass to store_aggregate.
     """
-    from lkj.chunking import chunk_iterable
-
     if exclude is None:
         exclude = set()
 
@@ -155,6 +401,8 @@ def aggregate_store(
                 return_removed_blocks=False,
             )
         )
+    else:
+        remove_duplicate_lines = identity
 
     if max_num_characters is not None:
         wrappers.append(wrap_kvs(value_decoder=lambda v: v[:max_num_characters]))
@@ -168,7 +416,7 @@ def aggregate_store(
             capped_num_characters,
         )
     else:
-        store_wrap = lambda x: x
+        store_wrap = identity
 
     wrapped_store = store_wrap(store)
 
@@ -181,12 +429,17 @@ def aggregate_store(
         ), "egress must be None, str, or callable"
 
     if isinstance(chk_size, int):
-        chunks = chunk_iterable(wrapped_store, chk_size)
-    else:
-        chunks = (wrapped_store,)
+        from lkj.chunking import chunk_iterable
 
-    for i, sub_store in enumerate(chunks, 1):
-        store_aggregate(sub_store, egress=egress(i), **store_aggregate_kwargs)
+        chunks = chunk_iterable(wrapped_store, chk_size)
+        if egress is not None:
+            egress = "store_aggregate_{:02.0f}.md"
+        for i, sub_store in enumerate(chunks, 1):
+            store_aggregate(sub_store, egress=egress(i), **store_aggregate_kwargs)
+    else:
+        if egress is None:
+            egress = identity
+        return store_aggregate(wrapped_store, egress=egress, **store_aggregate_kwargs)
 
 
 # --------------------------------------------------------------------------------------
@@ -246,7 +499,7 @@ def notebook_to_markdown(
             if self.output_processors:
                 self.process_output = Pipe(*output_processors)
             else:
-                self.process_output = lambda x: x
+                self.process_output = identity
 
         def preprocess_cell(self, cell, resources, index):
             if "outputs" in cell:
@@ -598,7 +851,7 @@ Filepath = str
 def code_aggregate(
     code_src: CodeSource,
     *,
-    egress: Union[Callable, Filepath] = lambda x: x,
+    egress: Union[Callable, Filepath] = identity,
     kv_to_item=lambda k, v: f"## {k}\n\n```python\n{v.strip()}\n```",
     **store_aggregate_kwargs,
 ) -> Any:
