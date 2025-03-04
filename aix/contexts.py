@@ -125,7 +125,7 @@ ignore_import_errors = contextlib.suppress(ImportError)
 # Initialize the default converters dictionary
 dflt_converters: Dict[str, Callable[[bytes], str]] = {}
 
-dflt_md_inner_file_header = '###'
+dflt_md_inner_file_header = "###"
 
 # PDF Conversion
 with ignore_import_errors:
@@ -142,7 +142,7 @@ with ignore_import_errors:
             pages.append(f"{md_inner_file_header} Page {len(pages) + 1}\n\n{text}")
         return "\n\n".join(pages)
 
-    dflt_converters['pdf'] = pdf_to_markdown
+    dflt_converters["pdf"] = pdf_to_markdown
 
 # Microsoft Office Conversion
 with ignore_import_errors:
@@ -153,8 +153,8 @@ with ignore_import_errors:
         result = mammoth.convert_to_markdown(io.BytesIO(docx_bytes))
         return result.value
 
-    dflt_converters['docx'] = docx_to_markdown
-    dflt_converters['doc'] = docx_to_markdown
+    dflt_converters["docx"] = docx_to_markdown
+    dflt_converters["doc"] = docx_to_markdown
 
 # Excel Conversion
 with ignore_import_errors:
@@ -176,8 +176,8 @@ with ignore_import_errors:
 
         return "\n".join(markdown_output)
 
-    dflt_converters['xlsx'] = excel_to_markdown
-    dflt_converters['xls'] = excel_to_markdown
+    dflt_converters["xlsx"] = excel_to_markdown
+    dflt_converters["xls"] = excel_to_markdown
 
 # PowerPoint Conversion
 with ignore_import_errors:
@@ -202,8 +202,8 @@ with ignore_import_errors:
 
         return "\n\n".join(slides)
 
-    dflt_converters['pptx'] = pptx_to_markdown
-    dflt_converters['ppt'] = pptx_to_markdown
+    dflt_converters["pptx"] = pptx_to_markdown
+    dflt_converters["ppt"] = pptx_to_markdown
 
 # HTML Conversion
 with ignore_import_errors:
@@ -212,7 +212,7 @@ with ignore_import_errors:
     def html_to_markdown(html_bytes: bytes) -> str:
         """Convert HTML to markdown."""
         # Decode bytes to string
-        html_str = html_bytes.decode('utf-8', errors='ignore')
+        html_str = html_bytes.decode("utf-8", errors="ignore")
 
         # Create HTML to Markdown converter
         h = html2text.HTML2Text()
@@ -221,7 +221,7 @@ with ignore_import_errors:
 
         return h.handle(html_str)
 
-    dflt_converters['html'] = html_to_markdown
+    dflt_converters["html"] = html_to_markdown
 
 
 # Fallback converter (default)
@@ -229,7 +229,7 @@ def default_fallback(b: bytes, input_format: str) -> str:
     """Fallback converter that attempts basic text extraction."""
     try:
         # Try decoding with different encodings
-        encodings = ['utf-8', 'latin-1', 'ascii', 'utf-16']
+        encodings = ["utf-8", "latin-1", "ascii", "utf-16"]
         for encoding in encodings:
             try:
                 return b.decode(encoding)
@@ -310,7 +310,7 @@ def _resolve_src_bytes_store_and_target_text_store(src_files, target_store):
         src_rootdir = fullpath(src_files)
         src_files = Files(src_rootdir)
     else:
-        if hasattr(src_files, 'rootdir'):
+        if hasattr(src_files, "rootdir"):
             src_rootdir = src_files.rootdir
         else:
             src_rootdir = None
