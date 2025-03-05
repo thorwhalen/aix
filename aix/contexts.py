@@ -260,6 +260,8 @@ def bytes_to_markdown(
 
     Returns:
         str: Markdown-formatted text
+
+    See also: https://github.com/thorwhalen/aix/discussions/3#discussioncomment-12387852
     """
     converter = converters.get(input_format.lower(), None)
     if converter is not None:
