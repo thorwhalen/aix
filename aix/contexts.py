@@ -591,7 +591,7 @@ def extract_urls(
     """
     if pattern is None:
         # Default pattern matches markdown hyperlinks: [context](url)
-        pattern = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+        pattern = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 
     if extractor is None:
         # Default extractor for markdown hyperlinks
@@ -619,7 +619,7 @@ def extract_with_surrounding_context(
         Iterator of (context, url) pairs
     """
     # Pattern to match URLs with a simple validation
-    pattern = re.compile(r'https?://[^\s]+')
+    pattern = re.compile(r"https?://[^\s]+")
 
     def surrounding_context_extractor(match: re.Match) -> Tuple[str, str]:
         url = match.group(0)
@@ -642,7 +642,7 @@ def extract_urls_only(markdown: str) -> Iterator[Tuple[str, str]]:
         Iterator of (empty_context, url) pairs
     """
     # More comprehensive URL pattern
-    pattern = re.compile(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+(?:/[^\s]*)?')
+    pattern = re.compile(r"https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+(?:/[^\s]*)?")
 
     def url_only_extractor(match: re.Match) -> Tuple[str, str]:
         url = match.group(0)
@@ -676,6 +676,7 @@ extract_urls.only_urls = extract_urls_only
 extract_urls.html_links = extract_html_links
 
 DFLT_SAVE_DIR = os.path.expanduser("~/Downloads")
+
 
 def download_articles(
     md_string: str,
