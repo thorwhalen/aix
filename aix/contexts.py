@@ -548,6 +548,8 @@ def notebook_to_markdown(
     return target_file
 
 
+dflt_converters["ipynb"] = notebook_to_markdown
+
 # --------------------------------------------------------------------------------------
 # Download articles from a markdown string and save them as PDF files
 
@@ -559,10 +561,121 @@ def notebook_to_markdown(
 
 import os
 import re
+from typing import Callable, Iterator, Pattern, Tuple, Optional
 import requests
 
 DFLT_SAVE_DIR = os.path.expanduser("~/Downloads")
 
+
+def extract_urls(
+    markdown: str,
+    pattern: Optional[Pattern] = None,
+    extractor: Optional[Callable[[re.Match], Tuple[str, str]]] = None,
+) -> Iterator[Tuple[str, str]]:
+    """
+    Extract URLs and their context from a markdown string.
+
+    Args:
+        markdown: The markdown string to process
+        pattern: A compiled regex pattern to match URLs and their context
+                 Defaults to matching markdown hyperlinks [context](url)
+        extractor: A function that extracts (context, url) from a match
+                  Defaults to extracting from markdown hyperlinks
+
+    Returns:
+        Iterator of (context, url) pairs
+
+    >>> text = "[Google](https://google.com) and [GitHub](https://github.com)"
+    >>> list(extract_urls(text))
+    [('Google', 'https://google.com'), ('GitHub', 'https://github.com')]
+    """
+    if pattern is None:
+        # Default pattern matches markdown hyperlinks: [context](url)
+        pattern = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+
+    if extractor is None:
+        # Default extractor for markdown hyperlinks
+        def extractor(match: re.Match) -> Tuple[str, str]:
+            return match.group(1), match.group(2)
+
+    for match in pattern.finditer(markdown):
+        yield extractor(match)
+
+
+# Example alternative patterns and extractors
+
+
+def extract_with_surrounding_context(
+    markdown: str, context_chars: int = 30
+) -> Iterator[Tuple[str, str]]:
+    """
+    Extract URLs with surrounding text as context.
+
+    Args:
+        markdown: The markdown string to process
+        context_chars: Number of characters to include before and after URL
+
+    Returns:
+        Iterator of (context, url) pairs
+    """
+    # Pattern to match URLs with a simple validation
+    pattern = re.compile(r'https?://[^\s]+')
+
+    def surrounding_context_extractor(match: re.Match) -> Tuple[str, str]:
+        url = match.group(0)
+        start = max(0, match.start() - context_chars)
+        end = min(len(markdown), match.end() + context_chars)
+        context = markdown[start:end].strip()
+        return context, url
+
+    return extract_urls(markdown, pattern, surrounding_context_extractor)
+
+
+def extract_urls_only(markdown: str) -> Iterator[Tuple[str, str]]:
+    """
+    Extract URLs with empty context.
+
+    Args:
+        markdown: The markdown string to process
+
+    Returns:
+        Iterator of (empty_context, url) pairs
+    """
+    # More comprehensive URL pattern
+    pattern = re.compile(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+(?:/[^\s]*)?')
+
+    def url_only_extractor(match: re.Match) -> Tuple[str, str]:
+        url = match.group(0)
+        return "", url
+
+    return extract_urls(markdown, pattern, url_only_extractor)
+
+
+def extract_html_links(markdown: str) -> Iterator[Tuple[str, str]]:
+    """
+    Extract URLs from HTML anchor tags.
+
+    Args:
+        markdown: The markdown or HTML string to process
+
+    Returns:
+        Iterator of (anchor_text, url) pairs
+    """
+    # Simple pattern for HTML anchor tags
+    pattern = re.compile(r'<a\s+(?:[^>]*?\s+)?href="([^"]*)"[^>]*>(.*?)</a>')
+
+    def html_link_extractor(match: re.Match) -> Tuple[str, str]:
+        # Note the order is reversed in HTML: href first, then text
+        return match.group(2), match.group(1)
+
+    return extract_urls(markdown, pattern, html_link_extractor)
+
+
+extract_urls.with_surrounding_context = extract_with_surrounding_context
+extract_urls.only_urls = extract_urls_only
+extract_urls.html_links = extract_html_links
+
+DFLT_SAVE_DIR = os.path.expanduser("~/Downloads")
 
 def download_articles(
     md_string: str,
