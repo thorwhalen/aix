@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.contexts &mdash; aix 0.0.20 documentation</title>
+  <title>aix.contexts &mdash; aix 0.0.22 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=056c92e6"></script>
+      <script src="../../_static/documentation_options.js?v=96ec9c95"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -67,6 +67,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.download_articles_by_section"><code class="docutils literal notranslate"><span class="pre">download_articles_by_section()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.excel_to_markdown"><code class="docutils literal notranslate"><span class="pre">excel_to_markdown()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.extensions_not_supported_by_converters"><code class="docutils literal notranslate"><span class="pre">extensions_not_supported_by_converters()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.extract_html_links"><code class="docutils literal notranslate"><span class="pre">extract_html_links()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.extract_urls"><code class="docutils literal notranslate"><span class="pre">extract_urls()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.extract_urls_only"><code class="docutils literal notranslate"><span class="pre">extract_urls_only()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.contexts.extract_with_surrounding_context"><code class="docutils literal notranslate"><span class="pre">extract_with_surrounding_context()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.fullpath"><code class="docutils literal notranslate"><span class="pre">fullpath()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.get_extension"><code class="docutils literal notranslate"><span class="pre">get_extension()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.contexts.is_local_pkg_name"><code class="docutils literal notranslate"><span class="pre">is_local_pkg_name()</span></code></a></li>
@@ -191,7 +195,7 @@ Saves the result to a file if a name is provided.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.contexts.bytes_store_to_markdown_store">
-<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">bytes_store_to_markdown_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">src_files:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.Mapping[str,</span> <span class="pre">bytes],</span> <span class="pre">target_store:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.MutableMapping[str,</span> <span class="pre">bytes]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">*,</span> <span class="pre">converters:</span> <span class="pre">~typing.Dict[str,</span> <span class="pre">~typing.Callable[[bytes],</span> <span class="pre">str]]</span> <span class="pre">=</span> <span class="pre">{'xls':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;,</span> <span class="pre">'xlsx':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;},</span> <span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">old_to_new_key:</span> <span class="pre">~typing.Callable[[str],</span> <span class="pre">str]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;,</span> <span class="pre">target_store_egress:</span> <span class="pre">~typing.Callable[[~typing.Mapping],</span> <span class="pre">~typing.Any]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">identity&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#bytes_store_to_markdown_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.bytes_store_to_markdown_store" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">bytes_store_to_markdown_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">src_files:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.Mapping[str,</span> <span class="pre">bytes],</span> <span class="pre">target_store:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.MutableMapping[str,</span> <span class="pre">bytes]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">*,</span> <span class="pre">converters:</span> <span class="pre">~typing.Dict[str,</span> <span class="pre">~typing.Callable[[bytes],</span> <span class="pre">str]]</span> <span class="pre">=</span> <span class="pre">{'ipynb':</span> <span class="pre">&lt;function</span> <span class="pre">notebook_to_markdown&gt;,</span> <span class="pre">'xls':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;,</span> <span class="pre">'xlsx':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;},</span> <span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">old_to_new_key:</span> <span class="pre">~typing.Callable[[str],</span> <span class="pre">str]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;,</span> <span class="pre">target_store_egress:</span> <span class="pre">~typing.Callable[[~typing.Mapping],</span> <span class="pre">~typing.Any]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">identity&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#bytes_store_to_markdown_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.bytes_store_to_markdown_store" title="Link to this definition"></a></dt>
 <dd><p>Converts files to markdown using the specified converters.</p>
 <p>Tip: You can use <cite>target_store_egress=aggregate_store</cite> to get an aggregate string
 as your output.</p>
@@ -199,7 +203,7 @@ as your output.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.contexts.bytes_to_markdown">
-<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">bytes_to_markdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">b:</span> <span class="pre">bytes,</span> <span class="pre">input_format:</span> <span class="pre">str,</span> <span class="pre">*,</span> <span class="pre">converters:</span> <span class="pre">~typing.Dict[str,</span> <span class="pre">~typing.Callable[[bytes],</span> <span class="pre">str]]</span> <span class="pre">=</span> <span class="pre">{'xls':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;,</span> <span class="pre">'xlsx':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;},</span> <span class="pre">fallback:</span> <span class="pre">~typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">default_fallback&gt;</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#bytes_to_markdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.bytes_to_markdown" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">bytes_to_markdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">b:</span> <span class="pre">bytes,</span> <span class="pre">input_format:</span> <span class="pre">str,</span> <span class="pre">*,</span> <span class="pre">converters:</span> <span class="pre">~typing.Dict[str,</span> <span class="pre">~typing.Callable[[bytes],</span> <span class="pre">str]]</span> <span class="pre">=</span> <span class="pre">{'ipynb':</span> <span class="pre">&lt;function</span> <span class="pre">notebook_to_markdown&gt;,</span> <span class="pre">'xls':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;,</span> <span class="pre">'xlsx':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;},</span> <span class="pre">fallback:</span> <span class="pre">~typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">default_fallback&gt;</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#bytes_to_markdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.bytes_to_markdown" title="Link to this definition"></a></dt>
 <dd><p>Convert bytes of a given format to markdown text.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -374,7 +378,7 @@ Defaults to ‘~/Downloads’.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.contexts.extensions_not_supported_by_converters">
-<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">extensions_not_supported_by_converters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">paths:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.Iterable[str],</span> <span class="pre">converters:</span> <span class="pre">~typing.Iterable</span> <span class="pre">=</span> <span class="pre">{'xls':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;,</span> <span class="pre">'xlsx':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#extensions_not_supported_by_converters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.extensions_not_supported_by_converters" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">extensions_not_supported_by_converters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">paths:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~typing.Iterable[str],</span> <span class="pre">converters:</span> <span class="pre">~typing.Iterable</span> <span class="pre">=</span> <span class="pre">{'ipynb':</span> <span class="pre">&lt;function</span> <span class="pre">notebook_to_markdown&gt;,</span> <span class="pre">'xls':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;,</span> <span class="pre">'xlsx':</span> <span class="pre">&lt;function</span> <span class="pre">excel_to_markdown&gt;}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/contexts.html#extensions_not_supported_by_converters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.extensions_not_supported_by_converters" title="Link to this definition"></a></dt>
 <dd><p>Returns a set of file extensions that are not supported by the given converters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -389,6 +393,76 @@ By default, it’s the default converters (a dict, so keys are considered).</p><
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.extract_html_links">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">extract_html_links</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markdown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#extract_html_links"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.extract_html_links" title="Link to this definition"></a></dt>
+<dd><p>Extract URLs from HTML anchor tags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>markdown</strong> – The markdown or HTML string to process</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Iterator of (anchor_text, url) pairs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.extract_urls">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">extract_urls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markdown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Pattern</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extractor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Match</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#extract_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.extract_urls" title="Link to this definition"></a></dt>
+<dd><p>Extract URLs and their context from a markdown string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>markdown</strong> – The markdown string to process</p></li>
+<li><p><strong>pattern</strong> – A compiled regex pattern to match URLs and their context
+Defaults to matching markdown hyperlinks [context](url)</p></li>
+<li><p><strong>extractor</strong> – A function that extracts (context, url) from a match
+Defaults to extracting from markdown hyperlinks</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Iterator of (context, url) pairs</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;[Google](https://google.com) and [GitHub](https://github.com)&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">extract_urls</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+<span class="go">[(&#39;Google&#39;, &#39;https://google.com&#39;), (&#39;GitHub&#39;, &#39;https://github.com&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.extract_urls_only">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">extract_urls_only</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markdown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#extract_urls_only"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.extract_urls_only" title="Link to this definition"></a></dt>
+<dd><p>Extract URLs with empty context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>markdown</strong> – The markdown string to process</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Iterator of (empty_context, url) pairs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.contexts.extract_with_surrounding_context">
+<span class="sig-prename descclassname"><span class="pre">aix.contexts.</span></span><span class="sig-name descname"><span class="pre">extract_with_surrounding_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markdown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context_chars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/contexts.html#extract_with_surrounding_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.contexts.extract_with_surrounding_context" title="Link to this definition"></a></dt>
+<dd><p>Extract URLs with surrounding text as context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>markdown</strong> – The markdown string to process</p></li>
+<li><p><strong>context_chars</strong> – Number of characters to include before and after URL</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Iterator of (context, url) pairs</p>
 </dd>
 </dl>
 </dd></dl>

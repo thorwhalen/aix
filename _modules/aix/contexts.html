@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.contexts &mdash; aix 0.0.20 documentation</title>
+  <title>aix.contexts &mdash; aix 0.0.22 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=056c92e6"></script>
+      <script src="../../_static/documentation_options.js?v=96ec9c95"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -667,6 +667,8 @@
 
 
 
+<span class="n">dflt_converters</span><span class="p">[</span><span class="s2">&quot;ipynb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">notebook_to_markdown</span>
+
 <span class="c1"># --------------------------------------------------------------------------------------</span>
 <span class="c1"># Download articles from a markdown string and save them as PDF files</span>
 
@@ -678,10 +680,133 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Pattern</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 <span class="n">DFLT_SAVE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/Downloads&quot;</span><span class="p">)</span>
 
+
+<div class="viewcode-block" id="extract_urls">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.extract_urls">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_urls</span><span class="p">(</span>
+    <span class="n">markdown</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">pattern</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Pattern</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">extractor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">re</span><span class="o">.</span><span class="n">Match</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract URLs and their context from a markdown string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        markdown: The markdown string to process</span>
+<span class="sd">        pattern: A compiled regex pattern to match URLs and their context</span>
+<span class="sd">                 Defaults to matching markdown hyperlinks [context](url)</span>
+<span class="sd">        extractor: A function that extracts (context, url) from a match</span>
+<span class="sd">                  Defaults to extracting from markdown hyperlinks</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Iterator of (context, url) pairs</span>
+
+<span class="sd">    &gt;&gt;&gt; text = &quot;[Google](https://google.com) and [GitHub](https://github.com)&quot;</span>
+<span class="sd">    &gt;&gt;&gt; list(extract_urls(text))</span>
+<span class="sd">    [(&#39;Google&#39;, &#39;https://google.com&#39;), (&#39;GitHub&#39;, &#39;https://github.com&#39;)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Default pattern matches markdown hyperlinks: [context](url)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\[([^\]]+)\]\(([^)]+)\)&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">extractor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Default extractor for markdown hyperlinks</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">extractor</span><span class="p">(</span><span class="n">match</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Match</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">pattern</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">markdown</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">extractor</span><span class="p">(</span><span class="n">match</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Example alternative patterns and extractors</span>
+
+
+<div class="viewcode-block" id="extract_with_surrounding_context">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.extract_with_surrounding_context">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_with_surrounding_context</span><span class="p">(</span>
+    <span class="n">markdown</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context_chars</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract URLs with surrounding text as context.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        markdown: The markdown string to process</span>
+<span class="sd">        context_chars: Number of characters to include before and after URL</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Iterator of (context, url) pairs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Pattern to match URLs with a simple validation</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;https?://[^\s]+&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">surrounding_context_extractor</span><span class="p">(</span><span class="n">match</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Match</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="o">-</span> <span class="n">context_chars</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">markdown</span><span class="p">),</span> <span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span> <span class="o">+</span> <span class="n">context_chars</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">markdown</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">context</span><span class="p">,</span> <span class="n">url</span>
+
+    <span class="k">return</span> <span class="n">extract_urls</span><span class="p">(</span><span class="n">markdown</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">surrounding_context_extractor</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="extract_urls_only">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.extract_urls_only">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_urls_only</span><span class="p">(</span><span class="n">markdown</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract URLs with empty context.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        markdown: The markdown string to process</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Iterator of (empty_context, url) pairs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># More comprehensive URL pattern</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;https?://(?:[-\w.]|(?:%[\da-fA-F]</span><span class="si">{2}</span><span class="s1">))+(?:/[^\s]*)?&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">url_only_extractor</span><span class="p">(</span><span class="n">match</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Match</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span>
+
+    <span class="k">return</span> <span class="n">extract_urls</span><span class="p">(</span><span class="n">markdown</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">url_only_extractor</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="extract_html_links">
+<a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.extract_html_links">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_html_links</span><span class="p">(</span><span class="n">markdown</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract URLs from HTML anchor tags.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        markdown: The markdown or HTML string to process</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Iterator of (anchor_text, url) pairs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Simple pattern for HTML anchor tags</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;a\s+(?:[^&gt;]*?\s+)?href=&quot;([^&quot;]*)&quot;[^&gt;]*&gt;(.*?)&lt;/a&gt;&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">html_link_extractor</span><span class="p">(</span><span class="n">match</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Match</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="c1"># Note the order is reversed in HTML: href first, then text</span>
+        <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">extract_urls</span><span class="p">(</span><span class="n">markdown</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">html_link_extractor</span><span class="p">)</span></div>
+
+
+
+<span class="n">extract_urls</span><span class="o">.</span><span class="n">with_surrounding_context</span> <span class="o">=</span> <span class="n">extract_with_surrounding_context</span>
+<span class="n">extract_urls</span><span class="o">.</span><span class="n">only_urls</span> <span class="o">=</span> <span class="n">extract_urls_only</span>
+<span class="n">extract_urls</span><span class="o">.</span><span class="n">html_links</span> <span class="o">=</span> <span class="n">extract_html_links</span>
+
+<span class="n">DFLT_SAVE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/Downloads&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="download_articles">
 <a class="viewcode-back" href="../../module_docs/aix/contexts.html#aix.contexts.download_articles">[docs]</a>
