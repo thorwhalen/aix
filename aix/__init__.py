@@ -27,12 +27,6 @@ Choose a chat function and chat with it:
 """
 
 from aix.gen_ai import chat, chat_models, chat_funcs
-from aix import contexts
-from aix.contexts import (
-    bytes_to_markdown,  # Convert bytes to markdown (with plugin support for different types of files)
-    bytes_store_to_markdown_store,  # Convert a bytes store to a markdown store based on extensions
-    aggregate_store,  # Aggregate a store into a single value (say, a string)
-)
 
 # TODO: Change this so that there's a load_pkg function that loads the packages dynamically
 #   if and when use wants.
