@@ -76,14 +76,15 @@ __all__ = [
 
 # Convenience functions for common operations
 
+
 def list_available_models(
     *,
     provider: str | None = None,
     is_local: bool | None = None,
-    storage_path: str | None = None
+    storage_path: str | None = None,
 ) -> list[Model]:
     """Quick function to list available models without explicit manager.
-    
+
     >>> models = list_available_models(provider="openai")
     >>> len(models) >= 0
     True
@@ -100,7 +101,7 @@ def discover_models(
     verbose: bool = True,
 ) -> list[Model]:
     """Quick function to discover models from a source.
-    
+
     >>> models = discover_models("openrouter", auto_register=False, verbose=False)
     >>> len(models) > 0
     True
@@ -112,13 +113,10 @@ def discover_models(
 
 
 def get_model_metadata(
-    model_id: str,
-    connector_name: str,
-    *,
-    storage_path: str | None = None
+    model_id: str, connector_name: str, *, storage_path: str | None = None
 ) -> dict:
     """Quick function to get formatted metadata for a model.
-    
+
     >>> import tempfile, os, json
     >>> if 'OPENROUTER_API_KEY' in os.environ:
     ...     from aix.ai_models.manager import get_manager
