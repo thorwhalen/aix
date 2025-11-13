@@ -4,7 +4,8 @@ Provides a high-level API for managing AI models across providers.
 """
 
 from pathlib import Path
-from typing import Any, Iterable, Callable
+from typing import Any
+from collections.abc import Iterable, Callable
 
 from aix.ai_models.base import Model, ModelRegistry, ConnectorRegistry, ModelSource
 from aix.ai_models.sources import (

@@ -4,7 +4,8 @@ This module demonstrates common patterns and use cases.
 """
 
 from pathlib import Path
-from typing import Any, Iterable, Callable
+from typing import Any
+from collections.abc import Iterable, Callable
 from aix.ai_models.base import ModelSource, Model
 from aix.ai_models.manager import ModelManager
 

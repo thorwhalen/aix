@@ -5,7 +5,8 @@ connecting to AI models across multiple providers and deployment methods.
 """
 
 from dataclasses import dataclass, field, asdict
-from typing import Any, Mapping, MutableMapping, Iterator, Callable, Iterable
+from typing import Any
+from collections.abc import Mapping, MutableMapping, Iterator, Callable, Iterable
 from abc import ABC, abstractmethod
 import json
 from pathlib import Path
@@ -156,7 +157,7 @@ class ModelRegistry(MutableMapping[str, Model]):
         if not self._storage_path:
             return
         
-        with open(self._storage_path, 'r') as f:
+        with open(self._storage_path) as f:
             data = json.load(f)
             for model_data in data['models']:
                 # Reconstruct set for tags

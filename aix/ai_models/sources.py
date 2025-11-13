@@ -5,7 +5,8 @@ and connectors for formatting metadata for different clients.
 """
 
 import requests
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 from dataclasses import dataclass
 
 from aix.ai_models.base import Model, ModelSource, Connector
