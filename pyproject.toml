@@ -28,6 +28,7 @@ dependencies = [
     "requests",
     "contaix",
     "hypothesis",
+    "litellm>=1.0.0",
 ]
 
 [project.license]
