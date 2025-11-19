@@ -1,0 +1,88 @@
+[build-system]
+requires = [
+    "hatchling",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "aix"
+version = "0.0.24"
+description = "Artificial Intelligence eXtensions"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = []
+authors = [
+    { name = "Thor Whalen" },
+]
+dependencies = [
+    "guide",
+    "config2py",
+    "google",
+    "dol",
+    "i2",
+    "numpy",
+    "oa",
+    "pandas",
+    "scikit-learn",
+    "tabled",
+    "requests",
+    "contaix",
+    "hypothesis",
+]
+
+[project.license]
+text = "Apache-2.0"
+
+[project.urls]
+Homepage = "https://github.com/thorwhalen/aix"
+
+[project.optional-dependencies]
+testing = []
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+exclude = [
+    "**/*.ipynb",
+    ".git",
+    ".venv",
+    "build",
+    "dist",
+    "tests",
+    "examples",
+    "scrap",
+]
+
+[tool.ruff.lint]
+select = [
+    "D100",
+]
+ignore = [
+    "D203",
+    "E501",
+    "B905",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "D",
+]
+"examples/*" = [
+    "D",
+]
+"scrap/*" = [
+    "D",
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = [
+    "tests",
+]
+doctest_optionflags = [
+    "NORMALIZE_WHITESPACE",
+    "ELLIPSIS",
+]
