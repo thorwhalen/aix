@@ -14,6 +14,7 @@ pip install aix
 
 ```python
 from aix import chat, embeddings, prompt_func, models
+from aix import generate_image, text_to_speech, transcribe
 
 # Simple chat
 response = chat("What is 2+2?")
@@ -27,6 +28,17 @@ print(result)  # "Bonjour le monde"
 # Get embeddings
 vecs = list(embeddings(["hello", "world"]))
 print(len(vecs))  # 2
+
+# Generate images
+image = generate_image("A serene mountain landscape")
+image.save("landscape.png")
+
+# Text to speech
+audio = text_to_speech("Hello, world!")
+audio.save("hello.mp3")
+
+# Speech to text
+text = transcribe("recording.mp3")
 
 # Discover available models
 models.discover()
@@ -230,6 +242,115 @@ processor = BatchProcessor(show_progress=True)
 results = processor.process_chats(prompts)
 processor.save_results("output.json")
 ```
+
+### 6. Image Generation
+
+Generate images from text descriptions:
+
+```python
+from aix import generate_image, generate_images
+
+# Simple image generation
+image = generate_image("A serene mountain landscape at sunset")
+image.save("landscape.png")
+
+# High quality with DALL-E 3
+image = generate_image(
+    "Abstract art with vibrant colors",
+    model="dall-e-3",
+    quality="hd",
+    style="vivid"
+)
+
+# Generate multiple variations
+images = generate_images(
+    "A cute robot waving hello",
+    n=3,
+    size="512x512"
+)
+for i, img in enumerate(images):
+    img.save(f"robot_{i}.png")
+
+# Edit existing images
+from aix import edit_image
+
+edited = edit_image(
+    "photo.jpg",
+    "Add a rainbow in the sky",
+    mask_path="sky_mask.png"
+)
+
+# Create variations
+from aix import create_variation
+
+variations = create_variation("original.png", n=3)
+```
+
+### 7. Audio Operations
+
+Text-to-speech and speech-to-text:
+
+```python
+from aix import text_to_speech, transcribe, transcribe_with_timestamps
+
+# Text to speech
+audio = text_to_speech("Hello, world!")
+audio.save("hello.mp3")
+
+# Different voices
+audio = text_to_speech(
+    "This is a test",
+    voice="nova",
+    speed=1.2
+)
+
+# Transcribe audio
+text = transcribe("recording.mp3")
+print(text)  # "This is the transcribed text"
+
+# With language hint
+text = transcribe("spanish_audio.mp3", language="es")
+
+# Detailed transcription with timestamps
+result = transcribe_with_timestamps("lecture.mp3")
+for segment in result.segments:
+    print(f"[{segment['start']:.2f}] {segment['text']}")
+
+# Translate audio to English
+from aix import translate_audio
+
+english_text = translate_audio("spanish_audio.mp3")
+```
+
+### 8. Video Generation (Coming Soon)
+
+Video generation with provider-specific implementations:
+
+```python
+from aix import generate_video, get_video_providers
+
+# Check available providers
+providers = get_video_providers()
+print(providers)  # ['runway', 'pika', ...]
+
+# Generate video (requires provider setup)
+video = generate_video(
+    "A cat walking through a garden",
+    duration=5,
+    resolution="1920x1080"
+)
+video.save("cat_video.mp4")
+
+# Animate static image
+from aix import animate_image_to_video
+
+video = animate_image_to_video(
+    "landscape.jpg",
+    prompt="Gentle camera pan across the scene"
+)
+```
+
+**Note**: Video generation requires additional provider setup (Runway, Pika, etc.) and API keys.
 
 ## OpenRouter Integration
 

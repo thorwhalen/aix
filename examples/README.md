@@ -88,6 +88,43 @@ Discovering and selecting models:
 python examples/06_model_discovery.py
 ```
 
+### 07_image_generation.py
+Text-to-image generation:
+- Simple image generation
+- High quality with DALL-E 3
+- Different sizes and styles
+- Multiple variations
+- Creative prompts
+
+```bash
+python examples/07_image_generation.py
+```
+
+### 08_audio_operations.py
+Audio operations (TTS and transcription):
+- Text-to-speech with different voices
+- Speed variations
+- High quality TTS
+- Audio transcription
+- Language hints and timestamps
+- Round-trip testing
+
+```bash
+python examples/08_audio_operations.py
+```
+
+### 09_multimodal_workflow.py
+Combining multiple AI operations:
+- Text → Image → Description workflows
+- Text → Speech → Transcription → Analysis
+- Story generation with multimedia
+- Multilingual workflows
+- Content creation pipelines
+
+```bash
+python examples/09_multimodal_workflow.py
+```
+
 ## Running All Examples
 
 ```bash

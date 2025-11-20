@@ -30,6 +30,9 @@ Main Features:
     - embeddings(): Vector embeddings for text
     - prompt_func(): Create functions from prompt templates
     - models: Model discovery and selection
+    - generate_image(): Text-to-image generation
+    - text_to_speech(), transcribe(): Audio operations
+    - generate_video(): Text-to-video generation (provider-dependent)
     - Batch operations for efficiency
     - Clean, i2mint-style Mapping interfaces
 
@@ -70,6 +73,28 @@ from aix.batches import (
     batch_process,
     BatchProcessor,
 )
+from aix.image import (
+    generate_image,
+    generate_images,
+    edit_image,
+    create_variation,
+    GeneratedImage,
+)
+from aix.audio import (
+    text_to_speech,
+    transcribe,
+    transcribe_with_timestamps,
+    translate_audio,
+    GeneratedAudio,
+    TranscriptionResult,
+)
+from aix.video import (
+    generate_video,
+    animate_image as animate_image_to_video,
+    extend_video,
+    GeneratedVideo,
+    get_available_providers as get_video_providers,
+)
 
 # Legacy interfaces (for backward compatibility)
 from aix.gen_ai import chat_models, chat_funcs
@@ -107,6 +132,25 @@ __all__ = [
     'batch_embeddings',
     'batch_process',
     'BatchProcessor',
+    # Image
+    'generate_image',
+    'generate_images',
+    'edit_image',
+    'create_variation',
+    'GeneratedImage',
+    # Audio
+    'text_to_speech',
+    'transcribe',
+    'transcribe_with_timestamps',
+    'translate_audio',
+    'GeneratedAudio',
+    'TranscriptionResult',
+    # Video
+    'generate_video',
+    'animate_image_to_video',
+    'extend_video',
+    'GeneratedVideo',
+    'get_video_providers',
     # Legacy
     'chat_models',
     'chat_funcs',
