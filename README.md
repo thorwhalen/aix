@@ -1,199 +1,550 @@
+# AIX: Artificial Intelligence eXtensions
 
-# aix
-Artificial Intelligence eXtensions
+A clean, pythonic facade for common AI operations that abstracts away provider-specific details and complexities.
 
-Fast access to your favorite A.I. tools. 
+**Philosophy**: Make AI interactions as simple and intuitive as Python itself, while maintaining the power and flexibility needed for production use.
 
-To install:	```pip install aix```
+## Installation
 
-
-
-# AI chat
-
-`aix.chat_funcs` gathers the models you have access to in your environment 
-(depends on what you have installed (e.g. `google.generativeai`, `oa` (itself a facade to `openai` functionality), etc.)).
-
-
-```python
-from aix import chat_funcs
-
-list(chat_funcs)
+```bash
+pip install aix
 ```
 
-
-
-
-    ['gemini-1.5-flash',
-     'gpt-4',
-     'gpt-4-32k',
-     'gpt-4-turbo',
-     'gpt-3.5-turbo',
-     'o1-preview',
-     'o1-mini',
-     'gpt-4o',
-     'gpt-4o-mini']
-
-
-
-`chat_funcs` is a dictionary whos keys are the names of the available models, and 
-values are a `chat` function with the model set to that model name. 
-
+## Quick Start
 
 ```python
-chat_funcs['o1-mini']
+from aix import chat, embeddings, prompt_func, models
+from aix import generate_image, text_to_speech, transcribe
+
+# Simple chat
+response = chat("What is 2+2?")
+print(response)  # "The answer is 4."
+
+# Create prompt-based functions
+translate = prompt_func("Translate to French: {text}")
+result = translate(text="Hello world")
+print(result)  # "Bonjour le monde"
+
+# Get embeddings
+vecs = list(embeddings(["hello", "world"]))
+print(len(vecs))  # 2
+
+# Generate images
+image = generate_image("A serene mountain landscape")
+image.save("landscape.png")
+
+# Text to speech
+audio = text_to_speech("Hello, world!")
+audio.save("hello.mp3")
+
+# Speech to text
+text = transcribe("recording.mp3")
+
+# Discover available models
+models.discover()
+print(list(models)[:5])  # ['openai/gpt-4o', 'openai/gpt-4o-mini', ...]
 ```
 
+## Core Features
 
+### 1. Chat Interface
 
-    functools.partial(<function chat at 0x1355f68c0>, model='o1-mini')
-
-
-
-Note that different providers have different interfaces, but the functions that 
-`chat_funcs` provides all have `prompt` as their first argument. 
-
+Clean, provider-agnostic chat completions:
 
 ```python
-from inspect import signature
+from aix import chat
 
-signature(chat_funcs['o1-mini'])
+# Simple text prompt
+response = chat("Explain quantum computing in one sentence")
+
+# With specific model
+response = chat("Hello!", model="gpt-4o-mini")
+
+# With message history
+messages = [
+    {"role": "user", "content": "My name is Alice"},
+    {"role": "assistant", "content": "Nice to meet you, Alice!"},
+    {"role": "user", "content": "What's my name?"}
+]
+response = chat(messages, model="gpt-4o")
+
+# Streaming responses
+for chunk in chat("Count to 5", stream=True):
+    print(chunk, end='', flush=True)
+
+# Stateful conversations
+from aix import chat_with_history
+
+session = chat_with_history("You are a helpful math tutor")
+response = session.send("What is 2+2?")
+response = session.send("And if I add 3 to that?")  # Remembers context
 ```
 
+### 2. Embeddings
 
-
-
-    <Sig (prompt=None, *, model='o1-mini', messages=None, frequency_penalty: 'Optional[float] | NotGiven' = NOT_GIVEN, function_call: 'completion_create_params.FunctionCall | NotGiven' = NOT_GIVEN, functions: 'Iterable[completion_create_params.Function] | NotGiven' = NOT_GIVEN, logit_bias: 'Optional[Dict[str, int]] | NotGiven' = NOT_GIVEN, logprobs: 'Optional[bool] | NotGiven' = NOT_GIVEN, max_tokens: 'Optional[int] | NotGiven' = NOT_GIVEN, n: 'Optional[int] | NotGiven' = NOT_GIVEN, parallel_tool_calls: 'bool | NotGiven' = NOT_GIVEN, presence_penalty: 'Optional[float] | NotGiven' = NOT_GIVEN, response_format: 'completion_create_params.ResponseFormat | NotGiven' = NOT_GIVEN, seed: 'Optional[int] | NotGiven' = NOT_GIVEN, service_tier: "Optional[Literal['auto', 'default']] | NotGiven" = NOT_GIVEN, stop: 'Union[Optional[str], List[str]] | NotGiven' = NOT_GIVEN, stream: 'Optional[Literal[False]] | Literal[True] | NotGiven' = NOT_GIVEN, stream_options: 'Optional[ChatCompletionStreamOptionsParam] | NotGiven' = NOT_GIVEN, temperature: 'Optional[float] | NotGiven' = NOT_GIVEN, tool_choice: 'ChatCompletionToolChoiceOptionParam | NotGiven' = NOT_GIVEN, tools: 'Iterable[ChatCompletionToolParam] | NotGiven' = NOT_GIVEN, top_logprobs: 'Optional[int] | NotGiven' = NOT_GIVEN, top_p: 'Optional[float] | NotGiven' = NOT_GIVEN, user: 'str | NotGiven' = NOT_GIVEN, extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx.Timeout | None | NotGiven' = NOT_GIVEN)>
-
-
-
+Generate vector embeddings for semantic search and similarity:
 
 ```python
-signature(chat_funcs['gemini-1.5-flash'])
+from aix import embeddings, embed, cosine_similarity, find_most_similar
+
+# Batch embeddings
+texts = ["cat", "dog", "bird"]
+vecs = list(embeddings(texts))
+
+# Single text
+vec = embed("Hello, world!")
+
+# Compute similarity
+v1 = embed("cat")
+v2 = embed("kitten")
+similarity = cosine_similarity(v1, v2)  # High similarity
+
+# Find most similar documents
+query = "What is machine learning?"
+docs = [
+    "Machine learning is a type of AI",
+    "Python is a programming language",
+    "Neural networks are used in deep learning"
+]
+results = find_most_similar(query, docs, top_k=2)
+# Returns: [('Machine learning is a type of AI', 0.95), ...]
+
+# Caching for efficiency
+from aix import EmbeddingCache
+
+cache = EmbeddingCache()
+v1 = cache.embed("hello")  # API call
+v2 = cache.embed("hello")  # From cache
 ```
 
+### 3. Prompt-Based Functions
 
-
-
-    <Sig (prompt: str, *, model='gemini-1.5-flash', generation_config: 'generation_types.GenerationConfigType | None' = None, safety_settings: 'safety_types.SafetySettingOptions | None' = None, stream: 'bool' = False, tools: 'content_types.FunctionLibraryType | None' = None, tool_config: 'content_types.ToolConfigType | None' = None, request_options: 'helper_types.RequestOptionsType | None' = None)>
-
-
-
-For tab-completion convenience, the (python identifier version of the) models 
-were placed as attributes of `chat_funcs`, so you can access them directly there.
-
+Transform natural language prompts into reusable Python functions:
 
 ```python
-print(chat_funcs.gemini_1_5_flash('What is the capital of France?'))
+from aix import prompt_func, prompt_to_text, prompt_to_json
+
+# Simple text generation
+summarize = prompt_func("Summarize this text: {text}")
+summary = summarize(text="Long article...")
+
+# Structured output
+extract_person = prompt_func(
+    "Extract person information from: {text}",
+    output_schema={"name": str, "age": int, "email": str}
+)
+result = extract_person(text="Contact John at john@example.com. He is 30 years old.")
+# Returns: {'name': 'John', 'age': 30, 'email': 'john@example.com'}
+
+# Multiple parameters
+compare = prompt_func(
+    "Compare {item1} and {item2} in terms of {aspect}"
+)
+result = compare(
+    item1="Python",
+    item2="JavaScript",
+    aspect="learning curve"
+)
+
+# Pre-built common functions
+from aix import common_funcs
+
+summary = common_funcs.summarize(text="Long article...")
+keywords = common_funcs.extract_keywords(text="Article about AI and ML")
+sentiment = common_funcs.sentiment(text="I love this product!")
+
+# Create custom collections
+from aix import PromptFuncs
+
+my_funcs = PromptFuncs(model="gpt-4o")
+my_funcs.add('analyze', "Analyze this code: {code}")
+my_funcs.add('fix_bugs', "Fix bugs in: {code}")
+
+result = my_funcs.analyze(code="def foo(): return bar")
 ```
 
-    The capital of France is **Paris**. 
-    
+### 4. Model Discovery & Selection
 
-
+Discover and filter models across providers:
 
 ```python
-print(chat_funcs.gpt_3_5_turbo('What is the capital of France?'))
+from aix import models
+
+# Discover available models
+models.discover('openrouter')  # Fetch 400+ models from OpenRouter
+
+# List all models
+all_models = list(models)
+
+# Get specific model info
+info = models['openai/gpt-4o']
+print(info.provider)  # 'openai'
+print(info.context_size)  # 128000
+
+# Filter models
+openai_models = models.filter(provider='openai')
+cheap_models = models.filter(
+    custom_filter=lambda m: m.cost_per_token.get('input', 0) < 0.001
+)
+local_models = models.filter(is_local=True)
+
+# Search models
+results = models.search('gpt-4')
+results = models.search('claude')
+
+# Get recommendations
+recommended = models.recommend(
+    task='chat',
+    max_cost_per_mtok=5.0,
+    min_context_size=16000
+)
+
+# Use with chat
+model = models['gpt-4o-mini']
+response = chat("Hello", model=model.id)
 ```
 
-    The capital of France is Paris.
+### 5. Batch Operations
 
-
-There's also a dictionary called `chat_models` that contains the same keys:
-
+Process multiple requests efficiently:
 
 ```python
-from aix import chat_models
+from aix import batch_chat, batch_embeddings, BatchProcessor
 
-list(chat_models)
+# Batch chat
+prompts = ["What is 2+2?", "What is 3+3?", "What is 5+5?"]
+results = list(batch_chat(prompts, batch_size=10, max_workers=5))
+
+# Batch embeddings
+texts = ["hello", "world", "foo", "bar"] * 100
+vectors = list(batch_embeddings(
+    texts,
+    batch_size=20,
+    show_progress=True
+))
+
+# Generic batch processing
+from aix import batch_process
+
+def analyze(text):
+    return chat(f"Analyze sentiment: {text}")
+
+texts = ["I love it!", "It's okay", "Terrible"]
+results = list(batch_process(
+    texts,
+    analyze,
+    batch_size=5,
+    retry_attempts=3
+))
+
+# Stateful batch processor
+processor = BatchProcessor(show_progress=True)
+results = processor.process_chats(prompts)
+processor.save_results("output.json")
 ```
 
+### 6. Image Generation
 
-
-
-    ['gemini-1.5-flash',
-     'gpt-4',
-     'gpt-4-32k',
-     'gpt-4-turbo',
-     'gpt-3.5-turbo',
-     'o1-preview',
-     'o1-mini',
-     'gpt-4o',
-     'gpt-4o-mini']
-
-
-
-But here the values are some useful metadatas on the model, like pricing...
-
+Generate images from text descriptions:
 
 ```python
-chat_models['gpt-4o']
+from aix import generate_image, generate_images
+
+# Simple image generation
+image = generate_image("A serene mountain landscape at sunset")
+image.save("landscape.png")
+
+# High quality with DALL-E 3
+image = generate_image(
+    "Abstract art with vibrant colors",
+    model="dall-e-3",
+    quality="hd",
+    style="vivid"
+)
+
+# Generate multiple variations
+images = generate_images(
+    "A cute robot waving hello",
+    n=3,
+    size="512x512"
+)
+for i, img in enumerate(images):
+    img.save(f"robot_{i}.png")
+
+# Edit existing images
+from aix import edit_image
+
+edited = edit_image(
+    "photo.jpg",
+    "Add a rainbow in the sky",
+    mask_path="sky_mask.png"
+)
+
+# Create variations
+from aix import create_variation
+
+variations = create_variation("original.png", n=3)
 ```
 
+### 7. Audio Operations
 
-
-
-    {'price_per_million_tokens': 5.0,
-     'pages_per_dollar': 804,
-     'performance_on_eval': 'Efficiency-optimized version of GPT-4 for better performance on reasoning tasks',
-     'max_input': 8192,
-     'provider': 'openai'}
-
-
-
-The corresponding attributes are only the name of the model (the key itself):
-
+Text-to-speech and speech-to-text:
 
 ```python
-chat_models.gpt_4
+from aix import text_to_speech, transcribe, transcribe_with_timestamps
+
+# Text to speech
+audio = text_to_speech("Hello, world!")
+audio.save("hello.mp3")
+
+# Different voices
+audio = text_to_speech(
+    "This is a test",
+    voice="nova",
+    speed=1.2
+)
+
+# Transcribe audio
+text = transcribe("recording.mp3")
+print(text)  # "This is the transcribed text"
+
+# With language hint
+text = transcribe("spanish_audio.mp3", language="es")
+
+# Detailed transcription with timestamps
+result = transcribe_with_timestamps("lecture.mp3")
+for segment in result.segments:
+    print(f"[{segment['start']:.2f}] {segment['text']}")
+
+# Translate audio to English
+from aix import translate_audio
+
+english_text = translate_audio("spanish_audio.mp3")
 ```
 
+### 8. Video Generation (Coming Soon)
 
-
-    'gpt-4'
-
-
-
-This is for the convenience of entering a model name in a different context, with 
-less errors than if you were typing the name as a string. 
-For example, you can enter it yourself in the general `chat` function:
-
+Video generation with provider-specific implementations:
 
 ```python
-from aix import chat, chat_models
+from aix import generate_video, get_video_providers
 
-chat('How many Rs in "Strawberry"?', model=chat_models.gpt_4o, frequency_penalty=0.5)  
+# Check available providers
+providers = get_video_providers()
+print(providers)  # ['runway', 'pika', ...]
+
+# Generate video (requires provider setup)
+video = generate_video(
+    "A cat walking through a garden",
+    duration=5,
+    resolution="1920x1080"
+)
+video.save("cat_video.mp4")
+
+# Animate static image
+from aix import animate_image_to_video
+
+video = animate_image_to_video(
+    "landscape.jpg",
+    prompt="Gentle camera pan across the scene"
+)
 ```
 
+**Note**: Video generation requires additional provider setup (Runway, Pika, etc.) and API keys.
 
+## OpenRouter Integration
 
+[OpenRouter](https://openrouter.ai) provides a single API key for 400+ models from 60+ providers. This is recommended for:
 
-    'The word "Strawberry" contains two instances of the letter \'R\'.'
+- **Getting started quickly** - One key vs. managing many
+- **Experimenting** - Easy access to models from OpenAI, Anthropic, Google, etc.
+- **Production flexibility** - Switch providers without code changes
 
+### Setup
 
+1. Get API key from https://openrouter.ai
+2. Set environment variable:
+   ```bash
+   export OPENROUTER_API_KEY=your-key-here
+   ```
+3. Use OpenRouter models:
+   ```python
+   # Prefix models with 'openrouter/'
+   chat("Hello", model="openrouter/openai/gpt-4o")
+   chat("Hello", model="openrouter/anthropic/claude-3.5-sonnet")
 
+   # Discover available models
+   models.discover('openrouter')
+   ```
 
-# Extras (older version -- might deprecate or change interface)
+All standard AIX features work with OpenRouter models.
 
-Want all your faves at your fingertips?
+## Architecture
 
-Never remember where to import that learner from?
+AIX follows the **i2mint philosophy** of clean, functional interfaces:
 
-Say `LinearDiscriminantAnalysis`?
+- **Mapping interfaces** for collections (models, registries)
+- **Functional approach** over verbose OOP
+- **Lazy evaluation** via generators where appropriate
+- **Protocol-based design** for flexibility
 
-... was it `from sklearn`?
+### Backend: LiteLLM
 
-... was it `from sklearn.linear_model`?
+AIX uses [LiteLLM](https://github.com/BerriAI/litellm) as the backend for provider interactions, but wraps it in clean, pythonic interfaces. Users never need to interact with LiteLLM directly.
 
-... ah no! It was `from sklearn.discriminant_analysis import LinearDiscriminantAnalysis`.
+**Supported Providers** (via LiteLLM):
+- OpenAI
+- Anthropic (Claude)
+- Google (Gemini)
+- Mistral
+- Cohere
+- And 100+ more
 
-Sure, you can do that. Or you can simply type `from aix.Lin...` click tab, and; there it is! 
-Select, enter, and moving on with real work.
+## Design Patterns
 
-*Note: This is meant to get off the ground quickly 
--- once your code is stable, you should probably import your stuff directly from it's origin*
+### From `oa` (OpenAI facade)
 
+AIX builds on patterns from the `oa` package:
+- Simple chat interface with smart defaults
+- Template-based function creation
+- Structured output support
+- Batch processing capabilities
 
-# Coming up
+### From `i2` (Signature manipulation)
 
-Now that the AI revolution is on its way, we'll add the ability to find, and one day,
-use the right AI tool -- until the day that AI will do even that for us...
+- Clean function signatures
+- Flexible parameter handling
+- Decorator-based composition
+
+### From `dol` (Storage abstraction)
+
+- Mapping-based interfaces
+- Persistent storage options
+- Cache management
+
+## Advanced Usage
+
+### Custom Model Sources
+
+```python
+from aix.ai_models import ModelManager, OpenRouterSource
+
+manager = ModelManager()
+source = OpenRouterSource()
+models = manager.discover_from_source('openrouter')
+```
+
+### Connector-Specific Metadata
+
+```python
+# Get provider-specific parameters
+metadata = models.get_connector_metadata('openai/gpt-4o', 'openai')
+# Use with native SDK: openai.ChatCompletion.create(**metadata, messages=[...])
+```
+
+### Error Handling
+
+```python
+from aix import chat
+
+try:
+    response = chat("Hello", model="nonexistent-model")
+except Exception as e:
+    print(f"Error: {e}")
+```
+
+## Backward Compatibility
+
+The legacy `chat_funcs` and `chat_models` interfaces are still available:
+
+```python
+from aix import chat_funcs, chat_models
+
+# Old style (still works)
+list(chat_funcs)  # ['gpt-4o', 'gpt-4o-mini', ...]
+response = chat_funcs.gpt_4o("Hello")
+
+# Model metadata
+info = chat_models['gpt-4o']
+# {'price_per_million_tokens': 5.0, 'provider': 'openai', ...}
+```
+
+However, the new interfaces (`chat`, `embeddings`, `prompt_func`, `models`) are recommended for new code.
+
+## Examples
+
+### Semantic Search
+
+```python
+from aix import embed, cosine_similarity
+
+# Build document index
+docs = ["AI is the future", "Python is great", "Machine learning works"]
+doc_vecs = [embed(doc) for doc in docs]
+
+# Search
+query_vec = embed("artificial intelligence")
+similarities = [cosine_similarity(query_vec, dv) for dv in doc_vecs]
+best_match = docs[similarities.index(max(similarities))]
+print(best_match)  # "AI is the future"
+```
+
+### Data Extraction Pipeline
+
+```python
+from aix import prompt_func, batch_process
+
+# Define extraction function
+extract = prompt_func(
+    "Extract product info from: {text}",
+    output_schema={"name": str, "price": float, "category": str}
+)
+
+# Process many product descriptions
+descriptions = [...]  # Your data
+results = list(batch_process(
+    descriptions,
+    lambda d: extract(text=d),
+    batch_size=10,
+    show_progress=True
+))
+```
+
+### Multi-Model Comparison
+
+```python
+from aix import chat
+
+prompt = "Explain quantum computing in one sentence"
+
+# Try different models
+for model_id in ['gpt-4o-mini', 'claude-sonnet-4', 'gemini-1.5-flash']:
+    response = chat(prompt, model=model_id)
+    print(f"{model_id}: {response}")
+```
+
+## Documentation
+
+- **API Reference**: See docstrings in each module
+- **Examples**: Check `examples/` directory
+- **GitHub**: https://github.com/thorwhalen/aix
+
+## Contributing
+
+Contributions are welcome! Please see CONTRIBUTING.md for guidelines.
+
+## License
+
+Apache 2.0
+
+## Credits
+
+Built with:
+- [LiteLLM](https://github.com/BerriAI/litellm) - Multi-provider backend
+- [i2](https://github.com/i2mint/i2) - Signature manipulation utilities
+- [dol](https://github.com/i2mint/dol) - Storage abstraction patterns
+- [oa](https://github.com/thorwhalen/oa) - OpenAI facade inspiration
+
+## What AIX is NOT
+
+AIX is NOT an AI agent framework. For that, see the separate `aw` package. AIX focuses on foundational AI operations (chat, embeddings, etc.) that can be used to build agents and other applications.

@@ -113,3 +113,15 @@ venv.bak/
 
 # PyCharm
 .idea
+
+# Ruff
+.ruff_cache/
+
+# VS Code
+.vscode/
+
+# Temporary test outputs
+batch_results.json
+*.tmp
+tmp/
+temp/

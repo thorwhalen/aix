@@ -1,62 +1,157 @@
+"""AIX: Artificial Intelligence eXtensions
+
+A clean, pythonic facade for common AI operations that abstracts away
+provider-specific details and complexities.
+
+Quick Start:
+    >>> from aix import chat, embeddings, prompt_func, models
+
+    # Simple chat
+    >>> response = chat("What is 2+2?")  # doctest: +SKIP
+    'The answer is 4.'
+
+    # Create prompt-based functions
+    >>> translate = prompt_func("Translate to French: {text}")
+    >>> translate(text="Hello world")  # doctest: +SKIP
+    'Bonjour le monde'
+
+    # Get embeddings
+    >>> vecs = list(embeddings(["hello", "world"]))  # doctest: +SKIP
+    >>> len(vecs)  # doctest: +SKIP
+    2
+
+    # Discover models
+    >>> models.discover()  # doctest: +SKIP
+    >>> list(models)[:5]  # doctest: +SKIP
+    ['openai/gpt-4o', 'openai/gpt-4o-mini', ...]
+
+Main Features:
+    - chat(): Simple chat interface across providers
+    - embeddings(): Vector embeddings for text
+    - prompt_func(): Create functions from prompt templates
+    - models: Model discovery and selection
+    - generate_image(): Text-to-image generation
+    - text_to_speech(), transcribe(): Audio operations
+    - generate_video(): Text-to-video generation (provider-dependent)
+    - Batch operations for efficiency
+    - Clean, i2mint-style Mapping interfaces
+
+Backends:
+    - Uses LiteLLM for provider interactions
+    - Supports OpenAI, Anthropic, Google, and 100+ models
+    - OpenRouter integration for multi-provider access
+
+For detailed documentation, see: https://github.com/thorwhalen/aix
 """
-Facade to key AI tools.
 
-Get a list of available chat functions (this will depend on the AI packages
-you have installed locally):
+# Core interfaces (new clean API)
+from aix.chat import chat, ask, chat_with_history, ChatSession
+from aix.embeddings import (
+    embeddings,
+    embed,
+    cosine_similarity,
+    find_most_similar,
+    EmbeddingCache,
+)
+from aix.prompts import (
+    prompt_func,
+    prompt_to_text,
+    prompt_to_json,
+    PromptFuncs,
+    common_funcs,
+)
+from aix.models import (
+    models,
+    ModelStore,
+    discover_available_models,
+    get_model_info,
+    find_models,
+)
+from aix.batches import (
+    batch_chat,
+    batch_embeddings,
+    batch_process,
+    BatchProcessor,
+)
+from aix.image import (
+    generate_image,
+    generate_images,
+    edit_image,
+    create_variation,
+    GeneratedImage,
+)
+from aix.audio import (
+    text_to_speech,
+    transcribe,
+    transcribe_with_timestamps,
+    translate_audio,
+    GeneratedAudio,
+    TranscriptionResult,
+)
+from aix.video import (
+    generate_video,
+    animate_image as animate_image_to_video,
+    extend_video,
+    GeneratedVideo,
+    get_available_providers as get_video_providers,
+)
 
->>> from aix import chat_funcs
->>> list(chat_funcs)  # doctest: +SKIP
-['gemini-1.5-flash',
- 'gpt-4',
- 'gpt-4-32k',
- 'gpt-4-turbo',
- 'gpt-3.5-turbo',
- 'o1-preview',
- 'o1-mini',
- 'gpt-4o',
- 'gpt-4o-mini']
+# Legacy interfaces (for backward compatibility)
+from aix.gen_ai import chat_models, chat_funcs
 
-Choose a chat function and chat with it:
->>> google_ai_chat = chat_funcs['gemini-1.5-flash']  # doctest: +SKIP
->>> google_ai_chat("What is the meaning of life? Respond with a number.")  # doctest: +SKIP
-'42'
->>> openai_chat = chat_funcs['gpt-3.5-turbo']  # doctest: +SKIP
->>> openai_chat("What is the meaning of life? Respond with a number.")  # doctest: +SKIP
-'42'
+# Version info
+__version__ = '0.1.0'
 
-"""
-
-from aix.gen_ai import chat, chat_models, chat_funcs
-
-# TODO: Change this so that there's a load_pkg function that loads the packages dynamically
-#   if and when use wants.
-
-# from aix.pd import *
-# from aix.np import *
-# from aix.sk import *
-
-# from aix import pd
-# from aix import np
-# from aix import sk
-
-
-#
-# from contextlib import suppress
-#
-# preferred_order = ['sk', 'np', 'pd']
-#
-# with suppress(ModuleNotFoundError):
-#     from aix import sk
-#
-# with suppress(ModuleNotFoundError):
-#     from aix import np
-#
-# with suppress(ModuleNotFoundError):
-#     from aix import pd
-#
-# for _module_name in preferred_order[::-1]:
-#     print(f"------ {_module_name}")
-#     _module = __import__(f'aix.{_module_name}')
-#     for _name in filter(lambda x: not x.startswith('__'), dir(_module)):
-#         print(_name, _module)
-#         locals()[_name] = getattr(_module, _name)
+# Public API
+__all__ = [
+    # Core chat
+    'chat',
+    'ask',
+    'chat_with_history',
+    'ChatSession',
+    # Embeddings
+    'embeddings',
+    'embed',
+    'cosine_similarity',
+    'find_most_similar',
+    'EmbeddingCache',
+    # Prompts
+    'prompt_func',
+    'prompt_to_text',
+    'prompt_to_json',
+    'PromptFuncs',
+    'common_funcs',
+    # Models
+    'models',
+    'ModelStore',
+    'discover_available_models',
+    'get_model_info',
+    'find_models',
+    # Batches
+    'batch_chat',
+    'batch_embeddings',
+    'batch_process',
+    'BatchProcessor',
+    # Image
+    'generate_image',
+    'generate_images',
+    'edit_image',
+    'create_variation',
+    'GeneratedImage',
+    # Audio
+    'text_to_speech',
+    'transcribe',
+    'transcribe_with_timestamps',
+    'translate_audio',
+    'GeneratedAudio',
+    'TranscriptionResult',
+    # Video
+    'generate_video',
+    'animate_image_to_video',
+    'extend_video',
+    'GeneratedVideo',
+    'get_video_providers',
+    # Legacy
+    'chat_models',
+    'chat_funcs',
+]
