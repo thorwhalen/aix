@@ -59,6 +59,7 @@ from aix.prompts import (
     prompt_to_json,
     PromptFuncs,
     common_funcs,
+    constrained_answer,
 )
 from aix.models import (
     models,
@@ -121,6 +122,7 @@ __all__ = [
     'prompt_to_json',
     'PromptFuncs',
     'common_funcs',
+    'constrained_answer',
     # Models
     'models',
     'ModelStore',

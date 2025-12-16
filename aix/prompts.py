@@ -459,3 +459,250 @@ class CommonFuncs(PromptFuncs):
 
 # Create singleton instance
 common_funcs = CommonFuncs()
+
+
+# -----------------------------------------------------------------------------
+# constrained_answer: Force LLM to choose from valid options
+
+
+def _enhance_prompt_for_json(
+    prompt: str,
+    valid_answers: Union[list[str], list[int], list[float], type, tuple[float, float]],
+    min_val: float = None,
+    max_val: float = None,
+) -> str:
+    """Add JSON formatting instructions to the prompt.
+
+    This is a helper that adds explicit instructions for JSON output.
+    Only used when enhance_prompt=True.
+    """
+    if isinstance(valid_answers, list):
+        valid_answers_list = "\n".join(f"- {answer}" for answer in valid_answers)
+        return f"""
+{prompt}
+You must respond with EXACTLY one of these options:
+{valid_answers_list}
+Choose the most appropriate answer. Return your response as JSON with an "answer" field.
+"""
+    elif valid_answers is bool:
+        return f"""
+{prompt}
+You must respond with either true or false.
+Return your response as JSON with an "answer" field.
+"""
+    elif valid_answers is int:
+        return f"""
+{prompt}
+You must respond with an integer number.
+Return your response as JSON with an "answer" field.
+"""
+    elif valid_answers is float:
+        return f"""
+{prompt}
+You must respond with a number.
+Return your response as JSON with an "answer" field.
+"""
+    elif isinstance(valid_answers, tuple) and len(valid_answers) == 2:
+        return f"""
+{prompt}
+You must respond with a number between {min_val} and {max_val} (inclusive).
+Return your response as JSON with an "answer" field.
+"""
+    else:
+        # Fallback - just add minimal JSON instruction
+        return f"{prompt}\nReturn your response as JSON with an 'answer' field."
+
+
+def constrained_answer(
+    prompt: str,
+    valid_answers: Union[list[str], list[int], list[float], type, tuple[float, float]],
+    *,
+    model: str = None,
+    temperature: float = None,
+    enhance_prompt: bool = False,
+    n: int = 1,
+):
+    """
+    Get an answer from the LLM constrained to a set of valid answers or types.
+
+    Uses JSON mode to ensure the LLM returns a valid response based on constraints.
+    More flexible than the oa version - works with any model that supports JSON mode
+    via LiteLLM.
+
+    This can be seen as a facade for some common structured output use cases, as well
+    as a convenient tool to do response statistics and validation (via n>1).
+
+    Args:
+        prompt: The question or prompt to ask the LLM
+        valid_answers: Can be:
+            - list[str]: List of valid string options
+            - list[int]: List of valid integer options
+            - list[float]: List of valid float options
+            - bool: Constrains answer to True or False
+            - int: Any integer
+            - float: Any number
+            - tuple[float, float]: Numerical range (min, max) inclusive
+        model: The model to use for the LLM (default: uses DFLT_CHAT_MODEL)
+        temperature: Temperature for sampling (default: None, uses model's default).
+            Higher values (e.g., 1.0) give more random/varied results.
+            Lower values (e.g., 0.0) give more deterministic results.
+        enhance_prompt: If True, adds explicit instructions to the prompt about
+            JSON formatting and constraints. If False (default), relies on
+            response_format alone. Default is False to match oa behavior.
+        n: Number of times to call the LLM (default: 1)
+
+    Returns:
+        One of the valid answers, respecting the type constraint.
+        If n > 1, returns a list of answers.
+
+    Examples:
+        >>> # String options
+        >>> answer = constrained_answer(
+        ...     "Is Python compiled or interpreted?",
+        ...     ["compiled", "interpreted", "both"]
+        ... )  # doctest: +SKIP
+        >>> answer in ["compiled", "interpreted", "both"]  # doctest: +SKIP
+        True
+
+        >>> # Boolean
+        >>> answer = constrained_answer(
+        ...     "Is Python dynamically typed?",
+        ...     bool
+        ... )  # doctest: +SKIP
+        >>> isinstance(answer, bool)  # doctest: +SKIP
+        True
+
+        >>> # Integer options
+        >>> answer = constrained_answer(
+        ...     "How many wheels does a car have?",
+        ...     [2, 3, 4, 6, 8]
+        ... )  # doctest: +SKIP
+        >>> answer in [2, 3, 4, 6, 8]  # doctest: +SKIP
+        True
+
+        >>> # Numerical range
+        >>> answer = constrained_answer(
+        ...     "What is a reasonable hourly rate for a senior Python developer? (USD)",
+        ...     (50.0, 300.0)
+        ... )  # doctest: +SKIP
+        >>> 50.0 <= answer <= 300.0  # doctest: +SKIP
+        True
+
+        >>> # Multiple samples for statistics
+        >>> answers = constrained_answer(
+        ...     "Which is better: cats or dogs?",
+        ...     ["cats", "dogs"],
+        ...     n=10
+        ... )  # doctest: +SKIP
+        >>> len(answers)  # doctest: +SKIP
+        10
+    """
+    if n != 1:
+        from functools import partial
+
+        f = partial(
+            constrained_answer,
+            prompt,
+            valid_answers,
+            model=model,
+            temperature=temperature,
+            enhance_prompt=enhance_prompt,
+            n=1,
+        )
+        return [f() for _ in range(n)]
+
+    # Determine the expected type for type conversion
+    expected_type = None
+
+    if isinstance(valid_answers, list):
+        # List of specific options
+        if not valid_answers:
+            raise ValueError("valid_answers list cannot be empty")
+
+        first_item = valid_answers[0]
+        if not isinstance(first_item, (str, int, float)):
+            raise ValueError(f"Unsupported list item type: {type(first_item)}")
+
+        expected_type = type(first_item)
+
+    elif valid_answers is bool:
+        expected_type = bool
+
+    elif valid_answers is int:
+        expected_type = int
+
+    elif valid_answers is float:
+        expected_type = float
+
+    elif isinstance(valid_answers, tuple) and len(valid_answers) == 2:
+        # Numerical range
+        min_val, max_val = valid_answers
+        if not isinstance(min_val, (int, float)) or not isinstance(
+            max_val, (int, float)
+        ):
+            raise ValueError("Range tuple must contain two numbers")
+
+        expected_type = float
+
+    else:
+        raise ValueError(f"Unsupported valid_answers type: {type(valid_answers)}")
+
+    # Build the prompt template
+    if enhance_prompt:
+        # Add explicit JSON instructions and constraints
+        if isinstance(valid_answers, tuple) and len(valid_answers) == 2:
+            template = _enhance_prompt_for_json(
+                prompt, valid_answers, min_val=valid_answers[0], max_val=valid_answers[1]
+            )
+        else:
+            template = _enhance_prompt_for_json(prompt, valid_answers)
+    else:
+        # Use the prompt as-is, but add minimal JSON instruction with type hint
+        # (OpenAI requires the word "json" to appear in the prompt when using json_object mode)
+        if isinstance(valid_answers, list):
+            # For lists, we need to be more specific
+            type_hint = f"one of: {', '.join(map(str, valid_answers))}"
+        elif valid_answers is bool:
+            type_hint = "true or false"
+        elif valid_answers is int:
+            type_hint = "a number (integer)"
+        elif valid_answers is float:
+            type_hint = "a number"
+        elif isinstance(valid_answers, tuple):
+            type_hint = f"a number between {valid_answers[0]} and {valid_answers[1]}"
+        else:
+            type_hint = "your answer"
+
+        template = f'{prompt}\nRespond in JSON format with an "answer" field containing {type_hint}.'
+
+    # Use LiteLLM's response_format for JSON mode
+    # This works across OpenAI, Anthropic (via tools), and other providers
+    chat_kwargs = {
+        "model": model or DFLT_CHAT_MODEL,
+        "response_format": {"type": "json_object"},
+    }
+    if temperature is not None:
+        chat_kwargs["temperature"] = temperature
+
+    response = chat(template, **chat_kwargs)
+
+    try:
+        result = json.loads(response)
+        answer = result["answer"]
+
+        # Convert to expected type if needed
+        if expected_type is not None and not isinstance(answer, expected_type):
+            # JSON might parse integers as strings or vice versa
+            # Try to convert to the expected type
+            try:
+                answer = expected_type(answer)
+            except (ValueError, TypeError):
+                # If conversion fails, just return as-is
+                pass
+
+        return answer
+    except (json.JSONDecodeError, KeyError) as e:
+        # Failed to parse - raise informative error
+        raise ValueError(
+            f"Failed to parse constrained answer. Response: {response[:200]}..."
+        ) from e
