@@ -4,7 +4,7 @@ This module provides a unified interface for managing, discovering, and
 connecting to AI models across multiple providers and deployment methods.
 """
 
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field, asdict, fields
 from typing import Any
 from collections.abc import Mapping, MutableMapping, Iterator, Callable, Iterable
 from abc import ABC, abstractmethod
@@ -54,6 +54,21 @@ class Model:
             if getattr(self, key) != value:
                 return False
         return True
+    
+    def __getitem__(self, key: str) -> Any:
+        """Get field value by name."""
+        try:
+            return getattr(self, key)
+        except AttributeError:
+            raise KeyError(key)
+    
+    def __iter__(self) -> Iterator[str]:
+        """Iterate over field names."""
+        return iter(field.name for field in fields(self))
+    
+    def __len__(self) -> int:
+        """Return number of fields."""
+        return len(fields(self))
 
 
 class ModelRegistry(MutableMapping[str, Model]):

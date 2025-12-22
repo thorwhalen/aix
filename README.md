@@ -404,7 +404,7 @@ AIX uses [LiteLLM](https://github.com/BerriAI/litellm) as the backend for provid
 
 ### From `oa` (OpenAI facade)
 
-AIX builds on patterns from the `oa` package:
+AIX builds on patterns from the `oa` package:OpenRouter
 - Simple chat interface with smart defaults
 - Template-based function creation
 - Structured output support
