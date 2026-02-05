@@ -36,9 +36,7 @@ def main():
     translate = prompt_func("Translate '{text}' from {source_lang} to {target_lang}")
 
     result = translate(
-        text="Hello, how are you?",
-        source_lang="English",
-        target_lang="Spanish"
+        text="Hello, how are you?", source_lang="English", target_lang="Spanish"
     )
     print(f"Translation: {result}")
 
@@ -47,7 +45,7 @@ def main():
     print("-" * 40)
     extract_contact = prompt_func(
         "Extract contact information from: {text}",
-        output_schema={"name": str, "email": str, "phone": str}
+        output_schema={"name": str, "email": str, "phone": str},
     )
 
     contact_text = "Contact John Smith at john.smith@example.com or call 555-1234"
@@ -75,7 +73,9 @@ def main():
     print(f"\nKeywords: {keywords}")
 
     # Sentiment analysis
-    sentiment = common_funcs.sentiment(text="I absolutely love this product! It's amazing!")
+    sentiment = common_funcs.sentiment(
+        text="I absolutely love this product! It's amazing!"
+    )
     print(f"\nSentiment: {sentiment}")
 
     # Example 5: Custom function collection
@@ -85,14 +85,10 @@ def main():
     my_funcs = PromptFuncs()
 
     # Add custom functions
-    my_funcs.add(
-        'explain_code',
-        "Explain what this code does in simple terms: {code}"
-    )
+    my_funcs.add("explain_code", "Explain what this code does in simple terms: {code}")
 
     my_funcs.add(
-        'generate_docstring',
-        "Generate a Python docstring for this function: {code}"
+        "generate_docstring", "Generate a Python docstring for this function: {code}"
     )
 
     code = """
@@ -114,7 +110,7 @@ def fibonacci(n):
     creative_writer = prompt_func(
         "Write a creative one-line story about {topic}",
         model="gpt-4o-mini",
-        temperature=1.5
+        temperature=1.5,
     )
 
     story = creative_writer(topic="a time-traveling cat")

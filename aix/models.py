@@ -70,7 +70,9 @@ class ModelStore(Mapping):
         'Hello! How can I help you?'
     """
 
-    def __init__(self, storage_path: Union[str, Path] = None, auto_discover: bool = False):
+    def __init__(
+        self, storage_path: Union[str, Path] = None, auto_discover: bool = False
+    ):
         """Initialize model store.
 
         Args:
@@ -88,9 +90,9 @@ class ModelStore(Mapping):
 
     def discover(
         self,
-        source: str = 'openrouter',
+        source: str = "openrouter",
         auto_register: bool = True,
-        verbose: bool = False
+        verbose: bool = False,
     ) -> list[Model]:
         """Discover models from a source.
 
@@ -169,7 +171,7 @@ class ModelStore(Mapping):
         max_context_size: int = None,
         has_capabilities: list[str] = None,
         tags: list[str] = None,
-        custom_filter: callable = None
+        custom_filter: callable = None,
     ) -> list[Model]:
         """Filter models by criteria.
 
@@ -214,7 +216,7 @@ class ModelStore(Mapping):
             max_context_size=max_context_size,
             has_capabilities=has_capabilities,
             tags=tags,
-            custom_filter=custom_filter
+            custom_filter=custom_filter,
         )
 
     def get_info(self, model_id: str) -> Model:
@@ -235,11 +237,7 @@ class ModelStore(Mapping):
         """
         return self._manager.models[model_id]
 
-    def get_connector_metadata(
-        self,
-        model_id: str,
-        connector: str
-    ) -> dict[str, Any]:
+    def get_connector_metadata(self, model_id: str, connector: str) -> dict[str, Any]:
         """Get connector-specific metadata for a model.
 
         Args:
@@ -280,7 +278,8 @@ class ModelStore(Mapping):
         """
         query_lower = query.lower()
         return [
-            model for model in self._manager.models.values()
+            model
+            for model in self._manager.models.values()
             if (
                 query_lower in model.id.lower()
                 or query_lower in model.provider.lower()
@@ -321,10 +320,10 @@ class ModelStore(Mapping):
     def recommend(
         self,
         *,
-        task: str = 'chat',
+        task: str = "chat",
         max_cost_per_mtok: float = None,
         min_context_size: int = None,
-        prefer_local: bool = False
+        prefer_local: bool = False,
     ) -> list[Model]:
         """Get recommended models based on requirements.
 
@@ -353,15 +352,14 @@ class ModelStore(Mapping):
 
         if max_cost_per_mtok is not None:
             candidates = [
-                m for m in candidates
-                if m.cost_per_token.get('input', 0) * 1_000_000 <= max_cost_per_mtok
+                m
+                for m in candidates
+                if m.cost_per_token.get("input", 0) * 1_000_000 <= max_cost_per_mtok
             ]
 
         # Sort by cost (cheaper first) if not preferring local
         if not prefer_local:
-            candidates.sort(
-                key=lambda m: m.cost_per_token.get('input', float('inf'))
-            )
+            candidates.sort(key=lambda m: m.cost_per_token.get("input", float("inf")))
 
         return candidates
 
@@ -375,8 +373,7 @@ models = ModelStore()
 
 
 def discover_available_models(
-    source: str = 'openrouter',
-    verbose: bool = True
+    source: str = "openrouter", verbose: bool = True
 ) -> list[Model]:
     """Discover available models from a source.
 

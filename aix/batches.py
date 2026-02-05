@@ -27,7 +27,6 @@ import time
 from aix.chat import chat, _normalize_prompt
 from aix.embeddings import embeddings
 
-
 # Default configurations
 DFLT_BATCH_SIZE = 10
 DFLT_MAX_WORKERS = 5
@@ -66,7 +65,7 @@ def batch_chat(
     batch_size: int = None,
     max_workers: int = None,
     show_progress: bool = False,
-    **chat_kwargs
+    **chat_kwargs,
 ) -> Iterable[str]:
     """Process multiple chat prompts in batches.
 
@@ -169,7 +168,7 @@ def batch_embeddings(
     model: str = None,
     batch_size: int = None,
     show_progress: bool = False,
-    **embedding_kwargs
+    **embedding_kwargs,
 ) -> Iterable[Sequence[float]]:
     """Generate embeddings for multiple texts in batches.
 
@@ -241,7 +240,7 @@ def batch_process(
     max_workers: int = None,
     show_progress: bool = False,
     retry_attempts: int = None,
-    retry_delay: float = None
+    retry_delay: float = None,
 ) -> Iterable[Any]:
     """Generic batch processing with parallel execution and retries.
 
@@ -309,8 +308,10 @@ def batch_process(
             except Exception as e:
                 if attempt < retry_attempts - 1:
                     if show_progress:
-                        print(f"Retry {attempt + 1}/{retry_attempts} for item {idx}: {e}")
-                    time.sleep(retry_delay * (2 ** attempt))  # Exponential backoff
+                        print(
+                            f"Retry {attempt + 1}/{retry_attempts} for item {idx}: {e}"
+                        )
+                    time.sleep(retry_delay * (2**attempt))  # Exponential backoff
                 else:
                     raise
 
@@ -361,7 +362,7 @@ class BatchProcessor:
         *,
         batch_size: int = None,
         max_workers: int = None,
-        show_progress: bool = True
+        show_progress: bool = True,
     ):
         """Initialize batch processor.
 
@@ -377,9 +378,7 @@ class BatchProcessor:
         self.errors = []
 
     def process_chats(
-        self,
-        prompts: Iterable[Union[str, list[dict]]],
-        **kwargs
+        self, prompts: Iterable[Union[str, list[dict]]], **kwargs
     ) -> list[str]:
         """Process chat prompts and store results.
 
@@ -390,20 +389,20 @@ class BatchProcessor:
         Returns:
             List of results
         """
-        results = list(batch_chat(
-            prompts,
-            batch_size=self.batch_size,
-            max_workers=self.max_workers,
-            show_progress=self.show_progress,
-            **kwargs
-        ))
+        results = list(
+            batch_chat(
+                prompts,
+                batch_size=self.batch_size,
+                max_workers=self.max_workers,
+                show_progress=self.show_progress,
+                **kwargs,
+            )
+        )
         self.results = results
         return results
 
     def process_embeddings(
-        self,
-        texts: Iterable[str],
-        **kwargs
+        self, texts: Iterable[str], **kwargs
     ) -> list[Sequence[float]]:
         """Process embeddings and store results.
 
@@ -414,12 +413,14 @@ class BatchProcessor:
         Returns:
             List of embedding vectors
         """
-        results = list(batch_embeddings(
-            texts,
-            batch_size=self.batch_size,
-            show_progress=self.show_progress,
-            **kwargs
-        ))
+        results = list(
+            batch_embeddings(
+                texts,
+                batch_size=self.batch_size,
+                show_progress=self.show_progress,
+                **kwargs,
+            )
+        )
         self.results = results
         return results
 
@@ -433,7 +434,7 @@ class BatchProcessor:
         from pathlib import Path
 
         path = Path(filepath)
-        with open(path, 'w') as f:
+        with open(path, "w") as f:
             json.dump(self.results, f, indent=2)
 
     def clear(self):

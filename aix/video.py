@@ -48,8 +48,8 @@ class GeneratedVideo:
         prompt: str = None,
         duration: float = None,
         resolution: str = None,
-        status: str = 'completed',
-        task_id: str = None
+        status: str = "completed",
+        task_id: str = None,
     ):
         """Initialize generated video.
 
@@ -87,6 +87,7 @@ class GeneratedVideo:
 
         if self.url:
             import requests
+
             response = requests.get(self.url)
             response.raise_for_status()
             self._video_data = response.content
@@ -106,7 +107,7 @@ class GeneratedVideo:
         path = Path(path)
         video_bytes = self.as_bytes()
 
-        with open(path, 'wb') as f:
+        with open(path, "wb") as f:
             f.write(video_bytes)
 
     def wait_until_complete(self, max_wait: int = 300, poll_interval: int = 5):
@@ -120,7 +121,7 @@ class GeneratedVideo:
             TimeoutError: If generation doesn't complete within max_wait
             RuntimeError: If generation fails
         """
-        if self.status == 'completed':
+        if self.status == "completed":
             return
 
         if not self.task_id:
@@ -136,9 +137,9 @@ class GeneratedVideo:
             # Check status (provider-specific)
             # self._check_status()
 
-            if self.status == 'completed':
+            if self.status == "completed":
                 return
-            elif self.status == 'failed':
+            elif self.status == "failed":
                 raise RuntimeError("Video generation failed")
 
         raise TimeoutError(
@@ -158,12 +159,12 @@ def generate_video(
     *,
     model: str = None,
     duration: float = 5.0,
-    resolution: str = '1280x720',
+    resolution: str = "1280x720",
     fps: int = 24,
     aspect_ratio: str = None,
     style: str = None,
     seed: int = None,
-    **kwargs
+    **kwargs,
 ) -> GeneratedVideo:
     """Generate a video from a text prompt.
 
@@ -228,7 +229,7 @@ def animate_image(
     model: str = None,
     duration: float = 3.0,
     motion_strength: float = 0.5,
-    **kwargs
+    **kwargs,
 ) -> GeneratedVideo:
     """Animate a static image into a video.
 
@@ -264,7 +265,7 @@ def extend_video(
     *,
     extend_duration: float = 2.0,
     model: str = None,
-    **kwargs
+    **kwargs,
 ) -> GeneratedVideo:
     """Extend an existing video with additional generated content.
 
@@ -293,11 +294,7 @@ def extend_video(
 
 
 def interpolate_frames(
-    video_path: Union[str, Path],
-    *,
-    target_fps: int = 60,
-    model: str = None,
-    **kwargs
+    video_path: Union[str, Path], *, target_fps: int = 60, model: str = None, **kwargs
 ) -> GeneratedVideo:
     """Interpolate frames to create smoother video.
 
@@ -325,11 +322,9 @@ def interpolate_frames(
 
 # Provider-specific implementations (placeholders for future implementation)
 
+
 def generate_video_runway(
-    prompt: str,
-    *,
-    duration: float = 5.0,
-    **kwargs
+    prompt: str, *, duration: float = 5.0, **kwargs
 ) -> GeneratedVideo:
     """Generate video using Runway ML.
 
@@ -350,10 +345,7 @@ def generate_video_runway(
 
 
 def generate_video_pika(
-    prompt: str,
-    *,
-    duration: float = 3.0,
-    **kwargs
+    prompt: str, *, duration: float = 3.0, **kwargs
 ) -> GeneratedVideo:
     """Generate video using Pika Labs.
 
@@ -368,16 +360,12 @@ def generate_video_pika(
         GeneratedVideo object
     """
     raise NotImplementedError(
-        "Pika Labs integration coming soon. "
-        "Set PIKA_API_KEY environment variable."
+        "Pika Labs integration coming soon. " "Set PIKA_API_KEY environment variable."
     )
 
 
 def generate_video_stable_diffusion(
-    prompt: str,
-    *,
-    duration: float = 2.0,
-    **kwargs
+    prompt: str, *, duration: float = 2.0, **kwargs
 ) -> GeneratedVideo:
     """Generate video using Stable Diffusion Video.
 
@@ -399,6 +387,7 @@ def generate_video_stable_diffusion(
 
 # Utility functions
 
+
 def get_available_providers() -> list[str]:
     """Get list of available video generation providers.
 
@@ -415,17 +404,19 @@ def get_available_providers() -> list[str]:
 
     # Check for Runway
     import os
-    if os.getenv('RUNWAY_API_KEY'):
-        available.append('runway')
+
+    if os.getenv("RUNWAY_API_KEY"):
+        available.append("runway")
 
     # Check for Pika
-    if os.getenv('PIKA_API_KEY'):
-        available.append('pika')
+    if os.getenv("PIKA_API_KEY"):
+        available.append("pika")
 
     # Check for Stable Diffusion
     try:
         import diffusers
-        available.append('stable-diffusion')
+
+        available.append("stable-diffusion")
     except ImportError:
         pass
 
@@ -433,9 +424,7 @@ def get_available_providers() -> list[str]:
 
 
 def estimate_cost(
-    duration: float,
-    resolution: str = '1280x720',
-    provider: str = None
+    duration: float, resolution: str = "1280x720", provider: str = None
 ) -> dict:
     """Estimate the cost of video generation.
 
@@ -456,11 +445,11 @@ def estimate_cost(
     # Placeholder cost estimates (not real pricing)
     estimates = {}
 
-    if provider is None or provider == 'runway':
+    if provider is None or provider == "runway":
         # Rough estimate based on typical pricing
-        estimates['runway'] = duration * 0.01  # $0.01 per second
+        estimates["runway"] = duration * 0.01  # $0.01 per second
 
-    if provider is None or provider == 'pika':
-        estimates['pika'] = duration * 0.006  # $0.006 per second
+    if provider is None or provider == "pika":
+        estimates["pika"] = duration * 0.006  # $0.006 per second
 
     return estimates

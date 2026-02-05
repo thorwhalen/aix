@@ -34,14 +34,11 @@ except ImportError:
 
 
 # Default configurations
-DFLT_EMBEDDING_MODEL = 'text-embedding-3-small'
+DFLT_EMBEDDING_MODEL = "text-embedding-3-small"
 
 
 def embeddings(
-    segments: Iterable[str],
-    *,
-    model: str = None,
-    **kwargs
+    segments: Iterable[str], *, model: str = None, **kwargs
 ) -> Iterable[Sequence[float]]:
     """Generate embeddings for multiple text segments.
 
@@ -100,8 +97,8 @@ def embeddings(
 
     # Build LiteLLM parameters
     litellm_kwargs = {
-        'model': model,
-        'input': segments_list,
+        "model": model,
+        "input": segments_list,
     }
 
     # Add any additional provider-specific kwargs
@@ -114,15 +111,10 @@ def embeddings(
     # LiteLLM returns a response with .data list
     # Each item has .embedding attribute
     for item in response.data:
-        yield item['embedding']
+        yield item["embedding"]
 
 
-def embed(
-    text: str,
-    *,
-    model: str = None,
-    **kwargs
-) -> Sequence[float]:
+def embed(text: str, *, model: str = None, **kwargs) -> Sequence[float]:
     """Generate embedding for a single text.
 
     Convenience function for embedding a single text string.
@@ -200,9 +192,7 @@ class EmbeddingCache:
         return vec
 
     def embed_batch(
-        self,
-        texts: Iterable[str],
-        force_refresh: bool = False
+        self, texts: Iterable[str], force_refresh: bool = False
     ) -> list[Sequence[float]]:
         """Get embeddings for multiple texts, using cache when possible.
 
@@ -289,7 +279,7 @@ def find_most_similar(
     *,
     model: str = None,
     top_k: int = 5,
-    **kwargs
+    **kwargs,
 ) -> list[tuple[str, float]]:
     """Find most similar texts to a query.
 

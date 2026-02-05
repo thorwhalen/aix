@@ -42,7 +42,7 @@ except ImportError:
 
 
 # Default configurations
-DFLT_CHAT_MODEL = 'gpt-4o-mini'
+DFLT_CHAT_MODEL = "gpt-4o-mini"
 DFLT_TEMPERATURE = 1.0
 DFLT_MAX_TOKENS = None
 
@@ -72,7 +72,7 @@ def _normalize_prompt(
         messages = list(prompt)
         # Validate structure
         for msg in messages:
-            if not isinstance(msg, dict) or 'role' not in msg or 'content' not in msg:
+            if not isinstance(msg, dict) or "role" not in msg or "content" not in msg:
                 raise ValueError(
                     f"Invalid message format: {msg}. "
                     "Messages must be dicts with 'role' and 'content' keys."
@@ -112,7 +112,7 @@ def _extract_text_from_stream(stream: Iterable) -> Iterable[str]:
     for chunk in stream:
         try:
             delta = chunk.choices[0].delta
-            if hasattr(delta, 'content') and delta.content is not None:
+            if hasattr(delta, "content") and delta.content is not None:
                 yield delta.content
         except (AttributeError, IndexError, KeyError):
             # Skip malformed chunks
@@ -126,7 +126,7 @@ def chat(
     temperature: float = None,
     max_tokens: int = None,
     stream: bool = False,
-    **kwargs
+    **kwargs,
 ) -> Union[str, Iterable[str]]:
     """Send a chat prompt and get a response.
 
@@ -188,14 +188,14 @@ def chat(
 
     # Build LiteLLM parameters
     litellm_kwargs = {
-        'model': model,
-        'messages': messages,
-        'temperature': temperature,
-        'stream': stream,
+        "model": model,
+        "messages": messages,
+        "temperature": temperature,
+        "stream": stream,
     }
 
     if max_tokens is not None:
-        litellm_kwargs['max_tokens'] = max_tokens
+        litellm_kwargs["max_tokens"] = max_tokens
 
     # Add any additional provider-specific kwargs
     litellm_kwargs.update(kwargs)
@@ -211,11 +211,8 @@ def chat(
 
 
 def chat_with_history(
-    system_prompt: str = None,
-    *,
-    model: str = None,
-    **chat_kwargs
-) -> 'ChatSession':
+    system_prompt: str = None, *, model: str = None, **chat_kwargs
+) -> "ChatSession":
     """Create a stateful chat session that maintains conversation history.
 
     Args:
@@ -251,13 +248,7 @@ class ChatSession:
         'Your name is Alice.'
     """
 
-    def __init__(
-        self,
-        system_prompt: str = None,
-        *,
-        model: str = None,
-        **chat_kwargs
-    ):
+    def __init__(self, system_prompt: str = None, *, model: str = None, **chat_kwargs):
         """Initialize a new chat session.
 
         Args:
@@ -302,7 +293,7 @@ class ChatSession:
         Args:
             keep_system: If True, preserve system message (if any)
         """
-        if keep_system and self.history and self.history[0]['role'] == 'system':
+        if keep_system and self.history and self.history[0]["role"] == "system":
             self.history = [self.history[0]]
         else:
             self.history = []

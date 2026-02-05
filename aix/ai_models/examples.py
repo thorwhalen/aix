@@ -104,7 +104,7 @@ def example_advanced_filtering():
         """Check if model is suitable for a specific task."""
         has_function_calling = model.capabilities.get("function_calling", False)
         has_sufficient_context = (model.context_size or 0) >= 32000
-        is_affordable = model.cost_per_token.get("input", float('inf')) < 0.01
+        is_affordable = model.cost_per_token.get("input", float("inf")) < 0.01
         return has_function_calling and has_sufficient_context and is_affordable
 
     suitable_models = manager.list_models(custom_filter=_is_suitable_for_task)

@@ -19,7 +19,7 @@ def main():
     print("\n1. Discovering Models from OpenRouter:")
     print("-" * 40)
     try:
-        discovered = models.discover('openrouter', verbose=True)
+        discovered = models.discover("openrouter", verbose=True)
         print(f"\nDiscovered {len(discovered)} models")
     except Exception as e:
         print(f"Note: Discovery requires API key. Error: {e}")
@@ -40,8 +40,8 @@ def main():
     # Example 3: Get specific model info
     print("\n3. Getting Model Information:")
     print("-" * 40)
-    if 'openai/gpt-4o' in models:
-        info = models['openai/gpt-4o']
+    if "openai/gpt-4o" in models:
+        info = models["openai/gpt-4o"]
         print(f"Model ID: {info.id}")
         print(f"Provider: {info.provider}")
         print(f"Context Size: {info.context_size}")
@@ -53,7 +53,7 @@ def main():
     # Example 4: Filter models by provider
     print("\n4. Filtering by Provider:")
     print("-" * 40)
-    openai_models = models.filter(provider='openai')
+    openai_models = models.filter(provider="openai")
     if openai_models:
         print(f"OpenAI models: {len(openai_models)}")
         for model in openai_models[:5]:
@@ -64,7 +64,7 @@ def main():
     print("-" * 40)
     filtered = models.filter(
         min_context_size=8000,
-        custom_filter=lambda m: m.cost_per_token.get('input', 0) < 0.00001
+        custom_filter=lambda m: m.cost_per_token.get("input", 0) < 0.00001,
     )
     if filtered:
         print(f"Models with >8K context and low cost: {len(filtered)}")
@@ -76,7 +76,7 @@ def main():
     # Example 6: Search models
     print("\n6. Searching for Models:")
     print("-" * 40)
-    results = models.search('gpt-4')
+    results = models.search("gpt-4")
     if results:
         print(f"Found {len(results)} models matching 'gpt-4':")
         for model in results[:5]:
@@ -86,14 +86,12 @@ def main():
     print("\n7. Getting Model Recommendations:")
     print("-" * 40)
     recommended = models.recommend(
-        task='chat',
-        max_cost_per_mtok=5.0,
-        min_context_size=8000
+        task="chat", max_cost_per_mtok=5.0, min_context_size=8000
     )
     if recommended:
         print(f"Recommended models: {len(recommended)}")
         for model in recommended[:3]:
-            cost = model.cost_per_token.get('input', 0) * 1_000_000
+            cost = model.cost_per_token.get("input", 0) * 1_000_000
             print(f"  - {model.id}")
             print(f"    Cost: ${cost:.2f}/M tokens")
             print(f"    Context: {model.context_size}")
@@ -105,16 +103,14 @@ def main():
         if models:
             # Get a cheap model
             cheap_models = models.filter(
-                custom_filter=lambda m: m.cost_per_token.get('input', float('inf')) < 0.000001
+                custom_filter=lambda m: m.cost_per_token.get("input", float("inf"))
+                < 0.000001
             )
             if cheap_models:
                 model = cheap_models[0]
                 print(f"Using model: {model.id}")
 
-                response = chat(
-                    "What is 2+2?",
-                    model=model.id
-                )
+                response = chat("What is 2+2?", model=model.id)
                 print(f"Response: {response}")
     except Exception as e:
         print(f"Chat requires API keys: {e}")
@@ -137,7 +133,7 @@ def main():
     # Example 10: Model by task
     print("\n10. Models by Task:")
     print("-" * 40)
-    chat_models = models.by_task('chat')
+    chat_models = models.by_task("chat")
     if chat_models:
         print(f"Chat models: {len(chat_models)}")
         for model in chat_models[:5]:

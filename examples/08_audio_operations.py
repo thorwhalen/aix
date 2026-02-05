@@ -71,11 +71,7 @@ def main():
     print(f"Text: {text}")
 
     try:
-        audio = text_to_speech(
-            text,
-            model="tts-1-hd",
-            voice="nova"
-        )
+        audio = text_to_speech(text, model="tts-1-hd", voice="nova")
         audio.save("high_quality_tts.mp3")
         print(f"✓ Generated with tts-1-hd model")
         print(f"  Saved to: high_quality_tts.mp3")
@@ -130,9 +126,9 @@ def main():
         if result.segments:
             print("\n  Segments:")
             for seg in result.segments[:3]:  # Show first 3
-                start = seg.get('start', 0)
-                end = seg.get('end', 0)
-                text = seg.get('text', '')
+                start = seg.get("start", 0)
+                end = seg.get("end", 0)
+                text = seg.get("text", "")
                 print(f"    [{start:.2f}-{end:.2f}] {text}")
     except Exception as e:
         print(f"⚠ Error: {e}")

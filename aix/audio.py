@@ -30,10 +30,10 @@ except ImportError:
 
 
 # Default configurations
-DFLT_TTS_MODEL = 'tts-1'
-DFLT_TTS_VOICE = 'alloy'  # Options: alloy, echo, fable, onyx, nova, shimmer
+DFLT_TTS_MODEL = "tts-1"
+DFLT_TTS_VOICE = "alloy"  # Options: alloy, echo, fable, onyx, nova, shimmer
 DFLT_TTS_SPEED = 1.0
-DFLT_TRANSCRIPTION_MODEL = 'whisper-1'
+DFLT_TRANSCRIPTION_MODEL = "whisper-1"
 
 
 class GeneratedAudio:
@@ -53,7 +53,7 @@ class GeneratedAudio:
         model: str = None,
         text: str = None,
         voice: str = None,
-        format: str = 'mp3'
+        format: str = "mp3",
     ):
         """Initialize generated audio.
 
@@ -89,7 +89,7 @@ class GeneratedAudio:
             >>> audio.save("speech.wav")  # doctest: +SKIP
         """
         path = Path(path)
-        with open(path, 'wb') as f:
+        with open(path, "wb") as f:
             f.write(self.data)
 
     def play(self):
@@ -105,23 +105,26 @@ class GeneratedAudio:
         import tempfile
 
         # Save to temporary file
-        with tempfile.NamedTemporaryFile(suffix=f'.{self.format}', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=f".{self.format}", delete=False) as f:
             temp_path = f.name
             f.write(self.data)
 
         try:
             # Try different players based on platform
             import sys
-            if sys.platform == 'darwin':  # macOS
-                subprocess.run(['afplay', temp_path])
-            elif sys.platform == 'linux':
-                subprocess.run(['aplay', temp_path])
-            elif sys.platform == 'win32':  # Windows
+
+            if sys.platform == "darwin":  # macOS
+                subprocess.run(["afplay", temp_path])
+            elif sys.platform == "linux":
+                subprocess.run(["aplay", temp_path])
+            elif sys.platform == "win32":  # Windows
                 import os
+
                 os.startfile(temp_path)
         finally:
             # Clean up temp file
             import os
+
             try:
                 os.unlink(temp_path)
             except:
@@ -150,7 +153,7 @@ class TranscriptionResult:
         language: str = None,
         duration: float = None,
         segments: list = None,
-        model: str = None
+        model: str = None,
     ):
         """Initialize transcription result.
 
@@ -173,7 +176,9 @@ class TranscriptionResult:
 
     def __repr__(self) -> str:
         """String representation."""
-        return f"TranscriptionResult(text='{self.text[:50]}...', language={self.language})"
+        return (
+            f"TranscriptionResult(text='{self.text[:50]}...', language={self.language})"
+        )
 
 
 def text_to_speech(
@@ -182,8 +187,8 @@ def text_to_speech(
     model: str = None,
     voice: str = None,
     speed: float = None,
-    response_format: str = 'mp3',
-    **kwargs
+    response_format: str = "mp3",
+    **kwargs,
 ) -> GeneratedAudio:
     """Convert text to speech audio.
 
@@ -233,11 +238,11 @@ def text_to_speech(
 
     # Build parameters
     params = {
-        'model': model,
-        'input': text,
-        'voice': voice,
-        'response_format': response_format,
-        'speed': speed,
+        "model": model,
+        "input": text,
+        "voice": voice,
+        "response_format": response_format,
+        "speed": speed,
     }
 
     # Add additional kwargs
@@ -251,14 +256,10 @@ def text_to_speech(
         audio_data = response
     else:
         # Some responses might be objects with content
-        audio_data = getattr(response, 'content', response)
+        audio_data = getattr(response, "content", response)
 
     return GeneratedAudio(
-        data=audio_data,
-        model=model,
-        text=text,
-        voice=voice,
-        format=response_format
+        data=audio_data, model=model, text=text, voice=voice, format=response_format
     )
 
 
@@ -268,10 +269,10 @@ def transcribe(
     model: str = None,
     language: str = None,
     prompt: str = None,
-    response_format: str = 'text',
+    response_format: str = "text",
     temperature: float = None,
     timestamp_granularities: list[str] = None,
-    **kwargs
+    **kwargs,
 ) -> Union[str, TranscriptionResult]:
     """Transcribe audio to text.
 
@@ -321,36 +322,36 @@ def transcribe(
     if isinstance(audio, (str, Path)):
         # File path
         audio_path = Path(audio)
-        with open(audio_path, 'rb') as f:
+        with open(audio_path, "rb") as f:
             audio_data = f.read()
         filename = audio_path.name
     elif isinstance(audio, bytes):
         # Raw bytes
         audio_data = audio
-        filename = 'audio.mp3'  # Default filename
+        filename = "audio.mp3"  # Default filename
     else:
         # File-like object
         audio_data = audio.read()
-        filename = getattr(audio, 'name', 'audio.mp3')
+        filename = getattr(audio, "name", "audio.mp3")
 
     # Apply defaults
     model = model or DFLT_TRANSCRIPTION_MODEL
 
     # Build parameters
     params = {
-        'model': model,
-        'file': (filename, audio_data),
-        'response_format': response_format,
+        "model": model,
+        "file": (filename, audio_data),
+        "response_format": response_format,
     }
 
     if language:
-        params['language'] = language
+        params["language"] = language
     if prompt:
-        params['prompt'] = prompt
+        params["prompt"] = prompt
     if temperature is not None:
-        params['temperature'] = temperature
+        params["temperature"] = temperature
     if timestamp_granularities:
-        params['timestamp_granularities'] = timestamp_granularities
+        params["timestamp_granularities"] = timestamp_granularities
 
     # Add additional kwargs
     params.update(kwargs)
@@ -359,12 +360,12 @@ def transcribe(
     response = _litellm_transcription(**params)
 
     # Parse response based on format
-    if response_format == 'text':
+    if response_format == "text":
         # Simple text response
         if isinstance(response, str):
             return response
         else:
-            return getattr(response, 'text', str(response))
+            return getattr(response, "text", str(response))
     else:
         # Structured response
         if isinstance(response, str):
@@ -372,26 +373,26 @@ def transcribe(
             return TranscriptionResult(text=response, model=model)
 
         # Extract metadata
-        text = getattr(response, 'text', '')
-        language = getattr(response, 'language', None)
-        duration = getattr(response, 'duration', None)
-        segments = getattr(response, 'segments', None)
+        text = getattr(response, "text", "")
+        language = getattr(response, "language", None)
+        duration = getattr(response, "duration", None)
+        segments = getattr(response, "segments", None)
 
         return TranscriptionResult(
             text=text,
             language=language,
             duration=duration,
             segments=segments,
-            model=model
+            model=model,
         )
 
 
 def transcribe_with_timestamps(
     audio: Union[str, Path, BinaryIO, bytes],
     *,
-    granularity: str = 'segment',
+    granularity: str = "segment",
     model: str = None,
-    **kwargs
+    **kwargs,
 ) -> TranscriptionResult:
     """Transcribe audio with detailed timestamps.
 
@@ -416,9 +417,9 @@ def transcribe_with_timestamps(
     return transcribe(
         audio,
         model=model,
-        response_format='verbose_json',
+        response_format="verbose_json",
         timestamp_granularities=[granularity],
-        **kwargs
+        **kwargs,
     )
 
 
@@ -427,7 +428,7 @@ def translate_audio(
     *,
     model: str = None,
     prompt: str = None,
-    **kwargs
+    **kwargs,
 ) -> str:
     """Translate audio from any language to English.
 
@@ -457,26 +458,26 @@ def translate_audio(
     # Handle different audio input types (same as transcribe)
     if isinstance(audio, (str, Path)):
         audio_path = Path(audio)
-        with open(audio_path, 'rb') as f:
+        with open(audio_path, "rb") as f:
             audio_data = f.read()
         filename = audio_path.name
     elif isinstance(audio, bytes):
         audio_data = audio
-        filename = 'audio.mp3'
+        filename = "audio.mp3"
     else:
         audio_data = audio.read()
-        filename = getattr(audio, 'name', 'audio.mp3')
+        filename = getattr(audio, "name", "audio.mp3")
 
     model = model or DFLT_TRANSCRIPTION_MODEL
 
     # Use translation endpoint
     params = {
-        'model': model,
-        'file': (filename, audio_data),
+        "model": model,
+        "file": (filename, audio_data),
     }
 
     if prompt:
-        params['prompt'] = prompt
+        params["prompt"] = prompt
 
     params.update(kwargs)
 
@@ -485,13 +486,14 @@ def translate_audio(
     # This depends on provider support
     try:
         from litellm import translation as _litellm_translation
+
         response = _litellm_translation(**params)
     except (ImportError, AttributeError):
         # Fallback: some models support translation via transcription
-        params['task'] = 'translate'
+        params["task"] = "translate"
         response = _litellm_transcription(**params)
 
     if isinstance(response, str):
         return response
     else:
-        return getattr(response, 'text', str(response))
+        return getattr(response, "text", str(response))

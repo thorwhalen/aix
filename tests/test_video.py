@@ -22,7 +22,7 @@ class TestGeneratedVideo:
             prompt="A cat playing",
             duration=5.0,
             resolution="1920x1080",
-            status="completed"
+            status="completed",
         )
         assert video.url == "https://example.com/video.mp4"
         assert video.model == "test-model"
@@ -31,28 +31,26 @@ class TestGeneratedVideo:
         assert video.resolution == "1920x1080"
         assert video.status == "completed"
 
-    @patch('requests.get')
+    @patch("requests.get")
     def test_as_bytes_from_url(self, mock_get):
         """Test getting bytes from URL."""
         mock_response = Mock()
-        mock_response.content = b'video_data'
+        mock_response.content = b"video_data"
         mock_get.return_value = mock_response
 
         video = GeneratedVideo(url="https://example.com/video.mp4")
         data = video.as_bytes()
 
-        assert data == b'video_data'
+        assert data == b"video_data"
 
     def test_as_bytes_from_data(self):
         """Test getting bytes from stored data."""
-        video = GeneratedVideo(data=b'video_bytes')
-        assert video.as_bytes() == b'video_bytes'
+        video = GeneratedVideo(data=b"video_bytes")
+        assert video.as_bytes() == b"video_bytes"
 
     def test_repr(self):
         """Test string representation."""
-        video = GeneratedVideo(
-            model="test", duration=5.0, status="completed"
-        )
+        video = GeneratedVideo(model="test", duration=5.0, status="completed")
         repr_str = repr(video)
         assert "GeneratedVideo" in repr_str
         assert "test" in repr_str
@@ -89,24 +87,24 @@ class TestAnimateImage:
 class TestGetAvailableProviders:
     """Tests for get_available_providers function."""
 
-    @patch.dict('os.environ', {}, clear=True)
+    @patch.dict("os.environ", {}, clear=True)
     def test_no_providers(self):
         """Test with no providers configured."""
         providers = get_available_providers()
         # May have some providers based on installed packages
         assert isinstance(providers, list)
 
-    @patch.dict('os.environ', {'RUNWAY_API_KEY': 'test-key'})
+    @patch.dict("os.environ", {"RUNWAY_API_KEY": "test-key"})
     def test_runway_available(self):
         """Test with Runway configured."""
         providers = get_available_providers()
-        assert 'runway' in providers
+        assert "runway" in providers
 
-    @patch.dict('os.environ', {'PIKA_API_KEY': 'test-key'})
+    @patch.dict("os.environ", {"PIKA_API_KEY": "test-key"})
     def test_pika_available(self):
         """Test with Pika configured."""
         providers = get_available_providers()
-        assert 'pika' in providers
+        assert "pika" in providers
 
 
 class TestEstimateCost:
@@ -114,10 +112,10 @@ class TestEstimateCost:
 
     def test_estimate_single_provider(self):
         """Test cost estimation for single provider."""
-        cost = estimate_cost(duration=5, provider='runway')
-        assert 'runway' in cost
-        assert isinstance(cost['runway'], (int, float))
-        assert cost['runway'] > 0
+        cost = estimate_cost(duration=5, provider="runway")
+        assert "runway" in cost
+        assert isinstance(cost["runway"], (int, float))
+        assert cost["runway"] > 0
 
     def test_estimate_all_providers(self):
         """Test cost estimation for all providers."""
@@ -125,11 +123,11 @@ class TestEstimateCost:
         assert isinstance(cost, dict)
         assert len(cost) > 0
         # Should have estimates for known providers
-        assert 'runway' in cost or 'pika' in cost
+        assert "runway" in cost or "pika" in cost
 
     def test_cost_scales_with_duration(self):
         """Test that cost increases with duration."""
-        cost_short = estimate_cost(duration=2, provider='runway')
-        cost_long = estimate_cost(duration=10, provider='runway')
+        cost_short = estimate_cost(duration=2, provider="runway")
+        cost_long = estimate_cost(duration=10, provider="runway")
 
-        assert cost_long['runway'] > cost_short['runway']
+        assert cost_long["runway"] > cost_short["runway"]

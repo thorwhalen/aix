@@ -70,7 +70,7 @@ def main():
         print("\nStep 3: Analyzing sentiment...")
         analyze = prompt_func(
             "Analyze the sentiment and main topic of: {text}",
-            output_schema={"sentiment": str, "topic": str, "confidence": float}
+            output_schema={"sentiment": str, "topic": str, "confidence": float},
         )
 
         analysis = analyze(text=transcribed)
@@ -92,7 +92,7 @@ def main():
         story = chat(
             "Write a one-paragraph story about a robot discovering art. "
             "Keep it under 50 words.",
-            model="gpt-4o-mini"
+            model="gpt-4o-mini",
         )
         print(f"✓ Story: {story}")
 

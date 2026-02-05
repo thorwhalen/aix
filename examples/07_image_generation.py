@@ -39,7 +39,7 @@ def main():
             "Abstract art with vibrant colors",
             model="dall-e-3",
             quality="hd",
-            style="vivid"
+            style="vivid",
         )
         image.save("abstract_art_hd.png")
         print(f"✓ Saved to: abstract_art_hd.png")
@@ -58,7 +58,7 @@ def main():
             image = generate_image(
                 "A cute robot waving hello",
                 size=size,
-                model="dall-e-2"  # DALL-E 2 supports multiple sizes
+                model="dall-e-2",  # DALL-E 2 supports multiple sizes
             )
             filename = f"robot_{size}.png"
             image.save(filename)
@@ -72,9 +72,7 @@ def main():
     print("Generating 3 variations of: 'A magical forest'")
     try:
         images = generate_images(
-            "A magical forest with glowing mushrooms",
-            n=3,
-            model="dall-e-2"
+            "A magical forest with glowing mushrooms", n=3, model="dall-e-2"
         )
         print(f"✓ Generated {len(images)} images")
         for i, img in enumerate(images):
@@ -93,11 +91,7 @@ def main():
     for style in styles:
         print(f"\nGenerating with '{style}' style...")
         try:
-            image = generate_image(
-                prompt,
-                model="dall-e-3",
-                style=style
-            )
+            image = generate_image(prompt, model="dall-e-3", style=style)
             filename = f"coffee_shop_{style}.png"
             image.save(filename)
             print(f"✓ Saved to: {filename}")

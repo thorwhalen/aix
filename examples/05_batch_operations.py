@@ -23,16 +23,11 @@ def main():
         "What is 3+3?",
         "What is 5+5?",
         "What is 7+7?",
-        "What is 10+10?"
+        "What is 10+10?",
     ]
 
     print(f"Processing {len(prompts)} prompts in batch...")
-    results = list(batch_chat(
-        prompts,
-        batch_size=5,
-        max_workers=3,
-        show_progress=True
-    ))
+    results = list(batch_chat(prompts, batch_size=5, max_workers=3, show_progress=True))
 
     print("\nResults:")
     for i, (prompt, result) in enumerate(zip(prompts, results), 1):
@@ -47,15 +42,11 @@ def main():
         "deep learning",
         "neural networks",
         "artificial intelligence",
-        "natural language processing"
+        "natural language processing",
     ] * 4  # 20 texts total
 
     print(f"Generating embeddings for {len(texts)} texts...")
-    vectors = list(batch_embeddings(
-        texts,
-        batch_size=10,
-        show_progress=True
-    ))
+    vectors = list(batch_embeddings(texts, batch_size=10, show_progress=True))
 
     print(f"\nGenerated {len(vectors)} vectors")
     print(f"Vector dimension: {len(vectors[0])}")
@@ -70,7 +61,7 @@ def main():
         """Analyze sentiment of text."""
         return chat(
             f"Analyze the sentiment (positive/negative/neutral): '{text}'",
-            model="gpt-4o-mini"
+            model="gpt-4o-mini",
         )
 
     reviews = [
@@ -78,16 +69,13 @@ def main():
         "Terrible quality, very disappointed",
         "It's okay, nothing special",
         "Best purchase I've ever made!",
-        "Complete waste of money"
+        "Complete waste of money",
     ]
 
     print(f"Analyzing sentiment for {len(reviews)} reviews...")
-    sentiments = list(batch_process(
-        reviews,
-        analyze_sentiment,
-        batch_size=3,
-        show_progress=True
-    ))
+    sentiments = list(
+        batch_process(reviews, analyze_sentiment, batch_size=3, show_progress=True)
+    )
 
     print("\nSentiment Analysis Results:")
     for review, sentiment in zip(reviews, sentiments):
@@ -98,11 +86,7 @@ def main():
     print("\n4. Using BatchProcessor:")
     print("-" * 40)
 
-    processor = BatchProcessor(
-        batch_size=5,
-        max_workers=3,
-        show_progress=True
-    )
+    processor = BatchProcessor(batch_size=5, max_workers=3, show_progress=True)
 
     questions = [
         "What is Python?",
@@ -135,13 +119,15 @@ def main():
     items = ["item1", "item2", "item3"]
 
     print(f"Processing {len(items)} items with retry logic...")
-    results = list(batch_process(
-        items,
-        potentially_failing_operation,
-        retry_attempts=3,
-        retry_delay=1.0,
-        show_progress=True
-    ))
+    results = list(
+        batch_process(
+            items,
+            potentially_failing_operation,
+            retry_attempts=3,
+            retry_delay=1.0,
+            show_progress=True,
+        )
+    )
 
     print(f"\nProcessed {len(results)} items successfully")
 

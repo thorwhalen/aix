@@ -40,7 +40,7 @@ class TestNormalizePrompt:
 class TestChat:
     """Tests for chat function."""
 
-    @patch('aix.chat._litellm_completion')
+    @patch("aix.chat._litellm_completion")
     def test_simple_chat(self, mock_completion):
         """Test simple chat with string prompt."""
         # Mock response
@@ -55,9 +55,9 @@ class TestChat:
         assert result == "Test response"
         mock_completion.assert_called_once()
         call_kwargs = mock_completion.call_args[1]
-        assert call_kwargs['messages'] == [{"role": "user", "content": "Hello"}]
+        assert call_kwargs["messages"] == [{"role": "user", "content": "Hello"}]
 
-    @patch('aix.chat._litellm_completion')
+    @patch("aix.chat._litellm_completion")
     def test_chat_with_model(self, mock_completion):
         """Test chat with specific model."""
         mock_response = Mock()
@@ -69,9 +69,9 @@ class TestChat:
         chat("Hello", model="gpt-4o")
 
         call_kwargs = mock_completion.call_args[1]
-        assert call_kwargs['model'] == "gpt-4o"
+        assert call_kwargs["model"] == "gpt-4o"
 
-    @patch('aix.chat._litellm_completion')
+    @patch("aix.chat._litellm_completion")
     def test_chat_with_temperature(self, mock_completion):
         """Test chat with custom temperature."""
         mock_response = Mock()
@@ -83,9 +83,9 @@ class TestChat:
         chat("Hello", temperature=0.5)
 
         call_kwargs = mock_completion.call_args[1]
-        assert call_kwargs['temperature'] == 0.5
+        assert call_kwargs["temperature"] == 0.5
 
-    @patch('aix.chat._litellm_completion')
+    @patch("aix.chat._litellm_completion")
     def test_chat_streaming(self, mock_completion):
         """Test streaming chat."""
         # Mock streaming response
@@ -105,9 +105,9 @@ class TestChat:
 
         assert result == ["Hello", " world"]
         call_kwargs = mock_completion.call_args[1]
-        assert call_kwargs['stream'] is True
+        assert call_kwargs["stream"] is True
 
-    @patch('aix.chat._litellm_completion')
+    @patch("aix.chat._litellm_completion")
     def test_chat_with_message_history(self, mock_completion):
         """Test chat with message history."""
         mock_response = Mock()
@@ -119,19 +119,19 @@ class TestChat:
         messages = [
             {"role": "user", "content": "Hi"},
             {"role": "assistant", "content": "Hello!"},
-            {"role": "user", "content": "How are you?"}
+            {"role": "user", "content": "How are you?"},
         ]
 
         chat(messages)
 
         call_kwargs = mock_completion.call_args[1]
-        assert call_kwargs['messages'] == messages
+        assert call_kwargs["messages"] == messages
 
 
 class TestAsk:
     """Tests for ask convenience function."""
 
-    @patch('aix.chat.chat')
+    @patch("aix.chat.chat")
     def test_ask(self, mock_chat):
         """Test ask function."""
         mock_chat.return_value = "Paris"
@@ -139,29 +139,26 @@ class TestAsk:
         result = ask("What is the capital of France?")
 
         assert result == "Paris"
-        mock_chat.assert_called_once_with(
-            "What is the capital of France?",
-            model=None
-        )
+        mock_chat.assert_called_once_with("What is the capital of France?", model=None)
 
 
 class TestChatSession:
     """Tests for ChatSession class."""
 
-    @patch('aix.chat.chat')
+    @patch("aix.chat.chat")
     def test_session_initialization(self, mock_chat):
         """Test session initialization."""
         session = ChatSession()
         assert session.history == []
 
-    @patch('aix.chat.chat')
+    @patch("aix.chat.chat")
     def test_session_with_system_prompt(self, mock_chat):
         """Test session with system prompt."""
         session = ChatSession(system_prompt="You are helpful")
         assert len(session.history) == 1
-        assert session.history[0]['role'] == 'system'
+        assert session.history[0]["role"] == "system"
 
-    @patch('aix.chat.chat')
+    @patch("aix.chat.chat")
     def test_session_send(self, mock_chat):
         """Test sending message in session."""
         mock_chat.return_value = "I'm doing well"
@@ -171,10 +168,10 @@ class TestChatSession:
 
         assert response == "I'm doing well"
         assert len(session.history) == 2
-        assert session.history[0]['role'] == 'user'
-        assert session.history[1]['role'] == 'assistant'
+        assert session.history[0]["role"] == "user"
+        assert session.history[1]["role"] == "assistant"
 
-    @patch('aix.chat.chat')
+    @patch("aix.chat.chat")
     def test_session_maintains_history(self, mock_chat):
         """Test that session maintains history across multiple sends."""
         mock_chat.side_effect = ["Hello!", "Your name is Alice"]
@@ -192,7 +189,7 @@ class TestChatSession:
         last_call = mock_chat.call_args[0][0]
         assert len(last_call) == 4
 
-    @patch('aix.chat.chat')
+    @patch("aix.chat.chat")
     def test_session_clear_history(self, mock_chat):
         """Test clearing session history."""
         mock_chat.return_value = "Response"
@@ -202,7 +199,7 @@ class TestChatSession:
 
         session.clear_history(keep_system=True)
         assert len(session.history) == 1
-        assert session.history[0]['role'] == 'system'
+        assert session.history[0]["role"] == "system"
 
         session.clear_history(keep_system=False)
         assert len(session.history) == 0
@@ -216,4 +213,4 @@ class TestChatWithHistory:
         session = chat_with_history("Be helpful")
         assert isinstance(session, ChatSession)
         assert len(session.history) == 1
-        assert session.history[0]['content'] == "Be helpful"
+        assert session.history[0]["content"] == "Be helpful"

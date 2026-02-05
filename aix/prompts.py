@@ -59,7 +59,7 @@ def _extract_template_vars(template: str) -> list[str]:
         ['a', 'b']
     """
     # Find all {var} patterns
-    matches = re.findall(r'\{(\w+)\}', template)
+    matches = re.findall(r"\{(\w+)\}", template)
     # Remove duplicates while preserving order
     seen = set()
     result = []
@@ -112,7 +112,7 @@ def _schema_to_json_schema(schema: Union[dict, type]) -> dict:
         return {
             "type": "object",
             "properties": properties,
-            "required": list(schema.keys())
+            "required": list(schema.keys()),
         }
     else:
         # Single type
@@ -159,9 +159,9 @@ def _parse_structured_output(response_text: str, schema: dict) -> Any:
 
     # Remove markdown code blocks if present
     if text.startswith("```"):
-        lines = text.split('\n')
+        lines = text.split("\n")
         # Remove first and last lines (``` markers)
-        text = '\n'.join(lines[1:-1])
+        text = "\n".join(lines[1:-1])
         if text.startswith("json"):
             text = text[4:].strip()
 
@@ -179,7 +179,7 @@ def prompt_func(
     output_schema: Union[dict, type] = None,
     model: str = None,
     temperature: float = None,
-    **chat_kwargs
+    **chat_kwargs,
 ) -> Callable:
     """Create a callable function from a prompt template.
 
@@ -268,16 +268,13 @@ def prompt_func(
                 structured_prompt,
                 model=model,
                 temperature=temperature or 0.0,  # Lower temp for structured output
-                **chat_kwargs
+                **chat_kwargs,
             )
             return _parse_structured_output(response, json_schema)
         else:
             # Plain text output
             response = chat(
-                formatted_prompt,
-                model=model,
-                temperature=temperature,
-                **chat_kwargs
+                formatted_prompt, model=model, temperature=temperature, **chat_kwargs
             )
             return response
 
@@ -292,7 +289,9 @@ def prompt_func(
         generated_function.__doc__ += f"    {param}: Parameter from template\n"
 
     if output_schema:
-        generated_function.__doc__ += f"\nReturns: Structured data matching schema: {output_schema}"
+        generated_function.__doc__ += (
+            f"\nReturns: Structured data matching schema: {output_schema}"
+        )
     else:
         generated_function.__doc__ += "\nReturns: Generated text"
 
@@ -384,7 +383,7 @@ class PromptFuncs:
         template: str,
         *,
         output_schema: Union[dict, type] = None,
-        **kwargs
+        **kwargs,
     ) -> None:
         """Add a function to the collection.
 
@@ -397,7 +396,7 @@ class PromptFuncs:
         # Merge default kwargs
         func_kwargs = {**self._default_kwargs, **kwargs}
         if self._model:
-            func_kwargs.setdefault('model', self._model)
+            func_kwargs.setdefault("model", self._model)
 
         # Create function
         func = prompt_func(template, output_schema=output_schema, **func_kwargs)
@@ -435,26 +434,26 @@ class CommonFuncs(PromptFuncs):
         super().__init__(model=model)
 
         # Text transformation functions
-        self.add('summarize', "Summarize this text concisely: {text}")
-        self.add('explain', "Explain this concept simply: {concept}")
-        self.add('translate', "Translate {text} to {language}")
-        self.add('paraphrase', "Paraphrase this text: {text}")
+        self.add("summarize", "Summarize this text concisely: {text}")
+        self.add("explain", "Explain this concept simply: {concept}")
+        self.add("translate", "Translate {text} to {language}")
+        self.add("paraphrase", "Paraphrase this text: {text}")
 
         # Analysis functions
         self.add(
-            'extract_keywords',
+            "extract_keywords",
             "Extract the main keywords from: {text}",
-            output_schema=list
+            output_schema=list,
         )
         self.add(
-            'sentiment',
+            "sentiment",
             "Analyze the sentiment of: {text}",
-            output_schema={"sentiment": str, "score": float, "explanation": str}
+            output_schema={"sentiment": str, "score": float, "explanation": str},
         )
 
         # Generation functions
-        self.add('continue_text', "Continue this text naturally: {text}")
-        self.add('generate_title', "Generate a catchy title for: {text}")
+        self.add("continue_text", "Continue this text naturally: {text}")
+        self.add("generate_title", "Generate a catchy title for: {text}")
 
 
 # Create singleton instance
@@ -652,7 +651,10 @@ def constrained_answer(
         # Add explicit JSON instructions and constraints
         if isinstance(valid_answers, tuple) and len(valid_answers) == 2:
             template = _enhance_prompt_for_json(
-                prompt, valid_answers, min_val=valid_answers[0], max_val=valid_answers[1]
+                prompt,
+                valid_answers,
+                min_val=valid_answers[0],
+                max_val=valid_answers[1],
             )
         else:
             template = _enhance_prompt_for_json(prompt, valid_answers)

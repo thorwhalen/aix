@@ -24,19 +24,13 @@ def main():
     # Example 2: With specific model
     print("\n2. With Specific Model (gpt-4o-mini):")
     print("-" * 40)
-    response = chat(
-        "Explain quantum computing in one sentence.",
-        model="gpt-4o-mini"
-    )
+    response = chat("Explain quantum computing in one sentence.", model="gpt-4o-mini")
     print(f"Response: {response}")
 
     # Example 3: With temperature control
     print("\n3. With Temperature Control (creative):")
     print("-" * 40)
-    response = chat(
-        "Write a creative tagline for a coffee shop",
-        temperature=1.5
-    )
+    response = chat("Write a creative tagline for a coffee shop", temperature=1.5)
     print(f"Response: {response}")
 
     # Example 4: Multi-turn conversation with message history
@@ -45,7 +39,7 @@ def main():
     messages = [
         {"role": "user", "content": "My name is Alice"},
         {"role": "assistant", "content": "Nice to meet you, Alice!"},
-        {"role": "user", "content": "What's my name?"}
+        {"role": "user", "content": "What's my name?"},
     ]
     response = chat(messages)
     print(f"Response: {response}")
@@ -53,9 +47,9 @@ def main():
     # Example 5: Streaming response
     print("\n5. Streaming Response:")
     print("-" * 40)
-    print("Response (streamed): ", end='', flush=True)
+    print("Response (streamed): ", end="", flush=True)
     for chunk in chat("Count from 1 to 5", stream=True):
-        print(chunk, end='', flush=True)
+        print(chunk, end="", flush=True)
     print()
 
     print("\n" + "=" * 60)

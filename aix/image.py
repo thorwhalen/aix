@@ -39,6 +39,7 @@ except ImportError:
 # Try to import PIL for image handling
 try:
     from PIL import Image as PILImage
+
     _PIL_AVAILABLE = True
 except ImportError:
     _PIL_AVAILABLE = False
@@ -46,9 +47,9 @@ except ImportError:
 
 
 # Default configurations
-DFLT_IMAGE_MODEL = 'dall-e-2'
-DFLT_IMAGE_SIZE = '1024x1024'
-DFLT_IMAGE_QUALITY = 'standard'
+DFLT_IMAGE_MODEL = "dall-e-2"
+DFLT_IMAGE_SIZE = "1024x1024"
+DFLT_IMAGE_QUALITY = "standard"
 DFLT_NUM_IMAGES = 1
 
 
@@ -70,7 +71,7 @@ class GeneratedImage:
         b64_json: str = None,
         model: str = None,
         prompt: str = None,
-        revised_prompt: str = None
+        revised_prompt: str = None,
     ):
         """Initialize generated image.
 
@@ -104,6 +105,7 @@ class GeneratedImage:
 
         if self.url:
             import requests
+
             response = requests.get(self.url)
             response.raise_for_status()
             self._image_data = response.content
@@ -150,7 +152,7 @@ class GeneratedImage:
         else:
             # Fallback: save raw bytes
             path = Path(path)
-            with open(path, 'wb') as f:
+            with open(path, "wb") as f:
                 f.write(self.as_bytes())
 
     def show(self):
@@ -176,8 +178,8 @@ def generate_image(
     size: str = None,
     quality: str = None,
     style: str = None,
-    response_format: str = 'url',
-    **kwargs
+    response_format: str = "url",
+    **kwargs,
 ) -> GeneratedImage:
     """Generate a single image from a text prompt.
 
@@ -227,17 +229,17 @@ def generate_image(
 
     # Build parameters
     params = {
-        'model': model,
-        'prompt': prompt,
-        'n': 1,
-        'size': size,
-        'response_format': response_format,
+        "model": model,
+        "prompt": prompt,
+        "n": 1,
+        "size": size,
+        "response_format": response_format,
     }
 
     if quality:
-        params['quality'] = quality
+        params["quality"] = quality
     if style:
-        params['style'] = style
+        params["style"] = style
 
     # Add additional kwargs
     params.update(kwargs)
@@ -249,11 +251,11 @@ def generate_image(
     image_data = response.data[0]
 
     return GeneratedImage(
-        url=getattr(image_data, 'url', None),
-        b64_json=getattr(image_data, 'b64_json', None),
+        url=getattr(image_data, "url", None),
+        b64_json=getattr(image_data, "b64_json", None),
         model=model,
         prompt=prompt,
-        revised_prompt=getattr(image_data, 'revised_prompt', None)
+        revised_prompt=getattr(image_data, "revised_prompt", None),
     )
 
 
@@ -265,8 +267,8 @@ def generate_images(
     size: str = None,
     quality: str = None,
     style: str = None,
-    response_format: str = 'url',
-    **kwargs
+    response_format: str = "url",
+    **kwargs,
 ) -> list[GeneratedImage]:
     """Generate multiple images from a text prompt.
 
@@ -306,17 +308,17 @@ def generate_images(
 
     # Build parameters
     params = {
-        'model': model,
-        'prompt': prompt,
-        'n': n,
-        'size': size,
-        'response_format': response_format,
+        "model": model,
+        "prompt": prompt,
+        "n": n,
+        "size": size,
+        "response_format": response_format,
     }
 
     if quality:
-        params['quality'] = quality
+        params["quality"] = quality
     if style:
-        params['style'] = style
+        params["style"] = style
 
     # Add additional kwargs
     params.update(kwargs)
@@ -327,13 +329,15 @@ def generate_images(
     # Extract all images
     images = []
     for image_data in response.data:
-        images.append(GeneratedImage(
-            url=getattr(image_data, 'url', None),
-            b64_json=getattr(image_data, 'b64_json', None),
-            model=model,
-            prompt=prompt,
-            revised_prompt=getattr(image_data, 'revised_prompt', None)
-        ))
+        images.append(
+            GeneratedImage(
+                url=getattr(image_data, "url", None),
+                b64_json=getattr(image_data, "b64_json", None),
+                model=model,
+                prompt=prompt,
+                revised_prompt=getattr(image_data, "revised_prompt", None),
+            )
+        )
 
     return images
 
@@ -346,7 +350,7 @@ def edit_image(
     model: str = None,
     size: str = None,
     n: int = 1,
-    **kwargs
+    **kwargs,
 ) -> Union[GeneratedImage, list[GeneratedImage]]:
     """Edit an existing image based on a prompt.
 
@@ -378,27 +382,27 @@ def edit_image(
         )
 
     # Read image file
-    with open(image_path, 'rb') as f:
+    with open(image_path, "rb") as f:
         image_data = f.read()
 
     # Read mask if provided
     mask_data = None
     if mask_path:
-        with open(mask_path, 'rb') as f:
+        with open(mask_path, "rb") as f:
             mask_data = f.read()
 
     # Build parameters
     params = {
-        'model': model or 'dall-e-2',
-        'prompt': prompt,
-        'image': image_data,
-        'n': n,
+        "model": model or "dall-e-2",
+        "prompt": prompt,
+        "image": image_data,
+        "n": n,
     }
 
     if mask_data:
-        params['mask'] = mask_data
+        params["mask"] = mask_data
     if size:
-        params['size'] = size
+        params["size"] = size
 
     params.update(kwargs)
 
@@ -408,12 +412,14 @@ def edit_image(
     # Extract images
     images = []
     for img_data in response.data:
-        images.append(GeneratedImage(
-            url=getattr(img_data, 'url', None),
-            b64_json=getattr(img_data, 'b64_json', None),
-            model=params['model'],
-            prompt=prompt
-        ))
+        images.append(
+            GeneratedImage(
+                url=getattr(img_data, "url", None),
+                b64_json=getattr(img_data, "b64_json", None),
+                model=params["model"],
+                prompt=prompt,
+            )
+        )
 
     return images[0] if n == 1 else images
 
@@ -424,7 +430,7 @@ def create_variation(
     model: str = None,
     size: str = None,
     n: int = 1,
-    **kwargs
+    **kwargs,
 ) -> Union[GeneratedImage, list[GeneratedImage]]:
     """Create variations of an existing image.
 
@@ -455,18 +461,18 @@ def create_variation(
         )
 
     # Read image file
-    with open(image_path, 'rb') as f:
+    with open(image_path, "rb") as f:
         image_data = f.read()
 
     # Build parameters
     params = {
-        'model': model or 'dall-e-2',
-        'image': image_data,
-        'n': n,
+        "model": model or "dall-e-2",
+        "image": image_data,
+        "n": n,
     }
 
     if size:
-        params['size'] = size
+        params["size"] = size
 
     params.update(kwargs)
 
@@ -476,10 +482,12 @@ def create_variation(
     # Extract images
     images = []
     for img_data in response.data:
-        images.append(GeneratedImage(
-            url=getattr(img_data, 'url', None),
-            b64_json=getattr(img_data, 'b64_json', None),
-            model=params['model']
-        ))
+        images.append(
+            GeneratedImage(
+                url=getattr(img_data, "url", None),
+                b64_json=getattr(img_data, "b64_json", None),
+                model=params["model"],
+            )
+        )
 
     return images[0] if n == 1 else images

@@ -17,9 +17,7 @@ def main():
 
     # Create a chat session with system prompt
     print("\nCreating chat session with system prompt...")
-    session = chat_with_history(
-        "You are a helpful math tutor. Keep answers concise."
-    )
+    session = chat_with_history("You are a helpful math tutor. Keep answers concise.")
 
     # Have a multi-turn conversation
     print("\n" + "=" * 60)
@@ -47,8 +45,10 @@ def main():
     print("=" * 60)
 
     for i, msg in enumerate(session.history):
-        role = msg['role'].capitalize()
-        content = msg['content'][:50] + "..." if len(msg['content']) > 50 else msg['content']
+        role = msg["role"].capitalize()
+        content = (
+            msg["content"][:50] + "..." if len(msg["content"]) > 50 else msg["content"]
+        )
         print(f"{i+1}. {role}: {content}")
 
     # Clear history and start fresh
