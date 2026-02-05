@@ -1,0 +1,482 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.ai_models.examples &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.ai_models.examples</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.ai_models.examples</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Usage examples for the model management module.</span>
+
+<span class="sd">This module demonstrates common patterns and use cases.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.ai_models.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelSource</span><span class="p">,</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.ai_models.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelManager</span>
+
+<span class="c1"># === Basic Usage ===</span>
+
+
+<div class="viewcode-block" id="example_basic_usage">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_basic_usage">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">example_basic_usage</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Basic model management workflow.&quot;&quot;&quot;</span>
+    <span class="c1"># Create manager with persistent storage</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">get_manager</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="s2">&quot;~/.config/ai_models.json&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Discover models from OpenRouter</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Discovering models from OpenRouter...&quot;</span><span class="p">)</span>
+    <span class="n">openrouter_models</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">discover_from_source</span><span class="p">(</span><span class="s2">&quot;openrouter&quot;</span><span class="p">,</span> <span class="n">auto_register</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">openrouter_models</span><span class="p">)</span><span class="si">}</span><span class="s2"> models from OpenRouter&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Discover local Ollama models</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Discovering local Ollama models...&quot;</span><span class="p">)</span>
+    <span class="n">ollama_models</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">discover_from_source</span><span class="p">(</span><span class="s2">&quot;ollama&quot;</span><span class="p">,</span> <span class="n">auto_register</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ollama_models</span><span class="p">)</span><span class="si">}</span><span class="s2"> local models&quot;</span><span class="p">)</span>
+
+    <span class="c1"># List all available models</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Total models in registry: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Filter for specific models</span>
+    <span class="n">local_models</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">is_local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Local models: </span><span class="si">{</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">local_models</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">openai_models</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OpenAI models: </span><span class="si">{</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">openai_models</span><span class="p">[:</span><span class="mi">5</span><span class="p">]]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Get metadata for a specific model and connector</span>
+    <span class="k">if</span> <span class="s2">&quot;gpt-4&quot;</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">:</span>
+        <span class="n">openai_meta</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_connector_metadata</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">OpenAI metadata for gpt-4: </span><span class="si">{</span><span class="n">openai_meta</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">langchain_meta</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_connector_metadata</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="s2">&quot;langchain&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LangChain metadata for gpt-4: </span><span class="si">{</span><span class="n">langchain_meta</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="example_custom_metadata">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_custom_metadata">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">example_custom_metadata</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Working with custom metadata and tags.&quot;&quot;&quot;</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">get_manager</span><span class="p">()</span>
+
+    <span class="c1"># Add a custom model manually</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
+
+    <span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;my-fine-tuned-gpt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;my-fine-tuned-gpt&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;openai&quot;</span><span class="p">,</span> <span class="n">context_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span> <span class="n">is_local</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Add custom metadata</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">set_custom_metadata</span><span class="p">(</span>
+        <span class="s2">&quot;my-fine-tuned-gpt&quot;</span><span class="p">,</span> <span class="s2">&quot;training_data&quot;</span><span class="p">,</span> <span class="s2">&quot;Customer support conversations&quot;</span>
+    <span class="p">)</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">set_custom_metadata</span><span class="p">(</span>
+        <span class="s2">&quot;my-fine-tuned-gpt&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;performance_notes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Better at formal tone than base model&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Add tags</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">add_model_tag</span><span class="p">(</span><span class="s2">&quot;my-fine-tuned-gpt&quot;</span><span class="p">,</span> <span class="s2">&quot;production&quot;</span><span class="p">,</span> <span class="s2">&quot;customer-facing&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create model groups</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">create_model_group</span><span class="p">(</span><span class="s2">&quot;production-ready&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;my-fine-tuned-gpt&quot;</span><span class="p">,</span> <span class="s2">&quot;gpt-4&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Filter by tags</span>
+    <span class="n">prod_models</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;production&quot;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Production models: </span><span class="si">{</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">prod_models</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Filter by group</span>
+    <span class="n">group_models</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;group:production-ready&quot;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Production-ready group: </span><span class="si">{</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">group_models</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="example_advanced_filtering">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_advanced_filtering">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">example_advanced_filtering</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advanced filtering with custom functions.&quot;&quot;&quot;</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">get_manager</span><span class="p">()</span>
+
+    <span class="c1"># Discover models first</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">discover_from_source</span><span class="p">(</span><span class="s2">&quot;openrouter&quot;</span><span class="p">,</span> <span class="n">auto_register</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Filter with multiple criteria</span>
+    <span class="n">affordable_models</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span>
+        <span class="n">max_context_size</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span>
+        <span class="n">custom_filter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="p">(</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">cost_per_token</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.001</span>
+            <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">capabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;streaming&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Affordable streaming models: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">affordable_models</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Complex filtering with callable</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_suitable_for_task</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if model is suitable for a specific task.&quot;&quot;&quot;</span>
+        <span class="n">has_function_calling</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">capabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function_calling&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">has_sufficient_context</span> <span class="o">=</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">context_size</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">32000</span>
+        <span class="n">is_affordable</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cost_per_token</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">0.01</span>
+        <span class="k">return</span> <span class="n">has_function_calling</span> <span class="ow">and</span> <span class="n">has_sufficient_context</span> <span class="ow">and</span> <span class="n">is_affordable</span>
+
+    <span class="n">suitable_models</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">custom_filter</span><span class="o">=</span><span class="n">_is_suitable_for_task</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Models suitable for task: </span><span class="si">{</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">suitable_models</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="example_connector_usage">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_connector_usage">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">example_connector_usage</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Using connectors to format metadata for different clients.&quot;&quot;&quot;</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">get_manager</span><span class="p">()</span>
+
+    <span class="c1"># Assume we have a model registered</span>
+    <span class="n">model_id</span> <span class="o">=</span> <span class="s2">&quot;gpt-4&quot;</span>
+
+    <span class="c1"># Get metadata for OpenAI Python client</span>
+    <span class="n">openai_meta</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_connector_metadata</span><span class="p">(</span><span class="n">model_id</span><span class="p">,</span> <span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+    <span class="c1"># Use with: openai.ChatCompletion.create(**openai_meta, messages=[...])</span>
+
+    <span class="c1"># Get metadata for LangChain</span>
+    <span class="n">langchain_meta</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_connector_metadata</span><span class="p">(</span><span class="n">model_id</span><span class="p">,</span> <span class="s2">&quot;langchain&quot;</span><span class="p">)</span>
+    <span class="c1"># Use with: ChatOpenAI(**{k: v for k, v in langchain_meta.items() if k != &#39;_class&#39;})</span>
+
+    <span class="c1"># Get metadata for DSPy</span>
+    <span class="n">dspy_meta</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_connector_metadata</span><span class="p">(</span><span class="n">model_id</span><span class="p">,</span> <span class="s2">&quot;dspy&quot;</span><span class="p">)</span>
+    <span class="c1"># Use with: dspy.OpenAI(**{k: v for k, v in dspy_meta.items() if k != &#39;_class&#39;})</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OpenAI format: </span><span class="si">{</span><span class="n">openai_meta</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LangChain format: </span><span class="si">{</span><span class="n">langchain_meta</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DSPy format: </span><span class="si">{</span><span class="n">dspy_meta</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># === Advanced Pattern: Model Mall ===</span>
+
+
+<div class="viewcode-block" id="ModelMall">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/examples.html#aix.ai_models.examples.ModelMall">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModelMall</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A &#39;mall&#39; of model collections organized by category.</span>
+
+<span class="sd">    Extends the Mapping pattern to group models by different dimensions.</span>
+
+<span class="sd">    &gt;&gt;&gt; from aix.ai_models.manager import get_manager</span>
+<span class="sd">    &gt;&gt;&gt; manager = get_manager()</span>
+<span class="sd">    &gt;&gt;&gt; mall = ModelMall(manager)</span>
+<span class="sd">    &gt;&gt;&gt; list(mall.keys())  # Shows available collections</span>
+<span class="sd">    [&#39;by_provider&#39;, &#39;by_capability&#39;, &#39;local&#39;, &#39;remote&#39;, &#39;groups&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">ModelManager</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span> <span class="o">=</span> <span class="n">manager</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Access model collections by key or nested keys.</span>
+
+<span class="sd">        Supports:</span>
+<span class="sd">        - mall[&#39;by_provider&#39;] -&gt; dict of providers</span>
+<span class="sd">        - mall[&#39;by_provider&#39;, &#39;openai&#39;] -&gt; list of OpenAI models</span>
+<span class="sd">        - mall[&#39;local&#39;] -&gt; list of local models</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="c1"># Nested access</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nested_getitem</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="c1"># Single key access</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;by_provider&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_provider</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;by_capability&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_capability</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;local&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">is_local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;remote&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">is_local</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;groups&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="n">name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;group:</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">list_model_groups</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown collection: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_nested_getitem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle nested key access.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">collection</span><span class="p">,</span> <span class="n">item</span> <span class="o">=</span> <span class="n">keys</span>
+            <span class="k">if</span> <span class="n">collection</span> <span class="o">==</span> <span class="s2">&quot;by_provider&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">collection</span> <span class="o">==</span> <span class="s2">&quot;by_capability&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">has_capabilities</span><span class="o">=</span><span class="p">[</span><span class="n">item</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">collection</span> <span class="o">==</span> <span class="s2">&quot;groups&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;group:</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid nested key: </span><span class="si">{</span><span class="n">keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_by_provider</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Model</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Group models by provider.&quot;&quot;&quot;</span>
+        <span class="n">providers</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">provider</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">providers</span><span class="p">:</span>
+                <span class="n">providers</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">provider</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">providers</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">provider</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">providers</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_by_capability</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Model</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Group models by capability.&quot;&quot;&quot;</span>
+        <span class="n">capabilities</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">cap</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">capabilities</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cap</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">capabilities</span><span class="p">:</span>
+                    <span class="n">capabilities</span><span class="p">[</span><span class="n">cap</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">capabilities</span><span class="p">[</span><span class="n">cap</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">capabilities</span>
+
+<div class="viewcode-block" id="ModelMall.keys">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/examples.html#aix.ai_models.examples.ModelMall.keys">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List available collections.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;by_provider&quot;</span><span class="p">,</span> <span class="s2">&quot;by_capability&quot;</span><span class="p">,</span> <span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;remote&quot;</span><span class="p">,</span> <span class="s2">&quot;groups&quot;</span><span class="p">]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="example_mall_usage">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_mall_usage">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">example_mall_usage</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Using the ModelMall pattern for organized access.&quot;&quot;&quot;</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">get_manager</span><span class="p">()</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">discover_from_source</span><span class="p">(</span><span class="s2">&quot;openrouter&quot;</span><span class="p">,</span> <span class="n">auto_register</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">discover_from_source</span><span class="p">(</span><span class="s2">&quot;ollama&quot;</span><span class="p">,</span> <span class="n">auto_register</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">mall</span> <span class="o">=</span> <span class="n">ModelMall</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+
+    <span class="c1"># Browse available collections</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available collections: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">mall</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Access models by provider</span>
+    <span class="n">providers</span> <span class="o">=</span> <span class="n">mall</span><span class="p">[</span><span class="s2">&quot;by_provider&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Providers: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">providers</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Direct nested access</span>
+    <span class="n">openai_models</span> <span class="o">=</span> <span class="n">mall</span><span class="p">[</span><span class="s2">&quot;by_provider&quot;</span><span class="p">,</span> <span class="s2">&quot;openai&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OpenAI models: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">openai_models</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Access by capability</span>
+    <span class="n">streaming_models</span> <span class="o">=</span> <span class="n">mall</span><span class="p">[</span><span class="s2">&quot;by_capability&quot;</span><span class="p">,</span> <span class="s2">&quot;streaming&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Models with streaming: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">streaming_models</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Access local vs remote</span>
+    <span class="n">local_models</span> <span class="o">=</span> <span class="n">mall</span><span class="p">[</span><span class="s2">&quot;local&quot;</span><span class="p">]</span>
+    <span class="n">remote_models</span> <span class="o">=</span> <span class="n">mall</span><span class="p">[</span><span class="s2">&quot;remote&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Local: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">local_models</span><span class="p">)</span><span class="si">}</span><span class="s2">, Remote: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">remote_models</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># === Custom Source Example ===</span>
+
+
+<div class="viewcode-block" id="HuggingFaceSource">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/examples.html#aix.ai_models.examples.HuggingFaceSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HuggingFaceSource</span><span class="p">(</span><span class="n">ModelSource</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Example custom source for HuggingFace Hub models.</span>
+
+<span class="sd">    Demonstrates how to add a new model source.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text-generation&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_task</span> <span class="o">=</span> <span class="n">task</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_limit</span> <span class="o">=</span> <span class="n">limit</span>
+
+<div class="viewcode-block" id="HuggingFaceSource.discover_models">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/examples.html#aix.ai_models.examples.HuggingFaceSource.discover_models">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">discover_models</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Model</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Discover models from HuggingFace Hub.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">huggingface_hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">HfApi</span>
+
+            <span class="n">api</span> <span class="o">=</span> <span class="n">HfApi</span><span class="p">()</span>
+
+            <span class="n">models</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_task</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_limit</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">hf_model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">Model</span><span class="p">(</span>
+                    <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;hf/</span><span class="si">{</span><span class="n">hf_model</span><span class="o">.</span><span class="n">modelId</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;huggingface&quot;</span><span class="p">,</span>
+                    <span class="n">is_local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">connector_metadata</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;huggingface&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;model_id&quot;</span><span class="p">:</span> <span class="n">hf_model</span><span class="o">.</span><span class="n">modelId</span><span class="p">,</span>
+                            <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">},</span>
+                    <span class="n">custom_metadata</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;downloads&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">hf_model</span><span class="p">,</span> <span class="s2">&quot;downloads&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">hf_model</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+                    <span class="p">},</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;huggingface_hub not installed&quot;</span><span class="p">)</span>
+            <span class="k">return</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="example_custom_source">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_custom_source">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">example_custom_source</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Using a custom source.&quot;&quot;&quot;</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">get_manager</span><span class="p">()</span>
+
+    <span class="c1"># Register custom source</span>
+    <span class="n">hf_source</span> <span class="o">=</span> <span class="n">HuggingFaceSource</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="s2">&quot;text-generation&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">register_source</span><span class="p">(</span><span class="s2">&quot;huggingface&quot;</span><span class="p">,</span> <span class="n">hf_source</span><span class="p">)</span>
+
+    <span class="c1"># Discover from custom source</span>
+    <span class="n">hf_models</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">discover_from_source</span><span class="p">(</span><span class="s2">&quot;huggingface&quot;</span><span class="p">,</span> <span class="n">auto_register</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">hf_models</span><span class="p">)</span><span class="si">}</span><span class="s2"> HuggingFace models&quot;</span><span class="p">)</span>
+
+    <span class="c1"># List all HuggingFace models</span>
+    <span class="n">all_hf</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">&quot;huggingface&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">all_hf</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;downloads&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2"> downloads&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Run examples</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== Basic Usage ===&quot;</span><span class="p">)</span>
+    <span class="n">example_basic_usage</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Custom Metadata ===&quot;</span><span class="p">)</span>
+    <span class="n">example_custom_metadata</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Advanced Filtering ===&quot;</span><span class="p">)</span>
+    <span class="n">example_advanced_filtering</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Mall Pattern ===&quot;</span><span class="p">)</span>
+    <span class="n">example_mall_usage</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Custom Source ===&quot;</span><span class="p">)</span>
+    <span class="n">example_custom_source</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

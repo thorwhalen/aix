@@ -1,0 +1,484 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.ai_models.sources &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.ai_models.sources</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.ai_models.sources</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Concrete implementations of model sources and connectors.</span>
+
+<span class="sd">This module provides ready-to-use sources for discovering models</span>
+<span class="sd">and connectors for formatting metadata for different clients.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.ai_models.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">ModelSource</span><span class="p">,</span> <span class="n">Connector</span>
+
+
+<div class="viewcode-block" id="OpenRouterSource">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.OpenRouterSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OpenRouterSource</span><span class="p">(</span><span class="n">ModelSource</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Discover models from OpenRouter&#39;s public API.</span>
+
+<span class="sd">    OpenRouter maintains a comprehensive registry of models across providers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span> <span class="o">=</span> <span class="s2">&quot;https://openrouter.ai/api/v1/models&quot;</span>
+
+<div class="viewcode-block" id="OpenRouterSource.discover_models">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.OpenRouterSource.discover_models">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">discover_models</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Model</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch models from OpenRouter API.</span>
+
+<span class="sd">        &gt;&gt;&gt; source = OpenRouterSource()</span>
+<span class="sd">        &gt;&gt;&gt; models = list(source.discover_models())</span>
+<span class="sd">        &gt;&gt;&gt; len(models) &gt; 0  # Should find many models</span>
+<span class="sd">        True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">model_id</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">model_id</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Extract provider info</span>
+            <span class="n">provider_data</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">provider</span> <span class="o">=</span> <span class="n">provider_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;provider&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Extract context size</span>
+            <span class="n">context_size</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;context_length&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">provider_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;context_length&quot;</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Extract pricing</span>
+            <span class="n">pricing</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pricing&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">cost_per_token</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="s2">&quot;prompt&quot;</span> <span class="ow">in</span> <span class="n">pricing</span><span class="p">:</span>
+                <span class="n">cost_per_token</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">pricing</span><span class="p">[</span><span class="s2">&quot;prompt&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="s2">&quot;completion&quot;</span> <span class="ow">in</span> <span class="n">pricing</span><span class="p">:</span>
+                <span class="n">cost_per_token</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">pricing</span><span class="p">[</span><span class="s2">&quot;completion&quot;</span><span class="p">])</span>
+
+            <span class="c1"># Build capabilities dict</span>
+            <span class="n">capabilities</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;supports_streaming&quot;</span><span class="p">):</span>
+                <span class="n">capabilities</span><span class="p">[</span><span class="s2">&quot;streaming&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;supports_functions&quot;</span><span class="p">):</span>
+                <span class="n">capabilities</span><span class="p">[</span><span class="s2">&quot;function_calling&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;supports_vision&quot;</span><span class="p">):</span>
+                <span class="n">capabilities</span><span class="p">[</span><span class="s2">&quot;vision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">yield</span> <span class="n">Model</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">model_id</span><span class="p">,</span>
+                <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
+                <span class="n">context_size</span><span class="o">=</span><span class="n">context_size</span><span class="p">,</span>
+                <span class="n">is_local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">capabilities</span><span class="o">=</span><span class="n">capabilities</span><span class="p">,</span>
+                <span class="n">cost_per_token</span><span class="o">=</span><span class="n">cost_per_token</span><span class="p">,</span>
+                <span class="n">connector_metadata</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;openrouter&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">model_id</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)}</span>
+                <span class="p">},</span>
+            <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="OllamaSource">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.OllamaSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OllamaSource</span><span class="p">(</span><span class="n">ModelSource</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Discover locally installed Ollama models.</span>
+
+<span class="sd">    Queries the Ollama API for models available on the local machine.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:11434&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+
+<div class="viewcode-block" id="OllamaSource.discover_models">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.OllamaSource.discover_models">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">discover_models</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Model</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch locally installed Ollama models.</span>
+
+<span class="sd">        &gt;&gt;&gt; source = OllamaSource()</span>
+<span class="sd">        &gt;&gt;&gt; models = list(source.discover_models())  # May be empty if Ollama not running</span>
+<span class="sd">        &gt;&gt;&gt; all(m.is_local for m in models)</span>
+<span class="sd">        True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_url</span><span class="si">}</span><span class="s2">/api/tags&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;models&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="n">model_name</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">model_name</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Ollama models are always local</span>
+                <span class="k">yield</span> <span class="n">Model</span><span class="p">(</span>
+                    <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;ollama/</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;ollama&quot;</span><span class="p">,</span>
+                    <span class="n">is_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">connector_metadata</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;ollama&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">model_name</span><span class="p">,</span> <span class="s2">&quot;base_url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_url</span><span class="p">}</span>
+                    <span class="p">},</span>
+                    <span class="n">custom_metadata</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">),</span>
+                        <span class="s2">&quot;modified_at&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modified_at&quot;</span><span class="p">),</span>
+                    <span class="p">},</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="c1"># Ollama might not be running</span>
+            <span class="k">return</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ProviderAPISource">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.ProviderAPISource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ProviderAPISource</span><span class="p">(</span><span class="n">ModelSource</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Discover models from a provider&#39;s API (OpenAI, Anthropic, etc.).</span>
+
+<span class="sd">    Generic source for providers with /v1/models endpoint.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">provider_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://api.openai.com/v1&quot;</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_provider_name</span> <span class="o">=</span> <span class="n">provider_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="o">=</span> <span class="n">api_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+
+<div class="viewcode-block" id="ProviderAPISource.discover_models">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.ProviderAPISource.discover_models">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">discover_models</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Model</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch models from provider API.</span>
+
+<span class="sd">        Requires valid API key for the provider.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_url</span><span class="si">}</span><span class="s2">/models&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span>
+            <span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="n">model_id</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">model_id</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">yield</span> <span class="n">Model</span><span class="p">(</span>
+                    <span class="nb">id</span><span class="o">=</span><span class="n">model_id</span><span class="p">,</span>
+                    <span class="n">provider</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_provider_name</span><span class="p">,</span>
+                    <span class="n">is_local</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">connector_metadata</span><span class="o">=</span><span class="p">{</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_provider_name</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">model_id</span><span class="p">,</span>
+                            <span class="s2">&quot;base_url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_url</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">},</span>
+                    <span class="n">custom_metadata</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;owned_by&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;owned_by&quot;</span><span class="p">),</span>
+                        <span class="s2">&quot;created&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;created&quot;</span><span class="p">),</span>
+                    <span class="p">},</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">return</span></div>
+</div>
+
+
+
+<span class="c1"># === Connectors ===</span>
+
+
+<div class="viewcode-block" id="OpenAIConnector">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.OpenAIConnector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OpenAIConnector</span><span class="p">(</span><span class="n">Connector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format metadata for OpenAI Python client.</span>
+
+<span class="sd">    Provides model metadata in format expected by openai.ChatCompletion.create().</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;openai&quot;</span>
+
+<div class="viewcode-block" id="OpenAIConnector.format_metadata">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.OpenAIConnector.format_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="OpenRouterConnector">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.OpenRouterConnector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OpenRouterConnector</span><span class="p">(</span><span class="n">Connector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connector for OpenRouter API.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;openrouter&quot;</span>
+
+<div class="viewcode-block" id="OpenRouterConnector.format_metadata">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.OpenRouterConnector.format_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Formats metadata for OpenRouter, which uses the model ID directly.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LangChainConnector">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.LangChainConnector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LangChainConnector</span><span class="p">(</span><span class="n">Connector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connector for LangChain library.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;langchain&quot;</span>
+
+<div class="viewcode-block" id="LangChainConnector.format_metadata">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.LangChainConnector.format_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format for LangChain.</span>
+
+<span class="sd">        &gt;&gt;&gt; connector = LangChainConnector()</span>
+<span class="sd">        &gt;&gt;&gt; model = Model(id=&quot;gpt-4&quot;, provider=&quot;openai&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; metadata = connector.format_metadata(model)</span>
+<span class="sd">        &gt;&gt;&gt; metadata[&quot;model_name&quot;]</span>
+<span class="sd">        &#39;gpt-4&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;model_name&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Add provider-specific class hint</span>
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;openai&quot;</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ChatOpenAI&quot;</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;anthropic&quot;</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ChatAnthropic&quot;</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;ollama&quot;</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ChatOllama&quot;</span>
+            <span class="n">ollama_meta</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">connector_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ollama&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;base_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ollama_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;base_url&quot;</span><span class="p">,</span> <span class="s2">&quot;http://localhost:11434&quot;</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ollama_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">context_size</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;max_tokens&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">context_size</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="OllamaConnector">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.OllamaConnector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OllamaConnector</span><span class="p">(</span><span class="n">Connector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format metadata for direct Ollama API calls.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;ollama&quot;</span>
+
+<div class="viewcode-block" id="OllamaConnector.format_metadata">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.OllamaConnector.format_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format for Ollama API.</span>
+
+<span class="sd">        &gt;&gt;&gt; connector = OllamaConnector()</span>
+<span class="sd">        &gt;&gt;&gt; model = Model(id=&quot;ollama/llama2&quot;, provider=&quot;ollama&quot;, is_local=True)</span>
+<span class="sd">        &gt;&gt;&gt; model.connector_metadata[&quot;ollama&quot;] = {&quot;name&quot;: &quot;llama2&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; metadata = connector.format_metadata(model)</span>
+<span class="sd">        &gt;&gt;&gt; metadata[&quot;model&quot;]</span>
+<span class="sd">        &#39;llama2&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ollama_meta</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">connector_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ollama&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">ollama_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;ollama/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+            <span class="s2">&quot;base_url&quot;</span><span class="p">:</span> <span class="n">ollama_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;base_url&quot;</span><span class="p">,</span> <span class="s2">&quot;http://localhost:11434&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DSPyConnector">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.DSPyConnector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DSPyConnector</span><span class="p">(</span><span class="n">Connector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format metadata for DSPy framework.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;dspy&quot;</span>
+
+<div class="viewcode-block" id="DSPyConnector.format_metadata">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/sources.html#aix.ai_models.DSPyConnector.format_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format for DSPy.</span>
+
+<span class="sd">        &gt;&gt;&gt; connector = DSPyConnector()</span>
+<span class="sd">        &gt;&gt;&gt; model = Model(id=&quot;gpt-4&quot;, provider=&quot;openai&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; metadata = connector.format_metadata(model)</span>
+<span class="sd">        &gt;&gt;&gt; &quot;model&quot; in metadata</span>
+<span class="sd">        True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># DSPy uses different classes for different providers</span>
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;openai&quot;</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dspy.OpenAI&quot;</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;anthropic&quot;</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dspy.Claude&quot;</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;ollama&quot;</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dspy.Ollama&quot;</span>
+            <span class="n">ollama_meta</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">connector_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ollama&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ollama_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">context_size</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;max_tokens&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">context_size</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

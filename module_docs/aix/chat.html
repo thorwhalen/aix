@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.chat &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="aix.contexts" href="contexts.html" />
+    <link rel="prev" title="aix.batches" href="batches.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batches.html">aix.batches</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aix.chat</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.chat.ChatSession"><code class="docutils literal notranslate"><span class="pre">ChatSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aix.chat.ChatSession.clear_history"><code class="docutils literal notranslate"><span class="pre">ChatSession.clear_history()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.chat.ChatSession.send"><code class="docutils literal notranslate"><span class="pre">ChatSession.send()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.chat.ask"><code class="docutils literal notranslate"><span class="pre">ask()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.chat.chat"><code class="docutils literal notranslate"><span class="pre">chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.chat.chat_with_history"><code class="docutils literal notranslate"><span class="pre">chat_with_history()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aix.chat</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/aix/chat.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aix.chat">
+<span id="aix-chat"></span><h1>aix.chat<a class="headerlink" href="#module-aix.chat" title="Link to this heading"></a></h1>
+<p>Core chat interface for AIX.</p>
+<p>A clean, pythonic facade for chat completions across multiple AI providers.
+Uses LiteLLM as the backend but provides a simpler, more intuitive interface.</p>
+<p class="rubric">Examples</p>
+<p>Simple text prompt:
+&gt;&gt;&gt; from aix.chat import chat
+&gt;&gt;&gt; response = chat(“What is 2+2?”)  # doctest: +SKIP
+&gt;&gt;&gt; print(response)  # doctest: +SKIP
+‘The answer is 4.’</p>
+<p>With specific model:
+&gt;&gt;&gt; chat(“Hello!”, model=”gpt-4o-mini”)  # doctest: +SKIP
+‘Hello! How can I help you today?’</p>
+<p>With message history:
+&gt;&gt;&gt; messages = [
+…     {“role”: “user”, “content”: “My name is Alice”},
+…     {“role”: “assistant”, “content”: “Nice to meet you, Alice!”},
+…     {“role”: “user”, “content”: “What’s my name?”}
+… ]
+&gt;&gt;&gt; chat(messages, model=”gpt-4o-mini”)  # doctest: +SKIP
+‘Your name is Alice.’</p>
+<p>Streaming responses:
+&gt;&gt;&gt; for chunk in chat(“Count to 3”, stream=True):  # doctest: +SKIP
+…     print(chunk, end=’’)
+1, 2, 3</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.chat.ChatSession">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aix.chat.</span></span><span class="sig-name descname"><span class="pre">ChatSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">chat_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/chat.html#ChatSession"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.chat.ChatSession" title="Link to this definition"></a></dt>
+<dd><p>Stateful chat session that maintains conversation history.</p>
+<p>This class provides a convenient way to have multi-turn conversations
+without manually managing message history.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span> <span class="o">=</span> <span class="n">ChatSession</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;My name is Alice&quot;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;What&#39;s my name?&quot;</span><span class="p">)</span>  
+<span class="go">&#39;Your name is Alice.&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.chat.ChatSession.clear_history">
+<span class="sig-name descname"><span class="pre">clear_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keep_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/chat.html#ChatSession.clear_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.chat.ChatSession.clear_history" title="Link to this definition"></a></dt>
+<dd><p>Clear conversation history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>keep_system</strong> – If True, preserve system message (if any)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.chat.ChatSession.send">
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/aix/chat.html#ChatSession.send"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.chat.ChatSession.send" title="Link to this definition"></a></dt>
+<dd><p>Send a message and get a response.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> – User message to send</p></li>
+<li><p><strong>**kwargs</strong> – Override chat parameters for this message</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Assistant’s response</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.chat.ask">
+<span class="sig-prename descclassname"><span class="pre">aix.chat.</span></span><span class="sig-name descname"><span class="pre">ask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">question</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/aix/chat.html#ask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.chat.ask" title="Link to this definition"></a></dt>
+<dd><p>Ask a single question and get an answer.</p>
+<p>This is a convenience wrapper around chat() for simple Q&amp;A.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>question</strong> – The question to ask</p></li>
+<li><p><strong>model</strong> – Model to use</p></li>
+<li><p><strong>**kwargs</strong> – Additional parameters for chat()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The answer as a string</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.chat</span><span class="w"> </span><span class="kn">import</span> <span class="n">ask</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;What is the capital of France?&quot;</span><span class="p">)</span>  
+<span class="go">&#39;The capital of France is Paris.&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.chat.chat">
+<span class="sig-prename descclassname"><span class="pre">aix.chat.</span></span><span class="sig-name descname"><span class="pre">chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/chat.html#chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.chat.chat" title="Link to this definition"></a></dt>
+<dd><p>Send a chat prompt and get a response.</p>
+<p>This is the main chat interface for AIX. It abstracts away provider-specific
+details and provides a clean, consistent API across all models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prompt</strong> – Either a string (becomes a user message) or a list of message dicts
+with ‘role’ and ‘content’ keys</p></li>
+<li><p><strong>model</strong> – Model identifier (e.g., ‘gpt-4o’, ‘claude-sonnet-4’,
+‘openrouter/anthropic/claude-3.5-sonnet’). If None, uses default.</p></li>
+<li><p><strong>temperature</strong> – Sampling temperature (0.0 = deterministic, 2.0 = creative).
+If None, uses default (1.0).</p></li>
+<li><p><strong>max_tokens</strong> – Maximum tokens to generate. If None, uses model’s default.</p></li>
+<li><p><strong>stream</strong> – If True, return an iterator of text chunks. If False, return
+complete response as string.</p></li>
+<li><p><strong>**kwargs</strong> – Additional provider-specific parameters passed to LiteLLM</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Complete response as string
+If stream=True: Iterator yielding text chunks as they arrive</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If stream=False</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ImportError</strong> – If LiteLLM is not installed</p></li>
+<li><p><strong>ValueError</strong> – If prompt format is invalid</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">chat</span><span class="p">(</span><span class="s2">&quot;What is Python?&quot;</span><span class="p">)</span>  
+<span class="go">&#39;Python is a high-level programming language...&#39;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">chat</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o&quot;</span><span class="p">)</span>  
+<span class="go">&#39;Hello! How can I assist you today?&#39;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Streaming response</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chat</span><span class="p">(</span><span class="s2">&quot;Count to 5&quot;</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>  
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">1, 2, 3, 4, 5</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># With message history</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;What is 2+2?&quot;</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chat</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>  
+<span class="go">&#39;2+2 equals 4.&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.chat.chat_with_history">
+<span class="sig-prename descclassname"><span class="pre">aix.chat.</span></span><span class="sig-name descname"><span class="pre">chat_with_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">chat_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#aix.chat.ChatSession" title="aix.chat.ChatSession"><span class="pre">ChatSession</span></a></span></span><a class="reference internal" href="../../_modules/aix/chat.html#chat_with_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.chat.chat_with_history" title="Link to this definition"></a></dt>
+<dd><p>Create a stateful chat session that maintains conversation history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system_prompt</strong> – Optional system message to set context/behavior</p></li>
+<li><p><strong>model</strong> – Model to use for this session</p></li>
+<li><p><strong>**chat_kwargs</strong> – Additional parameters passed to chat()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ChatSession object with send() method</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span> <span class="o">=</span> <span class="n">chat_with_history</span><span class="p">(</span><span class="s2">&quot;You are a helpful math tutor&quot;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;What is 2+2?&quot;</span><span class="p">)</span>  
+<span class="go">&#39;The answer is 4.&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;And if I add 3 to that?&quot;</span><span class="p">)</span>  
+<span class="go">&#39;That would be 7.&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">history</span><span class="p">)</span>  
+<span class="go">5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="batches.html" class="btn btn-neutral float-left" title="aix.batches" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contexts.html" class="btn btn-neutral float-right" title="aix.contexts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

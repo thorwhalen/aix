@@ -1,0 +1,4 @@
+aix.ai_models.manager
+=====================
+.. automodule:: aix.ai_models.manager
+   :members:

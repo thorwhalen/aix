@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; aix 0.0.22 documentation</title>
+  <title>&lt;no title&gt; &mdash; aix 0.0.24 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=96ec9c95"></script>
+      <script src="_static/documentation_options.js?v=f91d8841"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -48,16 +48,26 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/chat.html">aix.chat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/embeddings.html">aix.embeddings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/image.html">aix.image</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/misc.html">aix.misc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/np.html">aix.np</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/pd.html">aix.pd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/sk.html">aix.sk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/prompts.html">aix.prompts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/stores.html">aix.stores</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/video.html">aix.video</a></li>
 </ul>
 
         </div>
@@ -87,31 +97,130 @@
   <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix.html">aix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/contexts.html">aix.contexts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.PackageCodeContexts"><code class="docutils literal notranslate"><span class="pre">PackageCodeContexts</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.add_dflt_converter"><code class="docutils literal notranslate"><span class="pre">add_dflt_converter()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.aggregate_store"><code class="docutils literal notranslate"><span class="pre">aggregate_store()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.bytes_store_to_markdown_store"><code class="docutils literal notranslate"><span class="pre">bytes_store_to_markdown_store()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.bytes_to_markdown"><code class="docutils literal notranslate"><span class="pre">bytes_to_markdown()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.code_aggregate"><code class="docutils literal notranslate"><span class="pre">code_aggregate()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.default_fallback"><code class="docutils literal notranslate"><span class="pre">default_fallback()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.download_articles"><code class="docutils literal notranslate"><span class="pre">download_articles()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.download_articles_by_section"><code class="docutils literal notranslate"><span class="pre">download_articles_by_section()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.excel_to_markdown"><code class="docutils literal notranslate"><span class="pre">excel_to_markdown()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.extensions_not_supported_by_converters"><code class="docutils literal notranslate"><span class="pre">extensions_not_supported_by_converters()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.extract_html_links"><code class="docutils literal notranslate"><span class="pre">extract_html_links()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.extract_urls"><code class="docutils literal notranslate"><span class="pre">extract_urls()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.extract_urls_only"><code class="docutils literal notranslate"><span class="pre">extract_urls_only()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.extract_with_surrounding_context"><code class="docutils literal notranslate"><span class="pre">extract_with_surrounding_context()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.fullpath"><code class="docutils literal notranslate"><span class="pre">fullpath()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.get_extension"><code class="docutils literal notranslate"><span class="pre">get_extension()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.is_local_pkg_name"><code class="docutils literal notranslate"><span class="pre">is_local_pkg_name()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.notebook_to_markdown"><code class="docutils literal notranslate"><span class="pre">notebook_to_markdown()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.resolve_code_source"><code class="docutils literal notranslate"><span class="pre">resolve_code_source()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.resolve_code_source_dir_path"><code class="docutils literal notranslate"><span class="pre">resolve_code_source_dir_path()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.save_to_file_and_return_file"><code class="docutils literal notranslate"><span class="pre">save_to_file_and_return_file()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/contexts.html#aix.contexts.verify_urls"><code class="docutils literal notranslate"><span class="pre">verify_urls()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix.html">aix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.BatchProcessor"><code class="docutils literal notranslate"><span class="pre">BatchProcessor</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.ChatSession"><code class="docutils literal notranslate"><span class="pre">ChatSession</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.EmbeddingCache"><code class="docutils literal notranslate"><span class="pre">EmbeddingCache</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.GeneratedAudio"><code class="docutils literal notranslate"><span class="pre">GeneratedAudio</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.GeneratedImage"><code class="docutils literal notranslate"><span class="pre">GeneratedImage</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.GeneratedVideo"><code class="docutils literal notranslate"><span class="pre">GeneratedVideo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.ModelStore"><code class="docutils literal notranslate"><span class="pre">ModelStore</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.PromptFuncs"><code class="docutils literal notranslate"><span class="pre">PromptFuncs</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.TranscriptionResult"><code class="docutils literal notranslate"><span class="pre">TranscriptionResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.animate_image_to_video"><code class="docutils literal notranslate"><span class="pre">animate_image_to_video()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.ask"><code class="docutils literal notranslate"><span class="pre">ask()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.batch_chat"><code class="docutils literal notranslate"><span class="pre">batch_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.batch_embeddings"><code class="docutils literal notranslate"><span class="pre">batch_embeddings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.batch_process"><code class="docutils literal notranslate"><span class="pre">batch_process()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.chat"><code class="docutils literal notranslate"><span class="pre">chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.chat_with_history"><code class="docutils literal notranslate"><span class="pre">chat_with_history()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.constrained_answer"><code class="docutils literal notranslate"><span class="pre">constrained_answer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.cosine_similarity"><code class="docutils literal notranslate"><span class="pre">cosine_similarity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.create_variation"><code class="docutils literal notranslate"><span class="pre">create_variation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.discover_available_models"><code class="docutils literal notranslate"><span class="pre">discover_available_models()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.edit_image"><code class="docutils literal notranslate"><span class="pre">edit_image()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.embed"><code class="docutils literal notranslate"><span class="pre">embed()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.embeddings"><code class="docutils literal notranslate"><span class="pre">embeddings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.extend_video"><code class="docutils literal notranslate"><span class="pre">extend_video()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.find_models"><code class="docutils literal notranslate"><span class="pre">find_models()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.find_most_similar"><code class="docutils literal notranslate"><span class="pre">find_most_similar()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.generate_image"><code class="docutils literal notranslate"><span class="pre">generate_image()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.generate_images"><code class="docutils literal notranslate"><span class="pre">generate_images()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.generate_video"><code class="docutils literal notranslate"><span class="pre">generate_video()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.get_model_info"><code class="docutils literal notranslate"><span class="pre">get_model_info()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.get_video_providers"><code class="docutils literal notranslate"><span class="pre">get_video_providers()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.prompt_func"><code class="docutils literal notranslate"><span class="pre">prompt_func()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.prompt_to_json"><code class="docutils literal notranslate"><span class="pre">prompt_to_json()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.prompt_to_text"><code class="docutils literal notranslate"><span class="pre">prompt_to_text()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.text_to_speech"><code class="docutils literal notranslate"><span class="pre">text_to_speech()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.transcribe"><code class="docutils literal notranslate"><span class="pre">transcribe()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.transcribe_with_timestamps"><code class="docutils literal notranslate"><span class="pre">transcribe_with_timestamps()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.translate_audio"><code class="docutils literal notranslate"><span class="pre">translate_audio()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models.html">aix.ai_models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.Connector"><code class="docutils literal notranslate"><span class="pre">Connector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.ConnectorRegistry"><code class="docutils literal notranslate"><span class="pre">ConnectorRegistry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.DSPyConnector"><code class="docutils literal notranslate"><span class="pre">DSPyConnector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.LangChainConnector"><code class="docutils literal notranslate"><span class="pre">LangChainConnector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager"><code class="docutils literal notranslate"><span class="pre">ModelManager</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.ModelRegistry"><code class="docutils literal notranslate"><span class="pre">ModelRegistry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.ModelSource"><code class="docutils literal notranslate"><span class="pre">ModelSource</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.OllamaConnector"><code class="docutils literal notranslate"><span class="pre">OllamaConnector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.OllamaSource"><code class="docutils literal notranslate"><span class="pre">OllamaSource</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.OpenAIConnector"><code class="docutils literal notranslate"><span class="pre">OpenAIConnector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.OpenRouterConnector"><code class="docutils literal notranslate"><span class="pre">OpenRouterConnector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.OpenRouterSource"><code class="docutils literal notranslate"><span class="pre">OpenRouterSource</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.ProviderAPISource"><code class="docutils literal notranslate"><span class="pre">ProviderAPISource</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models.html#aix.ai_models.get_manager"><code class="docutils literal notranslate"><span class="pre">get_manager()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/base.html">aix.ai_models.base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/base.html#aix.ai_models.base.Connector"><code class="docutils literal notranslate"><span class="pre">Connector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/base.html#aix.ai_models.base.ConnectorRegistry"><code class="docutils literal notranslate"><span class="pre">ConnectorRegistry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/base.html#aix.ai_models.base.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/base.html#aix.ai_models.base.ModelRegistry"><code class="docutils literal notranslate"><span class="pre">ModelRegistry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/base.html#aix.ai_models.base.ModelSource"><code class="docutils literal notranslate"><span class="pre">ModelSource</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.HuggingFaceSource"><code class="docutils literal notranslate"><span class="pre">HuggingFaceSource</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.ModelMall"><code class="docutils literal notranslate"><span class="pre">ModelMall</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_advanced_filtering"><code class="docutils literal notranslate"><span class="pre">example_advanced_filtering()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_basic_usage"><code class="docutils literal notranslate"><span class="pre">example_basic_usage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_connector_usage"><code class="docutils literal notranslate"><span class="pre">example_connector_usage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_custom_metadata"><code class="docutils literal notranslate"><span class="pre">example_custom_metadata()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_custom_source"><code class="docutils literal notranslate"><span class="pre">example_custom_source()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_mall_usage"><code class="docutils literal notranslate"><span class="pre">example_mall_usage()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager"><code class="docutils literal notranslate"><span class="pre">ModelManager</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.get_manager"><code class="docutils literal notranslate"><span class="pre">get_manager()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.DSPyConnector"><code class="docutils literal notranslate"><span class="pre">DSPyConnector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.LangChainConnector"><code class="docutils literal notranslate"><span class="pre">LangChainConnector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OllamaConnector"><code class="docutils literal notranslate"><span class="pre">OllamaConnector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OllamaSource"><code class="docutils literal notranslate"><span class="pre">OllamaSource</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenAIConnector"><code class="docutils literal notranslate"><span class="pre">OpenAIConnector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenRouterConnector"><code class="docutils literal notranslate"><span class="pre">OpenRouterConnector</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenRouterSource"><code class="docutils literal notranslate"><span class="pre">OpenRouterSource</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.ProviderAPISource"><code class="docutils literal notranslate"><span class="pre">ProviderAPISource</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/audio.html">aix.audio</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/audio.html#aix.audio.GeneratedAudio"><code class="docutils literal notranslate"><span class="pre">GeneratedAudio</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/audio.html#aix.audio.TranscriptionResult"><code class="docutils literal notranslate"><span class="pre">TranscriptionResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/audio.html#aix.audio.text_to_speech"><code class="docutils literal notranslate"><span class="pre">text_to_speech()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/audio.html#aix.audio.transcribe"><code class="docutils literal notranslate"><span class="pre">transcribe()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/audio.html#aix.audio.transcribe_with_timestamps"><code class="docutils literal notranslate"><span class="pre">transcribe_with_timestamps()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/audio.html#aix.audio.translate_audio"><code class="docutils literal notranslate"><span class="pre">translate_audio()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/batches.html">aix.batches</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/batches.html#aix.batches.BatchProcessor"><code class="docutils literal notranslate"><span class="pre">BatchProcessor</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/batches.html#aix.batches.batch_chat"><code class="docutils literal notranslate"><span class="pre">batch_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/batches.html#aix.batches.batch_embeddings"><code class="docutils literal notranslate"><span class="pre">batch_embeddings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/batches.html#aix.batches.batch_process"><code class="docutils literal notranslate"><span class="pre">batch_process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/chat.html">aix.chat</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/chat.html#aix.chat.ChatSession"><code class="docutils literal notranslate"><span class="pre">ChatSession</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/chat.html#aix.chat.ask"><code class="docutils literal notranslate"><span class="pre">ask()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/chat.html#aix.chat.chat"><code class="docutils literal notranslate"><span class="pre">chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/chat.html#aix.chat.chat_with_history"><code class="docutils literal notranslate"><span class="pre">chat_with_history()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/embeddings.html">aix.embeddings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/embeddings.html#aix.embeddings.EmbeddingCache"><code class="docutils literal notranslate"><span class="pre">EmbeddingCache</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/embeddings.html#aix.embeddings.cosine_similarity"><code class="docutils literal notranslate"><span class="pre">cosine_similarity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/embeddings.html#aix.embeddings.embed"><code class="docutils literal notranslate"><span class="pre">embed()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/embeddings.html#aix.embeddings.embeddings"><code class="docutils literal notranslate"><span class="pre">embeddings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/embeddings.html#aix.embeddings.find_most_similar"><code class="docutils literal notranslate"><span class="pre">find_most_similar()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai.html">aix.gen_ai</a><ul>
@@ -121,19 +230,53 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/image.html">aix.image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/image.html#aix.image.GeneratedImage"><code class="docutils literal notranslate"><span class="pre">GeneratedImage</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/image.html#aix.image.create_variation"><code class="docutils literal notranslate"><span class="pre">create_variation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/image.html#aix.image.edit_image"><code class="docutils literal notranslate"><span class="pre">edit_image()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/image.html#aix.image.generate_image"><code class="docutils literal notranslate"><span class="pre">generate_image()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/image.html#aix.image.generate_images"><code class="docutils literal notranslate"><span class="pre">generate_images()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/misc.html">aix.misc</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix/misc.html#aix.misc.get_llm_leaderboards"><code class="docutils literal notranslate"><span class="pre">get_llm_leaderboards()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/np.html">aix.np</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/pd.html">aix.pd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/sk.html">aix.sk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/models.html">aix.models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/models.html#aix.models.ModelStore"><code class="docutils literal notranslate"><span class="pre">ModelStore</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/models.html#aix.models.discover_available_models"><code class="docutils literal notranslate"><span class="pre">discover_available_models()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/models.html#aix.models.find_models"><code class="docutils literal notranslate"><span class="pre">find_models()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/models.html#aix.models.get_model_info"><code class="docutils literal notranslate"><span class="pre">get_model_info()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/prompts.html">aix.prompts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/prompts.html#aix.prompts.CommonFuncs"><code class="docutils literal notranslate"><span class="pre">CommonFuncs</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/prompts.html#aix.prompts.PromptFuncs"><code class="docutils literal notranslate"><span class="pre">PromptFuncs</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/prompts.html#aix.prompts.constrained_answer"><code class="docutils literal notranslate"><span class="pre">constrained_answer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/prompts.html#aix.prompts.prompt_func"><code class="docutils literal notranslate"><span class="pre">prompt_func()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/prompts.html#aix.prompts.prompt_to_json"><code class="docutils literal notranslate"><span class="pre">prompt_to_json()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/prompts.html#aix.prompts.prompt_to_text"><code class="docutils literal notranslate"><span class="pre">prompt_to_text()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/stores.html">aix.stores</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix/stores.html#aix.stores.add_extension_based_decoder"><code class="docutils literal notranslate"><span class="pre">add_extension_based_decoder()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix/stores.html#aix.stores.extension_based_decode_to_text"><code class="docutils literal notranslate"><span class="pre">extension_based_decode_to_text()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/video.html">aix.video</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/video.html#aix.video.GeneratedVideo"><code class="docutils literal notranslate"><span class="pre">GeneratedVideo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/video.html#aix.video.animate_image"><code class="docutils literal notranslate"><span class="pre">animate_image()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/video.html#aix.video.estimate_cost"><code class="docutils literal notranslate"><span class="pre">estimate_cost()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/video.html#aix.video.extend_video"><code class="docutils literal notranslate"><span class="pre">extend_video()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/video.html#aix.video.generate_video"><code class="docutils literal notranslate"><span class="pre">generate_video()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/video.html#aix.video.generate_video_pika"><code class="docutils literal notranslate"><span class="pre">generate_video_pika()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/video.html#aix.video.generate_video_runway"><code class="docutils literal notranslate"><span class="pre">generate_video_runway()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/video.html#aix.video.generate_video_stable_diffusion"><code class="docutils literal notranslate"><span class="pre">generate_video_stable_diffusion()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/video.html#aix.video.get_available_providers"><code class="docutils literal notranslate"><span class="pre">get_available_providers()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/video.html#aix.video.interpolate_frames"><code class="docutils literal notranslate"><span class="pre">interpolate_frames()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
 

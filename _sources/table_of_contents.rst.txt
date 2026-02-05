@@ -3,13 +3,23 @@
    :caption: Contents:
 
    module_docs/aix
+   module_docs/aix/ai_models
+   module_docs/aix/ai_models/base
+   module_docs/aix/ai_models/examples
+   module_docs/aix/ai_models/manager
+   module_docs/aix/ai_models/sources
+   module_docs/aix/audio
+   module_docs/aix/batches
+   module_docs/aix/chat
    module_docs/aix/contexts
+   module_docs/aix/embeddings
    module_docs/aix/gen_ai
    module_docs/aix/gen_ai/google_genai
    module_docs/aix/gen_ai/openai_genai
+   module_docs/aix/image
    module_docs/aix/misc
-   module_docs/aix/np
-   module_docs/aix/pd
-   module_docs/aix/sk
+   module_docs/aix/models
+   module_docs/aix/prompts
    module_docs/aix/stores
    module_docs/aix/util
+   module_docs/aix/video

@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.chat &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.chat</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.chat</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Core chat interface for AIX.</span>
+
+<span class="sd">A clean, pythonic facade for chat completions across multiple AI providers.</span>
+<span class="sd">Uses LiteLLM as the backend but provides a simpler, more intuitive interface.</span>
+
+<span class="sd">Examples:</span>
+<span class="sd">    Simple text prompt:</span>
+<span class="sd">    &gt;&gt;&gt; from aix.chat import chat</span>
+<span class="sd">    &gt;&gt;&gt; response = chat(&quot;What is 2+2?&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; print(response)  # doctest: +SKIP</span>
+<span class="sd">    &#39;The answer is 4.&#39;</span>
+
+<span class="sd">    With specific model:</span>
+<span class="sd">    &gt;&gt;&gt; chat(&quot;Hello!&quot;, model=&quot;gpt-4o-mini&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &#39;Hello! How can I help you today?&#39;</span>
+
+<span class="sd">    With message history:</span>
+<span class="sd">    &gt;&gt;&gt; messages = [</span>
+<span class="sd">    ...     {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;My name is Alice&quot;},</span>
+<span class="sd">    ...     {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Nice to meet you, Alice!&quot;},</span>
+<span class="sd">    ...     {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What&#39;s my name?&quot;}</span>
+<span class="sd">    ... ]</span>
+<span class="sd">    &gt;&gt;&gt; chat(messages, model=&quot;gpt-4o-mini&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &#39;Your name is Alice.&#39;</span>
+
+<span class="sd">    Streaming responses:</span>
+<span class="sd">    &gt;&gt;&gt; for chunk in chat(&quot;Count to 3&quot;, stream=True):  # doctest: +SKIP</span>
+<span class="sd">    ...     print(chunk, end=&#39;&#39;)</span>
+<span class="sd">    1, 2, 3</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="c1"># Import LiteLLM but keep it private - users shouldn&#39;t call it directly</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">completion</span> <span class="k">as</span> <span class="n">_litellm_completion</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelResponse</span> <span class="k">as</span> <span class="n">_ModelResponse</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">_litellm_completion</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_ModelResponse</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="c1"># Default configurations</span>
+<span class="n">DFLT_CHAT_MODEL</span> <span class="o">=</span> <span class="s1">&#39;gpt-4o-mini&#39;</span>
+<span class="n">DFLT_TEMPERATURE</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">DFLT_MAX_TOKENS</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_normalize_prompt</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">dict</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize prompt input to standard message format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: Either a string or list of message dicts</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of message dictionaries with &#39;role&#39; and &#39;content&#39;</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _normalize_prompt(&quot;Hello&quot;)</span>
+<span class="sd">        [{&#39;role&#39;: &#39;user&#39;, &#39;content&#39;: &#39;Hello&#39;}]</span>
+
+<span class="sd">        &gt;&gt;&gt; _normalize_prompt([{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hi&quot;}])</span>
+<span class="sd">        [{&#39;role&#39;: &#39;user&#39;, &#39;content&#39;: &#39;Hi&#39;}]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+        <span class="c1"># Convert to list if it&#39;s an iterable</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+        <span class="c1"># Validate structure</span>
+        <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;role&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">msg</span> <span class="ow">or</span> <span class="s1">&#39;content&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Invalid message format: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="s2">&quot;Messages must be dicts with &#39;role&#39; and &#39;content&#39; keys.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">messages</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Prompt must be a string or iterable of message dicts, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_extract_text_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract text content from LiteLLM response.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        response: LiteLLM ModelResponse object</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Extracted text content</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+        <span class="c1"># Fallback for unexpected response structure</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_extract_text_from_stream</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract text chunks from LiteLLM streaming response.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        stream: LiteLLM streaming response</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        Text chunks as they arrive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">delta</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">delta</span><span class="o">.</span><span class="n">content</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">delta</span><span class="o">.</span><span class="n">content</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+            <span class="c1"># Skip malformed chunks</span>
+            <span class="k">continue</span>
+
+
+<div class="viewcode-block" id="chat">
+<a class="viewcode-back" href="../../module_docs/aix/chat.html#aix.chat">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">dict</span><span class="p">]],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">stream</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a chat prompt and get a response.</span>
+
+<span class="sd">    This is the main chat interface for AIX. It abstracts away provider-specific</span>
+<span class="sd">    details and provides a clean, consistent API across all models.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: Either a string (becomes a user message) or a list of message dicts</span>
+<span class="sd">            with &#39;role&#39; and &#39;content&#39; keys</span>
+<span class="sd">        model: Model identifier (e.g., &#39;gpt-4o&#39;, &#39;claude-sonnet-4&#39;,</span>
+<span class="sd">            &#39;openrouter/anthropic/claude-3.5-sonnet&#39;). If None, uses default.</span>
+<span class="sd">        temperature: Sampling temperature (0.0 = deterministic, 2.0 = creative).</span>
+<span class="sd">            If None, uses default (1.0).</span>
+<span class="sd">        max_tokens: Maximum tokens to generate. If None, uses model&#39;s default.</span>
+<span class="sd">        stream: If True, return an iterator of text chunks. If False, return</span>
+<span class="sd">            complete response as string.</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters passed to LiteLLM</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        If stream=False: Complete response as string</span>
+<span class="sd">        If stream=True: Iterator yielding text chunks as they arrive</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If LiteLLM is not installed</span>
+<span class="sd">        ValueError: If prompt format is invalid</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; chat(&quot;What is Python?&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;Python is a high-level programming language...&#39;</span>
+
+<span class="sd">        &gt;&gt;&gt; chat(&quot;Hello&quot;, model=&quot;gpt-4o&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;Hello! How can I assist you today?&#39;</span>
+
+<span class="sd">        &gt;&gt;&gt; # Streaming response</span>
+<span class="sd">        &gt;&gt;&gt; for chunk in chat(&quot;Count to 5&quot;, stream=True):  # doctest: +SKIP</span>
+<span class="sd">        ...     print(chunk, end=&#39;&#39;, flush=True)</span>
+<span class="sd">        1, 2, 3, 4, 5</span>
+
+<span class="sd">        &gt;&gt;&gt; # With message history</span>
+<span class="sd">        &gt;&gt;&gt; messages = [</span>
+<span class="sd">        ...     {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},</span>
+<span class="sd">        ...     {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is 2+2?&quot;}</span>
+<span class="sd">        ... ]</span>
+<span class="sd">        &gt;&gt;&gt; chat(messages)  # doctest: +SKIP</span>
+<span class="sd">        &#39;2+2 equals 4.&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_litellm_completion</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;LiteLLM is required for chat functionality. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Normalize inputs</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="n">_normalize_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+
+    <span class="c1"># Apply defaults</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_CHAT_MODEL</span>
+    <span class="n">temperature</span> <span class="o">=</span> <span class="n">temperature</span> <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">DFLT_TEMPERATURE</span>
+
+    <span class="c1"># Build LiteLLM parameters</span>
+    <span class="n">litellm_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s1">&#39;messages&#39;</span><span class="p">:</span> <span class="n">messages</span><span class="p">,</span>
+        <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="n">temperature</span><span class="p">,</span>
+        <span class="s1">&#39;stream&#39;</span><span class="p">:</span> <span class="n">stream</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s1">&#39;max_tokens&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_tokens</span>
+
+    <span class="c1"># Add any additional provider-specific kwargs</span>
+    <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Call LiteLLM</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_completion</span><span class="p">(</span><span class="o">**</span><span class="n">litellm_kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Extract and return text</span>
+    <span class="k">if</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_extract_text_from_stream</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_extract_text_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="chat_with_history">
+<a class="viewcode-back" href="../../module_docs/aix/chat.html#aix.chat_with_history">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">chat_with_history</span><span class="p">(</span>
+    <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">chat_kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ChatSession&#39;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a stateful chat session that maintains conversation history.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        system_prompt: Optional system message to set context/behavior</span>
+<span class="sd">        model: Model to use for this session</span>
+<span class="sd">        **chat_kwargs: Additional parameters passed to chat()</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ChatSession object with send() method</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; session = chat_with_history(&quot;You are a helpful math tutor&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; session.send(&quot;What is 2+2?&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;The answer is 4.&#39;</span>
+<span class="sd">        &gt;&gt;&gt; session.send(&quot;And if I add 3 to that?&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;That would be 7.&#39;</span>
+<span class="sd">        &gt;&gt;&gt; len(session.history)  # doctest: +SKIP</span>
+<span class="sd">        5</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ChatSession</span><span class="p">(</span><span class="n">system_prompt</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">chat_kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ChatSession">
+<a class="viewcode-back" href="../../module_docs/aix/chat.html#aix.ChatSession">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ChatSession</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stateful chat session that maintains conversation history.</span>
+
+<span class="sd">    This class provides a convenient way to have multi-turn conversations</span>
+<span class="sd">    without manually managing message history.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; session = ChatSession()  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; response = session.send(&quot;My name is Alice&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; response = session.send(&quot;What&#39;s my name?&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;Your name is Alice.&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">chat_kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a new chat session.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            system_prompt: Optional system message</span>
+<span class="sd">            model: Model to use for this session</span>
+<span class="sd">            **chat_kwargs: Additional parameters for chat()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chat_kwargs</span> <span class="o">=</span> <span class="n">chat_kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">system_prompt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system_prompt</span><span class="p">})</span>
+
+<div class="viewcode-block" id="ChatSession.send">
+<a class="viewcode-back" href="../../module_docs/aix/chat.html#aix.ChatSession.send">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a message and get a response.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            message: User message to send</span>
+<span class="sd">            **kwargs: Override chat parameters for this message</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Assistant&#39;s response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Add user message to history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">})</span>
+
+        <span class="c1"># Merge kwargs</span>
+        <span class="n">call_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">chat_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+
+        <span class="c1"># Get response</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">call_kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Add assistant response to history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">response</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">response</span></div>
+
+
+<div class="viewcode-block" id="ChatSession.clear_history">
+<a class="viewcode-back" href="../../module_docs/aix/chat.html#aix.ChatSession.clear_history">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keep_system</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear conversation history.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            keep_system: If True, preserve system message (if any)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">keep_system</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;role&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;system&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">[]</span></div>
+</div>
+
+
+
+<span class="c1"># Convenience function for simple question-answering</span>
+<div class="viewcode-block" id="ask">
+<a class="viewcode-back" href="../../module_docs/aix/chat.html#aix.ask">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ask</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ask a single question and get an answer.</span>
+
+<span class="sd">    This is a convenience wrapper around chat() for simple Q&amp;A.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        question: The question to ask</span>
+<span class="sd">        model: Model to use</span>
+<span class="sd">        **kwargs: Additional parameters for chat()</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The answer as a string</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.chat import ask</span>
+<span class="sd">        &gt;&gt;&gt; ask(&quot;What is the capital of France?&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;The capital of France is Paris.&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">chat</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

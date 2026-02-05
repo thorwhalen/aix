@@ -5,16 +5,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; aix 0.0.22 documentation</title>
+  <title>Index &mdash; aix 0.0.24 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=96ec9c95"></script>
+      <script src="_static/documentation_options.js?v=f91d8841"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -47,16 +47,26 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/chat.html">aix.chat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/embeddings.html">aix.embeddings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/image.html">aix.image</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/misc.html">aix.misc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/np.html">aix.np</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/pd.html">aix.pd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/sk.html">aix.sk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/prompts.html">aix.prompts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/stores.html">aix.stores</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/video.html">aix.video</a></li>
 </ul>
 
         </div>
@@ -93,29 +103,98 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
- | <a href="#V"><strong>V</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.add_dflt_converter">add_dflt_converter() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix.html#aix.PromptFuncs.add">add() (aix.PromptFuncs method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/prompts.html#aix.prompts.PromptFuncs.add">(aix.prompts.PromptFuncs method)</a>
 </li>
+      </ul></li>
       <li><a href="module_docs/aix/stores.html#aix.stores.add_extension_based_decoder">add_extension_based_decoder() (in module aix.stores)</a>
 </li>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.aggregate_store">aggregate_store() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.add_model_tag">add_model_tag() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.add_model_tag">(aix.ai_models.ModelManager method)</a>
 </li>
+      </ul></li>
       <li>
     aix
 
       <ul>
         <li><a href="module_docs/aix.html#module-aix">module</a>
+</li>
+      </ul></li>
+      <li>
+    aix.ai_models
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#module-aix.ai_models">module</a>
+</li>
+      </ul></li>
+      <li>
+    aix.ai_models.base
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/base.html#module-aix.ai_models.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    aix.ai_models.examples
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/examples.html#module-aix.ai_models.examples">module</a>
+</li>
+      </ul></li>
+      <li>
+    aix.ai_models.manager
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/manager.html#module-aix.ai_models.manager">module</a>
+</li>
+      </ul></li>
+      <li>
+    aix.ai_models.sources
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/sources.html#module-aix.ai_models.sources">module</a>
+</li>
+      </ul></li>
+      <li>
+    aix.audio
+
+      <ul>
+        <li><a href="module_docs/aix/audio.html#module-aix.audio">module</a>
+</li>
+      </ul></li>
+      <li>
+    aix.batches
+
+      <ul>
+        <li><a href="module_docs/aix/batches.html#module-aix.batches">module</a>
+</li>
+      </ul></li>
+      <li>
+    aix.chat
+
+      <ul>
+        <li><a href="module_docs/aix/chat.html#module-aix.chat">module</a>
 </li>
       </ul></li>
       <li>
@@ -126,12 +205,21 @@
 </li>
       </ul></li>
       <li>
+    aix.embeddings
+
+      <ul>
+        <li><a href="module_docs/aix/embeddings.html#module-aix.embeddings">module</a>
+</li>
+      </ul></li>
+      <li>
     aix.gen_ai
 
       <ul>
         <li><a href="module_docs/aix/gen_ai.html#module-aix.gen_ai">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     aix.gen_ai.google_genai
 
@@ -146,8 +234,13 @@
         <li><a href="module_docs/aix/gen_ai/openai_genai.html#module-aix.gen_ai.openai_genai">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    aix.image
+
+      <ul>
+        <li><a href="module_docs/aix/image.html#module-aix.image">module</a>
+</li>
+      </ul></li>
       <li>
     aix.misc
 
@@ -156,24 +249,17 @@
 </li>
       </ul></li>
       <li>
-    aix.np
+    aix.models
 
       <ul>
-        <li><a href="module_docs/aix/np.html#module-aix.np">module</a>
+        <li><a href="module_docs/aix/models.html#module-aix.models">module</a>
 </li>
       </ul></li>
       <li>
-    aix.pd
+    aix.prompts
 
       <ul>
-        <li><a href="module_docs/aix/pd.html#module-aix.pd">module</a>
-</li>
-      </ul></li>
-      <li>
-    aix.sk
-
-      <ul>
-        <li><a href="module_docs/aix/sk.html#module-aix.sk">module</a>
+        <li><a href="module_docs/aix/prompts.html#module-aix.prompts">module</a>
 </li>
       </ul></li>
       <li>
@@ -190,67 +276,298 @@
         <li><a href="module_docs/aix/util.html#module-aix.util">module</a>
 </li>
       </ul></li>
+      <li>
+    aix.video
+
+      <ul>
+        <li><a href="module_docs/aix/video.html#module-aix.video">module</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/video.html#aix.video.animate_image">animate_image() (in module aix.video)</a>
+</li>
+      <li><a href="module_docs/aix.html#aix.animate_image_to_video">animate_image_to_video() (in module aix)</a>
+</li>
+      <li><a href="module_docs/aix/audio.html#aix.audio.GeneratedAudio.as_bytes">as_bytes() (aix.audio.GeneratedAudio method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.GeneratedAudio.as_bytes">(aix.GeneratedAudio method)</a>
+</li>
+        <li><a href="module_docs/aix.html#aix.GeneratedImage.as_bytes">(aix.GeneratedImage method)</a>
+</li>
+        <li><a href="module_docs/aix.html#aix.GeneratedVideo.as_bytes">(aix.GeneratedVideo method)</a>
+</li>
+        <li><a href="module_docs/aix/image.html#aix.image.GeneratedImage.as_bytes">(aix.image.GeneratedImage method)</a>
+</li>
+        <li><a href="module_docs/aix/video.html#aix.video.GeneratedVideo.as_bytes">(aix.video.GeneratedVideo method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.GeneratedImage.as_pil_image">as_pil_image() (aix.GeneratedImage method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/image.html#aix.image.GeneratedImage.as_pil_image">(aix.image.GeneratedImage method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.ask">ask() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/chat.html#aix.chat.ask">(in module aix.chat)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.bytes_store_to_markdown_store">bytes_store_to_markdown_store() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix.html#aix.batch_chat">batch_chat() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/batches.html#aix.batches.batch_chat">(in module aix.batches)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.batch_embeddings">batch_embeddings() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/batches.html#aix.batches.batch_embeddings">(in module aix.batches)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.batch_process">batch_process() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/batches.html#aix.batches.batch_process">(in module aix.batches)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.bytes_to_markdown">bytes_to_markdown() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix.html#aix.BatchProcessor">BatchProcessor (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/batches.html#aix.batches.BatchProcessor">(class in aix.batches)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/aix/models.html#aix.models.ModelStore.by_provider">by_provider() (aix.models.ModelStore method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.ModelStore.by_provider">(aix.ModelStore method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/models.html#aix.models.ModelStore.by_task">by_task() (aix.models.ModelStore method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.ModelStore.by_task">(aix.ModelStore method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/gen_ai.html#aix.gen_ai.chat">chat() (in module aix.gen_ai)</a>
+      <li><a href="module_docs/aix.html#aix.chat">chat() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/chat.html#aix.chat.chat">(in module aix.chat)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="module_docs/aix/gen_ai.html#aix.gen_ai.chat">(in module aix.gen_ai)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/aix/gen_ai.html#aix.gen_ai.chat_function_for_model">chat_function_for_model() (in module aix.gen_ai)</a>
 </li>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.code_aggregate">code_aggregate() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix.html#aix.chat_with_history">chat_with_history() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/chat.html#aix.chat.chat_with_history">(in module aix.chat)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.ChatSession">ChatSession (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/chat.html#aix.chat.ChatSession">(class in aix.chat)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/batches.html#aix.batches.BatchProcessor.clear">clear() (aix.batches.BatchProcessor method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.BatchProcessor.clear">(aix.BatchProcessor method)</a>
+</li>
+        <li><a href="module_docs/aix.html#aix.EmbeddingCache.clear">(aix.EmbeddingCache method)</a>
+</li>
+        <li><a href="module_docs/aix/embeddings.html#aix.embeddings.EmbeddingCache.clear">(aix.embeddings.EmbeddingCache method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/chat.html#aix.chat.ChatSession.clear_history">clear_history() (aix.chat.ChatSession method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.ChatSession.clear_history">(aix.ChatSession method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/prompts.html#aix.prompts.CommonFuncs">CommonFuncs (class in aix.prompts)</a>
+</li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.Connector">Connector (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.Connector">(class in aix.ai_models.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ConnectorRegistry">ConnectorRegistry (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.ConnectorRegistry">(class in aix.ai_models.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.connectors">connectors (aix.ai_models.manager.ModelManager property)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.connectors">(aix.ai_models.ModelManager property)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.constrained_answer">constrained_answer() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/prompts.html#aix.prompts.constrained_answer">(in module aix.prompts)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.cosine_similarity">cosine_similarity() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/embeddings.html#aix.embeddings.cosine_similarity">(in module aix.embeddings)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.create_model_group">create_model_group() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.create_model_group">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.create_variation">create_variation() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/image.html#aix.image.create_variation">(in module aix.image)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.default_fallback">default_fallback() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/models.html#aix.models.ModelStore.discover">discover() (aix.models.ModelStore method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.ModelStore.discover">(aix.ModelStore method)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.discover_all">discover_all() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.discover_all">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.discover_available_models">discover_available_models() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/models.html#aix.models.discover_available_models">(in module aix.models)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.discover_from_source">discover_from_source() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.discover_from_source">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.ModelSource.discover_models">discover_models() (aix.ai_models.base.ModelSource method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.HuggingFaceSource.discover_models">(aix.ai_models.examples.HuggingFaceSource method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelSource.discover_models">(aix.ai_models.ModelSource method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OllamaSource.discover_models">(aix.ai_models.OllamaSource method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OpenRouterSource.discover_models">(aix.ai_models.OpenRouterSource method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ProviderAPISource.discover_models">(aix.ai_models.ProviderAPISource method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OllamaSource.discover_models">(aix.ai_models.sources.OllamaSource method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenRouterSource.discover_models">(aix.ai_models.sources.OpenRouterSource method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.ProviderAPISource.discover_models">(aix.ai_models.sources.ProviderAPISource method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.download_articles">download_articles() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.DSPyConnector">DSPyConnector (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.DSPyConnector">(class in aix.ai_models.sources)</a>
 </li>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.download_articles_by_section">download_articles_by_section() (in module aix.contexts)</a>
-</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.excel_to_markdown">excel_to_markdown() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix.html#aix.edit_image">edit_image() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/image.html#aix.image.edit_image">(in module aix.image)</a>
 </li>
-      <li><a href="module_docs/aix/stores.html#aix.stores.extension_based_decode_to_text">extension_based_decode_to_text() (in module aix.stores)</a>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.EmbeddingCache.embed">embed() (aix.EmbeddingCache method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/embeddings.html#aix.embeddings.EmbeddingCache.embed">(aix.embeddings.EmbeddingCache method)</a>
 </li>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.extensions_not_supported_by_converters">extensions_not_supported_by_converters() (in module aix.contexts)</a>
+        <li><a href="module_docs/aix.html#aix.embed">(in module aix)</a>
 </li>
+        <li><a href="module_docs/aix/embeddings.html#aix.embeddings.embed">(in module aix.embeddings)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.EmbeddingCache.embed_batch">embed_batch() (aix.EmbeddingCache method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/embeddings.html#aix.embeddings.EmbeddingCache.embed_batch">(aix.embeddings.EmbeddingCache method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.EmbeddingCache">EmbeddingCache (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/embeddings.html#aix.embeddings.EmbeddingCache">(class in aix.embeddings)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.embeddings">embeddings() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/embeddings.html#aix.embeddings.embeddings">(in module aix.embeddings)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.extract_html_links">extract_html_links() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/video.html#aix.video.estimate_cost">estimate_cost() (in module aix.video)</a>
 </li>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.extract_urls">extract_urls() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_advanced_filtering">example_advanced_filtering() (in module aix.ai_models.examples)</a>
 </li>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.extract_urls_only">extract_urls_only() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_basic_usage">example_basic_usage() (in module aix.ai_models.examples)</a>
 </li>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.extract_with_surrounding_context">extract_with_surrounding_context() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_connector_usage">example_connector_usage() (in module aix.ai_models.examples)</a>
+</li>
+      <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_custom_metadata">example_custom_metadata() (in module aix.ai_models.examples)</a>
+</li>
+      <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_custom_source">example_custom_source() (in module aix.ai_models.examples)</a>
+</li>
+      <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_mall_usage">example_mall_usage() (in module aix.ai_models.examples)</a>
+</li>
+      <li><a href="module_docs/aix.html#aix.extend_video">extend_video() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/video.html#aix.video.extend_video">(in module aix.video)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/stores.html#aix.stores.extension_based_decode_to_text">extension_based_decode_to_text() (in module aix.stores)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -258,19 +575,151 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.fullpath">fullpath() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.ModelRegistry.filter">filter() (aix.ai_models.base.ModelRegistry method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelRegistry.filter">(aix.ai_models.ModelRegistry method)</a>
 </li>
+        <li><a href="module_docs/aix/models.html#aix.models.ModelStore.filter">(aix.models.ModelStore method)</a>
+</li>
+        <li><a href="module_docs/aix.html#aix.ModelStore.filter">(aix.ModelStore method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.find_models">find_models() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/models.html#aix.models.find_models">(in module aix.models)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.find_most_similar">find_most_similar() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/embeddings.html#aix.embeddings.find_most_similar">(in module aix.embeddings)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.Connector.format_metadata">format_metadata() (aix.ai_models.base.Connector method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.Connector.format_metadata">(aix.ai_models.Connector method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.DSPyConnector.format_metadata">(aix.ai_models.DSPyConnector method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.LangChainConnector.format_metadata">(aix.ai_models.LangChainConnector method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OllamaConnector.format_metadata">(aix.ai_models.OllamaConnector method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OpenAIConnector.format_metadata">(aix.ai_models.OpenAIConnector method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OpenRouterConnector.format_metadata">(aix.ai_models.OpenRouterConnector method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.DSPyConnector.format_metadata">(aix.ai_models.sources.DSPyConnector method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.LangChainConnector.format_metadata">(aix.ai_models.sources.LangChainConnector method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OllamaConnector.format_metadata">(aix.ai_models.sources.OllamaConnector method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenAIConnector.format_metadata">(aix.ai_models.sources.OpenAIConnector method)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenRouterConnector.format_metadata">(aix.ai_models.sources.OpenRouterConnector method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.get_extension">get_extension() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix.html#aix.generate_image">generate_image() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/image.html#aix.image.generate_image">(in module aix.image)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.generate_images">generate_images() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/image.html#aix.image.generate_images">(in module aix.image)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.generate_video">generate_video() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/video.html#aix.video.generate_video">(in module aix.video)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/video.html#aix.video.generate_video_pika">generate_video_pika() (in module aix.video)</a>
+</li>
+      <li><a href="module_docs/aix/video.html#aix.video.generate_video_runway">generate_video_runway() (in module aix.video)</a>
+</li>
+      <li><a href="module_docs/aix/video.html#aix.video.generate_video_stable_diffusion">generate_video_stable_diffusion() (in module aix.video)</a>
+</li>
+      <li><a href="module_docs/aix.html#aix.GeneratedAudio">GeneratedAudio (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/audio.html#aix.audio.GeneratedAudio">(class in aix.audio)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.GeneratedImage">GeneratedImage (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/image.html#aix.image.GeneratedImage">(class in aix.image)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.GeneratedVideo">GeneratedVideo (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/video.html#aix.video.GeneratedVideo">(class in aix.video)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/video.html#aix.video.get_available_providers">get_available_providers() (in module aix.video)</a>
+</li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.get_connector_metadata">get_connector_metadata() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.get_connector_metadata">(aix.ai_models.ModelManager method)</a>
+</li>
+        <li><a href="module_docs/aix/models.html#aix.models.ModelStore.get_connector_metadata">(aix.models.ModelStore method)</a>
+</li>
+        <li><a href="module_docs/aix.html#aix.ModelStore.get_connector_metadata">(aix.ModelStore method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/models.html#aix.models.ModelStore.get_info">get_info() (aix.models.ModelStore method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.ModelStore.get_info">(aix.ModelStore method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/aix/misc.html#aix.misc.get_llm_leaderboards">get_llm_leaderboards() (in module aix.misc)</a>
+</li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.get_manager">get_manager() (in module aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.get_manager">(in module aix.ai_models.manager)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.get_model">get_model() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.get_model">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.get_model_info">get_model_info() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/models.html#aix.models.get_model_info">(in module aix.models)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.get_video_providers">get_video_providers() (in module aix)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.HuggingFaceSource">HuggingFaceSource (class in aix.ai_models.examples)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -278,21 +727,129 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.is_local_pkg_name">is_local_pkg_name() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/video.html#aix.video.interpolate_frames">interpolate_frames() (in module aix.video)</a>
 </li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.ModelMall.keys">keys() (aix.ai_models.examples.ModelMall method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.PromptFuncs.keys">(aix.PromptFuncs method)</a>
+</li>
+        <li><a href="module_docs/aix/prompts.html#aix.prompts.PromptFuncs.keys">(aix.prompts.PromptFuncs method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.LangChainConnector">LangChainConnector (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.LangChainConnector">(class in aix.ai_models.sources)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.list_model_groups">list_model_groups() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.list_model_groups">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.list_models">list_models() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.list_models">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.list_sources">list_sources() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.list_sources">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.Model.matches_filter">matches_filter() (aix.ai_models.base.Model method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.Model.matches_filter">(aix.ai_models.Model method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.Model">Model (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.Model">(class in aix.ai_models.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.ModelMall">ModelMall (class in aix.ai_models.examples)</a>
+</li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager">ModelManager (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager">(class in aix.ai_models.manager)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelRegistry">ModelRegistry (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.ModelRegistry">(class in aix.ai_models.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.models">models (aix.ai_models.manager.ModelManager property)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.models">(aix.ai_models.ModelManager property)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelSource">ModelSource (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.ModelSource">(class in aix.ai_models.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.ModelStore">ModelStore (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/models.html#aix.models.ModelStore">(class in aix.models)</a>
+</li>
+      </ul></li>
       <li>
     module
 
       <ul>
         <li><a href="module_docs/aix.html#module-aix">aix</a>
 </li>
+        <li><a href="module_docs/aix/ai_models.html#module-aix.ai_models">aix.ai_models</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/base.html#module-aix.ai_models.base">aix.ai_models.base</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/examples.html#module-aix.ai_models.examples">aix.ai_models.examples</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/manager.html#module-aix.ai_models.manager">aix.ai_models.manager</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#module-aix.ai_models.sources">aix.ai_models.sources</a>
+</li>
+        <li><a href="module_docs/aix/audio.html#module-aix.audio">aix.audio</a>
+</li>
+        <li><a href="module_docs/aix/batches.html#module-aix.batches">aix.batches</a>
+</li>
+        <li><a href="module_docs/aix/chat.html#module-aix.chat">aix.chat</a>
+</li>
         <li><a href="module_docs/aix/contexts.html#module-aix.contexts">aix.contexts</a>
+</li>
+        <li><a href="module_docs/aix/embeddings.html#module-aix.embeddings">aix.embeddings</a>
 </li>
         <li><a href="module_docs/aix/gen_ai.html#module-aix.gen_ai">aix.gen_ai</a>
 </li>
@@ -300,73 +857,281 @@
 </li>
         <li><a href="module_docs/aix/gen_ai/openai_genai.html#module-aix.gen_ai.openai_genai">aix.gen_ai.openai_genai</a>
 </li>
+        <li><a href="module_docs/aix/image.html#module-aix.image">aix.image</a>
+</li>
         <li><a href="module_docs/aix/misc.html#module-aix.misc">aix.misc</a>
 </li>
-        <li><a href="module_docs/aix/np.html#module-aix.np">aix.np</a>
+        <li><a href="module_docs/aix/models.html#module-aix.models">aix.models</a>
 </li>
-        <li><a href="module_docs/aix/pd.html#module-aix.pd">aix.pd</a>
-</li>
-        <li><a href="module_docs/aix/sk.html#module-aix.sk">aix.sk</a>
+        <li><a href="module_docs/aix/prompts.html#module-aix.prompts">aix.prompts</a>
 </li>
         <li><a href="module_docs/aix/stores.html#module-aix.stores">aix.stores</a>
 </li>
         <li><a href="module_docs/aix/util.html#module-aix.util">aix.util</a>
 </li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.PackageCodeContexts.multiple_pkgs_code">multiple_pkgs_code() (aix.contexts.PackageCodeContexts method)</a>
+        <li><a href="module_docs/aix/video.html#module-aix.video">aix.video</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.notebook_to_markdown">notebook_to_markdown() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.Connector.name">name (aix.ai_models.base.Connector property)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.Connector.name">(aix.ai_models.Connector property)</a>
 </li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.DSPyConnector.name">(aix.ai_models.DSPyConnector property)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.LangChainConnector.name">(aix.ai_models.LangChainConnector property)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OllamaConnector.name">(aix.ai_models.OllamaConnector property)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OpenAIConnector.name">(aix.ai_models.OpenAIConnector property)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OpenRouterConnector.name">(aix.ai_models.OpenRouterConnector property)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.DSPyConnector.name">(aix.ai_models.sources.DSPyConnector property)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.LangChainConnector.name">(aix.ai_models.sources.LangChainConnector property)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OllamaConnector.name">(aix.ai_models.sources.OllamaConnector property)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenAIConnector.name">(aix.ai_models.sources.OpenAIConnector property)</a>
+</li>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenRouterConnector.name">(aix.ai_models.sources.OpenRouterConnector property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OllamaConnector">OllamaConnector (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OllamaConnector">(class in aix.ai_models.sources)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OllamaSource">OllamaSource (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OllamaSource">(class in aix.ai_models.sources)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OpenAIConnector">OpenAIConnector (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenAIConnector">(class in aix.ai_models.sources)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OpenRouterConnector">OpenRouterConnector (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenRouterConnector">(class in aix.ai_models.sources)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.OpenRouterSource">OpenRouterSource (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenRouterSource">(class in aix.ai_models.sources)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.PackageCodeContexts">PackageCodeContexts (class in aix.contexts)</a>
+      <li><a href="module_docs/aix/audio.html#aix.audio.GeneratedAudio.play">play() (aix.audio.GeneratedAudio method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.GeneratedAudio.play">(aix.GeneratedAudio method)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/aix/batches.html#aix.batches.BatchProcessor.process_chats">process_chats() (aix.batches.BatchProcessor method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.BatchProcessor.process_chats">(aix.BatchProcessor method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/batches.html#aix.batches.BatchProcessor.process_embeddings">process_embeddings() (aix.batches.BatchProcessor method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.BatchProcessor.process_embeddings">(aix.BatchProcessor method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.prompt_func">prompt_func() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/prompts.html#aix.prompts.prompt_func">(in module aix.prompts)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix.html#aix.prompt_to_json">prompt_to_json() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/prompts.html#aix.prompts.prompt_to_json">(in module aix.prompts)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.prompt_to_text">prompt_to_text() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/prompts.html#aix.prompts.prompt_to_text">(in module aix.prompts)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.PromptFuncs">PromptFuncs (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/prompts.html#aix.prompts.PromptFuncs">(class in aix.prompts)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ProviderAPISource">ProviderAPISource (class in aix.ai_models)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.ProviderAPISource">(class in aix.ai_models.sources)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.resolve_code_source">resolve_code_source() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/models.html#aix.models.ModelStore.recommend">recommend() (aix.models.ModelStore method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.ModelStore.recommend">(aix.ModelStore method)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.register_connector">register_connector() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.register_connector">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.resolve_code_source_dir_path">resolve_code_source_dir_path() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.register_source">register_source() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.register_source">(aix.ai_models.ModelManager method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.PackageCodeContexts.save_multiple_pkgs_code">save_multiple_pkgs_code() (aix.contexts.PackageCodeContexts method)</a>
+      <li><a href="module_docs/aix/audio.html#aix.audio.GeneratedAudio.save">save() (aix.audio.GeneratedAudio method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.GeneratedAudio.save">(aix.GeneratedAudio method)</a>
 </li>
+        <li><a href="module_docs/aix.html#aix.GeneratedImage.save">(aix.GeneratedImage method)</a>
+</li>
+        <li><a href="module_docs/aix.html#aix.GeneratedVideo.save">(aix.GeneratedVideo method)</a>
+</li>
+        <li><a href="module_docs/aix/image.html#aix.image.GeneratedImage.save">(aix.image.GeneratedImage method)</a>
+</li>
+        <li><a href="module_docs/aix/video.html#aix.video.GeneratedVideo.save">(aix.video.GeneratedVideo method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix/batches.html#aix.batches.BatchProcessor.save_results">save_results() (aix.batches.BatchProcessor method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.BatchProcessor.save_results">(aix.BatchProcessor method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.PackageCodeContexts.save_single">save_single() (aix.contexts.PackageCodeContexts method)</a>
+      <li><a href="module_docs/aix/models.html#aix.models.ModelStore.search">search() (aix.models.ModelStore method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.ModelStore.search">(aix.ModelStore method)</a>
 </li>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.save_to_file_and_return_file">save_to_file_and_return_file() (in module aix.contexts)</a>
+      </ul></li>
+      <li><a href="module_docs/aix/chat.html#aix.chat.ChatSession.send">send() (aix.chat.ChatSession method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.ChatSession.send">(aix.ChatSession method)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.set_custom_metadata">set_custom_metadata() (aix.ai_models.manager.ModelManager method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.set_custom_metadata">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.GeneratedImage.show">show() (aix.GeneratedImage method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/image.html#aix.image.GeneratedImage.show">(aix.image.GeneratedImage method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
-<h2 id="V">V</h2>
+<h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/contexts.html#aix.contexts.verify_urls">verify_urls() (in module aix.contexts)</a>
+      <li><a href="module_docs/aix.html#aix.text_to_speech">text_to_speech() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/audio.html#aix.audio.text_to_speech">(in module aix.audio)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.Model.to_dict">to_dict() (aix.ai_models.base.Model method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/ai_models.html#aix.ai_models.Model.to_dict">(aix.ai_models.Model method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.transcribe">transcribe() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/audio.html#aix.audio.transcribe">(in module aix.audio)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix.html#aix.transcribe_with_timestamps">transcribe_with_timestamps() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/audio.html#aix.audio.transcribe_with_timestamps">(in module aix.audio)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.TranscriptionResult">TranscriptionResult (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/audio.html#aix.audio.TranscriptionResult">(class in aix.audio)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.translate_audio">translate_audio() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/audio.html#aix.audio.translate_audio">(in module aix.audio)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix.html#aix.GeneratedVideo.wait_until_complete">wait_until_complete() (aix.GeneratedVideo method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/video.html#aix.video.GeneratedVideo.wait_until_complete">(aix.video.GeneratedVideo method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

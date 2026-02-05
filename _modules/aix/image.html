@@ -1,0 +1,638 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.image &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.image</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.image</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Image generation interface for AIX.</span>
+
+<span class="sd">Generate images from text descriptions using various AI models.</span>
+
+<span class="sd">Examples:</span>
+<span class="sd">    Simple image generation:</span>
+<span class="sd">    &gt;&gt;&gt; from aix.image import generate_image</span>
+<span class="sd">    &gt;&gt;&gt; image = generate_image(&quot;A serene mountain landscape at sunset&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; image.save(&quot;landscape.png&quot;)  # doctest: +SKIP</span>
+
+<span class="sd">    Multiple images:</span>
+<span class="sd">    &gt;&gt;&gt; images = generate_images(</span>
+<span class="sd">    ...     &quot;A cute cat wearing a hat&quot;,</span>
+<span class="sd">    ...     n=3,</span>
+<span class="sd">    ...     size=&quot;1024x1024&quot;</span>
+<span class="sd">    ... )  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; for i, img in enumerate(images):  # doctest: +SKIP</span>
+<span class="sd">    ...     img.save(f&quot;cat_{i}.png&quot;)</span>
+
+<span class="sd">    With specific model:</span>
+<span class="sd">    &gt;&gt;&gt; image = generate_image(</span>
+<span class="sd">    ...     &quot;Abstract art with vibrant colors&quot;,</span>
+<span class="sd">    ...     model=&quot;dall-e-3&quot;</span>
+<span class="sd">    ... )  # doctest: +SKIP</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">BytesIO</span>
+
+<span class="c1"># Import LiteLLM but keep it private</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">image_generation</span> <span class="k">as</span> <span class="n">_litellm_image_generation</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">_litellm_image_generation</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># Try to import PIL for image handling</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">PILImage</span>
+    <span class="n">_PIL_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">_PIL_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">PILImage</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="c1"># Default configurations</span>
+<span class="n">DFLT_IMAGE_MODEL</span> <span class="o">=</span> <span class="s1">&#39;dall-e-2&#39;</span>
+<span class="n">DFLT_IMAGE_SIZE</span> <span class="o">=</span> <span class="s1">&#39;1024x1024&#39;</span>
+<span class="n">DFLT_IMAGE_QUALITY</span> <span class="o">=</span> <span class="s1">&#39;standard&#39;</span>
+<span class="n">DFLT_NUM_IMAGES</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+<div class="viewcode-block" id="GeneratedImage">
+<a class="viewcode-back" href="../../module_docs/aix/image.html#aix.GeneratedImage">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GeneratedImage</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper for generated images.</span>
+
+<span class="sd">    Provides convenient access to image data in various formats.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; img = GeneratedImage(url=&quot;https://...&quot;, model=&quot;dall-e-3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; img.save(&quot;output.png&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; img.show()  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; data = img.as_bytes()  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">b64_json</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">revised_prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize generated image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url: URL of the generated image</span>
+<span class="sd">            b64_json: Base64-encoded image data</span>
+<span class="sd">            model: Model used for generation</span>
+<span class="sd">            prompt: Original prompt</span>
+<span class="sd">            revised_prompt: Revised prompt (if model modified it)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b64_json</span> <span class="o">=</span> <span class="n">b64_json</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="n">prompt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">revised_prompt</span> <span class="o">=</span> <span class="n">revised_prompt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pil_image</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="GeneratedImage.as_bytes">
+<a class="viewcode-back" href="../../module_docs/aix/image.html#aix.GeneratedImage.as_bytes">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get image as bytes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Image data as bytes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_data</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">b64_json</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b64_json</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_data</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_image_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_data</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No image data available&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GeneratedImage.as_pil_image">
+<a class="viewcode-back" href="../../module_docs/aix/image.html#aix.GeneratedImage.as_pil_image">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_pil_image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get image as PIL Image object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            PIL.Image object</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ImportError: If PIL is not installed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_PIL_AVAILABLE</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;PIL (Pillow) is required for image operations. &quot;</span>
+                <span class="s2">&quot;Install it with: pip install Pillow&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pil_image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pil_image</span>
+
+        <span class="n">image_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_bytes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pil_image</span> <span class="o">=</span> <span class="n">PILImage</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">image_bytes</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pil_image</span></div>
+
+
+<div class="viewcode-block" id="GeneratedImage.save">
+<a class="viewcode-back" href="../../module_docs/aix/image.html#aix.GeneratedImage.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save image to file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path: Output file path</span>
+<span class="sd">            format: Image format (e.g., &#39;PNG&#39;, &#39;JPEG&#39;). Auto-detected from path if None.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; img.save(&quot;output.png&quot;)  # doctest: +SKIP</span>
+<span class="sd">            &gt;&gt;&gt; img.save(&quot;output.jpg&quot;, format=&quot;JPEG&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">_PIL_AVAILABLE</span><span class="p">:</span>
+            <span class="n">pil_img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_pil_image</span><span class="p">()</span>
+            <span class="n">pil_img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Fallback: save raw bytes</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_bytes</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="GeneratedImage.show">
+<a class="viewcode-back" href="../../module_docs/aix/image.html#aix.GeneratedImage.show">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the image.</span>
+
+<span class="sd">        Requires PIL (Pillow) to be installed.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; img.show()  # doctest: +SKIP</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pil_img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_pil_image</span><span class="p">()</span>
+        <span class="n">pil_img</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;String representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;GeneratedImage(model=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">, url=</span><span class="si">{</span><span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="generate_image">
+<a class="viewcode-back" href="../../module_docs/aix/image.html#aix.generate_image">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_image</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;url&#39;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedImage</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a single image from a text prompt.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: Text description of the image to generate</span>
+<span class="sd">        model: Model to use (e.g., &#39;dall-e-2&#39;, &#39;dall-e-3&#39;, &#39;stable-diffusion&#39;)</span>
+<span class="sd">        size: Image size (e.g., &#39;1024x1024&#39;, &#39;512x512&#39;, &#39;1792x1024&#39;)</span>
+<span class="sd">        quality: Image quality (&#39;standard&#39; or &#39;hd&#39; for DALL-E 3)</span>
+<span class="sd">        style: Image style (&#39;vivid&#39; or &#39;natural&#39; for DALL-E 3)</span>
+<span class="sd">        response_format: Format of response (&#39;url&#39; or &#39;b64_json&#39;)</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedImage object</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If LiteLLM is not installed</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.image import generate_image</span>
+<span class="sd">        &gt;&gt;&gt; image = generate_image(&quot;A serene mountain landscape&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; image.save(&quot;landscape.png&quot;)  # doctest: +SKIP</span>
+
+<span class="sd">        &gt;&gt;&gt; # High quality with DALL-E 3</span>
+<span class="sd">        &gt;&gt;&gt; image = generate_image(</span>
+<span class="sd">        ...     &quot;Abstract art with vibrant colors&quot;,</span>
+<span class="sd">        ...     model=&quot;dall-e-3&quot;,</span>
+<span class="sd">        ...     quality=&quot;hd&quot;,</span>
+<span class="sd">        ...     style=&quot;vivid&quot;</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+
+<span class="sd">        &gt;&gt;&gt; # Specific size</span>
+<span class="sd">        &gt;&gt;&gt; image = generate_image(</span>
+<span class="sd">        ...     &quot;A futuristic city&quot;,</span>
+<span class="sd">        ...     size=&quot;1792x1024&quot;</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_litellm_image_generation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;LiteLLM is required for image generation. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Apply defaults</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_IMAGE_MODEL</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">size</span> <span class="ow">or</span> <span class="n">DFLT_IMAGE_SIZE</span>
+
+    <span class="c1"># Build parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s1">&#39;prompt&#39;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
+        <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+        <span class="s1">&#39;response_format&#39;</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">quality</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;quality&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">quality</span>
+    <span class="k">if</span> <span class="n">style</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;style&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">style</span>
+
+    <span class="c1"># Add additional kwargs</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Call LiteLLM</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_image_generation</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="c1"># Extract image data</span>
+    <span class="n">image_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">GeneratedImage</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">image_data</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="n">b64_json</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">image_data</span><span class="p">,</span> <span class="s1">&#39;b64_json&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+        <span class="n">revised_prompt</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">image_data</span><span class="p">,</span> <span class="s1">&#39;revised_prompt&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="generate_images">
+<a class="viewcode-back" href="../../module_docs/aix/image.html#aix.generate_images">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_images</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;url&#39;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate multiple images from a text prompt.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: Text description of images to generate</span>
+<span class="sd">        n: Number of images to generate</span>
+<span class="sd">        model: Model to use</span>
+<span class="sd">        size: Image size</span>
+<span class="sd">        quality: Image quality</span>
+<span class="sd">        style: Image style</span>
+<span class="sd">        response_format: Format of response</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of GeneratedImage objects</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.image import generate_images</span>
+<span class="sd">        &gt;&gt;&gt; images = generate_images(</span>
+<span class="sd">        ...     &quot;A cute robot&quot;,</span>
+<span class="sd">        ...     n=3,</span>
+<span class="sd">        ...     size=&quot;512x512&quot;</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; for i, img in enumerate(images):  # doctest: +SKIP</span>
+<span class="sd">        ...     img.save(f&quot;robot_{i}.png&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_litellm_image_generation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;LiteLLM is required for image generation. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Apply defaults</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_IMAGE_MODEL</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">size</span> <span class="ow">or</span> <span class="n">DFLT_IMAGE_SIZE</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="ow">or</span> <span class="n">DFLT_NUM_IMAGES</span>
+
+    <span class="c1"># Build parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s1">&#39;prompt&#39;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
+        <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span>
+        <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+        <span class="s1">&#39;response_format&#39;</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">quality</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;quality&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">quality</span>
+    <span class="k">if</span> <span class="n">style</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;style&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">style</span>
+
+    <span class="c1"># Add additional kwargs</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Call LiteLLM</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_image_generation</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="c1"># Extract all images</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">image_data</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+        <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GeneratedImage</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">image_data</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">b64_json</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">image_data</span><span class="p">,</span> <span class="s1">&#39;b64_json&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+            <span class="n">revised_prompt</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">image_data</span><span class="p">,</span> <span class="s1">&#39;revised_prompt&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">images</span></div>
+
+
+
+<div class="viewcode-block" id="edit_image">
+<a class="viewcode-back" href="../../module_docs/aix/image.html#aix.edit_image">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">edit_image</span><span class="p">(</span>
+    <span class="n">image_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">mask_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Edit an existing image based on a prompt.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image_path: Path to the image to edit</span>
+<span class="sd">        prompt: Description of the desired edit</span>
+<span class="sd">        mask_path: Optional path to mask image (transparent areas will be edited)</span>
+<span class="sd">        model: Model to use (typically &#39;dall-e-2&#39; for edits)</span>
+<span class="sd">        size: Output image size</span>
+<span class="sd">        n: Number of variations to generate</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedImage or list of GeneratedImage objects</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.image import edit_image</span>
+<span class="sd">        &gt;&gt;&gt; edited = edit_image(</span>
+<span class="sd">        ...     &quot;photo.png&quot;,</span>
+<span class="sd">        ...     &quot;Add a rainbow in the sky&quot;,</span>
+<span class="sd">        ...     mask_path=&quot;sky_mask.png&quot;</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; edited.save(&quot;edited_photo.png&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_litellm_image_generation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;LiteLLM is required for image editing. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Read image file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">image_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># Read mask if provided</span>
+    <span class="n">mask_data</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">mask_path</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mask_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">mask_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># Build parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">model</span> <span class="ow">or</span> <span class="s1">&#39;dall-e-2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;prompt&#39;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">image_data</span><span class="p">,</span>
+        <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">mask_data</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mask_data</span>
+    <span class="k">if</span> <span class="n">size</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">size</span>
+
+    <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Call LiteLLM (using custom_llm_provider for edits)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_image_generation</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="c1"># Extract images</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">img_data</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+        <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GeneratedImage</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">b64_json</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="s1">&#39;b64_json&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">],</span>
+            <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span>
+        <span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">images</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">images</span></div>
+
+
+
+<div class="viewcode-block" id="create_variation">
+<a class="viewcode-back" href="../../module_docs/aix/image.html#aix.create_variation">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_variation</span><span class="p">(</span>
+    <span class="n">image_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create variations of an existing image.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image_path: Path to the source image</span>
+<span class="sd">        model: Model to use (typically &#39;dall-e-2&#39;)</span>
+<span class="sd">        size: Output image size</span>
+<span class="sd">        n: Number of variations to generate</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedImage or list of GeneratedImage objects</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.image import create_variation</span>
+<span class="sd">        &gt;&gt;&gt; variations = create_variation(</span>
+<span class="sd">        ...     &quot;original.png&quot;,</span>
+<span class="sd">        ...     n=3,</span>
+<span class="sd">        ...     size=&quot;512x512&quot;</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; for i, var in enumerate(variations):  # doctest: +SKIP</span>
+<span class="sd">        ...     var.save(f&quot;variation_{i}.png&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_litellm_image_generation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;LiteLLM is required for image variations. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Read image file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">image_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># Build parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">model</span> <span class="ow">or</span> <span class="s1">&#39;dall-e-2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">image_data</span><span class="p">,</span>
+        <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">size</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">size</span>
+
+    <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Call LiteLLM</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_image_generation</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="c1"># Extract images</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">img_data</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+        <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GeneratedImage</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">b64_json</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="s1">&#39;b64_json&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+        <span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">images</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">images</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

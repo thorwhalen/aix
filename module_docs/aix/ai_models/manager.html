@@ -1,0 +1,367 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.ai_models.manager &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="aix.ai_models.sources" href="sources.html" />
+    <link rel="prev" title="aix.ai_models.examples" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aix.ai_models.manager</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.ai_models.manager.ModelManager"><code class="docutils literal notranslate"><span class="pre">ModelManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.add_model_tag"><code class="docutils literal notranslate"><span class="pre">ModelManager.add_model_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.connectors"><code class="docutils literal notranslate"><span class="pre">ModelManager.connectors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.create_model_group"><code class="docutils literal notranslate"><span class="pre">ModelManager.create_model_group()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.discover_all"><code class="docutils literal notranslate"><span class="pre">ModelManager.discover_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.discover_from_source"><code class="docutils literal notranslate"><span class="pre">ModelManager.discover_from_source()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.get_connector_metadata"><code class="docutils literal notranslate"><span class="pre">ModelManager.get_connector_metadata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.get_model"><code class="docutils literal notranslate"><span class="pre">ModelManager.get_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.list_model_groups"><code class="docutils literal notranslate"><span class="pre">ModelManager.list_model_groups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.list_models"><code class="docutils literal notranslate"><span class="pre">ModelManager.list_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.list_sources"><code class="docutils literal notranslate"><span class="pre">ModelManager.list_sources()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.models"><code class="docutils literal notranslate"><span class="pre">ModelManager.models</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.register_connector"><code class="docutils literal notranslate"><span class="pre">ModelManager.register_connector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.register_source"><code class="docutils literal notranslate"><span class="pre">ModelManager.register_source()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.manager.ModelManager.set_custom_metadata"><code class="docutils literal notranslate"><span class="pre">ModelManager.set_custom_metadata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.ai_models.manager.get_manager"><code class="docutils literal notranslate"><span class="pre">get_manager()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aix.ai_models.manager</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/aix/ai_models/manager.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aix.ai_models.manager">
+<span id="aix-ai-models-manager"></span><h1>aix.ai_models.manager<a class="headerlink" href="#module-aix.ai_models.manager" title="Link to this heading"></a></h1>
+<p>Unified model management interface.</p>
+<p>Provides a high-level API for managing AI models across providers.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aix.ai_models.manager.</span></span><span class="sig-name descname"><span class="pre">ModelManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager" title="Link to this definition"></a></dt>
+<dd><p>Unified interface for AI model management.</p>
+<p>Combines model registry, sources, and connectors into a single facade.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">register_connector</span><span class="p">(</span><span class="n">OpenAIConnector</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">connectors</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.add_model_tag">
+<span class="sig-name descname"><span class="pre">add_model_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.add_model_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.add_model_tag" title="Link to this definition"></a></dt>
+<dd><p>Add tags to a model.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">add_model_tag</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="s2">&quot;fast&quot;</span><span class="p">,</span> <span class="s2">&quot;expensive&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;fast&quot;</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.connectors">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connectors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="base.html#aix.ai_models.base.ConnectorRegistry" title="aix.ai_models.base.ConnectorRegistry"><span class="pre">ConnectorRegistry</span></a></em><a class="headerlink" href="#aix.ai_models.manager.ModelManager.connectors" title="Link to this definition"></a></dt>
+<dd><p>Access to connector registry.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.create_model_group">
+<span class="sig-name descname"><span class="pre">create_model_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.create_model_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.create_model_group" title="Link to this definition"></a></dt>
+<dd><p>Create a named group of models using tags.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;claude-3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;claude-3&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;anthropic&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">create_model_group</span><span class="p">(</span><span class="s2">&quot;premium&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="s2">&quot;claude-3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">premium</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;group:premium&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">premium</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.discover_all">
+<span class="sig-name descname"><span class="pre">discover_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_register</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.discover_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.discover_all" title="Link to this definition"></a></dt>
+<dd><p>Discover models from all registered sources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict mapping source name to list of discovered models</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.discover_from_source">
+<span class="sig-name descname"><span class="pre">discover_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_register</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.discover_from_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.discover_from_source" title="Link to this definition"></a></dt>
+<dd><p>Discover models from a registered source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_name</strong> – Name of registered source</p></li>
+<li><p><strong>auto_register</strong> – If True, automatically add discovered models to registry</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of discovered models</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.get_connector_metadata">
+<span class="sig-name descname"><span class="pre">get_connector_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connector_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.get_connector_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.get_connector_metadata" title="Link to this definition"></a></dt>
+<dd><p>Get formatted metadata for a specific connector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_id</strong> – ID of the model</p></li>
+<li><p><strong>connector_name</strong> – Name of the connector to format for</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict with metadata formatted for the specified connector</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">register_connector</span><span class="p">(</span><span class="n">OpenAIConnector</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meta</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_connector_metadata</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
+<span class="go">&#39;gpt-4&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.get_model">
+<span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.get_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.get_model" title="Link to this definition"></a></dt>
+<dd><p>Get a specific model by ID.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">id</span>
+<span class="go">&#39;gpt-4&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.list_model_groups">
+<span class="sig-name descname"><span class="pre">list_model_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.list_model_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.list_model_groups" title="Link to this definition"></a></dt>
+<dd><p>List all model groups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>‘ prefix)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Set of group names (without ‘group</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.list_models">
+<span class="sig-name descname"><span class="pre">list_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_local</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_context_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_context_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_capabilities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.list_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.list_models" title="Link to this definition"></a></dt>
+<dd><p>List models with optional filtering.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;llama2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;llama2&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;ollama&quot;</span><span class="p">,</span> <span class="n">is_local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">local</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">is_local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">local</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
+<span class="go">&#39;llama2&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.list_sources">
+<span class="sig-name descname"><span class="pre">list_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.list_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.list_sources" title="Link to this definition"></a></dt>
+<dd><p>List registered source names.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.models">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">models</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="base.html#aix.ai_models.base.ModelRegistry" title="aix.ai_models.base.ModelRegistry"><span class="pre">ModelRegistry</span></a></em><a class="headerlink" href="#aix.ai_models.manager.ModelManager.models" title="Link to this definition"></a></dt>
+<dd><p>Access to model registry for direct manipulation.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;test&quot;</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">models</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.register_connector">
+<span class="sig-name descname"><span class="pre">register_connector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#aix.ai_models.base.Connector" title="aix.ai_models.base.Connector"><span class="pre">Connector</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.register_connector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.register_connector" title="Link to this definition"></a></dt>
+<dd><p>Register a model connector.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connector</span> <span class="o">=</span> <span class="n">OpenAIConnector</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">register_connector</span><span class="p">(</span><span class="n">connector</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connector</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">connectors</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.register_source">
+<span class="sig-name descname"><span class="pre">register_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#aix.ai_models.base.ModelSource" title="aix.ai_models.base.ModelSource"><span class="pre">ModelSource</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.register_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.register_source" title="Link to this definition"></a></dt>
+<dd><p>Register a model discovery source.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source</span> <span class="o">=</span> <span class="n">OpenRouterSource</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">register_source</span><span class="p">(</span><span class="s2">&quot;openrouter&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;openrouter&quot;</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_sources</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.manager.ModelManager.set_custom_metadata">
+<span class="sig-name descname"><span class="pre">set_custom_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#ModelManager.set_custom_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.ModelManager.set_custom_metadata" title="Link to this definition"></a></dt>
+<dd><p>Set custom metadata on a model.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;openai&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">set_custom_metadata</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="s2">&quot;my_note&quot;</span><span class="p">,</span> <span class="s2">&quot;Use for production&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">custom_metadata</span><span class="p">[</span><span class="s2">&quot;my_note&quot;</span><span class="p">]</span>
+<span class="go">&#39;Use for production&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.ai_models.manager.get_manager">
+<span class="sig-prename descclassname"><span class="pre">aix.ai_models.manager.</span></span><span class="sig-name descname"><span class="pre">get_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#aix.ai_models.manager.ModelManager" title="aix.ai_models.manager.ModelManager"><span class="pre">ModelManager</span></a></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/manager.html#get_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.manager.get_manager" title="Link to this definition"></a></dt>
+<dd><p>Get a pre-configured model manager.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">get_manager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">connectors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="aix.ai_models.examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sources.html" class="btn btn-neutral float-right" title="aix.ai_models.sources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

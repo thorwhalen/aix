@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.batches &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="aix.chat" href="chat.html" />
+    <link rel="prev" title="aix.audio" href="audio.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">aix.audio</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aix.batches</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.batches.BatchProcessor"><code class="docutils literal notranslate"><span class="pre">BatchProcessor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aix.batches.BatchProcessor.clear"><code class="docutils literal notranslate"><span class="pre">BatchProcessor.clear()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.batches.BatchProcessor.process_chats"><code class="docutils literal notranslate"><span class="pre">BatchProcessor.process_chats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.batches.BatchProcessor.process_embeddings"><code class="docutils literal notranslate"><span class="pre">BatchProcessor.process_embeddings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.batches.BatchProcessor.save_results"><code class="docutils literal notranslate"><span class="pre">BatchProcessor.save_results()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.batches.batch_chat"><code class="docutils literal notranslate"><span class="pre">batch_chat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.batches.batch_embeddings"><code class="docutils literal notranslate"><span class="pre">batch_embeddings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.batches.batch_process"><code class="docutils literal notranslate"><span class="pre">batch_process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aix.batches</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/aix/batches.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aix.batches">
+<span id="aix-batches"></span><h1>aix.batches<a class="headerlink" href="#module-aix.batches" title="Link to this heading"></a></h1>
+<p>Batch processing interface for AIX.</p>
+<p>Efficiently process multiple prompts or embeddings in batches.</p>
+<p class="rubric">Examples</p>
+<p>Batch chat:
+&gt;&gt;&gt; from aix.batches import batch_chat
+&gt;&gt;&gt; prompts = [“What is 2+2?”, “What is 3+3?”, “What is 4+4?”]
+&gt;&gt;&gt; results = list(batch_chat(prompts))  # doctest: +SKIP
+&gt;&gt;&gt; len(results)  # doctest: +SKIP
+3</p>
+<p>Batch embeddings:
+&gt;&gt;&gt; from aix.batches import batch_embeddings
+&gt;&gt;&gt; texts = [“hello”, “world”, “foo”, “bar”]
+&gt;&gt;&gt; vectors = list(batch_embeddings(texts))  # doctest: +SKIP
+&gt;&gt;&gt; len(vectors)  # doctest: +SKIP
+4</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.batches.BatchProcessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aix.batches.</span></span><span class="sig-name descname"><span class="pre">BatchProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/batches.html#BatchProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchProcessor" title="Link to this definition"></a></dt>
+<dd><p>Stateful batch processor for managing long-running operations.</p>
+<p>Provides a higher-level interface for batch processing with
+progress tracking, error handling, and result caching.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span> <span class="o">=</span> <span class="n">BatchProcessor</span><span class="p">(</span><span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">process_chats</span><span class="p">(</span><span class="n">prompts</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="s2">&quot;output.json&quot;</span><span class="p">)</span>  
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.batches.BatchProcessor.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/batches.html#BatchProcessor.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchProcessor.clear" title="Link to this definition"></a></dt>
+<dd><p>Clear stored results and errors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.batches.BatchProcessor.process_chats">
+<span class="sig-name descname"><span class="pre">process_chats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/batches.html#BatchProcessor.process_chats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchProcessor.process_chats" title="Link to this definition"></a></dt>
+<dd><p>Process chat prompts and store results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prompts</strong> – Prompts to process</p></li>
+<li><p><strong>**kwargs</strong> – Additional parameters for batch_chat()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of results</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.batches.BatchProcessor.process_embeddings">
+<span class="sig-name descname"><span class="pre">process_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/batches.html#BatchProcessor.process_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchProcessor.process_embeddings" title="Link to this definition"></a></dt>
+<dd><p>Process embeddings and store results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>texts</strong> – Texts to embed</p></li>
+<li><p><strong>**kwargs</strong> – Additional parameters for batch_embeddings()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of embedding vectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.batches.BatchProcessor.save_results">
+<span class="sig-name descname"><span class="pre">save_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/batches.html#BatchProcessor.save_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchProcessor.save_results" title="Link to this definition"></a></dt>
+<dd><p>Save results to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Path to save results (JSON)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.batches.batch_chat">
+<span class="sig-prename descclassname"><span class="pre">aix.batches.</span></span><span class="sig-name descname"><span class="pre">batch_chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">chat_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/batches.html#batch_chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.batch_chat" title="Link to this definition"></a></dt>
+<dd><p>Process multiple chat prompts in batches.</p>
+<p>This function processes multiple prompts efficiently by:
+1. Chunking prompts into batches
+2. Processing batches in parallel where possible
+3. Yielding results in the same order as input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prompts</strong> – Iterable of prompts (strings or message lists)</p></li>
+<li><p><strong>model</strong> – Model to use for all prompts</p></li>
+<li><p><strong>batch_size</strong> – Number of prompts to process in each batch</p></li>
+<li><p><strong>max_workers</strong> – Maximum number of parallel workers</p></li>
+<li><p><strong>show_progress</strong> – If True, print progress information</p></li>
+<li><p><strong>**chat_kwargs</strong> – Additional parameters passed to chat()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p>Responses in the same order as input prompts</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.batches</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_chat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prompts</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="s2">&quot;What is 2+2?&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;What is 3+3?&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;What is 5+5?&quot;</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">batch_chat</span><span class="p">(</span><span class="n">prompts</span><span class="p">))</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>  
+<span class="go">3</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># With specific model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">batch_chat</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">prompts</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">5</span>
+<span class="gp">... </span><span class="p">))</span>  
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Process large dataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">generate_prompts</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;Explain concept </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">batch_chat</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">generate_prompts</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>  
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">result</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.batches.batch_embeddings">
+<span class="sig-prename descclassname"><span class="pre">aix.batches.</span></span><span class="sig-name descname"><span class="pre">batch_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">embedding_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/batches.html#batch_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.batch_embeddings" title="Link to this definition"></a></dt>
+<dd><p>Generate embeddings for multiple texts in batches.</p>
+<p>For efficiency, this function processes embeddings in chunks,
+as most embedding APIs can handle multiple texts per request.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segments</strong> – Iterable of text strings to embed</p></li>
+<li><p><strong>model</strong> – Embedding model to use</p></li>
+<li><p><strong>batch_size</strong> – Number of texts per batch</p></li>
+<li><p><strong>show_progress</strong> – If True, print progress information</p></li>
+<li><p><strong>**embedding_kwargs</strong> – Additional parameters for embeddings()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p>Vector embeddings in the same order as input</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.batches</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_embeddings</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">25</span>  <span class="c1"># 100 texts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vectors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">batch_embeddings</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">texts</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">))</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">vectors</span><span class="p">)</span>  
+<span class="go">100</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Process large dataset efficiently</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">read_documents</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="c1"># Generator that yields documents</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">yield</span> <span class="sa">f</span><span class="s2">&quot;Document </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> content&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_vectors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">vec</span> <span class="ow">in</span> <span class="n">batch_embeddings</span><span class="p">(</span><span class="n">read_documents</span><span class="p">()):</span>  
+<span class="gp">... </span>    <span class="n">all_vectors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.batches.batch_process">
+<span class="sig-prename descclassname"><span class="pre">aix.batches.</span></span><span class="sig-name descname"><span class="pre">batch_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_attempts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/batches.html#batch_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.batch_process" title="Link to this definition"></a></dt>
+<dd><p>Generic batch processing with parallel execution and retries.</p>
+<p>This is a general-purpose batch processor that can be used for
+any operation, not just chat or embeddings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>items</strong> – Items to process</p></li>
+<li><p><strong>process_func</strong> – Function to apply to each item</p></li>
+<li><p><strong>batch_size</strong> – Batch size for chunking</p></li>
+<li><p><strong>max_workers</strong> – Maximum parallel workers</p></li>
+<li><p><strong>show_progress</strong> – Show progress information</p></li>
+<li><p><strong>retry_attempts</strong> – Number of retry attempts on failure</p></li>
+<li><p><strong>retry_delay</strong> – Delay between retries (seconds)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p>Results in same order as input</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.batches</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_process</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.chat</span><span class="w"> </span><span class="kn">import</span> <span class="n">chat</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Custom processing function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">analyze_sentiment</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">chat</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Analyze sentiment: </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;I love this!&quot;</span><span class="p">,</span> <span class="s2">&quot;This is terrible&quot;</span><span class="p">,</span> <span class="s2">&quot;It&#39;s okay&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">batch_process</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">texts</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">analyze_sentiment</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">5</span>
+<span class="gp">... </span><span class="p">))</span>  
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># With retries for flaky operations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">flaky_api_call</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># Some API that might fail</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">call_api</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">batch_process</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">items</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">flaky_api_call</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">retry_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">retry_delay</span><span class="o">=</span><span class="mf">2.0</span>
+<span class="gp">... </span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="audio.html" class="btn btn-neutral float-left" title="aix.audio" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="chat.html" class="btn btn-neutral float-right" title="aix.chat" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

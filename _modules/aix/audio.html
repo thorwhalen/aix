@@ -1,0 +1,650 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.audio &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.audio</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.audio</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Audio operations interface for AIX.</span>
+
+<span class="sd">Provides text-to-speech (TTS) and speech-to-text (transcription) capabilities.</span>
+
+<span class="sd">Examples:</span>
+<span class="sd">    Text to speech:</span>
+<span class="sd">    &gt;&gt;&gt; from aix.audio import text_to_speech</span>
+<span class="sd">    &gt;&gt;&gt; audio = text_to_speech(&quot;Hello, world!&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; audio.save(&quot;hello.mp3&quot;)  # doctest: +SKIP</span>
+
+<span class="sd">    Transcription:</span>
+<span class="sd">    &gt;&gt;&gt; from aix.audio import transcribe</span>
+<span class="sd">    &gt;&gt;&gt; text = transcribe(&quot;speech.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; print(text)  # doctest: +SKIP</span>
+<span class="sd">    &#39;Hello, this is a test recording.&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">BinaryIO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mimetypes</span>
+
+<span class="c1"># Import LiteLLM but keep it private</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcription</span> <span class="k">as</span> <span class="n">_litellm_transcription</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">speech</span> <span class="k">as</span> <span class="n">_litellm_speech</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">_litellm_transcription</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_litellm_speech</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="c1"># Default configurations</span>
+<span class="n">DFLT_TTS_MODEL</span> <span class="o">=</span> <span class="s1">&#39;tts-1&#39;</span>
+<span class="n">DFLT_TTS_VOICE</span> <span class="o">=</span> <span class="s1">&#39;alloy&#39;</span>  <span class="c1"># Options: alloy, echo, fable, onyx, nova, shimmer</span>
+<span class="n">DFLT_TTS_SPEED</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">DFLT_TRANSCRIPTION_MODEL</span> <span class="o">=</span> <span class="s1">&#39;whisper-1&#39;</span>
+
+
+<div class="viewcode-block" id="GeneratedAudio">
+<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.GeneratedAudio">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GeneratedAudio</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper for generated audio.</span>
+
+<span class="sd">    Provides convenient access to audio data and saving.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; audio = GeneratedAudio(data=b&#39;...&#39;, model=&quot;tts-1&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; audio.save(&quot;output.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; data = audio.as_bytes()  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">voice</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mp3&#39;</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize generated audio.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: Audio data as bytes</span>
+<span class="sd">            model: Model used for generation</span>
+<span class="sd">            text: Original text</span>
+<span class="sd">            voice: Voice used</span>
+<span class="sd">            format: Audio format (mp3, opus, aac, flac)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voice</span> <span class="o">=</span> <span class="n">voice</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="nb">format</span>
+
+<div class="viewcode-block" id="GeneratedAudio.as_bytes">
+<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.GeneratedAudio.as_bytes">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get audio as bytes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Audio data as bytes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="GeneratedAudio.save">
+<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.GeneratedAudio.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save audio to file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path: Output file path</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; audio.save(&quot;output.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">            &gt;&gt;&gt; audio.save(&quot;speech.wav&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GeneratedAudio.play">
+<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.GeneratedAudio.play">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Play the audio.</span>
+
+<span class="sd">        Requires a system audio player or library like pygame/pyaudio.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; audio.play()  # doctest: +SKIP</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Try to play using system tools</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+        <span class="c1"># Save to temporary file</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">temp_path</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Try different players based on platform</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;darwin&#39;</span><span class="p">:</span>  <span class="c1"># macOS</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s1">&#39;afplay&#39;</span><span class="p">,</span> <span class="n">temp_path</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;linux&#39;</span><span class="p">:</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s1">&#39;aplay&#39;</span><span class="p">,</span> <span class="n">temp_path</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>  <span class="c1"># Windows</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">startfile</span><span class="p">(</span><span class="n">temp_path</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># Clean up temp file</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">temp_path</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;String representation.&quot;&quot;&quot;</span>
+        <span class="n">size_kb</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1024</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;GeneratedAudio(format=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="si">}</span><span class="s2">, size=</span><span class="si">{</span><span class="n">size_kb</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">KB, voice=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="TranscriptionResult">
+<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.TranscriptionResult">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TranscriptionResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of audio transcription.</span>
+
+<span class="sd">    Contains the transcribed text and optional metadata like segments and timestamps.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; result = TranscriptionResult(text=&quot;Hello world&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; print(result.text)  # doctest: +SKIP</span>
+<span class="sd">        &#39;Hello world&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">segments</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize transcription result.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text: Transcribed text</span>
+<span class="sd">            language: Detected language</span>
+<span class="sd">            duration: Audio duration in seconds</span>
+<span class="sd">            segments: List of transcript segments with timestamps</span>
+<span class="sd">            model: Model used for transcription</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">language</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segments</span> <span class="o">=</span> <span class="n">segments</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get text representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;String representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;TranscriptionResult(text=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">...&#39;, language=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">language</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="text_to_speech">
+<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.text_to_speech">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">text_to_speech</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">voice</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">speed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mp3&#39;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedAudio</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert text to speech audio.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text: Text to convert to speech</span>
+<span class="sd">        model: TTS model to use (e.g., &#39;tts-1&#39;, &#39;tts-1-hd&#39;)</span>
+<span class="sd">        voice: Voice to use (&#39;alloy&#39;, &#39;echo&#39;, &#39;fable&#39;, &#39;onyx&#39;, &#39;nova&#39;, &#39;shimmer&#39;)</span>
+<span class="sd">        speed: Playback speed (0.25 to 4.0)</span>
+<span class="sd">        response_format: Audio format (&#39;mp3&#39;, &#39;opus&#39;, &#39;aac&#39;, &#39;flac&#39;)</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedAudio object</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If LiteLLM is not installed</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.audio import text_to_speech</span>
+<span class="sd">        &gt;&gt;&gt; audio = text_to_speech(&quot;Hello, how are you?&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; audio.save(&quot;greeting.mp3&quot;)  # doctest: +SKIP</span>
+
+<span class="sd">        &gt;&gt;&gt; # Different voice and speed</span>
+<span class="sd">        &gt;&gt;&gt; audio = text_to_speech(</span>
+<span class="sd">        ...     &quot;This is a test.&quot;,</span>
+<span class="sd">        ...     voice=&quot;nova&quot;,</span>
+<span class="sd">        ...     speed=1.2</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+
+<span class="sd">        &gt;&gt;&gt; # High quality</span>
+<span class="sd">        &gt;&gt;&gt; audio = text_to_speech(</span>
+<span class="sd">        ...     &quot;Important announcement&quot;,</span>
+<span class="sd">        ...     model=&quot;tts-1-hd&quot;,</span>
+<span class="sd">        ...     voice=&quot;onyx&quot;</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_litellm_speech</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;LiteLLM is required for text-to-speech. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Apply defaults</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_TTS_MODEL</span>
+    <span class="n">voice</span> <span class="o">=</span> <span class="n">voice</span> <span class="ow">or</span> <span class="n">DFLT_TTS_VOICE</span>
+    <span class="n">speed</span> <span class="o">=</span> <span class="n">speed</span> <span class="k">if</span> <span class="n">speed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">DFLT_TTS_SPEED</span>
+
+    <span class="c1"># Build parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s1">&#39;input&#39;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span>
+        <span class="s1">&#39;voice&#39;</span><span class="p">:</span> <span class="n">voice</span><span class="p">,</span>
+        <span class="s1">&#39;response_format&#39;</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
+        <span class="s1">&#39;speed&#39;</span><span class="p">:</span> <span class="n">speed</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Add additional kwargs</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Call LiteLLM</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_speech</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="c1"># Response is audio data (bytes)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">audio_data</span> <span class="o">=</span> <span class="n">response</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Some responses might be objects with content</span>
+        <span class="n">audio_data</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">GeneratedAudio</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">audio_data</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+        <span class="n">voice</span><span class="o">=</span><span class="n">voice</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">response_format</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="transcribe">
+<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.transcribe">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">transcribe</span><span class="p">(</span>
+    <span class="n">audio</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">timestamp_granularities</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TranscriptionResult</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transcribe audio to text.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        audio: Audio file path, file object, or bytes</span>
+<span class="sd">        model: Transcription model (e.g., &#39;whisper-1&#39;)</span>
+<span class="sd">        language: Source language (ISO-639-1 code, e.g., &#39;en&#39;, &#39;es&#39;)</span>
+<span class="sd">        prompt: Optional text to guide the model&#39;s style</span>
+<span class="sd">        response_format: Format of response (&#39;text&#39;, &#39;json&#39;, &#39;verbose_json&#39;, &#39;srt&#39;, &#39;vtt&#39;)</span>
+<span class="sd">        temperature: Sampling temperature (0 to 1)</span>
+<span class="sd">        timestamp_granularities: List of timestamp types (&#39;word&#39;, &#39;segment&#39;)</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        If response_format=&#39;text&#39;: String with transcription</span>
+<span class="sd">        Otherwise: TranscriptionResult object with metadata</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If LiteLLM is not installed</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.audio import transcribe</span>
+<span class="sd">        &gt;&gt;&gt; text = transcribe(&quot;recording.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; print(text)  # doctest: +SKIP</span>
+<span class="sd">        &#39;This is the transcribed text.&#39;</span>
+
+<span class="sd">        &gt;&gt;&gt; # With language hint</span>
+<span class="sd">        &gt;&gt;&gt; text = transcribe(&quot;spanish.mp3&quot;, language=&quot;es&quot;)  # doctest: +SKIP</span>
+
+<span class="sd">        &gt;&gt;&gt; # Get detailed results</span>
+<span class="sd">        &gt;&gt;&gt; result = transcribe(</span>
+<span class="sd">        ...     &quot;meeting.mp3&quot;,</span>
+<span class="sd">        ...     response_format=&quot;verbose_json&quot;</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; print(result.text)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; print(result.language)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; for segment in result.segments:  # doctest: +SKIP</span>
+<span class="sd">        ...     print(f&quot;{segment[&#39;start&#39;]}: {segment[&#39;text&#39;]}&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_litellm_transcription</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;LiteLLM is required for transcription. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Handle different audio input types</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+        <span class="c1"># File path</span>
+        <span class="n">audio_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">audio_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">audio_path</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="c1"># Raw bytes</span>
+        <span class="n">audio_data</span> <span class="o">=</span> <span class="n">audio</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;audio.mp3&#39;</span>  <span class="c1"># Default filename</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># File-like object</span>
+        <span class="n">audio_data</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;audio.mp3&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Apply defaults</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_TRANSCRIPTION_MODEL</span>
+
+    <span class="c1"># Build parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">audio_data</span><span class="p">),</span>
+        <span class="s1">&#39;response_format&#39;</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">language</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;language&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">language</span>
+    <span class="k">if</span> <span class="n">prompt</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;prompt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prompt</span>
+    <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
+    <span class="k">if</span> <span class="n">timestamp_granularities</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;timestamp_granularities&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">timestamp_granularities</span>
+
+    <span class="c1"># Add additional kwargs</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Call LiteLLM</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_transcription</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="c1"># Parse response based on format</span>
+    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s1">&#39;text&#39;</span><span class="p">:</span>
+        <span class="c1"># Simple text response</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">response</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Structured response</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># Fallback if we got text anyway</span>
+            <span class="k">return</span> <span class="n">TranscriptionResult</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">response</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="c1"># Extract metadata</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">language</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;language&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;duration&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">segments</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;segments&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">TranscriptionResult</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span>
+            <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span>
+            <span class="n">segments</span><span class="o">=</span><span class="n">segments</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="transcribe_with_timestamps">
+<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.transcribe_with_timestamps">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">transcribe_with_timestamps</span><span class="p">(</span>
+    <span class="n">audio</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">granularity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;segment&#39;</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TranscriptionResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transcribe audio with detailed timestamps.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        audio: Audio file path, file object, or bytes</span>
+<span class="sd">        granularity: Timestamp granularity (&#39;word&#39; or &#39;segment&#39;)</span>
+<span class="sd">        model: Transcription model</span>
+<span class="sd">        **kwargs: Additional parameters for transcribe()</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        TranscriptionResult with detailed segments</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.audio import transcribe_with_timestamps</span>
+<span class="sd">        &gt;&gt;&gt; result = transcribe_with_timestamps(&quot;lecture.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; for segment in result.segments:  # doctest: +SKIP</span>
+<span class="sd">        ...     start = segment[&#39;start&#39;]</span>
+<span class="sd">        ...     end = segment[&#39;end&#39;]</span>
+<span class="sd">        ...     text = segment[&#39;text&#39;]</span>
+<span class="sd">        ...     print(f&quot;[{start:.2f}-{end:.2f}] {text}&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">transcribe</span><span class="p">(</span>
+        <span class="n">audio</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">response_format</span><span class="o">=</span><span class="s1">&#39;verbose_json&#39;</span><span class="p">,</span>
+        <span class="n">timestamp_granularities</span><span class="o">=</span><span class="p">[</span><span class="n">granularity</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="translate_audio">
+<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.translate_audio">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">translate_audio</span><span class="p">(</span>
+    <span class="n">audio</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate audio from any language to English.</span>
+
+<span class="sd">    Note: Currently uses Whisper&#39;s translation capability which translates to English.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        audio: Audio file path, file object, or bytes</span>
+<span class="sd">        model: Translation model (typically &#39;whisper-1&#39;)</span>
+<span class="sd">        prompt: Optional text to guide translation</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Translated text in English</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.audio import translate_audio</span>
+<span class="sd">        &gt;&gt;&gt; english_text = translate_audio(&quot;spanish_audio.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; print(english_text)  # doctest: +SKIP</span>
+<span class="sd">        &#39;This is the English translation.&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_litellm_transcription</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;LiteLLM is required for audio translation. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Handle different audio input types (same as transcribe)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+        <span class="n">audio_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">audio_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">audio_path</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">audio_data</span> <span class="o">=</span> <span class="n">audio</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;audio.mp3&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">audio_data</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;audio.mp3&#39;</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_TRANSCRIPTION_MODEL</span>
+
+    <span class="c1"># Use translation endpoint</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">audio_data</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">prompt</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;prompt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prompt</span>
+
+    <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Note: LiteLLM may have a separate translation function</span>
+    <span class="c1"># For now, we use transcription with task=&#39;translate&#39;</span>
+    <span class="c1"># This depends on provider support</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">translation</span> <span class="k">as</span> <span class="n">_litellm_translation</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_translation</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+        <span class="c1"># Fallback: some models support translation via transcription</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;translate&#39;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_transcription</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">response</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

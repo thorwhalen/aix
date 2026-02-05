@@ -1,0 +1,450 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.ai_models.manager &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/aix/video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.ai_models.manager</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.ai_models.manager</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Unified model management interface.</span>
+
+<span class="sd">Provides a high-level API for managing AI models across providers.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.ai_models.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">ModelRegistry</span><span class="p">,</span> <span class="n">ConnectorRegistry</span><span class="p">,</span> <span class="n">ModelSource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.ai_models.sources</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Connector</span><span class="p">,</span>
+    <span class="n">OpenRouterSource</span><span class="p">,</span>
+    <span class="n">OllamaSource</span><span class="p">,</span>
+    <span class="n">ProviderAPISource</span><span class="p">,</span>
+    <span class="n">OpenAIConnector</span><span class="p">,</span>
+    <span class="n">OpenRouterConnector</span><span class="p">,</span>
+    <span class="n">LangChainConnector</span><span class="p">,</span>
+    <span class="n">OllamaConnector</span><span class="p">,</span>
+    <span class="n">DSPyConnector</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="ModelManager">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModelManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unified interface for AI model management.</span>
+
+<span class="sd">    Combines model registry, sources, and connectors into a single facade.</span>
+
+<span class="sd">    &gt;&gt;&gt; manager = ModelManager()</span>
+<span class="sd">    &gt;&gt;&gt; manager.register_connector(OpenAIConnector())</span>
+<span class="sd">    &gt;&gt;&gt; len(manager.connectors)</span>
+<span class="sd">    1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">storage_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize model manager with optional persistent storage.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            storage_path: Path to JSON file for persisting model registry</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span> <span class="o">=</span> <span class="n">ModelRegistry</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">storage_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectors</span> <span class="o">=</span> <span class="n">ConnectorRegistry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sources</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModelSource</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">models</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelRegistry</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Access to model registry for direct manipulation.</span>
+
+<span class="sd">        &gt;&gt;&gt; manager = ModelManager()</span>
+<span class="sd">        &gt;&gt;&gt; manager.models[&quot;test&quot;] = Model(id=&quot;test&quot;, provider=&quot;test&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; &quot;test&quot; in manager.models</span>
+<span class="sd">        True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">connectors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConnectorRegistry</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Access to connector registry.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectors</span>
+
+<div class="viewcode-block" id="ModelManager.register_source">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.register_source">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">ModelSource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register a model discovery source.</span>
+
+<span class="sd">        &gt;&gt;&gt; manager = ModelManager()</span>
+<span class="sd">        &gt;&gt;&gt; source = OpenRouterSource()</span>
+<span class="sd">        &gt;&gt;&gt; manager.register_source(&quot;openrouter&quot;, source)</span>
+<span class="sd">        &gt;&gt;&gt; &quot;openrouter&quot; in manager.list_sources()</span>
+<span class="sd">        True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sources</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.register_connector">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.register_connector">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_connector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector</span><span class="p">:</span> <span class="n">Connector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register a model connector.</span>
+
+<span class="sd">        &gt;&gt;&gt; manager = ModelManager()</span>
+<span class="sd">        &gt;&gt;&gt; connector = OpenAIConnector()</span>
+<span class="sd">        &gt;&gt;&gt; manager.register_connector(connector)</span>
+<span class="sd">        &gt;&gt;&gt; connector.name in manager.connectors</span>
+<span class="sd">        True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectors</span><span class="p">[</span><span class="n">connector</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">connector</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.list_sources">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.list_sources">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List registered source names.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sources</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.discover_from_source">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.discover_from_source">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">discover_from_source</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">source_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">auto_register</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Model</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Discover models from a registered source.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            source_name: Name of registered source</span>
+<span class="sd">            auto_register: If True, automatically add discovered models to registry</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of discovered models</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">source_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sources</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Source &#39;</span><span class="si">{</span><span class="n">source_name</span><span class="si">}</span><span class="s2">&#39; not registered&quot;</span><span class="p">)</span>
+
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sources</span><span class="p">[</span><span class="n">source_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Discovering models from </span><span class="si">{</span><span class="n">source_name</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="n">discovered</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">discover_models</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  -&gt; Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">discovered</span><span class="p">)</span><span class="si">}</span><span class="s2"> models&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">auto_register</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">discovered</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span>
+
+        <span class="k">return</span> <span class="n">discovered</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.discover_all">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.discover_all">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">discover_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">auto_register</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Model</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Discover models from all registered sources.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict mapping source name to list of discovered models</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">source_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sources</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">source_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discover_from_source</span><span class="p">(</span>
+                <span class="n">source_name</span><span class="p">,</span> <span class="n">auto_register</span><span class="o">=</span><span class="n">auto_register</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.list_models">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.list_models">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_models</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">is_local</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">min_context_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_context_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">has_capabilities</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">tags</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">custom_filter</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Model</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Model</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List models with optional filtering.</span>
+
+<span class="sd">        &gt;&gt;&gt; manager = ModelManager()</span>
+<span class="sd">        &gt;&gt;&gt; manager.models[&quot;gpt-4&quot;] = Model(id=&quot;gpt-4&quot;, provider=&quot;openai&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; manager.models[&quot;llama2&quot;] = Model(id=&quot;llama2&quot;, provider=&quot;ollama&quot;, is_local=True)</span>
+<span class="sd">        &gt;&gt;&gt; local = manager.list_models(is_local=True)</span>
+<span class="sd">        &gt;&gt;&gt; len(local)</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; local[0].id</span>
+<span class="sd">        &#39;llama2&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
+            <span class="n">is_local</span><span class="o">=</span><span class="n">is_local</span><span class="p">,</span>
+            <span class="n">min_context_size</span><span class="o">=</span><span class="n">min_context_size</span><span class="p">,</span>
+            <span class="n">max_context_size</span><span class="o">=</span><span class="n">max_context_size</span><span class="p">,</span>
+            <span class="n">has_capabilities</span><span class="o">=</span><span class="n">has_capabilities</span><span class="p">,</span>
+            <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span>
+            <span class="n">custom_filter</span><span class="o">=</span><span class="n">custom_filter</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.get_model">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.get_model">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Model</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a specific model by ID.</span>
+
+<span class="sd">        &gt;&gt;&gt; manager = ModelManager()</span>
+<span class="sd">        &gt;&gt;&gt; manager.models[&quot;gpt-4&quot;] = Model(id=&quot;gpt-4&quot;, provider=&quot;openai&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; model = manager.get_model(&quot;gpt-4&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; model.id</span>
+<span class="sd">        &#39;gpt-4&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span><span class="p">[</span><span class="n">model_id</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.get_connector_metadata">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.get_connector_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_connector_metadata</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">connector_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get formatted metadata for a specific connector.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_id: ID of the model</span>
+<span class="sd">            connector_name: Name of the connector to format for</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict with metadata formatted for the specified connector</span>
+
+<span class="sd">        &gt;&gt;&gt; manager = ModelManager()</span>
+<span class="sd">        &gt;&gt;&gt; manager.models[&quot;gpt-4&quot;] = Model(id=&quot;gpt-4&quot;, provider=&quot;openai&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; manager.register_connector(OpenAIConnector())</span>
+<span class="sd">        &gt;&gt;&gt; meta = manager.get_connector_metadata(&quot;gpt-4&quot;, &quot;openai&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; meta[&quot;model&quot;]</span>
+<span class="sd">        &#39;gpt-4&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span><span class="p">[</span><span class="n">model_id</span><span class="p">]</span>
+        <span class="n">connector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectors</span><span class="p">[</span><span class="n">connector_name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">connector</span><span class="o">.</span><span class="n">format_metadata</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.add_model_tag">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.add_model_tag">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_model_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">tags</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add tags to a model.</span>
+
+<span class="sd">        &gt;&gt;&gt; manager = ModelManager()</span>
+<span class="sd">        &gt;&gt;&gt; manager.models[&quot;gpt-4&quot;] = Model(id=&quot;gpt-4&quot;, provider=&quot;openai&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; manager.add_model_tag(&quot;gpt-4&quot;, &quot;fast&quot;, &quot;expensive&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; &quot;fast&quot; in manager.models[&quot;gpt-4&quot;].tags</span>
+<span class="sd">        True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span><span class="p">[</span><span class="n">model_id</span><span class="p">]</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span>
+        <span class="c1"># Trigger save if using persistent storage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span><span class="p">[</span><span class="n">model_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.set_custom_metadata">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.set_custom_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_custom_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set custom metadata on a model.</span>
+
+<span class="sd">        &gt;&gt;&gt; manager = ModelManager()</span>
+<span class="sd">        &gt;&gt;&gt; manager.models[&quot;gpt-4&quot;] = Model(id=&quot;gpt-4&quot;, provider=&quot;openai&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; manager.set_custom_metadata(&quot;gpt-4&quot;, &quot;my_note&quot;, &quot;Use for production&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; manager.models[&quot;gpt-4&quot;].custom_metadata[&quot;my_note&quot;]</span>
+<span class="sd">        &#39;Use for production&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span><span class="p">[</span><span class="n">model_id</span><span class="p">]</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">custom_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="c1"># Trigger save</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span><span class="p">[</span><span class="n">model_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.create_model_group">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.create_model_group">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_model_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_ids</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a named group of models using tags.</span>
+
+<span class="sd">        &gt;&gt;&gt; manager = ModelManager()</span>
+<span class="sd">        &gt;&gt;&gt; manager.models[&quot;gpt-4&quot;] = Model(id=&quot;gpt-4&quot;, provider=&quot;openai&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; manager.models[&quot;claude-3&quot;] = Model(id=&quot;claude-3&quot;, provider=&quot;anthropic&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; manager.create_model_group(&quot;premium&quot;, [&quot;gpt-4&quot;, &quot;claude-3&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; premium = manager.list_models(tags=[&quot;group:premium&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; len(premium)</span>
+<span class="sd">        2</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">group_tag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;group:</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">model_id</span> <span class="ow">in</span> <span class="n">model_ids</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_model_tag</span><span class="p">(</span><span class="n">model_id</span><span class="p">,</span> <span class="n">group_tag</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelManager.list_model_groups">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.ModelManager.list_model_groups">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_model_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all model groups.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Set of group names (without &#39;group:&#39; prefix)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registry</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;group:&quot;</span><span class="p">):</span>
+                    <span class="n">groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tag</span><span class="p">[</span><span class="mi">6</span><span class="p">:])</span>  <span class="c1"># Remove &#39;group:&#39; prefix</span>
+        <span class="k">return</span> <span class="n">groups</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_default_manager</span><span class="p">(</span><span class="n">storage_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a manager with common sources and connectors pre-registered.</span>
+
+<span class="sd">    Helper function to set up a fully configured manager.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">ModelManager</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">storage_path</span><span class="p">)</span>
+
+    <span class="c1"># Register common connectors</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">register_connector</span><span class="p">(</span><span class="n">OpenAIConnector</span><span class="p">())</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">register_connector</span><span class="p">(</span><span class="n">OpenRouterConnector</span><span class="p">())</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">register_connector</span><span class="p">(</span><span class="n">LangChainConnector</span><span class="p">())</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">register_connector</span><span class="p">(</span><span class="n">OllamaConnector</span><span class="p">())</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">register_connector</span><span class="p">(</span><span class="n">DSPyConnector</span><span class="p">())</span>
+
+    <span class="c1"># Register common sources</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">register_source</span><span class="p">(</span><span class="s2">&quot;openrouter&quot;</span><span class="p">,</span> <span class="n">OpenRouterSource</span><span class="p">())</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">register_source</span><span class="p">(</span><span class="s2">&quot;ollama&quot;</span><span class="p">,</span> <span class="n">OllamaSource</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">manager</span>
+
+
+<span class="c1"># Convenience function for quick setup</span>
+<div class="viewcode-block" id="get_manager">
+<a class="viewcode-back" href="../../../module_docs/aix/ai_models/manager.html#aix.ai_models.get_manager">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_manager</span><span class="p">(</span><span class="n">storage_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a pre-configured model manager.</span>
+
+<span class="sd">    &gt;&gt;&gt; manager = get_manager()</span>
+<span class="sd">    &gt;&gt;&gt; len(manager.connectors) &gt; 0</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">storage_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">storage_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">storage_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_create_default_manager</span><span class="p">(</span><span class="n">storage_path</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

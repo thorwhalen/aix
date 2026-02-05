@@ -1,0 +1,858 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.prompts &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.prompts</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.prompts</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Prompt-based function creation for AIX.</span>
+
+<span class="sd">Transform text prompts into callable Python functions with automatic parameter extraction.</span>
+
+<span class="sd">This module provides the core functionality for creating reusable AI-powered functions</span>
+<span class="sd">from natural language prompts. It supports both text generation and structured output.</span>
+
+<span class="sd">Examples:</span>
+<span class="sd">    Create a simple text function:</span>
+<span class="sd">    &gt;&gt;&gt; from aix.prompts import prompt_func</span>
+<span class="sd">    &gt;&gt;&gt; translate = prompt_func(&quot;Translate to French: {text}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; translate(text=&quot;Hello world&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &#39;Bonjour le monde&#39;</span>
+
+<span class="sd">    Create a function with structured output:</span>
+<span class="sd">    &gt;&gt;&gt; extract_person = prompt_func(</span>
+<span class="sd">    ...     &quot;Extract person information from: {text}&quot;,</span>
+<span class="sd">    ...     output_schema={&quot;name&quot;: str, &quot;age&quot;: int}</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; extract_person(text=&quot;Alice is 30 years old&quot;)  # doctest: +SKIP</span>
+<span class="sd">    {&#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 30}</span>
+
+<span class="sd">    Multiple parameters:</span>
+<span class="sd">    &gt;&gt;&gt; compare = prompt_func(</span>
+<span class="sd">    ...     &quot;Compare {item1} and {item2} in terms of {aspect}&quot;</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; compare(item1=&quot;Python&quot;, item2=&quot;JavaScript&quot;, aspect=&quot;performance&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &#39;Python generally has better...&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">get_type_hints</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">inspect</span><span class="w"> </span><span class="kn">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">Parameter</span>
+
+<span class="c1"># Import from aix.chat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.chat</span><span class="w"> </span><span class="kn">import</span> <span class="n">chat</span><span class="p">,</span> <span class="n">DFLT_CHAT_MODEL</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_extract_template_vars</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract variable names from a template string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        template: Template string with {var} placeholders</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of variable names found in template</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _extract_template_vars(&quot;Translate {text} to {language}&quot;)</span>
+<span class="sd">        [&#39;text&#39;, &#39;language&#39;]</span>
+
+<span class="sd">        &gt;&gt;&gt; _extract_template_vars(&quot;No variables here&quot;)</span>
+<span class="sd">        []</span>
+
+<span class="sd">        &gt;&gt;&gt; _extract_template_vars(&quot;{a} {b} {a}&quot;)  # Duplicates removed</span>
+<span class="sd">        [&#39;a&#39;, &#39;b&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Find all {var} patterns</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\{(\w+)\}&#39;</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+    <span class="c1"># Remove duplicates while preserving order</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_format_prompt</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a prompt template with given parameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        template: Template string</span>
+<span class="sd">        **kwargs: Values for template variables</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Formatted prompt string</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _format_prompt(&quot;Hello {name}&quot;, name=&quot;Alice&quot;)</span>
+<span class="sd">        &#39;Hello Alice&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_schema_to_json_schema</span><span class="p">(</span><span class="n">schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a simple schema to JSON Schema format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        schema: Either a dict mapping field names to types, or a type annotation</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        JSON Schema dict</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _schema_to_json_schema({&quot;name&quot;: str, &quot;age&quot;: int})</span>
+<span class="sd">        {&#39;type&#39;: &#39;object&#39;, &#39;properties&#39;: {&#39;name&#39;: {&#39;type&#39;: &#39;string&#39;}, &#39;age&#39;: {&#39;type&#39;: &#39;integer&#39;}}, &#39;required&#39;: [&#39;name&#39;, &#39;age&#39;]}</span>
+
+<span class="sd">        &gt;&gt;&gt; _schema_to_json_schema(str)</span>
+<span class="sd">        {&#39;type&#39;: &#39;string&#39;}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="c1"># Dictionary mapping field names to types</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_type</span> <span class="ow">in</span> <span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">properties</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_type_to_json_type</span><span class="p">(</span><span class="n">field_type</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">,</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Single type</span>
+        <span class="k">return</span> <span class="n">_type_to_json_type</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_type_to_json_type</span><span class="p">(</span><span class="n">python_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert Python type to JSON Schema type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        python_type: Python type (str, int, float, bool, list, dict)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        JSON Schema type definition</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">type_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nb">str</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+        <span class="nb">int</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">},</span>
+        <span class="nb">float</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">},</span>
+        <span class="nb">bool</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">},</span>
+        <span class="nb">list</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">},</span>
+        <span class="nb">dict</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">type_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">python_type</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">})</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_structured_output</span><span class="p">(</span><span class="n">response_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse structured output from LLM response.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        response_text: Raw text response from LLM</span>
+<span class="sd">        schema: Expected schema</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Parsed structured data</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If response cannot be parsed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Try to extract JSON from response</span>
+    <span class="c1"># Handle cases where LLM wraps JSON in markdown code blocks</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">response_text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="c1"># Remove markdown code blocks if present</span>
+    <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;```&quot;</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="c1"># Remove first and last lines (``` markers)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">):</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Failed to parse structured output. Expected JSON, got: </span><span class="si">{</span><span class="n">text</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+
+<div class="viewcode-block" id="prompt_func">
+<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.prompt_func">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">prompt_func</span><span class="p">(</span>
+    <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">output_schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">chat_kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a callable function from a prompt template.</span>
+
+<span class="sd">    This is the main function for creating prompt-based functions. It automatically</span>
+<span class="sd">    detects parameters from the template and creates a function with those parameters.</span>
+
+<span class="sd">    Without output_schema: Returns text</span>
+<span class="sd">    With output_schema: Returns structured data (dict, list, etc.)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        template: Prompt template with {var} placeholders for parameters</span>
+<span class="sd">        output_schema: Optional schema for structured output. Can be:</span>
+<span class="sd">            - Dict mapping field names to types: {&quot;name&quot;: str, &quot;age&quot;: int}</span>
+<span class="sd">            - A single type for simple outputs: str, int, list, etc.</span>
+<span class="sd">            - None for plain text output (default)</span>
+<span class="sd">        model: Model to use for this function</span>
+<span class="sd">        temperature: Temperature for generation</span>
+<span class="sd">        **chat_kwargs: Additional parameters passed to chat()</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Callable function with parameters derived from template</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; # Simple text generation</span>
+<span class="sd">        &gt;&gt;&gt; summarize = prompt_func(&quot;Summarize this text: {text}&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; summarize(text=&quot;Long article...&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;Brief summary...&#39;</span>
+
+<span class="sd">        &gt;&gt;&gt; # Structured output</span>
+<span class="sd">        &gt;&gt;&gt; extract = prompt_func(</span>
+<span class="sd">        ...     &quot;Extract contact info from: {text}&quot;,</span>
+<span class="sd">        ...     output_schema={&quot;name&quot;: str, &quot;email&quot;: str, &quot;phone&quot;: str}</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; result = extract(text=&quot;Contact John at john@example.com, 555-1234&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; result[&#39;name&#39;]  # doctest: +SKIP</span>
+<span class="sd">        &#39;John&#39;</span>
+
+<span class="sd">        &gt;&gt;&gt; # Multiple parameters</span>
+<span class="sd">        &gt;&gt;&gt; compare = prompt_func(</span>
+<span class="sd">        ...     &quot;Compare {item1} and {item2} in terms of {aspect}. &quot;</span>
+<span class="sd">        ...     &quot;Keep it under {word_limit} words.&quot;</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; compare(</span>
+<span class="sd">        ...     item1=&quot;Python&quot;,</span>
+<span class="sd">        ...     item2=&quot;Java&quot;,</span>
+<span class="sd">        ...     aspect=&quot;learning curve&quot;,</span>
+<span class="sd">        ...     word_limit=50</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &#39;Python has a gentler learning curve...&#39;</span>
+
+<span class="sd">        &gt;&gt;&gt; # With specific model</span>
+<span class="sd">        &gt;&gt;&gt; creative_writer = prompt_func(</span>
+<span class="sd">        ...     &quot;Write a creative story about {topic}&quot;,</span>
+<span class="sd">        ...     model=&quot;gpt-4o&quot;,</span>
+<span class="sd">        ...     temperature=1.5</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; creative_writer(topic=&quot;a time-traveling cat&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;Once upon a time, there was a cat named Whiskers...&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract parameter names from template</span>
+    <span class="n">param_names</span> <span class="o">=</span> <span class="n">_extract_template_vars</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+
+    <span class="c1"># Build the actual function</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generated_function</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Validate parameters</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">param</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Missing required parameter: </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Required parameters: </span><span class="si">{</span><span class="n">param_names</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Format the prompt</span>
+        <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">_format_prompt</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># If structured output is requested, modify the prompt</span>
+        <span class="k">if</span> <span class="n">output_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">json_schema</span> <span class="o">=</span> <span class="n">_schema_to_json_schema</span><span class="p">(</span><span class="n">output_schema</span><span class="p">)</span>
+            <span class="c1"># Add instruction for JSON output</span>
+            <span class="n">structured_prompt</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">formatted_prompt</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Respond with valid JSON matching this schema: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_schema</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Only return the JSON, no additional text.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span>
+                <span class="n">structured_prompt</span><span class="p">,</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span> <span class="ow">or</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># Lower temp for structured output</span>
+                <span class="o">**</span><span class="n">chat_kwargs</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">_parse_structured_output</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">json_schema</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Plain text output</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span>
+                <span class="n">formatted_prompt</span><span class="p">,</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">chat_kwargs</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">response</span>
+
+    <span class="c1"># Set function name and docstring</span>
+    <span class="n">generated_function</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;prompt_based_function&quot;</span>
+    <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Auto-generated function from prompt template.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Template: </span><span class="si">{</span><span class="n">template</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Parameters:</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_names</span><span class="p">:</span>
+        <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">: Parameter from template</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="k">if</span> <span class="n">output_schema</span><span class="p">:</span>
+        <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Returns: Structured data matching schema: </span><span class="si">{</span><span class="n">output_schema</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Returns: Generated text&quot;</span>
+
+    <span class="c1"># Add metadata</span>
+    <span class="n">generated_function</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">template</span>
+    <span class="n">generated_function</span><span class="o">.</span><span class="n">output_schema</span> <span class="o">=</span> <span class="n">output_schema</span>
+    <span class="n">generated_function</span><span class="o">.</span><span class="n">param_names</span> <span class="o">=</span> <span class="n">param_names</span>
+
+    <span class="k">return</span> <span class="n">generated_function</span></div>
+
+
+
+<span class="c1"># Convenience aliases for explicit intent</span>
+<div class="viewcode-block" id="prompt_to_text">
+<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.prompt_to_text">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">prompt_to_text</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a function that returns text output.</span>
+
+<span class="sd">    This is an explicit alias for prompt_func without output_schema.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        template: Prompt template</span>
+<span class="sd">        **kwargs: Additional parameters for prompt_func</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Function that returns text</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; summarize = prompt_to_text(&quot;Summarize: {text}&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; result = summarize(text=&quot;Long text...&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; isinstance(result, str)  # doctest: +SKIP</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">prompt_func</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">output_schema</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="prompt_to_json">
+<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.prompt_to_json">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">prompt_to_json</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a function that returns structured JSON output.</span>
+
+<span class="sd">    This is an explicit alias for prompt_func with output_schema.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        template: Prompt template</span>
+<span class="sd">        schema: Output schema</span>
+<span class="sd">        **kwargs: Additional parameters for prompt_func</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Function that returns structured data</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; extract = prompt_to_json(</span>
+<span class="sd">        ...     &quot;Extract name and age from: {text}&quot;,</span>
+<span class="sd">        ...     schema={&quot;name&quot;: str, &quot;age&quot;: int}</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; result = extract(text=&quot;Alice is 30&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; isinstance(result, dict)  # doctest: +SKIP</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">prompt_func</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">output_schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PromptFuncs">
+<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.PromptFuncs">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PromptFuncs</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Collection of prompt-based functions.</span>
+
+<span class="sd">    Provides a namespace for organizing related prompt functions with</span>
+<span class="sd">    attribute-based access.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; funcs = PromptFuncs()  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; funcs.add(&#39;summarize&#39;, &quot;Summarize: {text}&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; funcs.add(&#39;translate&#39;, &quot;Translate {text} to {language}&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; funcs.summarize(text=&quot;Long article...&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;Summary...&#39;</span>
+<span class="sd">        &gt;&gt;&gt; funcs.translate(text=&quot;Hello&quot;, language=&quot;Spanish&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;Hola&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">default_kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize collection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: Default model for all functions</span>
+<span class="sd">            **default_kwargs: Default parameters for all functions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_kwargs</span> <span class="o">=</span> <span class="n">default_kwargs</span>
+
+<div class="viewcode-block" id="PromptFuncs.add">
+<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.PromptFuncs.add">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">output_schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a function to the collection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: Function name (will be accessible as attribute)</span>
+<span class="sd">            template: Prompt template</span>
+<span class="sd">            output_schema: Optional schema for structured output</span>
+<span class="sd">            **kwargs: Additional parameters for prompt_func</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Merge default kwargs</span>
+        <span class="n">func_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_default_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">:</span>
+            <span class="n">func_kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span>
+
+        <span class="c1"># Create function</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">prompt_func</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">output_schema</span><span class="o">=</span><span class="n">output_schema</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span>
+
+        <span class="c1"># Make accessible as attribute</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get function by name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if function exists.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span>
+
+<div class="viewcode-block" id="PromptFuncs.keys">
+<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.PromptFuncs.keys">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all function names.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+</div>
+
+
+
+<span class="c1"># Pre-built common functions</span>
+<div class="viewcode-block" id="CommonFuncs">
+<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.CommonFuncs">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CommonFuncs</span><span class="p">(</span><span class="n">PromptFuncs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Collection of commonly used prompt functions.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.prompts import common_funcs</span>
+<span class="sd">        &gt;&gt;&gt; common_funcs.summarize(text=&quot;Long article...&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &#39;Summary...&#39;</span>
+<span class="sd">        &gt;&gt;&gt; common_funcs.extract_keywords(text=&quot;Article about AI&quot;)  # doctest: +SKIP</span>
+<span class="sd">        [&#39;AI&#39;, &#39;artificial&#39;, &#39;intelligence&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="c1"># Text transformation functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;summarize&#39;</span><span class="p">,</span> <span class="s2">&quot;Summarize this text concisely: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;explain&#39;</span><span class="p">,</span> <span class="s2">&quot;Explain this concept simply: </span><span class="si">{concept}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;translate&#39;</span><span class="p">,</span> <span class="s2">&quot;Translate </span><span class="si">{text}</span><span class="s2"> to </span><span class="si">{language}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;paraphrase&#39;</span><span class="p">,</span> <span class="s2">&quot;Paraphrase this text: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Analysis functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="s1">&#39;extract_keywords&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;Extract the main keywords from: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">output_schema</span><span class="o">=</span><span class="nb">list</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="s1">&#39;sentiment&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;Analyze the sentiment of: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">output_schema</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sentiment&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;explanation&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generation functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;continue_text&#39;</span><span class="p">,</span> <span class="s2">&quot;Continue this text naturally: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;generate_title&#39;</span><span class="p">,</span> <span class="s2">&quot;Generate a catchy title for: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Create singleton instance</span>
+<span class="n">common_funcs</span> <span class="o">=</span> <span class="n">CommonFuncs</span><span class="p">()</span>
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1"># constrained_answer: Force LLM to choose from valid options</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_enhance_prompt_for_json</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">valid_answers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+    <span class="n">min_val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add JSON formatting instructions to the prompt.</span>
+
+<span class="sd">    This is a helper that adds explicit instructions for JSON output.</span>
+<span class="sd">    Only used when enhance_prompt=True.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">valid_answers_list</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">answer</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">answer</span> <span class="ow">in</span> <span class="n">valid_answers</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
+<span class="s2">You must respond with EXACTLY one of these options:</span>
+<span class="si">{</span><span class="n">valid_answers_list</span><span class="si">}</span>
+<span class="s2">Choose the most appropriate answer. Return your response as JSON with an &quot;answer&quot; field.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
+<span class="s2">You must respond with either true or false.</span>
+<span class="s2">Return your response as JSON with an &quot;answer&quot; field.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
+<span class="s2">You must respond with an integer number.</span>
+<span class="s2">Return your response as JSON with an &quot;answer&quot; field.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
+<span class="s2">You must respond with a number.</span>
+<span class="s2">Return your response as JSON with an &quot;answer&quot; field.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
+<span class="s2">You must respond with a number between </span><span class="si">{</span><span class="n">min_val</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">max_val</span><span class="si">}</span><span class="s2"> (inclusive).</span>
+<span class="s2">Return your response as JSON with an &quot;answer&quot; field.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Fallback - just add minimal JSON instruction</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n</span><span class="s2">Return your response as JSON with an &#39;answer&#39; field.&quot;</span>
+
+
+<div class="viewcode-block" id="constrained_answer">
+<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.constrained_answer">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">constrained_answer</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">valid_answers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">enhance_prompt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get an answer from the LLM constrained to a set of valid answers or types.</span>
+
+<span class="sd">    Uses JSON mode to ensure the LLM returns a valid response based on constraints.</span>
+<span class="sd">    More flexible than the oa version - works with any model that supports JSON mode</span>
+<span class="sd">    via LiteLLM.</span>
+
+<span class="sd">    This can be seen as a facade for some common structured output use cases, as well</span>
+<span class="sd">    as a convenient tool to do response statistics and validation (via n&gt;1).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: The question or prompt to ask the LLM</span>
+<span class="sd">        valid_answers: Can be:</span>
+<span class="sd">            - list[str]: List of valid string options</span>
+<span class="sd">            - list[int]: List of valid integer options</span>
+<span class="sd">            - list[float]: List of valid float options</span>
+<span class="sd">            - bool: Constrains answer to True or False</span>
+<span class="sd">            - int: Any integer</span>
+<span class="sd">            - float: Any number</span>
+<span class="sd">            - tuple[float, float]: Numerical range (min, max) inclusive</span>
+<span class="sd">        model: The model to use for the LLM (default: uses DFLT_CHAT_MODEL)</span>
+<span class="sd">        temperature: Temperature for sampling (default: None, uses model&#39;s default).</span>
+<span class="sd">            Higher values (e.g., 1.0) give more random/varied results.</span>
+<span class="sd">            Lower values (e.g., 0.0) give more deterministic results.</span>
+<span class="sd">        enhance_prompt: If True, adds explicit instructions to the prompt about</span>
+<span class="sd">            JSON formatting and constraints. If False (default), relies on</span>
+<span class="sd">            response_format alone. Default is False to match oa behavior.</span>
+<span class="sd">        n: Number of times to call the LLM (default: 1)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        One of the valid answers, respecting the type constraint.</span>
+<span class="sd">        If n &gt; 1, returns a list of answers.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; # String options</span>
+<span class="sd">        &gt;&gt;&gt; answer = constrained_answer(</span>
+<span class="sd">        ...     &quot;Is Python compiled or interpreted?&quot;,</span>
+<span class="sd">        ...     [&quot;compiled&quot;, &quot;interpreted&quot;, &quot;both&quot;]</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; answer in [&quot;compiled&quot;, &quot;interpreted&quot;, &quot;both&quot;]  # doctest: +SKIP</span>
+<span class="sd">        True</span>
+
+<span class="sd">        &gt;&gt;&gt; # Boolean</span>
+<span class="sd">        &gt;&gt;&gt; answer = constrained_answer(</span>
+<span class="sd">        ...     &quot;Is Python dynamically typed?&quot;,</span>
+<span class="sd">        ...     bool</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; isinstance(answer, bool)  # doctest: +SKIP</span>
+<span class="sd">        True</span>
+
+<span class="sd">        &gt;&gt;&gt; # Integer options</span>
+<span class="sd">        &gt;&gt;&gt; answer = constrained_answer(</span>
+<span class="sd">        ...     &quot;How many wheels does a car have?&quot;,</span>
+<span class="sd">        ...     [2, 3, 4, 6, 8]</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; answer in [2, 3, 4, 6, 8]  # doctest: +SKIP</span>
+<span class="sd">        True</span>
+
+<span class="sd">        &gt;&gt;&gt; # Numerical range</span>
+<span class="sd">        &gt;&gt;&gt; answer = constrained_answer(</span>
+<span class="sd">        ...     &quot;What is a reasonable hourly rate for a senior Python developer? (USD)&quot;,</span>
+<span class="sd">        ...     (50.0, 300.0)</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; 50.0 &lt;= answer &lt;= 300.0  # doctest: +SKIP</span>
+<span class="sd">        True</span>
+
+<span class="sd">        &gt;&gt;&gt; # Multiple samples for statistics</span>
+<span class="sd">        &gt;&gt;&gt; answers = constrained_answer(</span>
+<span class="sd">        ...     &quot;Which is better: cats or dogs?&quot;,</span>
+<span class="sd">        ...     [&quot;cats&quot;, &quot;dogs&quot;],</span>
+<span class="sd">        ...     n=10</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; len(answers)  # doctest: +SKIP</span>
+<span class="sd">        10</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+            <span class="n">constrained_answer</span><span class="p">,</span>
+            <span class="n">prompt</span><span class="p">,</span>
+            <span class="n">valid_answers</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+            <span class="n">enhance_prompt</span><span class="o">=</span><span class="n">enhance_prompt</span><span class="p">,</span>
+            <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+
+    <span class="c1"># Determine the expected type for type conversion</span>
+    <span class="n">expected_type</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># List of specific options</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_answers</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;valid_answers list cannot be empty&quot;</span><span class="p">)</span>
+
+        <span class="n">first_item</span> <span class="o">=</span> <span class="n">valid_answers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first_item</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported list item type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">first_item</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">expected_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">first_item</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">expected_type</span> <span class="o">=</span> <span class="nb">bool</span>
+
+    <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">expected_type</span> <span class="o">=</span> <span class="nb">int</span>
+
+    <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">expected_type</span> <span class="o">=</span> <span class="nb">float</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># Numerical range</span>
+        <span class="n">min_val</span><span class="p">,</span> <span class="n">max_val</span> <span class="o">=</span> <span class="n">valid_answers</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_val</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">max_val</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Range tuple must contain two numbers&quot;</span><span class="p">)</span>
+
+        <span class="n">expected_type</span> <span class="o">=</span> <span class="nb">float</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported valid_answers type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Build the prompt template</span>
+    <span class="k">if</span> <span class="n">enhance_prompt</span><span class="p">:</span>
+        <span class="c1"># Add explicit JSON instructions and constraints</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">_enhance_prompt_for_json</span><span class="p">(</span>
+                <span class="n">prompt</span><span class="p">,</span> <span class="n">valid_answers</span><span class="p">,</span> <span class="n">min_val</span><span class="o">=</span><span class="n">valid_answers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_val</span><span class="o">=</span><span class="n">valid_answers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">_enhance_prompt_for_json</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">valid_answers</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Use the prompt as-is, but add minimal JSON instruction with type hint</span>
+        <span class="c1"># (OpenAI requires the word &quot;json&quot; to appear in the prompt when using json_object mode)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># For lists, we need to be more specific</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;one of: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="w"> </span><span class="n">valid_answers</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">&quot;true or false&quot;</span>
+        <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">&quot;a number (integer)&quot;</span>
+        <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">&quot;a number&quot;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;a number between </span><span class="si">{</span><span class="n">valid_answers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">valid_answers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">&quot;your answer&quot;</span>
+
+        <span class="n">template</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n</span><span class="s1">Respond in JSON format with an &quot;answer&quot; field containing </span><span class="si">{</span><span class="n">type_hint</span><span class="si">}</span><span class="s1">.&#39;</span>
+
+    <span class="c1"># Use LiteLLM&#39;s response_format for JSON mode</span>
+    <span class="c1"># This works across OpenAI, Anthropic (via tools), and other providers</span>
+    <span class="n">chat_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_CHAT_MODEL</span><span class="p">,</span>
+        <span class="s2">&quot;response_format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">chat_kwargs</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">**</span><span class="n">chat_kwargs</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;answer&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Convert to expected type if needed</span>
+        <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">):</span>
+            <span class="c1"># JSON might parse integers as strings or vice versa</span>
+            <span class="c1"># Try to convert to the expected type</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">answer</span> <span class="o">=</span> <span class="n">expected_type</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="c1"># If conversion fails, just return as-is</span>
+                <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">answer</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Failed to parse - raise informative error</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Failed to parse constrained answer. Response: </span><span class="si">{</span><span class="n">response</span><span class="p">[:</span><span class="mi">200</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.image &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="aix.misc" href="misc.html" />
+    <link rel="prev" title="aix.gen_ai.openai_genai" href="gen_ai/openai_genai.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aix.image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.image.GeneratedImage"><code class="docutils literal notranslate"><span class="pre">GeneratedImage</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aix.image.GeneratedImage.as_bytes"><code class="docutils literal notranslate"><span class="pre">GeneratedImage.as_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.image.GeneratedImage.as_pil_image"><code class="docutils literal notranslate"><span class="pre">GeneratedImage.as_pil_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.image.GeneratedImage.save"><code class="docutils literal notranslate"><span class="pre">GeneratedImage.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.image.GeneratedImage.show"><code class="docutils literal notranslate"><span class="pre">GeneratedImage.show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.image.create_variation"><code class="docutils literal notranslate"><span class="pre">create_variation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.image.edit_image"><code class="docutils literal notranslate"><span class="pre">edit_image()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.image.generate_image"><code class="docutils literal notranslate"><span class="pre">generate_image()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.image.generate_images"><code class="docutils literal notranslate"><span class="pre">generate_images()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aix.image</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/aix/image.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aix.image">
+<span id="aix-image"></span><h1>aix.image<a class="headerlink" href="#module-aix.image" title="Link to this heading"></a></h1>
+<p>Image generation interface for AIX.</p>
+<p>Generate images from text descriptions using various AI models.</p>
+<p class="rubric">Examples</p>
+<p>Simple image generation:
+&gt;&gt;&gt; from aix.image import generate_image
+&gt;&gt;&gt; image = generate_image(“A serene mountain landscape at sunset”)  # doctest: +SKIP
+&gt;&gt;&gt; image.save(“landscape.png”)  # doctest: +SKIP</p>
+<p>Multiple images:
+&gt;&gt;&gt; images = generate_images(
+…     “A cute cat wearing a hat”,
+…     n=3,
+…     size=”1024x1024”
+… )  # doctest: +SKIP
+&gt;&gt;&gt; for i, img in enumerate(images):  # doctest: +SKIP
+…     img.save(f”cat_{i}.png”)</p>
+<p>With specific model:
+&gt;&gt;&gt; image = generate_image(
+…     “Abstract art with vibrant colors”,
+…     model=”dall-e-3”
+… )  # doctest: +SKIP</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.image.GeneratedImage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aix.image.</span></span><span class="sig-name descname"><span class="pre">GeneratedImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b64_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">revised_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/image.html#GeneratedImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.image.GeneratedImage" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for generated images.</p>
+<p>Provides convenient access to image data in various formats.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">GeneratedImage</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://...&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;dall-e-3&quot;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.png&quot;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">as_bytes</span><span class="p">()</span>  
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.image.GeneratedImage.as_bytes">
+<span class="sig-name descname"><span class="pre">as_bytes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../../_modules/aix/image.html#GeneratedImage.as_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.image.GeneratedImage.as_bytes" title="Link to this definition"></a></dt>
+<dd><p>Get image as bytes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Image data as bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.image.GeneratedImage.as_pil_image">
+<span class="sig-name descname"><span class="pre">as_pil_image</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/image.html#GeneratedImage.as_pil_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.image.GeneratedImage.as_pil_image" title="Link to this definition"></a></dt>
+<dd><p>Get image as PIL Image object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>PIL.Image object</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ImportError</strong> – If PIL is not installed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.image.GeneratedImage.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/image.html#GeneratedImage.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.image.GeneratedImage.save" title="Link to this definition"></a></dt>
+<dd><p>Save image to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – Output file path</p></li>
+<li><p><strong>format</strong> – Image format (e.g., ‘PNG’, ‘JPEG’). Auto-detected from path if None.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.png&quot;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.jpg&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;JPEG&quot;</span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.image.GeneratedImage.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/image.html#GeneratedImage.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.image.GeneratedImage.show" title="Link to this definition"></a></dt>
+<dd><p>Display the image.</p>
+<p>Requires PIL (Pillow) to be installed.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">img</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.image.create_variation">
+<span class="sig-prename descclassname"><span class="pre">aix.image.</span></span><span class="sig-name descname"><span class="pre">create_variation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#aix.image.GeneratedImage" title="aix.image.GeneratedImage"><span class="pre">GeneratedImage</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aix.image.GeneratedImage" title="aix.image.GeneratedImage"><span class="pre">GeneratedImage</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/image.html#create_variation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.image.create_variation" title="Link to this definition"></a></dt>
+<dd><p>Create variations of an existing image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image_path</strong> – Path to the source image</p></li>
+<li><p><strong>model</strong> – Model to use (typically ‘dall-e-2’)</p></li>
+<li><p><strong>size</strong> – Output image size</p></li>
+<li><p><strong>n</strong> – Number of variations to generate</p></li>
+<li><p><strong>**kwargs</strong> – Additional provider-specific parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeneratedImage or list of GeneratedImage objects</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_variation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variations</span> <span class="o">=</span> <span class="n">create_variation</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;original.png&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">size</span><span class="o">=</span><span class="s2">&quot;512x512&quot;</span>
+<span class="gp">... </span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">variations</span><span class="p">):</span>  
+<span class="gp">... </span>    <span class="n">var</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;variation_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.image.edit_image">
+<span class="sig-prename descclassname"><span class="pre">aix.image.</span></span><span class="sig-name descname"><span class="pre">edit_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#aix.image.GeneratedImage" title="aix.image.GeneratedImage"><span class="pre">GeneratedImage</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aix.image.GeneratedImage" title="aix.image.GeneratedImage"><span class="pre">GeneratedImage</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/image.html#edit_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.image.edit_image" title="Link to this definition"></a></dt>
+<dd><p>Edit an existing image based on a prompt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image_path</strong> – Path to the image to edit</p></li>
+<li><p><strong>prompt</strong> – Description of the desired edit</p></li>
+<li><p><strong>mask_path</strong> – Optional path to mask image (transparent areas will be edited)</p></li>
+<li><p><strong>model</strong> – Model to use (typically ‘dall-e-2’ for edits)</p></li>
+<li><p><strong>size</strong> – Output image size</p></li>
+<li><p><strong>n</strong> – Number of variations to generate</p></li>
+<li><p><strong>**kwargs</strong> – Additional provider-specific parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeneratedImage or list of GeneratedImage objects</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">edit_image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">edited</span> <span class="o">=</span> <span class="n">edit_image</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;photo.png&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;Add a rainbow in the sky&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">mask_path</span><span class="o">=</span><span class="s2">&quot;sky_mask.png&quot;</span>
+<span class="gp">... </span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">edited</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;edited_photo.png&quot;</span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.image.generate_image">
+<span class="sig-prename descclassname"><span class="pre">aix.image.</span></span><span class="sig-name descname"><span class="pre">generate_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'url'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#aix.image.GeneratedImage" title="aix.image.GeneratedImage"><span class="pre">GeneratedImage</span></a></span></span><a class="reference internal" href="../../_modules/aix/image.html#generate_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.image.generate_image" title="Link to this definition"></a></dt>
+<dd><p>Generate a single image from a text prompt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prompt</strong> – Text description of the image to generate</p></li>
+<li><p><strong>model</strong> – Model to use (e.g., ‘dall-e-2’, ‘dall-e-3’, ‘stable-diffusion’)</p></li>
+<li><p><strong>size</strong> – Image size (e.g., ‘1024x1024’, ‘512x512’, ‘1792x1024’)</p></li>
+<li><p><strong>quality</strong> – Image quality (‘standard’ or ‘hd’ for DALL-E 3)</p></li>
+<li><p><strong>style</strong> – Image style (‘vivid’ or ‘natural’ for DALL-E 3)</p></li>
+<li><p><strong>response_format</strong> – Format of response (‘url’ or ‘b64_json’)</p></li>
+<li><p><strong>**kwargs</strong> – Additional provider-specific parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeneratedImage object</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ImportError</strong> – If LiteLLM is not installed</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">generate_image</span><span class="p">(</span><span class="s2">&quot;A serene mountain landscape&quot;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;landscape.png&quot;</span><span class="p">)</span>  
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># High quality with DALL-E 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">generate_image</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;Abstract art with vibrant colors&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;dall-e-3&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">quality</span><span class="o">=</span><span class="s2">&quot;hd&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">style</span><span class="o">=</span><span class="s2">&quot;vivid&quot;</span>
+<span class="gp">... </span><span class="p">)</span>  
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Specific size</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">generate_image</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;A futuristic city&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">size</span><span class="o">=</span><span class="s2">&quot;1792x1024&quot;</span>
+<span class="gp">... </span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.image.generate_images">
+<span class="sig-prename descclassname"><span class="pre">aix.image.</span></span><span class="sig-name descname"><span class="pre">generate_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'url'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aix.image.GeneratedImage" title="aix.image.GeneratedImage"><span class="pre">GeneratedImage</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/image.html#generate_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.image.generate_images" title="Link to this definition"></a></dt>
+<dd><p>Generate multiple images from a text prompt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prompt</strong> – Text description of images to generate</p></li>
+<li><p><strong>n</strong> – Number of images to generate</p></li>
+<li><p><strong>model</strong> – Model to use</p></li>
+<li><p><strong>size</strong> – Image size</p></li>
+<li><p><strong>quality</strong> – Image quality</p></li>
+<li><p><strong>style</strong> – Image style</p></li>
+<li><p><strong>response_format</strong> – Format of response</p></li>
+<li><p><strong>**kwargs</strong> – Additional provider-specific parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of GeneratedImage objects</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_images</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">images</span> <span class="o">=</span> <span class="n">generate_images</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;A cute robot&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">size</span><span class="o">=</span><span class="s2">&quot;512x512&quot;</span>
+<span class="gp">... </span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">img</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>  
+<span class="gp">... </span>    <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;robot_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gen_ai/openai_genai.html" class="btn btn-neutral float-left" title="aix.gen_ai.openai_genai" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="misc.html" class="btn btn-neutral float-right" title="aix.misc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

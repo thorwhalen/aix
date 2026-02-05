@@ -1,0 +1,4 @@
+aix.prompts
+===========
+.. automodule:: aix.prompts
+   :members:

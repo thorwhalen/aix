@@ -1,0 +1,631 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.video &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.video</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.video</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Video generation interface for AIX.</span>
+
+<span class="sd">Generate videos from text descriptions or images.</span>
+
+<span class="sd">Note: Video generation support varies by provider and may require additional</span>
+<span class="sd">API keys and configuration. This module provides a unified interface but</span>
+<span class="sd">implementation depends on available providers.</span>
+
+<span class="sd">Examples:</span>
+<span class="sd">    Text to video:</span>
+<span class="sd">    &gt;&gt;&gt; from aix.video import generate_video</span>
+<span class="sd">    &gt;&gt;&gt; video = generate_video(</span>
+<span class="sd">    ...     &quot;A cat walking through a garden&quot;,</span>
+<span class="sd">    ...     duration=5</span>
+<span class="sd">    ... )  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; video.save(&quot;cat_video.mp4&quot;)  # doctest: +SKIP</span>
+
+<span class="sd">    Image to video:</span>
+<span class="sd">    &gt;&gt;&gt; video = animate_image(</span>
+<span class="sd">    ...     &quot;static_image.jpg&quot;,</span>
+<span class="sd">    ...     prompt=&quot;Make the clouds move gently&quot;</span>
+<span class="sd">    ... )  # doctest: +SKIP</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+
+<div class="viewcode-block" id="GeneratedVideo">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.GeneratedVideo">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GeneratedVideo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper for generated videos.</span>
+
+<span class="sd">    Provides convenient access to video data and metadata.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; video = GeneratedVideo(url=&quot;https://...&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; video.save(&quot;output.mp4&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; print(video.duration)  # doctest: +SKIP</span>
+<span class="sd">        5.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;completed&#39;</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize generated video.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url: URL of the generated video</span>
+<span class="sd">            data: Video data as bytes</span>
+<span class="sd">            model: Model used for generation</span>
+<span class="sd">            prompt: Original prompt</span>
+<span class="sd">            duration: Video duration in seconds</span>
+<span class="sd">            resolution: Video resolution (e.g., &#39;1920x1080&#39;, &#39;1280x720&#39;)</span>
+<span class="sd">            status: Generation status (&#39;pending&#39;, &#39;processing&#39;, &#39;completed&#39;, &#39;failed&#39;)</span>
+<span class="sd">            task_id: Async task ID if generation is in progress</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="n">prompt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="n">resolution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span> <span class="o">=</span> <span class="n">task_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_video_data</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="GeneratedVideo.as_bytes">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.GeneratedVideo.as_bytes">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get video as bytes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Video data as bytes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_video_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_video_data</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_video_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_video_data</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No video data available&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GeneratedVideo.save">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.GeneratedVideo.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save video to file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path: Output file path</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; video.save(&quot;output.mp4&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">video_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_bytes</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">video_bytes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GeneratedVideo.wait_until_complete">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.GeneratedVideo.wait_until_complete">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wait_until_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_wait</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">poll_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait for video generation to complete (for async operations).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            max_wait: Maximum time to wait in seconds</span>
+<span class="sd">            poll_interval: Time between status checks in seconds</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TimeoutError: If generation doesn&#39;t complete within max_wait</span>
+<span class="sd">            RuntimeError: If generation fails</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;completed&#39;</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No task_id available for status checking&quot;</span><span class="p">)</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&lt;</span> <span class="n">max_wait</span><span class="p">:</span>
+            <span class="c1"># This would need provider-specific implementation</span>
+            <span class="c1"># For now, this is a placeholder</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">poll_interval</span><span class="p">)</span>
+
+            <span class="c1"># Check status (provider-specific)</span>
+            <span class="c1"># self._check_status()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;completed&#39;</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;failed&#39;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Video generation failed&quot;</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Video generation did not complete within </span><span class="si">{</span><span class="n">max_wait</span><span class="si">}</span><span class="s2"> seconds&quot;</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;String representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;GeneratedVideo(model=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;duration=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="si">}</span><span class="s2">s, status=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="generate_video">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.generate_video">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_video</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;1280x720&#39;</span><span class="p">,</span>
+    <span class="n">fps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
+    <span class="n">aspect_ratio</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a video from a text prompt.</span>
+
+<span class="sd">    Note: This is a high-level interface. Actual implementation depends on</span>
+<span class="sd">    available video generation providers (Runway, Pika, etc.) and may require</span>
+<span class="sd">    provider-specific API keys.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: Text description of the video to generate</span>
+<span class="sd">        model: Video generation model to use</span>
+<span class="sd">        duration: Video duration in seconds (typically 2-10 seconds)</span>
+<span class="sd">        resolution: Video resolution (&#39;1280x720&#39;, &#39;1920x1080&#39;, etc.)</span>
+<span class="sd">        fps: Frames per second</span>
+<span class="sd">        aspect_ratio: Aspect ratio (&#39;16:9&#39;, &#39;9:16&#39;, &#39;1:1&#39;, etc.)</span>
+<span class="sd">        style: Video style hint (provider-specific)</span>
+<span class="sd">        seed: Random seed for reproducibility</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedVideo object</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        NotImplementedError: If no video provider is configured</span>
+<span class="sd">        ImportError: If required provider SDK is not installed</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.video import generate_video</span>
+<span class="sd">        &gt;&gt;&gt; video = generate_video(</span>
+<span class="sd">        ...     &quot;A serene ocean sunset with gentle waves&quot;,</span>
+<span class="sd">        ...     duration=5,</span>
+<span class="sd">        ...     resolution=&quot;1920x1080&quot;</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; video.save(&quot;sunset.mp4&quot;)  # doctest: +SKIP</span>
+
+<span class="sd">        &gt;&gt;&gt; # Specific style</span>
+<span class="sd">        &gt;&gt;&gt; video = generate_video(</span>
+<span class="sd">        ...     &quot;A futuristic city&quot;,</span>
+<span class="sd">        ...     style=&quot;cyberpunk&quot;,</span>
+<span class="sd">        ...     duration=4</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># This is a placeholder implementation</span>
+    <span class="c1"># In practice, you would integrate with specific providers</span>
+
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="s2">&quot;Video generation requires additional provider configuration. &quot;</span>
+        <span class="s2">&quot;Supported providers include Runway, Pika, and others. &quot;</span>
+        <span class="s2">&quot;Please configure your provider API keys and try again.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Example configuration:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  export RUNWAY_API_KEY=your-key</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  export PIKA_API_KEY=your-key</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Or use provider-specific functions:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  from aix.video import generate_video_runway</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  video = generate_video_runway(prompt, ...)&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="animate_image">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.animate_image">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">animate_image</span><span class="p">(</span>
+    <span class="n">image_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+    <span class="n">motion_strength</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Animate a static image into a video.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image_path: Path to the source image</span>
+<span class="sd">        prompt: Optional text prompt to guide the animation</span>
+<span class="sd">        model: Video generation model to use</span>
+<span class="sd">        duration: Animation duration in seconds</span>
+<span class="sd">        motion_strength: Strength of motion (0.0 to 1.0)</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedVideo object</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.video import animate_image</span>
+<span class="sd">        &gt;&gt;&gt; video = animate_image(</span>
+<span class="sd">        ...     &quot;landscape.jpg&quot;,</span>
+<span class="sd">        ...     prompt=&quot;Gentle camera pan across the scene&quot;,</span>
+<span class="sd">        ...     duration=4</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; video.save(&quot;animated_landscape.mp4&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="s2">&quot;Image-to-video animation requires additional provider configuration. &quot;</span>
+        <span class="s2">&quot;See generate_video() documentation for setup instructions.&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="extend_video">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.extend_video">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extend_video</span><span class="p">(</span>
+    <span class="n">video_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">extend_duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extend an existing video with additional generated content.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        video_path: Path to the source video</span>
+<span class="sd">        prompt: Optional text prompt to guide the extension</span>
+<span class="sd">        extend_duration: How many seconds to add</span>
+<span class="sd">        model: Video generation model</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedVideo object with extended content</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.video import extend_video</span>
+<span class="sd">        &gt;&gt;&gt; extended = extend_video(</span>
+<span class="sd">        ...     &quot;original.mp4&quot;,</span>
+<span class="sd">        ...     prompt=&quot;Continue the same scene&quot;,</span>
+<span class="sd">        ...     extend_duration=3</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="s2">&quot;Video extension requires additional provider configuration. &quot;</span>
+        <span class="s2">&quot;See generate_video() documentation for setup instructions.&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="interpolate_frames">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.interpolate_frames">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">interpolate_frames</span><span class="p">(</span>
+    <span class="n">video_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">target_fps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate frames to create smoother video.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        video_path: Path to the source video</span>
+<span class="sd">        target_fps: Target frames per second</span>
+<span class="sd">        model: Frame interpolation model</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedVideo with interpolated frames</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.video import interpolate_frames</span>
+<span class="sd">        &gt;&gt;&gt; smooth_video = interpolate_frames(</span>
+<span class="sd">        ...     &quot;choppy.mp4&quot;,</span>
+<span class="sd">        ...     target_fps=60</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="s2">&quot;Frame interpolation requires additional libraries. &quot;</span>
+        <span class="s2">&quot;Consider using tools like RIFE or DAIN for frame interpolation.&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># Provider-specific implementations (placeholders for future implementation)</span>
+
+<div class="viewcode-block" id="generate_video_runway">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.generate_video_runway">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_video_runway</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate video using Runway ML.</span>
+
+<span class="sd">    Requires: RUNWAY_API_KEY environment variable</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: Text description</span>
+<span class="sd">        duration: Video duration</span>
+<span class="sd">        **kwargs: Runway-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedVideo object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="s2">&quot;Runway integration coming soon. &quot;</span>
+        <span class="s2">&quot;Set RUNWAY_API_KEY and install: pip install runwayml&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="generate_video_pika">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.generate_video_pika">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_video_pika</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate video using Pika Labs.</span>
+
+<span class="sd">    Requires: PIKA_API_KEY environment variable</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: Text description</span>
+<span class="sd">        duration: Video duration</span>
+<span class="sd">        **kwargs: Pika-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedVideo object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="s2">&quot;Pika Labs integration coming soon. &quot;</span>
+        <span class="s2">&quot;Set PIKA_API_KEY environment variable.&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="generate_video_stable_diffusion">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.generate_video_stable_diffusion">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_video_stable_diffusion</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate video using Stable Diffusion Video.</span>
+
+<span class="sd">    Requires: Stable Diffusion Video model setup</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: Text description</span>
+<span class="sd">        duration: Video duration</span>
+<span class="sd">        **kwargs: SD-specific parameters</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeneratedVideo object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="s2">&quot;Stable Diffusion Video integration coming soon. &quot;</span>
+        <span class="s2">&quot;Install: pip install diffusers torch&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># Utility functions</span>
+
+<div class="viewcode-block" id="get_available_providers">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.get_available_providers">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_available_providers</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get list of available video generation providers.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of provider names that are configured</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.video import get_available_providers</span>
+<span class="sd">        &gt;&gt;&gt; providers = get_available_providers()  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; print(providers)  # doctest: +SKIP</span>
+<span class="sd">        [&#39;runway&#39;, &#39;pika&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">available</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check for Runway</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;RUNWAY_API_KEY&#39;</span><span class="p">):</span>
+        <span class="n">available</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;runway&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Check for Pika</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;PIKA_API_KEY&#39;</span><span class="p">):</span>
+        <span class="n">available</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;pika&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Check for Stable Diffusion</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">diffusers</span>
+        <span class="n">available</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;stable-diffusion&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">available</span></div>
+
+
+
+<div class="viewcode-block" id="estimate_cost">
+<a class="viewcode-back" href="../../module_docs/aix/video.html#aix.estimate_cost">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_cost</span><span class="p">(</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;1280x720&#39;</span><span class="p">,</span>
+    <span class="n">provider</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate the cost of video generation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        duration: Video duration in seconds</span>
+<span class="sd">        resolution: Video resolution</span>
+<span class="sd">        provider: Provider name (or None for all)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict with cost estimates</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.video import estimate_cost</span>
+<span class="sd">        &gt;&gt;&gt; cost = estimate_cost(duration=5, resolution=&quot;1920x1080&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; print(cost)  # doctest: +SKIP</span>
+<span class="sd">        {&#39;runway&#39;: 0.05, &#39;pika&#39;: 0.03}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Placeholder cost estimates (not real pricing)</span>
+    <span class="n">estimates</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="n">provider</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">provider</span> <span class="o">==</span> <span class="s1">&#39;runway&#39;</span><span class="p">:</span>
+        <span class="c1"># Rough estimate based on typical pricing</span>
+        <span class="n">estimates</span><span class="p">[</span><span class="s1">&#39;runway&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">*</span> <span class="mf">0.01</span>  <span class="c1"># $0.01 per second</span>
+
+    <span class="k">if</span> <span class="n">provider</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">provider</span> <span class="o">==</span> <span class="s1">&#39;pika&#39;</span><span class="p">:</span>
+        <span class="n">estimates</span><span class="p">[</span><span class="s1">&#39;pika&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">*</span> <span class="mf">0.006</span>  <span class="c1"># $0.006 per second</span>
+
+    <span class="k">return</span> <span class="n">estimates</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.embeddings &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.embeddings</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.embeddings</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Embeddings interface for AIX.</span>
+
+<span class="sd">Generate vector embeddings from text using various models and providers.</span>
+
+<span class="sd">Examples:</span>
+<span class="sd">    Simple embedding:</span>
+<span class="sd">    &gt;&gt;&gt; from aix.embeddings import embeddings</span>
+<span class="sd">    &gt;&gt;&gt; vecs = list(embeddings([&quot;hello&quot;, &quot;world&quot;]))  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; len(vecs)  # doctest: +SKIP</span>
+<span class="sd">    2</span>
+<span class="sd">    &gt;&gt;&gt; len(vecs[0])  # dimension depends on model  # doctest: +SKIP</span>
+<span class="sd">    1536</span>
+
+<span class="sd">    With specific model:</span>
+<span class="sd">    &gt;&gt;&gt; vecs = list(embeddings(</span>
+<span class="sd">    ...     [&quot;hello&quot;, &quot;world&quot;],</span>
+<span class="sd">    ...     model=&quot;text-embedding-3-small&quot;</span>
+<span class="sd">    ... ))  # doctest: +SKIP</span>
+
+<span class="sd">    Single text:</span>
+<span class="sd">    &gt;&gt;&gt; vec = embed(&quot;hello world&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; len(vec)  # doctest: +SKIP</span>
+<span class="sd">    1536</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+
+<span class="c1"># Import LiteLLM but keep it private</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">embedding</span> <span class="k">as</span> <span class="n">_litellm_embedding</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">_litellm_embedding</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="c1"># Default configurations</span>
+<span class="n">DFLT_EMBEDDING_MODEL</span> <span class="o">=</span> <span class="s1">&#39;text-embedding-3-small&#39;</span>
+
+
+<div class="viewcode-block" id="embeddings">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.embeddings">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">embeddings</span><span class="p">(</span>
+    <span class="n">segments</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate embeddings for multiple text segments.</span>
+
+<span class="sd">    This is the main embedding interface for AIX. It abstracts away provider-specific</span>
+<span class="sd">    details and provides a clean, consistent API across all embedding models.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        segments: Iterable of text strings to embed</span>
+<span class="sd">        model: Model identifier (e.g., &#39;text-embedding-3-small&#39;, &#39;text-embedding-ada-002&#39;,</span>
+<span class="sd">            &#39;openrouter/openai/text-embedding-3-small&#39;). If None, uses default.</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters passed to LiteLLM</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        Vector embeddings as sequences of floats. Each embedding corresponds to</span>
+<span class="sd">        one input segment in the same order.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If LiteLLM is not installed</span>
+<span class="sd">        ValueError: If segments is empty or invalid</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.embeddings import embeddings</span>
+<span class="sd">        &gt;&gt;&gt; texts = [&quot;cat&quot;, &quot;dog&quot;, &quot;bird&quot;]</span>
+<span class="sd">        &gt;&gt;&gt; vecs = list(embeddings(texts))  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; len(vecs)  # doctest: +SKIP</span>
+<span class="sd">        3</span>
+
+<span class="sd">        &gt;&gt;&gt; # With specific model</span>
+<span class="sd">        &gt;&gt;&gt; vecs = list(embeddings(</span>
+<span class="sd">        ...     [&quot;hello&quot;, &quot;world&quot;],</span>
+<span class="sd">        ...     model=&quot;text-embedding-3-large&quot;</span>
+<span class="sd">        ... ))  # doctest: +SKIP</span>
+
+<span class="sd">        &gt;&gt;&gt; # Process in chunks for large datasets</span>
+<span class="sd">        &gt;&gt;&gt; def chunk_texts(texts, size=100):</span>
+<span class="sd">        ...     for i in range(0, len(texts), size):</span>
+<span class="sd">        ...         yield texts[i:i+size]</span>
+<span class="sd">        &gt;&gt;&gt; all_vecs = []</span>
+<span class="sd">        &gt;&gt;&gt; for chunk in chunk_texts(large_dataset):  # doctest: +SKIP</span>
+<span class="sd">        ...     all_vecs.extend(embeddings(chunk))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_litellm_embedding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;LiteLLM is required for embeddings functionality. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Convert to list to allow validation</span>
+    <span class="n">segments_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">segments_list</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot generate embeddings for empty sequence&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Apply defaults</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_EMBEDDING_MODEL</span>
+
+    <span class="c1"># Build LiteLLM parameters</span>
+    <span class="n">litellm_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s1">&#39;input&#39;</span><span class="p">:</span> <span class="n">segments_list</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Add any additional provider-specific kwargs</span>
+    <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Call LiteLLM</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_embedding</span><span class="p">(</span><span class="o">**</span><span class="n">litellm_kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Extract embeddings from response</span>
+    <span class="c1"># LiteLLM returns a response with .data list</span>
+    <span class="c1"># Each item has .embedding attribute</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;embedding&#39;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="embed">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.embed">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate embedding for a single text.</span>
+
+<span class="sd">    Convenience function for embedding a single text string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text: Text string to embed</span>
+<span class="sd">        model: Model identifier</span>
+<span class="sd">        **kwargs: Additional parameters for embeddings()</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Vector embedding as sequence of floats</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.embeddings import embed</span>
+<span class="sd">        &gt;&gt;&gt; vec = embed(&quot;Hello, world!&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; len(vec)  # doctest: +SKIP</span>
+<span class="sd">        1536</span>
+
+<span class="sd">        &gt;&gt;&gt; # Compare similarity</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; v1 = np.array(embed(&quot;cat&quot;))  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; v2 = np.array(embed(&quot;kitten&quot;))  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; v3 = np.array(embed(&quot;computer&quot;))  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; # Cosine similarity</span>
+<span class="sd">        &gt;&gt;&gt; np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))  # doctest: +SKIP</span>
+<span class="sd">        0.92  # High similarity</span>
+<span class="sd">        &gt;&gt;&gt; np.dot(v1, v3) / (np.linalg.norm(v1) * np.linalg.norm(v3))  # doctest: +SKIP</span>
+<span class="sd">        0.23  # Low similarity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">embeddings</span><span class="p">([</span><span class="n">text</span><span class="p">],</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="EmbeddingCache">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.EmbeddingCache">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EmbeddingCache</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cache for embeddings to avoid redundant API calls.</span>
+
+<span class="sd">    Useful when you need to embed the same texts multiple times.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; cache = EmbeddingCache()  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; vec1 = cache.embed(&quot;hello&quot;)  # API call  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; vec2 = cache.embed(&quot;hello&quot;)  # From cache  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; vec1 == vec2  # doctest: +SKIP</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">embedding_kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize cache.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: Default model for embeddings</span>
+<span class="sd">            **embedding_kwargs: Additional parameters for embeddings()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_embedding_kwargs</span> <span class="o">=</span> <span class="n">embedding_kwargs</span>
+
+<div class="viewcode-block" id="EmbeddingCache.embed">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.EmbeddingCache.embed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">force_refresh</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get embedding for text, using cache if available.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text: Text to embed</span>
+<span class="sd">            force_refresh: If True, bypass cache and get fresh embedding</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Vector embedding</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cache_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">force_refresh</span> <span class="ow">and</span> <span class="n">cache_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span>
+
+        <span class="c1"># Get fresh embedding</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_embedding_kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span>
+        <span class="k">return</span> <span class="n">vec</span></div>
+
+
+<div class="viewcode-block" id="EmbeddingCache.embed_batch">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.EmbeddingCache.embed_batch">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">embed_batch</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">texts</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">force_refresh</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get embeddings for multiple texts, using cache when possible.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            texts: Texts to embed</span>
+<span class="sd">            force_refresh: If True, bypass cache</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of embeddings in same order as input texts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">texts_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">uncached_texts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">uncached_indices</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Check cache</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">texts_list</span><span class="p">):</span>
+            <span class="n">cache_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">force_refresh</span> <span class="ow">and</span> <span class="n">cache_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># Placeholder</span>
+                <span class="n">uncached_texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                <span class="n">uncached_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Get fresh embeddings for uncached texts</span>
+        <span class="k">if</span> <span class="n">uncached_texts</span><span class="p">:</span>
+            <span class="n">new_embeddings</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">embeddings</span><span class="p">(</span><span class="n">uncached_texts</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_embedding_kwargs</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Update cache and results</span>
+            <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">uncached_texts</span><span class="p">,</span> <span class="n">new_embeddings</span><span class="p">,</span> <span class="n">uncached_indices</span><span class="p">):</span>
+                <span class="n">cache_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span>
+
+        <span class="k">return</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="EmbeddingCache.clear">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.EmbeddingCache.clear">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the cache.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return number of cached embeddings.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cosine_similarity">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.cosine_similarity">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cosine_similarity</span><span class="p">(</span><span class="n">vec1</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">vec2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute cosine similarity between two vectors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        vec1: First vector</span>
+<span class="sd">        vec2: Second vector</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Cosine similarity (between -1 and 1)</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.embeddings import embed, cosine_similarity</span>
+<span class="sd">        &gt;&gt;&gt; v1 = embed(&quot;cat&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; v2 = embed(&quot;kitten&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; similarity = cosine_similarity(v1, v2)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; similarity &gt; 0.8  # doctest: +SKIP</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Compute dot product</span>
+    <span class="n">dot_product</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">))</span>
+
+    <span class="c1"># Compute magnitudes</span>
+    <span class="n">mag1</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">vec1</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+    <span class="n">mag2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">vec2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+    <span class="c1"># Avoid division by zero</span>
+    <span class="k">if</span> <span class="n">mag1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">mag2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="k">return</span> <span class="n">dot_product</span> <span class="o">/</span> <span class="p">(</span><span class="n">mag1</span> <span class="o">*</span> <span class="n">mag2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="find_most_similar">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.find_most_similar">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_most_similar</span><span class="p">(</span>
+    <span class="n">query</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+    <span class="n">candidates</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find most similar texts to a query.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query: Query text or pre-computed embedding vector</span>
+<span class="sd">        candidates: Candidate texts to compare against</span>
+<span class="sd">        model: Embedding model to use</span>
+<span class="sd">        top_k: Number of top results to return</span>
+<span class="sd">        **kwargs: Additional parameters for embeddings()</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of (text, similarity_score) tuples, sorted by similarity (highest first)</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; query = &quot;What is machine learning?&quot;</span>
+<span class="sd">        &gt;&gt;&gt; docs = [</span>
+<span class="sd">        ...     &quot;Machine learning is a type of AI&quot;,</span>
+<span class="sd">        ...     &quot;Python is a programming language&quot;,</span>
+<span class="sd">        ...     &quot;Neural networks are used in deep learning&quot;,</span>
+<span class="sd">        ... ]</span>
+<span class="sd">        &gt;&gt;&gt; results = find_most_similar(query, docs, top_k=2)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; results[0][0]  # Most similar doc  # doctest: +SKIP</span>
+<span class="sd">        &#39;Machine learning is a type of AI&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get query embedding if needed</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">query_vec</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">query_vec</span> <span class="o">=</span> <span class="n">query</span>
+
+    <span class="c1"># Get candidate embeddings</span>
+    <span class="n">candidates_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span>
+    <span class="n">candidate_vecs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">embeddings</span><span class="p">(</span><span class="n">candidates_list</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+    <span class="c1"># Compute similarities</span>
+    <span class="n">similarities</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">query_vec</span><span class="p">,</span> <span class="n">vec</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">candidates_list</span><span class="p">,</span> <span class="n">candidate_vecs</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Sort by similarity (descending) and return top_k</span>
+    <span class="n">similarities</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">similarities</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

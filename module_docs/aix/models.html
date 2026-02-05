@@ -1,0 +1,488 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.models &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="aix.prompts" href="prompts.html" />
+    <link rel="prev" title="aix.misc" href="misc.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">aix.misc</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aix.models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.models.ModelStore"><code class="docutils literal notranslate"><span class="pre">ModelStore</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aix.models.ModelStore.by_provider"><code class="docutils literal notranslate"><span class="pre">ModelStore.by_provider()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.models.ModelStore.by_task"><code class="docutils literal notranslate"><span class="pre">ModelStore.by_task()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.models.ModelStore.discover"><code class="docutils literal notranslate"><span class="pre">ModelStore.discover()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.models.ModelStore.filter"><code class="docutils literal notranslate"><span class="pre">ModelStore.filter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.models.ModelStore.get_connector_metadata"><code class="docutils literal notranslate"><span class="pre">ModelStore.get_connector_metadata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.models.ModelStore.get_info"><code class="docutils literal notranslate"><span class="pre">ModelStore.get_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.models.ModelStore.recommend"><code class="docutils literal notranslate"><span class="pre">ModelStore.recommend()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aix.models.ModelStore.search"><code class="docutils literal notranslate"><span class="pre">ModelStore.search()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.models.discover_available_models"><code class="docutils literal notranslate"><span class="pre">discover_available_models()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.models.find_models"><code class="docutils literal notranslate"><span class="pre">find_models()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.models.get_model_info"><code class="docutils literal notranslate"><span class="pre">get_model_info()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aix.models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/aix/models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aix.models">
+<span id="aix-models"></span><h1>aix.models<a class="headerlink" href="#module-aix.models" title="Link to this heading"></a></h1>
+<p>Model discovery and selection interface for AIX.</p>
+<p>Extends the ai_models module with a clean, user-friendly interface for
+discovering, filtering, and selecting AI models across providers.</p>
+<p class="rubric">Examples</p>
+<p>List all models:
+&gt;&gt;&gt; from aix.models import models
+&gt;&gt;&gt; all_models = list(models)  # doctest: +SKIP
+&gt;&gt;&gt; len(all_models) &gt; 0  # doctest: +SKIP
+True</p>
+<p>Get specific model:
+&gt;&gt;&gt; model_info = models[‘openai/gpt-4o’]  # doctest: +SKIP
+&gt;&gt;&gt; model_info.provider  # doctest: +SKIP
+‘openai’</p>
+<p>Filter models:
+&gt;&gt;&gt; cheap_models = models.filter(
+…     custom_filter=lambda m: m.cost_per_token.get(‘input’, 0) &lt; 0.001
+… )  # doctest: +SKIP</p>
+<p>Use with chat:
+&gt;&gt;&gt; from aix import chat
+&gt;&gt;&gt; chat(“Hello”, model=”gpt-4o-mini”)  # doctest: +SKIP
+‘Hello! How can I help you?’</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.models.ModelStore">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aix.models.</span></span><span class="sig-name descname"><span class="pre">ModelStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_discover</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/aix/models.html#ModelStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.ModelStore" title="Link to this definition"></a></dt>
+<dd><p>User-friendly interface for model discovery and selection.</p>
+<p>Provides a Mapping interface over the ModelManager with convenient
+access patterns and integration with chat/embeddings functions.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span> <span class="o">=</span> <span class="n">ModelStore</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">models</span><span class="o">.</span><span class="n">discover</span><span class="p">()</span>  <span class="c1"># Fetch available models  </span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># List all models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">models</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>  
+<span class="go">[&#39;openai/gpt-4o&#39;, &#39;openai/gpt-4o-mini&#39;, ...]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get model info</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">info</span> <span class="o">=</span> <span class="n">models</span><span class="p">[</span><span class="s1">&#39;openai/gpt-4o&#39;</span><span class="p">]</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">info</span><span class="o">.</span><span class="n">provider</span>  
+<span class="go">&#39;openai&#39;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Filter models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">openai_models</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s1">&#39;openai&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">local_models</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Use with chat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.chat</span><span class="w"> </span><span class="kn">import</span> <span class="n">chat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="p">[</span><span class="s1">&#39;gpt-4o-mini&#39;</span><span class="p">]</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chat</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  
+<span class="go">&#39;Hello! How can I help you?&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.models.ModelStore.by_provider">
+<span class="sig-name descname"><span class="pre">by_provider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/models.html#ModelStore.by_provider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.ModelStore.by_provider" title="Link to this definition"></a></dt>
+<dd><p>Get all models from a specific provider.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>provider</strong> – Provider name</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of models</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span> <span class="o">=</span> <span class="n">ModelStore</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">openai_models</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">by_provider</span><span class="p">(</span><span class="s1">&#39;openai&#39;</span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.models.ModelStore.by_task">
+<span class="sig-name descname"><span class="pre">by_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/models.html#ModelStore.by_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.ModelStore.by_task" title="Link to this definition"></a></dt>
+<dd><p>Get models suitable for a specific task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>task</strong> – Task name (‘chat’, ‘embedding’, ‘image’, etc.)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of suitable models</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span> <span class="o">=</span> <span class="n">ModelStore</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chat_models</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">by_task</span><span class="p">(</span><span class="s1">&#39;chat&#39;</span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.models.ModelStore.discover">
+<span class="sig-name descname"><span class="pre">discover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'openrouter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_register</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/models.html#ModelStore.discover"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.ModelStore.discover" title="Link to this definition"></a></dt>
+<dd><p>Discover models from a source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – Source name (‘openrouter’, ‘ollama’, etc.)</p></li>
+<li><p><strong>auto_register</strong> – If True, add discovered models to registry</p></li>
+<li><p><strong>verbose</strong> – If True, print progress information</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of discovered models</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span> <span class="o">=</span> <span class="n">ModelStore</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">discovered</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">discover</span><span class="p">(</span><span class="s1">&#39;openrouter&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">discovered</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span>  
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.models.ModelStore.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_local</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_context_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_context_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_capabilities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/models.html#ModelStore.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.ModelStore.filter" title="Link to this definition"></a></dt>
+<dd><p>Filter models by criteria.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>provider</strong> – Filter by provider name (‘openai’, ‘anthropic’, etc.)</p></li>
+<li><p><strong>is_local</strong> – Filter by local vs remote</p></li>
+<li><p><strong>min_context_size</strong> – Minimum context window size</p></li>
+<li><p><strong>max_context_size</strong> – Maximum context window size</p></li>
+<li><p><strong>has_capabilities</strong> – Required capabilities</p></li>
+<li><p><strong>tags</strong> – Required tags</p></li>
+<li><p><strong>custom_filter</strong> – Custom filter function: f(Model) -&gt; bool</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of models matching criteria</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span> <span class="o">=</span> <span class="n">ModelStore</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">models</span><span class="o">.</span><span class="n">discover</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get OpenAI models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">openai</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s1">&#39;openai&#39;</span><span class="p">)</span>  
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get local models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">local</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get cheap models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cheap</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">custom_filter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">cost_per_token</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.001</span>
+<span class="gp">... </span><span class="p">)</span>  
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Combine criteria</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">good_models</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">provider</span><span class="o">=</span><span class="s1">&#39;openai&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">min_context_size</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">custom_filter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="s1">&#39;gpt-4&#39;</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">id</span>
+<span class="gp">... </span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.models.ModelStore.get_connector_metadata">
+<span class="sig-name descname"><span class="pre">get_connector_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/models.html#ModelStore.get_connector_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.ModelStore.get_connector_metadata" title="Link to this definition"></a></dt>
+<dd><p>Get connector-specific metadata for a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_id</strong> – Model identifier</p></li>
+<li><p><strong>connector</strong> – Connector name (‘openai’, ‘openrouter’, etc.)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict with connector-specific parameters</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span> <span class="o">=</span> <span class="n">ModelStore</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meta</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">get_connector_metadata</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s1">&#39;openai/gpt-4o&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;openai&#39;</span>
+<span class="gp">... </span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>  
+<span class="go">&#39;gpt-4o&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.models.ModelStore.get_info">
+<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a></span></span><a class="reference internal" href="../../_modules/aix/models.html#ModelStore.get_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.ModelStore.get_info" title="Link to this definition"></a></dt>
+<dd><p>Get detailed information about a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_id</strong> – Model identifier</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Model object with full metadata</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span> <span class="o">=</span> <span class="n">ModelStore</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">models</span><span class="o">.</span><span class="n">discover</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">info</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">get_info</span><span class="p">(</span><span class="s1">&#39;openai/gpt-4o&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">info</span><span class="o">.</span><span class="n">context_size</span>  
+<span class="go">128000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.models.ModelStore.recommend">
+<span class="sig-name descname"><span class="pre">recommend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'chat'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cost_per_mtok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_context_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefer_local</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/models.html#ModelStore.recommend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.ModelStore.recommend" title="Link to this definition"></a></dt>
+<dd><p>Get recommended models based on requirements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task</strong> – Primary task (‘chat’, ‘embedding’, etc.)</p></li>
+<li><p><strong>max_cost_per_mtok</strong> – Maximum cost per million tokens</p></li>
+<li><p><strong>min_context_size</strong> – Minimum required context size</p></li>
+<li><p><strong>prefer_local</strong> – Prefer local models if available</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of recommended models, sorted by suitability</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span> <span class="o">=</span> <span class="n">ModelStore</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recommendations</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">recommend</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">task</span><span class="o">=</span><span class="s1">&#39;chat&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_cost_per_mtok</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">min_context_size</span><span class="o">=</span><span class="mi">16000</span>
+<span class="gp">... </span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.models.ModelStore.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/models.html#ModelStore.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.ModelStore.search" title="Link to this definition"></a></dt>
+<dd><p>Search models by text query.</p>
+<p>Searches in model ID, provider, and tags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query</strong> – Search query</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of matching models</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">models</span> <span class="o">=</span> <span class="n">ModelStore</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">models</span><span class="o">.</span><span class="n">discover</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;gpt-4&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>  
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.models.discover_available_models">
+<span class="sig-prename descclassname"><span class="pre">aix.models.</span></span><span class="sig-name descname"><span class="pre">discover_available_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'openrouter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/models.html#discover_available_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.discover_available_models" title="Link to this definition"></a></dt>
+<dd><p>Discover available models from a source.</p>
+<p>Convenience function that uses the global models instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – Source name (‘openrouter’, ‘ollama’, etc.)</p></li>
+<li><p><strong>verbose</strong> – Print progress information</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of discovered models</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">discover_available_models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">models</span> <span class="o">=</span> <span class="n">discover_available_models</span><span class="p">(</span><span class="s1">&#39;openrouter&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span>  
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.models.find_models">
+<span class="sig-prename descclassname"><span class="pre">aix.models.</span></span><span class="sig-name descname"><span class="pre">find_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/models.html#find_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.find_models" title="Link to this definition"></a></dt>
+<dd><p>Search for models matching a query.</p>
+<p>Convenience function that uses the global models instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query</strong> – Search query</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of matching models</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">find_models</span><span class="p">(</span><span class="s1">&#39;claude&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">any</span><span class="p">(</span><span class="s1">&#39;claude&#39;</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">results</span><span class="p">)</span>  
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.models.get_model_info">
+<span class="sig-prename descclassname"><span class="pre">aix.models.</span></span><span class="sig-name descname"><span class="pre">get_model_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a></span></span><a class="reference internal" href="../../_modules/aix/models.html#get_model_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.models.get_model_info" title="Link to this definition"></a></dt>
+<dd><p>Get information about a specific model.</p>
+<p>Convenience function that uses the global models instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_id</strong> – Model identifier</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Model object</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_model_info</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">info</span> <span class="o">=</span> <span class="n">get_model_info</span><span class="p">(</span><span class="s1">&#39;openai/gpt-4o&#39;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">info</span><span class="o">.</span><span class="n">provider</span>  
+<span class="go">&#39;openai&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="misc.html" class="btn btn-neutral float-left" title="aix.misc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="prompts.html" class="btn btn-neutral float-right" title="aix.prompts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

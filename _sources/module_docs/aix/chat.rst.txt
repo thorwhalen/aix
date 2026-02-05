@@ -1,0 +1,4 @@
+aix.chat
+========
+.. automodule:: aix.chat
+   :members:

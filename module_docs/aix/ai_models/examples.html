@@ -1,0 +1,221 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.ai_models.examples &mdash; aix 0.0.24 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f91d8841"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="aix.ai_models.manager" href="manager.html" />
+    <link rel="prev" title="aix.ai_models.base" href="base.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aix.ai_models.examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.ai_models.examples.HuggingFaceSource"><code class="docutils literal notranslate"><span class="pre">HuggingFaceSource</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.examples.HuggingFaceSource.discover_models"><code class="docutils literal notranslate"><span class="pre">HuggingFaceSource.discover_models()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.ai_models.examples.ModelMall"><code class="docutils literal notranslate"><span class="pre">ModelMall</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aix.ai_models.examples.ModelMall.keys"><code class="docutils literal notranslate"><span class="pre">ModelMall.keys()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.ai_models.examples.example_advanced_filtering"><code class="docutils literal notranslate"><span class="pre">example_advanced_filtering()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.ai_models.examples.example_basic_usage"><code class="docutils literal notranslate"><span class="pre">example_basic_usage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.ai_models.examples.example_connector_usage"><code class="docutils literal notranslate"><span class="pre">example_connector_usage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.ai_models.examples.example_custom_metadata"><code class="docutils literal notranslate"><span class="pre">example_custom_metadata()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.ai_models.examples.example_custom_source"><code class="docutils literal notranslate"><span class="pre">example_custom_source()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.ai_models.examples.example_mall_usage"><code class="docutils literal notranslate"><span class="pre">example_mall_usage()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contexts.html">aix.contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aix.ai_models.examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/aix/ai_models/examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aix.ai_models.examples">
+<span id="aix-ai-models-examples"></span><h1>aix.ai_models.examples<a class="headerlink" href="#module-aix.ai_models.examples" title="Link to this heading"></a></h1>
+<p>Usage examples for the model management module.</p>
+<p>This module demonstrates common patterns and use cases.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.ai_models.examples.HuggingFaceSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aix.ai_models.examples.</span></span><span class="sig-name descname"><span class="pre">HuggingFaceSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'text-generation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/aix/ai_models/examples.html#HuggingFaceSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.examples.HuggingFaceSource" title="Link to this definition"></a></dt>
+<dd><p>Example custom source for HuggingFace Hub models.</p>
+<p>Demonstrates how to add a new model source.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.examples.HuggingFaceSource.discover_models">
+<span class="sig-name descname"><span class="pre">discover_models</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/aix/ai_models/examples.html#HuggingFaceSource.discover_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.examples.HuggingFaceSource.discover_models" title="Link to this definition"></a></dt>
+<dd><p>Discover models from HuggingFace Hub.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.ai_models.examples.ModelMall">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aix.ai_models.examples.</span></span><span class="sig-name descname"><span class="pre">ModelMall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">manager</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="manager.html#aix.ai_models.manager.ModelManager" title="aix.ai_models.manager.ModelManager"><span class="pre">ModelManager</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/aix/ai_models/examples.html#ModelMall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.examples.ModelMall" title="Link to this definition"></a></dt>
+<dd><p>A ‘mall’ of model collections organized by category.</p>
+<p>Extends the Mapping pattern to group models by different dimensions.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.ai_models.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_manager</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">get_manager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mall</span> <span class="o">=</span> <span class="n">ModelMall</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">mall</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>  <span class="c1"># Shows available collections</span>
+<span class="go">[&#39;by_provider&#39;, &#39;by_capability&#39;, &#39;local&#39;, &#39;remote&#39;, &#39;groups&#39;]</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.ai_models.examples.ModelMall.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/aix/ai_models/examples.html#ModelMall.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.examples.ModelMall.keys" title="Link to this definition"></a></dt>
+<dd><p>List available collections.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.ai_models.examples.example_advanced_filtering">
+<span class="sig-prename descclassname"><span class="pre">aix.ai_models.examples.</span></span><span class="sig-name descname"><span class="pre">example_advanced_filtering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/aix/ai_models/examples.html#example_advanced_filtering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.examples.example_advanced_filtering" title="Link to this definition"></a></dt>
+<dd><p>Advanced filtering with custom functions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.ai_models.examples.example_basic_usage">
+<span class="sig-prename descclassname"><span class="pre">aix.ai_models.examples.</span></span><span class="sig-name descname"><span class="pre">example_basic_usage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/aix/ai_models/examples.html#example_basic_usage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.examples.example_basic_usage" title="Link to this definition"></a></dt>
+<dd><p>Basic model management workflow.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.ai_models.examples.example_connector_usage">
+<span class="sig-prename descclassname"><span class="pre">aix.ai_models.examples.</span></span><span class="sig-name descname"><span class="pre">example_connector_usage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/aix/ai_models/examples.html#example_connector_usage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.examples.example_connector_usage" title="Link to this definition"></a></dt>
+<dd><p>Using connectors to format metadata for different clients.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.ai_models.examples.example_custom_metadata">
+<span class="sig-prename descclassname"><span class="pre">aix.ai_models.examples.</span></span><span class="sig-name descname"><span class="pre">example_custom_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/aix/ai_models/examples.html#example_custom_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.examples.example_custom_metadata" title="Link to this definition"></a></dt>
+<dd><p>Working with custom metadata and tags.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.ai_models.examples.example_custom_source">
+<span class="sig-prename descclassname"><span class="pre">aix.ai_models.examples.</span></span><span class="sig-name descname"><span class="pre">example_custom_source</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/aix/ai_models/examples.html#example_custom_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.examples.example_custom_source" title="Link to this definition"></a></dt>
+<dd><p>Using a custom source.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.ai_models.examples.example_mall_usage">
+<span class="sig-prename descclassname"><span class="pre">aix.ai_models.examples.</span></span><span class="sig-name descname"><span class="pre">example_mall_usage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/aix/ai_models/examples.html#example_mall_usage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.ai_models.examples.example_mall_usage" title="Link to this definition"></a></dt>
+<dd><p>Using the ModelMall pattern for organized access.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="base.html" class="btn btn-neutral float-left" title="aix.ai_models.base" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="manager.html" class="btn btn-neutral float-right" title="aix.ai_models.manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

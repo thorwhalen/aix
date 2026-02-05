@@ -1,4 +1,0 @@
-aix.sk
-======
-.. automodule:: aix.sk
-   :members:

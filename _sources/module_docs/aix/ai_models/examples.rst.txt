@@ -1,0 +1,4 @@
+aix.ai_models.examples
+======================
+.. automodule:: aix.ai_models.examples
+   :members:
