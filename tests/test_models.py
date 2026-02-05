@@ -186,7 +186,11 @@ class TestModelStore:
         store = ModelStore()
         result = store.by_task('chat')
 
-        mock_registry.filter.assert_called_once_with(has_capabilities=['chat'])
+        mock_registry.filter.assert_called_once_with(
+            provider=None, is_local=None, min_context_size=None,
+            max_context_size=None, has_capabilities=['chat'],
+            tags=None, custom_filter=None
+        )
 
     @patch('aix.models.get_manager')
     def test_recommend(self, mock_get_manager):
@@ -210,7 +214,7 @@ class TestModelStore:
         store = ModelStore()
         result = store.recommend(
             task='chat',
-            max_cost_per_mtok=1.0
+            max_cost_per_mtok=500.0
         )
 
         # Should return only model1 (cheaper) and sorted

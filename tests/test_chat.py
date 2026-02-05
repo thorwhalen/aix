@@ -187,8 +187,10 @@ class TestChatSession:
         assert len(session.history) == 4
 
         # Verify chat was called with full history
+        # Note: call_args captures the list by reference, and the assistant
+        # response is appended after chat() returns, so the list has 4 items
         last_call = mock_chat.call_args[0][0]
-        assert len(last_call) == 3  # Including the new user message
+        assert len(last_call) == 4
 
     @patch('aix.chat.chat')
     def test_session_clear_history(self, mock_chat):
