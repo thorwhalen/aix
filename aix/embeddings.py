@@ -23,8 +23,9 @@ Examples:
     1536
 """
 
-from collections.abc import Iterable, Sequence
-from typing import Union
+import hashlib
+from collections.abc import Iterable, Iterator, MutableMapping, Sequence
+from typing import Callable, Optional, Union
 
 # Import LiteLLM but keep it private
 try:
@@ -35,6 +36,7 @@ except ImportError:
 
 # Default configurations
 DFLT_EMBEDDING_MODEL = "text-embedding-3-small"
+DFLT_BATCH_SIZE = 512  # OpenAI batch endpoint accepts up to 2048 but smaller is safer
 
 
 def embeddings(
@@ -323,3 +325,190 @@ def find_most_similar(
     # Sort by similarity (descending) and return top_k
     similarities.sort(key=lambda x: x[1], reverse=True)
     return similarities[:top_k]
+
+
+# -----------------------------------------------------------------------------
+# Batching + persistent caching
+# -----------------------------------------------------------------------------
+
+
+def iter_batches(items: Iterable, size: int = DFLT_BATCH_SIZE) -> Iterator[list]:
+    """Yield successive ``size``-length lists from any iterable.
+
+    >>> list(iter_batches([1, 2, 3, 4, 5], size=2))
+    [[1, 2], [3, 4], [5]]
+    """
+    if size < 1:
+        raise ValueError(f"size must be >= 1, got {size}")
+    batch: list = []
+    for item in items:
+        batch.append(item)
+        if len(batch) >= size:
+            yield batch
+            batch = []
+    if batch:
+        yield batch
+
+
+# Conservative char-level truncation: OpenAI's text-embedding-* models accept
+# up to 8192 tokens. English averages ~4 chars/token, but dense text (URLs,
+# CJK, code, numeric strings) can be much denser — ~2 chars/token in the worst
+# case. 16000 chars ≈ 4000-8000 tokens depending on density, leaving headroom.
+DFLT_MAX_CHARS = 16_000
+
+
+def truncate_segment(text: str, *, max_chars: int = DFLT_MAX_CHARS) -> str:
+    """Truncate a single segment to ``max_chars`` if needed.
+
+    >>> truncate_segment('short')
+    'short'
+    >>> truncate_segment('x' * 30, max_chars=10)
+    'xxxxxxxxxx'
+    """
+    if max_chars is None or max_chars <= 0:
+        return text
+    if len(text) <= max_chars:
+        return text
+    return text[:max_chars]
+
+
+def batched_embeddings(
+    segments: Iterable[str],
+    *,
+    model: str = None,
+    batch_size: int = DFLT_BATCH_SIZE,
+    max_chars: Optional[int] = DFLT_MAX_CHARS,
+    on_batch: Optional[Callable[[int, int], None]] = None,
+    **kwargs,
+) -> Iterator[Sequence[float]]:
+    """Embed an iterable of segments in fixed-size batches.
+
+    Unlike :func:`embeddings`, this is generator-friendly: it pulls from
+    ``segments`` in chunks and yields vectors as each batch returns, so memory
+    stays bounded even for very large inputs.
+
+    Args:
+        segments: Iterable of strings to embed.
+        model: Embedding model name (default: ``DFLT_EMBEDDING_MODEL``).
+        batch_size: How many segments per API call.
+        max_chars: Per-segment character cap to avoid provider token limits
+            (default ~24K chars, safe for 8K-token embedding models). Pass
+            ``None`` to disable truncation.
+        on_batch: Optional progress callback ``(batch_index, batch_size) -> None``.
+        **kwargs: Forwarded to :func:`embeddings`.
+
+    Yields:
+        One vector per input segment, in input order.
+
+    Examples:
+        >>> vecs = list(batched_embeddings(["a", "b", "c"], batch_size=2))  # doctest: +SKIP
+        >>> len(vecs)  # doctest: +SKIP
+        3
+    """
+    for i, batch in enumerate(iter_batches(segments, size=batch_size)):
+        if max_chars is not None:
+            batch = [truncate_segment(s, max_chars=max_chars) for s in batch]
+        if on_batch is not None:
+            on_batch(i, len(batch))
+        yield from embeddings(batch, model=model, **kwargs)
+
+
+def text_cache_key(text: str, model: Optional[str] = None, *, hash_len: int = 16) -> str:
+    """Stable cache key for ``(text, model)``.
+
+    Uses SHA-1 over a normalized form: ``model + "\\x00" + text``. ``model=None``
+    is treated as the default (so cached entries are stable across runs).
+
+    >>> text_cache_key("hello") == text_cache_key("hello")
+    True
+    >>> text_cache_key("hello", "text-embedding-3-small") != text_cache_key("hello", "text-embedding-3-large")
+    True
+    >>> len(text_cache_key("hello"))
+    16
+    """
+    m = model or DFLT_EMBEDDING_MODEL
+    h = hashlib.sha1((m + "\x00" + text).encode("utf-8")).hexdigest()
+    return h[:hash_len]
+
+
+def cached_embeddings(
+    segments: Iterable[str],
+    *,
+    cache: MutableMapping[str, Sequence[float]],
+    model: str = None,
+    batch_size: int = DFLT_BATCH_SIZE,
+    on_batch: Optional[Callable[[int, int], None]] = None,
+    on_hit: Optional[Callable[[str], None]] = None,
+    **kwargs,
+) -> list[Sequence[float]]:
+    """Embed segments, looking up + writing back to a ``MutableMapping`` cache.
+
+    The cache may be any dict-like that maps the cache key (see
+    :func:`text_cache_key`) to a vector. ``dol`` stores work natively:
+
+    .. code-block:: python
+
+        from dol import Files
+        from aix.embeddings import cached_embeddings
+        store = Files('/tmp/embeddings_cache')  # bytes-backed
+        # Wrap with a codec for vector serialization in real use; below we
+        # assume an already-codec-wrapped MutableMapping.
+        vecs = cached_embeddings(["hello", "world"], cache=store)
+
+    Args:
+        segments: Iterable of strings to embed.
+        cache: A MutableMapping[str, Sequence[float]] used as persistent store.
+        model: Embedding model name (default: ``DFLT_EMBEDDING_MODEL``).
+        batch_size: Batch size for cache misses.
+        on_batch: Optional progress callback ``(batch_index, batch_size) -> None``.
+        on_hit: Optional callback fired once per cache hit (gets the cache key).
+        **kwargs: Forwarded to :func:`embeddings`.
+
+    Returns:
+        List of vectors aligned with the input order.
+
+    Examples:
+        >>> # in-memory cache works too
+        >>> cache = {}
+        >>> vecs1 = cached_embeddings(["x", "y"], cache=cache)  # doctest: +SKIP
+        >>> vecs2 = cached_embeddings(["x", "y"], cache=cache)  # all hits  # doctest: +SKIP
+        >>> vecs1 == vecs2  # doctest: +SKIP
+        True
+    """
+    segments_list = list(segments)
+    n = len(segments_list)
+    if n == 0:
+        return []
+
+    keys = [text_cache_key(s, model) for s in segments_list]
+    result: list[Optional[Sequence[float]]] = [None] * n
+    miss_texts: list[str] = []
+    miss_indices: list[int] = []
+
+    for i, (k, text) in enumerate(zip(keys, segments_list)):
+        try:
+            vec = cache[k]
+        except KeyError:
+            miss_texts.append(text)
+            miss_indices.append(i)
+        else:
+            if on_hit is not None:
+                on_hit(k)
+            result[i] = vec
+
+    if miss_texts:
+        new_vecs = list(
+            batched_embeddings(
+                miss_texts,
+                model=model,
+                batch_size=batch_size,
+                on_batch=on_batch,
+                **kwargs,
+            )
+        )
+        for idx, vec in zip(miss_indices, new_vecs):
+            cache[keys[idx]] = list(vec)  # ensure pickling-friendly plain list
+            result[idx] = list(vec)
+
+    # All slots filled.
+    return result  # type: ignore[return-value]
