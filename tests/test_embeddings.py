@@ -331,7 +331,9 @@ class TestBatchedEmbeddings:
         calls = []
         list(
             batched_embeddings(
-                ["a", "b", "c"], batch_size=2, on_batch=lambda i, n: calls.append((i, n))
+                ["a", "b", "c"],
+                batch_size=2,
+                on_batch=lambda i, n: calls.append((i, n)),
             )
         )
         assert calls == [(0, 2), (1, 1)]

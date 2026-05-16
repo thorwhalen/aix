@@ -413,7 +413,9 @@ def batched_embeddings(
         yield from embeddings(batch, model=model, **kwargs)
 
 
-def text_cache_key(text: str, model: Optional[str] = None, *, hash_len: int = 16) -> str:
+def text_cache_key(
+    text: str, model: Optional[str] = None, *, hash_len: int = 16
+) -> str:
     """Stable cache key for ``(text, model)``.
 
     Uses SHA-1 over a normalized form: ``model + "\\x00" + text``. ``model=None``
