@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.video &mdash; aix 0.0.24 documentation</title>
+  <title>aix.video &mdash; aix 0.0.25 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,9 +14,9 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/documentation_options.js?v=5d650c58"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
       <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../_static/copybutton.js?v=f281be69"></script>
@@ -146,8 +146,8 @@
         <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">resolution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;completed&#39;</span><span class="p">,</span>
-        <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;completed&quot;</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize generated video.</span>
 
@@ -187,6 +187,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
             <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
             <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
             <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_video_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span>
@@ -209,7 +210,7 @@
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="n">video_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_bytes</span><span class="p">()</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">video_bytes</span><span class="p">)</span></div>
 
 
@@ -226,7 +227,7 @@
 <span class="sd">            TimeoutError: If generation doesn&#39;t complete within max_wait</span>
 <span class="sd">            RuntimeError: If generation fails</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;completed&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;completed&quot;</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">:</span>
@@ -242,9 +243,9 @@
             <span class="c1"># Check status (provider-specific)</span>
             <span class="c1"># self._check_status()</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;completed&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;completed&quot;</span><span class="p">:</span>
                 <span class="k">return</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;failed&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Video generation failed&quot;</span><span class="p">)</span>
 
         <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span>
@@ -268,12 +269,12 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
-    <span class="n">resolution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;1280x720&#39;</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;1280x720&quot;</span><span class="p">,</span>
     <span class="n">fps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
     <span class="n">aspect_ratio</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a video from a text prompt.</span>
 
@@ -341,7 +342,7 @@
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
     <span class="n">motion_strength</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Animate a static image into a video.</span>
 
@@ -380,7 +381,7 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">extend_duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extend an existing video with additional generated content.</span>
 
@@ -412,11 +413,7 @@
 <div class="viewcode-block" id="interpolate_frames">
 <a class="viewcode-back" href="../../module_docs/aix/video.html#aix.interpolate_frames">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">interpolate_frames</span><span class="p">(</span>
-    <span class="n">video_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">target_fps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">video_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">target_fps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate frames to create smoother video.</span>
 
@@ -445,13 +442,11 @@
 
 <span class="c1"># Provider-specific implementations (placeholders for future implementation)</span>
 
+
 <div class="viewcode-block" id="generate_video_runway">
 <a class="viewcode-back" href="../../module_docs/aix/video.html#aix.generate_video_runway">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_video_runway</span><span class="p">(</span>
-    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate video using Runway ML.</span>
 
@@ -475,10 +470,7 @@
 <div class="viewcode-block" id="generate_video_pika">
 <a class="viewcode-back" href="../../module_docs/aix/video.html#aix.generate_video_pika">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_video_pika</span><span class="p">(</span>
-    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate video using Pika Labs.</span>
 
@@ -493,8 +485,7 @@
 <span class="sd">        GeneratedVideo object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-        <span class="s2">&quot;Pika Labs integration coming soon. &quot;</span>
-        <span class="s2">&quot;Set PIKA_API_KEY environment variable.&quot;</span>
+        <span class="s2">&quot;Pika Labs integration coming soon. &quot;</span> <span class="s2">&quot;Set PIKA_API_KEY environment variable.&quot;</span>
     <span class="p">)</span></div>
 
 
@@ -502,10 +493,7 @@
 <div class="viewcode-block" id="generate_video_stable_diffusion">
 <a class="viewcode-back" href="../../module_docs/aix/video.html#aix.generate_video_stable_diffusion">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_video_stable_diffusion</span><span class="p">(</span>
-    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedVideo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate video using Stable Diffusion Video.</span>
 
@@ -528,6 +516,7 @@
 
 <span class="c1"># Utility functions</span>
 
+
 <div class="viewcode-block" id="get_available_providers">
 <a class="viewcode-back" href="../../module_docs/aix/video.html#aix.get_available_providers">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_available_providers</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -546,17 +535,19 @@
 
     <span class="c1"># Check for Runway</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;RUNWAY_API_KEY&#39;</span><span class="p">):</span>
-        <span class="n">available</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;runway&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RUNWAY_API_KEY&quot;</span><span class="p">):</span>
+        <span class="n">available</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;runway&quot;</span><span class="p">)</span>
 
     <span class="c1"># Check for Pika</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;PIKA_API_KEY&#39;</span><span class="p">):</span>
-        <span class="n">available</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;pika&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PIKA_API_KEY&quot;</span><span class="p">):</span>
+        <span class="n">available</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;pika&quot;</span><span class="p">)</span>
 
     <span class="c1"># Check for Stable Diffusion</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">diffusers</span>
-        <span class="n">available</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;stable-diffusion&#39;</span><span class="p">)</span>
+
+        <span class="n">available</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;stable-diffusion&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">pass</span>
 
@@ -567,9 +558,7 @@
 <div class="viewcode-block" id="estimate_cost">
 <a class="viewcode-back" href="../../module_docs/aix/video.html#aix.estimate_cost">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">estimate_cost</span><span class="p">(</span>
-    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">resolution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;1280x720&#39;</span><span class="p">,</span>
-    <span class="n">provider</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">resolution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;1280x720&quot;</span><span class="p">,</span> <span class="n">provider</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate the cost of video generation.</span>
 
@@ -590,12 +579,12 @@
     <span class="c1"># Placeholder cost estimates (not real pricing)</span>
     <span class="n">estimates</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">if</span> <span class="n">provider</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">provider</span> <span class="o">==</span> <span class="s1">&#39;runway&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">provider</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;runway&quot;</span><span class="p">:</span>
         <span class="c1"># Rough estimate based on typical pricing</span>
-        <span class="n">estimates</span><span class="p">[</span><span class="s1">&#39;runway&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">*</span> <span class="mf">0.01</span>  <span class="c1"># $0.01 per second</span>
+        <span class="n">estimates</span><span class="p">[</span><span class="s2">&quot;runway&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">*</span> <span class="mf">0.01</span>  <span class="c1"># $0.01 per second</span>
 
-    <span class="k">if</span> <span class="n">provider</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">provider</span> <span class="o">==</span> <span class="s1">&#39;pika&#39;</span><span class="p">:</span>
-        <span class="n">estimates</span><span class="p">[</span><span class="s1">&#39;pika&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">*</span> <span class="mf">0.006</span>  <span class="c1"># $0.006 per second</span>
+    <span class="k">if</span> <span class="n">provider</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;pika&quot;</span><span class="p">:</span>
+        <span class="n">estimates</span><span class="p">[</span><span class="s2">&quot;pika&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">duration</span> <span class="o">*</span> <span class="mf">0.006</span>  <span class="c1"># $0.006 per second</span>
 
     <span class="k">return</span> <span class="n">estimates</span></div>
 

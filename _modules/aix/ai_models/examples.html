@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.ai_models.examples &mdash; aix 0.0.24 documentation</title>
+  <title>aix.ai_models.examples &mdash; aix 0.0.25 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,9 +14,9 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=f91d8841"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/documentation_options.js?v=5d650c58"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
@@ -208,7 +208,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if model is suitable for a specific task.&quot;&quot;&quot;</span>
         <span class="n">has_function_calling</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">capabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function_calling&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">has_sufficient_context</span> <span class="o">=</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">context_size</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">32000</span>
-        <span class="n">is_affordable</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cost_per_token</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">0.01</span>
+        <span class="n">is_affordable</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cost_per_token</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">0.01</span>
         <span class="k">return</span> <span class="n">has_function_calling</span> <span class="ow">and</span> <span class="n">has_sufficient_context</span> <span class="ow">and</span> <span class="n">is_affordable</span>
 
     <span class="n">suitable_models</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_models</span><span class="p">(</span><span class="n">custom_filter</span><span class="o">=</span><span class="n">_is_suitable_for_task</span><span class="p">)</span>

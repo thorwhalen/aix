@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.embeddings &mdash; aix 0.0.24 documentation</title>
+  <title>aix.embeddings &mdash; aix 0.0.25 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,9 +14,9 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=f91d8841"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/documentation_options.js?v=5d650c58"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
       <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../_static/copybutton.js?v=f281be69"></script>
@@ -119,8 +119,9 @@
 <span class="sd">    1536</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Sequence</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">MutableMapping</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="c1"># Import LiteLLM but keep it private</span>
 <span class="k">try</span><span class="p">:</span>
@@ -130,16 +131,14 @@
 
 
 <span class="c1"># Default configurations</span>
-<span class="n">DFLT_EMBEDDING_MODEL</span> <span class="o">=</span> <span class="s1">&#39;text-embedding-3-small&#39;</span>
+<span class="n">DFLT_EMBEDDING_MODEL</span> <span class="o">=</span> <span class="s2">&quot;text-embedding-3-small&quot;</span>
+<span class="n">DFLT_BATCH_SIZE</span> <span class="o">=</span> <span class="mi">512</span>  <span class="c1"># OpenAI batch endpoint accepts up to 2048 but smaller is safer</span>
 
 
 <div class="viewcode-block" id="embeddings">
 <a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.embeddings">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">embeddings</span><span class="p">(</span>
-    <span class="n">segments</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="n">segments</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate embeddings for multiple text segments.</span>
 
@@ -198,8 +197,8 @@
 
     <span class="c1"># Build LiteLLM parameters</span>
     <span class="n">litellm_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
-        <span class="s1">&#39;input&#39;</span><span class="p">:</span> <span class="n">segments_list</span><span class="p">,</span>
+        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="n">segments_list</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="c1"># Add any additional provider-specific kwargs</span>
@@ -212,18 +211,13 @@
     <span class="c1"># LiteLLM returns a response with .data list</span>
     <span class="c1"># Each item has .embedding attribute</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-        <span class="k">yield</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;embedding&#39;</span><span class="p">]</span></div>
+        <span class="k">yield</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;embedding&quot;</span><span class="p">]</span></div>
 
 
 
 <div class="viewcode-block" id="embed">
 <a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.embed">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span>
-    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate embedding for a single text.</span>
 
 <span class="sd">    Convenience function for embedding a single text string.</span>
@@ -309,9 +303,7 @@
 <div class="viewcode-block" id="EmbeddingCache.embed_batch">
 <a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.EmbeddingCache.embed_batch">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">embed_batch</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">texts</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-        <span class="n">force_refresh</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">force_refresh</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get embeddings for multiple texts, using cache when possible.</span>
 
@@ -408,7 +400,7 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find most similar texts to a query.</span>
 
@@ -452,6 +444,208 @@
     <span class="c1"># Sort by similarity (descending) and return top_k</span>
     <span class="n">similarities</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">similarities</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]</span></div>
+
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1"># Batching + persistent caching</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="iter_batches">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.iter_batches">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">iter_batches</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DFLT_BATCH_SIZE</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">list</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield successive ``size``-length lists from any iterable.</span>
+
+<span class="sd">    &gt;&gt;&gt; list(iter_batches([1, 2, 3, 4, 5], size=2))</span>
+<span class="sd">    [[1, 2], [3, 4], [5]]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;size must be &gt;= 1, got </span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">batch</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">size</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">batch</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">batch</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">batch</span></div>
+
+
+
+<span class="c1"># Conservative char-level truncation: OpenAI&#39;s text-embedding-* models accept</span>
+<span class="c1"># up to 8192 tokens. English averages ~4 chars/token, but dense text (URLs,</span>
+<span class="c1"># CJK, code, numeric strings) can be much denser — ~2 chars/token in the worst</span>
+<span class="c1"># case. 16000 chars ≈ 4000-8000 tokens depending on density, leaving headroom.</span>
+<span class="n">DFLT_MAX_CHARS</span> <span class="o">=</span> <span class="mi">16_000</span>
+
+
+<div class="viewcode-block" id="truncate_segment">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.truncate_segment">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">truncate_segment</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">max_chars</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DFLT_MAX_CHARS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Truncate a single segment to ``max_chars`` if needed.</span>
+
+<span class="sd">    &gt;&gt;&gt; truncate_segment(&#39;short&#39;)</span>
+<span class="sd">    &#39;short&#39;</span>
+<span class="sd">    &gt;&gt;&gt; truncate_segment(&#39;x&#39; * 30, max_chars=10)</span>
+<span class="sd">    &#39;xxxxxxxxxx&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">max_chars</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">max_chars</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_chars</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span>
+    <span class="k">return</span> <span class="n">text</span><span class="p">[:</span><span class="n">max_chars</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="batched_embeddings">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.batched_embeddings">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">batched_embeddings</span><span class="p">(</span>
+    <span class="n">segments</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DFLT_BATCH_SIZE</span><span class="p">,</span>
+    <span class="n">max_chars</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">DFLT_MAX_CHARS</span><span class="p">,</span>
+    <span class="n">on_batch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Embed an iterable of segments in fixed-size batches.</span>
+
+<span class="sd">    Unlike :func:`embeddings`, this is generator-friendly: it pulls from</span>
+<span class="sd">    ``segments`` in chunks and yields vectors as each batch returns, so memory</span>
+<span class="sd">    stays bounded even for very large inputs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        segments: Iterable of strings to embed.</span>
+<span class="sd">        model: Embedding model name (default: ``DFLT_EMBEDDING_MODEL``).</span>
+<span class="sd">        batch_size: How many segments per API call.</span>
+<span class="sd">        max_chars: Per-segment character cap to avoid provider token limits</span>
+<span class="sd">            (default ~24K chars, safe for 8K-token embedding models). Pass</span>
+<span class="sd">            ``None`` to disable truncation.</span>
+<span class="sd">        on_batch: Optional progress callback ``(batch_index, batch_size) -&gt; None``.</span>
+<span class="sd">        **kwargs: Forwarded to :func:`embeddings`.</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        One vector per input segment, in input order.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; vecs = list(batched_embeddings([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;], batch_size=2))  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; len(vecs)  # doctest: +SKIP</span>
+<span class="sd">        3</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">iter_batches</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">max_chars</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="p">[</span><span class="n">truncate_segment</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">max_chars</span><span class="o">=</span><span class="n">max_chars</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">on_batch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">on_batch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">))</span>
+        <span class="k">yield from</span> <span class="n">embeddings</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="text_cache_key">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.text_cache_key">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">text_cache_key</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">hash_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stable cache key for ``(text, model)``.</span>
+
+<span class="sd">    Uses SHA-1 over a normalized form: ``model + &quot;\\x00&quot; + text``. ``model=None``</span>
+<span class="sd">    is treated as the default (so cached entries are stable across runs).</span>
+
+<span class="sd">    &gt;&gt;&gt; text_cache_key(&quot;hello&quot;) == text_cache_key(&quot;hello&quot;)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; text_cache_key(&quot;hello&quot;, &quot;text-embedding-3-small&quot;) != text_cache_key(&quot;hello&quot;, &quot;text-embedding-3-large&quot;)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; len(text_cache_key(&quot;hello&quot;))</span>
+<span class="sd">    16</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_EMBEDDING_MODEL</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">((</span><span class="n">m</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">h</span><span class="p">[:</span><span class="n">hash_len</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="cached_embeddings">
+<a class="viewcode-back" href="../../module_docs/aix/embeddings.html#aix.cached_embeddings">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cached_embeddings</span><span class="p">(</span>
+    <span class="n">segments</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DFLT_BATCH_SIZE</span><span class="p">,</span>
+    <span class="n">on_batch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">on_hit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Embed segments, looking up + writing back to a ``MutableMapping`` cache.</span>
+
+<span class="sd">    The cache may be any dict-like that maps the cache key (see</span>
+<span class="sd">    :func:`text_cache_key`) to a vector. ``dol`` stores work natively:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        from dol import Files</span>
+<span class="sd">        from aix.embeddings import cached_embeddings</span>
+<span class="sd">        store = Files(&#39;/tmp/embeddings_cache&#39;)  # bytes-backed</span>
+<span class="sd">        # Wrap with a codec for vector serialization in real use; below we</span>
+<span class="sd">        # assume an already-codec-wrapped MutableMapping.</span>
+<span class="sd">        vecs = cached_embeddings([&quot;hello&quot;, &quot;world&quot;], cache=store)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        segments: Iterable of strings to embed.</span>
+<span class="sd">        cache: A MutableMapping[str, Sequence[float]] used as persistent store.</span>
+<span class="sd">        model: Embedding model name (default: ``DFLT_EMBEDDING_MODEL``).</span>
+<span class="sd">        batch_size: Batch size for cache misses.</span>
+<span class="sd">        on_batch: Optional progress callback ``(batch_index, batch_size) -&gt; None``.</span>
+<span class="sd">        on_hit: Optional callback fired once per cache hit (gets the cache key).</span>
+<span class="sd">        **kwargs: Forwarded to :func:`embeddings`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of vectors aligned with the input order.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; # in-memory cache works too</span>
+<span class="sd">        &gt;&gt;&gt; cache = {}</span>
+<span class="sd">        &gt;&gt;&gt; vecs1 = cached_embeddings([&quot;x&quot;, &quot;y&quot;], cache=cache)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; vecs2 = cached_embeddings([&quot;x&quot;, &quot;y&quot;], cache=cache)  # all hits  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; vecs1 == vecs2  # doctest: +SKIP</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">segments_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">segments_list</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">text_cache_key</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">segments_list</span><span class="p">]</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+    <span class="n">miss_texts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">miss_indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">segments_list</span><span class="p">)):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">miss_texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">miss_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">on_hit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">on_hit</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span>
+
+    <span class="k">if</span> <span class="n">miss_texts</span><span class="p">:</span>
+        <span class="n">new_vecs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="n">batched_embeddings</span><span class="p">(</span>
+                <span class="n">miss_texts</span><span class="p">,</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">on_batch</span><span class="o">=</span><span class="n">on_batch</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">miss_indices</span><span class="p">,</span> <span class="n">new_vecs</span><span class="p">):</span>
+            <span class="n">cache</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>  <span class="c1"># ensure pickling-friendly plain list</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+
+    <span class="c1"># All slots filled.</span>
+    <span class="k">return</span> <span class="n">result</span>  <span class="c1"># type: ignore[return-value]</span></div>
 
 </pre></div>
 
