@@ -8,6 +8,10 @@ from aix.embeddings import (
     cosine_similarity,
     find_most_similar,
     EmbeddingCache,
+    batched_embeddings,
+    cached_embeddings,
+    iter_batches,
+    text_cache_key,
 )
 
 
@@ -251,3 +255,147 @@ class TestEmbeddingCache:
 
         cache.clear()
         assert len(cache) == 0
+
+
+class TestIterBatches:
+    """Tests for iter_batches helper."""
+
+    def test_even_split(self):
+        assert list(iter_batches([1, 2, 3, 4], size=2)) == [[1, 2], [3, 4]]
+
+    def test_partial_tail(self):
+        assert list(iter_batches([1, 2, 3, 4, 5], size=2)) == [[1, 2], [3, 4], [5]]
+
+    def test_size_larger_than_input(self):
+        assert list(iter_batches([1, 2], size=10)) == [[1, 2]]
+
+    def test_empty(self):
+        assert list(iter_batches([], size=3)) == []
+
+    def test_invalid_size(self):
+        with pytest.raises(ValueError):
+            list(iter_batches([1], size=0))
+
+
+class TestTextCacheKey:
+    """Tests for text_cache_key."""
+
+    def test_stable_for_same_inputs(self):
+        assert text_cache_key("hello") == text_cache_key("hello")
+
+    def test_model_affects_key(self):
+        a = text_cache_key("hello", "text-embedding-3-small")
+        b = text_cache_key("hello", "text-embedding-3-large")
+        assert a != b
+
+    def test_text_affects_key(self):
+        assert text_cache_key("hello") != text_cache_key("world")
+
+    def test_default_hash_len(self):
+        assert len(text_cache_key("hello")) == 16
+
+    def test_custom_hash_len(self):
+        assert len(text_cache_key("hello", hash_len=8)) == 8
+
+    def test_none_model_equals_default(self):
+        from aix.embeddings import DFLT_EMBEDDING_MODEL
+
+        assert text_cache_key("hello") == text_cache_key("hello", DFLT_EMBEDDING_MODEL)
+
+
+class TestBatchedEmbeddings:
+    """Tests for batched_embeddings."""
+
+    @patch("aix.embeddings._litellm_embedding")
+    def test_batches_correctly(self, mock_embedding):
+        # Each call returns one embedding per input
+        def side_effect(*, model, input, **kwargs):
+            resp = Mock()
+            resp.data = [{"embedding": [float(i)]} for i, _ in enumerate(input)]
+            return resp
+
+        mock_embedding.side_effect = side_effect
+        vecs = list(batched_embeddings(["a", "b", "c", "d", "e"], batch_size=2))
+        assert len(vecs) == 5
+        # 3 API calls: 2, 2, 1
+        assert mock_embedding.call_count == 3
+
+    @patch("aix.embeddings._litellm_embedding")
+    def test_on_batch_callback(self, mock_embedding):
+        def side_effect(*, model, input, **kwargs):
+            resp = Mock()
+            resp.data = [{"embedding": [0.0]} for _ in input]
+            return resp
+
+        mock_embedding.side_effect = side_effect
+        calls = []
+        list(
+            batched_embeddings(
+                ["a", "b", "c"], batch_size=2, on_batch=lambda i, n: calls.append((i, n))
+            )
+        )
+        assert calls == [(0, 2), (1, 1)]
+
+
+class TestCachedEmbeddings:
+    """Tests for cached_embeddings (persistent caching pattern)."""
+
+    @patch("aix.embeddings._litellm_embedding")
+    def test_misses_then_hits(self, mock_embedding):
+        def side_effect(*, model, input, **kwargs):
+            resp = Mock()
+            resp.data = [{"embedding": [float(len(s))]} for s in input]
+            return resp
+
+        mock_embedding.side_effect = side_effect
+
+        cache: dict[str, list[float]] = {}
+        vecs1 = cached_embeddings(["hi", "world"], cache=cache)
+        # One API call, two cached entries
+        assert mock_embedding.call_count == 1
+        assert len(cache) == 2
+        # Second call: pure hits
+        mock_embedding.reset_mock()
+        vecs2 = cached_embeddings(["hi", "world"], cache=cache)
+        assert mock_embedding.call_count == 0
+        assert vecs1 == vecs2
+
+    @patch("aix.embeddings._litellm_embedding")
+    def test_partial_hits(self, mock_embedding):
+        # Pre-seed cache with one entry
+        cache = {text_cache_key("hi"): [0.99]}
+
+        def side_effect(*, model, input, **kwargs):
+            resp = Mock()
+            resp.data = [{"embedding": [float(len(s))]} for s in input]
+            return resp
+
+        mock_embedding.side_effect = side_effect
+
+        vecs = cached_embeddings(["hi", "world"], cache=cache)
+        # One API call for "world" only; "hi" was a hit
+        assert mock_embedding.call_count == 1
+        assert vecs[0] == [0.99]
+        assert vecs[1] == [5.0]
+        # Cache now has both
+        assert len(cache) == 2
+
+    @patch("aix.embeddings._litellm_embedding")
+    def test_on_hit_fires_for_each_hit(self, mock_embedding):
+        cache = {text_cache_key("hi"): [0.1]}
+
+        def side_effect(*, model, input, **kwargs):
+            resp = Mock()
+            resp.data = [{"embedding": [0.0]} for _ in input]
+            return resp
+
+        mock_embedding.side_effect = side_effect
+
+        hits: list[str] = []
+        cached_embeddings(["hi", "hi", "miss"], cache=cache, on_hit=hits.append)
+        # 'hi' appears twice -> 2 hits; 'miss' is a miss
+        assert len(hits) == 2
+
+    def test_empty_input(self):
+        cache = {}
+        assert cached_embeddings([], cache=cache) == []

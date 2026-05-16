@@ -52,6 +52,11 @@ from aix.embeddings import (
     cosine_similarity,
     find_most_similar,
     EmbeddingCache,
+    batched_embeddings,
+    cached_embeddings,
+    iter_batches,
+    text_cache_key,
+    truncate_segment,
 )
 from aix.prompts import (
     prompt_func,
