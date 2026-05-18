@@ -66,3 +66,8 @@ convention = "google"
 minversion = "6.0"
 testpaths = ["tests"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
+
+[tool.wads.ci.env]
+# OPENAI_API_KEY: aix modules read this via config2py at import time.
+# wads-migrate wires this from secrets into the workflow-level env: block.
+test_envvars = ["OPENAI_API_KEY"]
