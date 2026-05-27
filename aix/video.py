@@ -360,7 +360,7 @@ def generate_video_pika(
         GeneratedVideo object
     """
     raise NotImplementedError(
-        "Pika Labs integration coming soon. " "Set PIKA_API_KEY environment variable."
+        "Pika Labs integration coming soon. Set PIKA_API_KEY environment variable."
     )
 
 
