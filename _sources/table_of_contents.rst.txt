@@ -11,7 +11,6 @@
    module_docs/aix/audio
    module_docs/aix/batches
    module_docs/aix/chat
-   module_docs/aix/contexts
    module_docs/aix/embeddings
    module_docs/aix/gen_ai
    module_docs/aix/gen_ai/google_genai

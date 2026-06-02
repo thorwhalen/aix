@@ -1,4 +1,0 @@
-aix.contexts
-============
-.. automodule:: aix.contexts
-   :members:
