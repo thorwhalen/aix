@@ -1,7 +1,15 @@
 """Tests for aix.embeddings module."""
 
+import sys
 import pytest
 from unittest.mock import Mock, patch
+
+# `aix.embeddings` resolves to the exported function (not the submodule) on
+# some Python builds; patch the submodule object directly for robustness.
+import aix.embeddings  # noqa: F401
+
+_aix_embeddings = sys.modules["aix.embeddings"]
+
 from aix.embeddings import (
     embeddings,
     embed,
@@ -18,7 +26,7 @@ from aix.embeddings import (
 class TestEmbeddings:
     """Tests for embeddings function."""
 
-    @patch("aix.embeddings._litellm_embedding")
+    @patch.object(_aix_embeddings, "_litellm_embedding")
     def test_basic_embeddings(self, mock_embedding):
         """Test basic embeddings generation."""
         # Mock response
@@ -35,7 +43,7 @@ class TestEmbeddings:
         assert result[0] == [0.1, 0.2, 0.3]
         assert result[1] == [0.4, 0.5, 0.6]
 
-    @patch("aix.embeddings._litellm_embedding")
+    @patch.object(_aix_embeddings, "_litellm_embedding")
     def test_embeddings_with_model(self, mock_embedding):
         """Test embeddings with specific model."""
         mock_response = Mock()
@@ -56,7 +64,7 @@ class TestEmbeddings:
 class TestEmbed:
     """Tests for embed function."""
 
-    @patch("aix.embeddings.embeddings")
+    @patch.object(_aix_embeddings, "embeddings")
     def test_embed_single_text(self, mock_embeddings):
         """Test embedding single text."""
         mock_embeddings.return_value = iter([[0.1, 0.2, 0.3]])
@@ -103,8 +111,8 @@ class TestCosineSimilarity:
 class TestFindMostSimilar:
     """Tests for find_most_similar function."""
 
-    @patch("aix.embeddings.embed")
-    @patch("aix.embeddings.embeddings")
+    @patch.object(_aix_embeddings, "embed")
+    @patch.object(_aix_embeddings, "embeddings")
     def test_find_most_similar_with_string_query(self, mock_embeddings, mock_embed):
         """Test finding most similar with string query."""
         # Mock query embedding
@@ -127,7 +135,7 @@ class TestFindMostSimilar:
         assert results[0][1] == 1.0
         assert results[1][0] == "doc3"  # Second most similar
 
-    @patch("aix.embeddings.embeddings")
+    @patch.object(_aix_embeddings, "embeddings")
     def test_find_most_similar_with_vector_query(self, mock_embeddings):
         """Test finding most similar with pre-computed vector."""
         query_vec = [1.0, 0.0]
@@ -145,8 +153,8 @@ class TestFindMostSimilar:
         assert results[0][0] == "doc1"
         assert abs(results[0][1] - 1.0) < 1e-6
 
-    @patch("aix.embeddings.embed")
-    @patch("aix.embeddings.embeddings")
+    @patch.object(_aix_embeddings, "embed")
+    @patch.object(_aix_embeddings, "embeddings")
     def test_find_most_similar_top_k(self, mock_embeddings, mock_embed):
         """Test that top_k limits results."""
         mock_embed.return_value = [1.0, 0.0]
@@ -167,13 +175,13 @@ class TestFindMostSimilar:
 class TestEmbeddingCache:
     """Tests for EmbeddingCache class."""
 
-    @patch("aix.embeddings.embed")
+    @patch.object(_aix_embeddings, "embed")
     def test_cache_initialization(self, mock_embed):
         """Test cache initialization."""
         cache = EmbeddingCache()
         assert len(cache) == 0
 
-    @patch("aix.embeddings.embed")
+    @patch.object(_aix_embeddings, "embed")
     def test_cache_stores_results(self, mock_embed):
         """Test that cache stores results."""
         mock_embed.return_value = [0.1, 0.2, 0.3]
@@ -184,7 +192,7 @@ class TestEmbeddingCache:
         assert len(cache) == 1
         assert result1 == [0.1, 0.2, 0.3]
 
-    @patch("aix.embeddings.embed")
+    @patch.object(_aix_embeddings, "embed")
     def test_cache_reuses_results(self, mock_embed):
         """Test that cache reuses stored results."""
         mock_embed.return_value = [0.1, 0.2, 0.3]
@@ -197,7 +205,7 @@ class TestEmbeddingCache:
         assert mock_embed.call_count == 1
         assert result1 == result2
 
-    @patch("aix.embeddings.embed")
+    @patch.object(_aix_embeddings, "embed")
     def test_cache_force_refresh(self, mock_embed):
         """Test force refresh bypasses cache."""
         mock_embed.side_effect = [[0.1, 0.2], [0.3, 0.4]]
@@ -210,7 +218,7 @@ class TestEmbeddingCache:
         assert mock_embed.call_count == 2
         assert result1 != result2
 
-    @patch("aix.embeddings.embeddings")
+    @patch.object(_aix_embeddings, "embeddings")
     def test_cache_batch(self, mock_embeddings):
         """Test batch caching."""
         mock_embeddings.return_value = iter([[0.1, 0.2], [0.3, 0.4]])
@@ -221,8 +229,8 @@ class TestEmbeddingCache:
         assert len(results) == 2
         assert len(cache) == 2
 
-    @patch("aix.embeddings.embed")
-    @patch("aix.embeddings.embeddings")
+    @patch.object(_aix_embeddings, "embed")
+    @patch.object(_aix_embeddings, "embeddings")
     def test_cache_batch_partial_cache(self, mock_embeddings, mock_embed):
         """Test batch with partial cache hits."""
         # First, populate cache with one item
@@ -244,7 +252,7 @@ class TestEmbeddingCache:
         assert results[0] == [0.1, 0.2]  # From cache
         assert results[1] == [0.3, 0.4]  # New
 
-    @patch("aix.embeddings.embed")
+    @patch.object(_aix_embeddings, "embed")
     def test_cache_clear(self, mock_embed):
         """Test clearing cache."""
         mock_embed.return_value = [0.1, 0.2]
@@ -306,7 +314,7 @@ class TestTextCacheKey:
 class TestBatchedEmbeddings:
     """Tests for batched_embeddings."""
 
-    @patch("aix.embeddings._litellm_embedding")
+    @patch.object(_aix_embeddings, "_litellm_embedding")
     def test_batches_correctly(self, mock_embedding):
         # Each call returns one embedding per input
         def side_effect(*, model, input, **kwargs):
@@ -320,7 +328,7 @@ class TestBatchedEmbeddings:
         # 3 API calls: 2, 2, 1
         assert mock_embedding.call_count == 3
 
-    @patch("aix.embeddings._litellm_embedding")
+    @patch.object(_aix_embeddings, "_litellm_embedding")
     def test_on_batch_callback(self, mock_embedding):
         def side_effect(*, model, input, **kwargs):
             resp = Mock()
@@ -342,7 +350,7 @@ class TestBatchedEmbeddings:
 class TestCachedEmbeddings:
     """Tests for cached_embeddings (persistent caching pattern)."""
 
-    @patch("aix.embeddings._litellm_embedding")
+    @patch.object(_aix_embeddings, "_litellm_embedding")
     def test_misses_then_hits(self, mock_embedding):
         def side_effect(*, model, input, **kwargs):
             resp = Mock()
@@ -362,7 +370,7 @@ class TestCachedEmbeddings:
         assert mock_embedding.call_count == 0
         assert vecs1 == vecs2
 
-    @patch("aix.embeddings._litellm_embedding")
+    @patch.object(_aix_embeddings, "_litellm_embedding")
     def test_partial_hits(self, mock_embedding):
         # Pre-seed cache with one entry
         cache = {text_cache_key("hi"): [0.99]}
@@ -382,7 +390,7 @@ class TestCachedEmbeddings:
         # Cache now has both
         assert len(cache) == 2
 
-    @patch("aix.embeddings._litellm_embedding")
+    @patch.object(_aix_embeddings, "_litellm_embedding")
     def test_on_hit_fires_for_each_hit(self, mock_embedding):
         cache = {text_cache_key("hi"): [0.1]}
 

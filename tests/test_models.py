@@ -1,5 +1,6 @@
 """Tests for aix.models module."""
 
+import sys
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from aix.models import (
@@ -10,11 +11,17 @@ from aix.models import (
 )
 from aix.ai_models import Model
 
+# `aix.models` resolves to the exported `models` object (not the submodule) on
+# some Python builds; patch the submodule object directly for robustness.
+import aix.models  # noqa: F401
+
+_aix_models = sys.modules["aix.models"]
+
 
 class TestModelStore:
     """Tests for ModelStore class."""
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_initialization(self, mock_get_manager):
         """Test ModelStore initialization."""
         mock_manager = Mock()
@@ -25,7 +32,7 @@ class TestModelStore:
         assert store._manager is mock_manager
         assert store._discovered is False
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_auto_discover(self, mock_get_manager):
         """Test auto_discover on initialization."""
         mock_manager = Mock()
@@ -36,7 +43,7 @@ class TestModelStore:
 
         mock_manager.discover_from_source.assert_called_once()
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_discover(self, mock_get_manager):
         """Test discover method."""
         mock_manager = Mock()
@@ -53,7 +60,7 @@ class TestModelStore:
         assert result == mock_models
         assert store._discovered is True
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_getitem_by_id(self, mock_get_manager):
         """Test getting model by ID."""
         mock_manager = Mock()
@@ -66,7 +73,7 @@ class TestModelStore:
 
         assert result == mock_model
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_getitem_by_dict(self, mock_get_manager):
         """Test getting models by filter dict."""
         mock_manager = Mock()
@@ -80,7 +87,7 @@ class TestModelStore:
         assert result == mock_models
         mock_manager.list_models.assert_called_once_with(provider="openai")
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_iter(self, mock_get_manager):
         """Test iterating over model IDs."""
         mock_manager = Mock()
@@ -93,7 +100,7 @@ class TestModelStore:
         assert "model1" in ids
         assert "model2" in ids
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_len(self, mock_get_manager):
         """Test getting number of models."""
         mock_manager = Mock()
@@ -104,7 +111,7 @@ class TestModelStore:
 
         assert len(store) == 2
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_contains(self, mock_get_manager):
         """Test checking if model exists."""
         mock_manager = Mock()
@@ -116,7 +123,7 @@ class TestModelStore:
         assert "gpt-4" in store
         assert "nonexistent" not in store
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_filter(self, mock_get_manager):
         """Test filtering models."""
         mock_manager = Mock()
@@ -140,7 +147,7 @@ class TestModelStore:
             custom_filter=None,
         )
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_search(self, mock_get_manager):
         """Test searching models."""
         mock_manager = Mock()
@@ -160,7 +167,7 @@ class TestModelStore:
         assert len(results) == 2
         assert all("gpt" in m.id.lower() for m in results)
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_by_provider(self, mock_get_manager):
         """Test getting models by provider."""
         mock_manager = Mock()
@@ -175,7 +182,7 @@ class TestModelStore:
 
         assert result == mock_models
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_by_task(self, mock_get_manager):
         """Test getting models by task."""
         mock_manager = Mock()
@@ -198,7 +205,7 @@ class TestModelStore:
             custom_filter=None,
         )
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_recommend(self, mock_get_manager):
         """Test model recommendations."""
         mock_manager = Mock()
@@ -226,7 +233,7 @@ class TestModelStore:
         assert len(result) == 1
         assert result[0].id == "cheap"
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_get_info(self, mock_get_manager):
         """Test getting model info."""
         mock_manager = Mock()
@@ -239,7 +246,7 @@ class TestModelStore:
 
         assert result == mock_model
 
-    @patch("aix.models.get_manager")
+    @patch.object(_aix_models, "get_manager")
     def test_get_connector_metadata(self, mock_get_manager):
         """Test getting connector metadata."""
         mock_manager = Mock()
@@ -256,7 +263,7 @@ class TestModelStore:
 class TestConvenienceFunctions:
     """Tests for convenience functions."""
 
-    @patch("aix.models.models")
+    @patch.object(_aix_models, "models")
     def test_discover_available_models(self, mock_models):
         """Test discover_available_models function."""
         mock_models.discover.return_value = []
@@ -265,7 +272,7 @@ class TestConvenienceFunctions:
 
         mock_models.discover.assert_called_once_with(source="openrouter", verbose=True)
 
-    @patch("aix.models.models")
+    @patch.object(_aix_models, "models")
     def test_get_model_info(self, mock_models):
         """Test get_model_info function."""
         mock_model = Model(id="gpt-4", provider="openai")
@@ -276,7 +283,7 @@ class TestConvenienceFunctions:
         assert result == mock_model
         mock_models.get_info.assert_called_once_with("gpt-4")
 
-    @patch("aix.models.models")
+    @patch.object(_aix_models, "models")
     def test_find_models(self, mock_models):
         """Test find_models function."""
         mock_results = [Model(id="gpt-4", provider="openai")]

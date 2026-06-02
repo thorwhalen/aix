@@ -1,13 +1,23 @@
 """Pytest configuration and shared fixtures."""
 
+import sys
 import pytest
 from unittest.mock import Mock, patch
+
+# `aix/__init__.py` exports `chat`/`embeddings` (the function) under the same
+# name as their submodule, so `aix.chat` resolves to the function on some
+# Python builds. Patch the submodule objects directly to stay version-robust.
+import aix.chat  # noqa: F401
+import aix.embeddings  # noqa: F401
+
+_aix_chat = sys.modules["aix.chat"]
+_aix_embeddings = sys.modules["aix.embeddings"]
 
 
 @pytest.fixture
 def mock_litellm_completion():
     """Mock LiteLLM completion function."""
-    with patch("aix.chat._litellm_completion") as mock:
+    with patch.object(_aix_chat, "_litellm_completion") as mock:
         mock_response = Mock()
         mock_response.choices = [Mock()]
         mock_response.choices[0].message = Mock()
@@ -19,7 +29,7 @@ def mock_litellm_completion():
 @pytest.fixture
 def mock_litellm_embedding():
     """Mock LiteLLM embedding function."""
-    with patch("aix.embeddings._litellm_embedding") as mock:
+    with patch.object(_aix_embeddings, "_litellm_embedding") as mock:
         mock_response = Mock()
         mock_response.data = [{"embedding": [0.1, 0.2, 0.3]}]
         mock.return_value = mock_response
