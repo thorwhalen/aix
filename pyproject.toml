@@ -10,21 +10,13 @@ readme = "README.md"
 requires-python = ">=3.10"
 keywords = []
 authors = [{ name = "Thor Whalen" }]
+# aix is a headless facade -- it keeps hard dependencies to a minimum.
+# `litellm` is the provider backend (imported lazily, only when a call is made);
+# `config2py` reads API keys / config. Everything else lives in the extras below
+# and is imported lazily, with a clear install hint when missing.
 dependencies = [
-    "guide",
-    "config2py",
-    "google",
-    "dol",
-    "i2",
-    "numpy",
-    "oa",
-    "pandas",
-    "scikit-learn",
-    "tabled",
-    "requests",
-    "contaix",
-    "hypothesis",
     "litellm>=1.0.0",
+    "config2py",
 ]
 
 [project.license]
@@ -34,7 +26,28 @@ text = "Apache-2.0"
 Homepage = "https://github.com/thorwhalen/aix"
 
 [project.optional-dependencies]
-testing = []
+# Provider SDKs used by the legacy aix.gen_ai backends
+google = ["google-generativeai", "i2"]
+openai = ["oa"]
+# Model discovery from OpenRouter / Ollama / provider APIs (aix.ai_models.sources)
+discovery = ["requests"]
+# Media generation helpers (aix.image / aix.video)
+image = ["pillow", "requests"]
+video = ["diffusers", "torch", "requests"]
+# Misc utilities
+tables = ["tabled"]              # aix.misc.get_llm_leaderboards
+hub = ["huggingface_hub"]        # aix.ai_models.examples
+# Everything above, for "give me all the optional backends"
+all = [
+    "google-generativeai",
+    "i2",
+    "oa",
+    "requests",
+    "pillow",
+    "tabled",
+    "huggingface_hub",
+]
+testing = ["pytest", "hypothesis"]
 
 [tool.ruff]
 line-length = 88
