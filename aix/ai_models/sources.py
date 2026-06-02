@@ -4,7 +4,6 @@ This module provides ready-to-use sources for discovering models
 and connectors for formatting metadata for different clients.
 """
 
-import requests
 from typing import Any
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -30,6 +29,8 @@ class OpenRouterSource(ModelSource):
         >>> len(models) > 0  # Should find many models
         True
         """
+        import requests
+
         response = requests.get(self._endpoint, timeout=self._timeout)
         response.raise_for_status()
         data = response.json()
@@ -96,6 +97,8 @@ class OllamaSource(ModelSource):
         >>> all(m.is_local for m in models)
         True
         """
+        import requests
+
         try:
             response = requests.get(f"{self._base_url}/api/tags", timeout=self._timeout)
             response.raise_for_status()
@@ -148,6 +151,8 @@ class ProviderAPISource(ModelSource):
 
         Requires valid API key for the provider.
         """
+        import requests
+
         headers = {"Authorization": f"Bearer {self._api_key}"}
 
         try:

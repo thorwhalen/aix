@@ -1,7 +1,6 @@
 """Google GenAI API functionality."""
 
 from contextlib import suppress
-from i2 import Sig
 from aix.util import get_config
 
 name = "google"
@@ -19,6 +18,7 @@ chat_models = {
 
 with suppress(ModuleNotFoundError, ImportError):
     import google.generativeai as genai
+    from i2 import Sig
 
     genai.configure(api_key=get_config(Const.GOOGLE_API_KEY))
 

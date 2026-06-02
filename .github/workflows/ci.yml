@@ -38,11 +38,10 @@ jobs:
     # propagation unambiguous regardless of caller-vs-called ownership.
     # Missing secrets on the caller resolve to empty strings, harmless for
     # the optional ones; PYPI_PASSWORD must be set for the publish job.
+    # Transport list generated from [tool.wads.ci.env] in pyproject.toml.
+    # PYPI_PASSWORD is always needed for publishing; OPENAI_API_KEY is the only
+    # third-party secret aix's modules/tests reference. Add more with
+    # `wads-secrets add VAR_NAME` (updates pyproject + this block together).
     secrets:
       PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      HF_TOKEN: ${{ secrets.HF_TOKEN }}
-      HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
-      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-      KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}

@@ -10,6 +10,21 @@ A clean, pythonic facade for common AI operations that abstracts away provider-s
 pip install aix
 ```
 
+`aix` is a headless facade and keeps its hard dependencies minimal — the base
+install only pulls in [`litellm`](https://github.com/BerriAI/litellm) (the
+provider backend) and `config2py` (for reading API keys / config). Optional
+capabilities live in extras and are imported lazily, raising a clear install
+hint if their backend is missing:
+
+```bash
+pip install "aix[image]"      # image generation helpers (Pillow)
+pip install "aix[video]"      # local text-to-video (diffusers, torch)
+pip install "aix[discovery]"  # model discovery via OpenRouter / Ollama (requests)
+pip install "aix[google]"     # legacy Google Gemini backend
+pip install "aix[openai]"     # legacy OpenAI (oa) backend
+pip install "aix[all]"        # all optional backends
+```
+
 ## Quick Start
 
 ```python
