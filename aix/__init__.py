@@ -44,6 +44,17 @@ Backends:
 For detailed documentation, see: https://github.com/thorwhalen/aix
 """
 
+# Configuration (single source of truth for per-function defaults)
+from aix import config
+from aix.config import (
+    AixConfig,
+    get_config,
+    set_config,
+    configure,
+    using,
+    load_config,
+)
+
 # Core interfaces (new clean API)
 from aix.chat import chat, ask, chat_with_history, ChatSession
 from aix.embeddings import (
@@ -110,6 +121,14 @@ __version__ = "0.1.0"
 
 # Public API
 __all__ = [
+    # Configuration
+    "config",
+    "AixConfig",
+    "get_config",
+    "set_config",
+    "configure",
+    "using",
+    "load_config",
     # Core chat
     "chat",
     "ask",

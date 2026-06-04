@@ -17,6 +17,9 @@ authors = [{ name = "Thor Whalen" }]
 dependencies = [
     "litellm>=1.0.0",
     "config2py",
+    # TOML parsing for the user config file (aix.config). `tomllib` is stdlib on
+    # 3.11+; `tomli` is the tiny backport for 3.10.
+    "tomli; python_version < '3.11'",
 ]
 
 [project.license]
