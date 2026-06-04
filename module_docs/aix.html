@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix &mdash; aix 0.0.27 documentation</title>
+  <title>aix &mdash; aix 0.0.28 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=cee5022b"></script>
+      <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,6 +50,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.AixConfig"><code class="docutils literal notranslate"><span class="pre">AixConfig</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.BatchProcessor"><code class="docutils literal notranslate"><span class="pre">BatchProcessor</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aix.BatchProcessor.clear"><code class="docutils literal notranslate"><span class="pre">BatchProcessor.clear()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aix.BatchProcessor.process_chats"><code class="docutils literal notranslate"><span class="pre">BatchProcessor.process_chats()</span></code></a></li>
@@ -111,6 +112,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#aix.batch_process"><code class="docutils literal notranslate"><span class="pre">batch_process()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.chat"><code class="docutils literal notranslate"><span class="pre">chat()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.chat_with_history"><code class="docutils literal notranslate"><span class="pre">chat_with_history()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.configure"><code class="docutils literal notranslate"><span class="pre">configure()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.constrained_answer"><code class="docutils literal notranslate"><span class="pre">constrained_answer()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.cosine_similarity"><code class="docutils literal notranslate"><span class="pre">cosine_similarity()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.create_variation"><code class="docutils literal notranslate"><span class="pre">create_variation()</span></code></a></li>
@@ -124,15 +126,19 @@
 <li class="toctree-l2"><a class="reference internal" href="#aix.generate_image"><code class="docutils literal notranslate"><span class="pre">generate_image()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.generate_images"><code class="docutils literal notranslate"><span class="pre">generate_images()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.generate_video"><code class="docutils literal notranslate"><span class="pre">generate_video()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.get_config"><code class="docutils literal notranslate"><span class="pre">get_config()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.get_model_info"><code class="docutils literal notranslate"><span class="pre">get_model_info()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.get_video_providers"><code class="docutils literal notranslate"><span class="pre">get_video_providers()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.prompt_func"><code class="docutils literal notranslate"><span class="pre">prompt_func()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.prompt_to_json"><code class="docutils literal notranslate"><span class="pre">prompt_to_json()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.prompt_to_text"><code class="docutils literal notranslate"><span class="pre">prompt_to_text()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.set_config"><code class="docutils literal notranslate"><span class="pre">set_config()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.text_to_speech"><code class="docutils literal notranslate"><span class="pre">text_to_speech()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.transcribe"><code class="docutils literal notranslate"><span class="pre">transcribe()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.transcribe_with_timestamps"><code class="docutils literal notranslate"><span class="pre">transcribe_with_timestamps()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aix.translate_audio"><code class="docutils literal notranslate"><span class="pre">translate_audio()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.using"><code class="docutils literal notranslate"><span class="pre">using()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="aix/ai_models.html">aix.ai_models</a></li>
@@ -143,6 +149,7 @@
 <li class="toctree-l1"><a class="reference internal" href="aix/audio.html">aix.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aix/batches.html">aix.batches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aix/config.html">aix.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aix/embeddings.html">aix.embeddings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aix/gen_ai.html">aix.gen_ai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
@@ -225,6 +232,12 @@ provider-specific details and complexities.</p>
 </dd>
 </dl>
 <p>For detailed documentation, see: <a class="reference external" href="https://github.com/thorwhalen/aix">https://github.com/thorwhalen/aix</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.AixConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">AixConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="aix/config.html#aix.config.ChatConfig" title="aix.config.ChatConfig"><span class="pre">ChatConfig</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embeddings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="aix/config.html#aix.config.EmbeddingConfig" title="aix.config.EmbeddingConfig"><span class="pre">EmbeddingConfig</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="aix/config.html#aix.config.ImageConfig" title="aix.config.ImageConfig"><span class="pre">ImageConfig</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="aix/config.html#aix.config.AudioConfig" title="aix.config.AudioConfig"><span class="pre">AudioConfig</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="aix/config.html#aix.config.VideoConfig" title="aix.config.VideoConfig"><span class="pre">VideoConfig</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#AixConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.AixConfig" title="Link to this definition"></a></dt>
+<dd><p>Top-level AIX configuration (single source of truth for defaults).</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="aix.BatchProcessor">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">BatchProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/batches.html#BatchProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.BatchProcessor" title="Link to this definition"></a></dt>
@@ -1172,6 +1185,22 @@ If stream=True: Iterator yielding text chunks as they arrive</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="aix.configure">
+<span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="aix/config.html#aix.config.AixConfig" title="aix.config.AixConfig"><span class="pre">AixConfig</span></a></span></span><a class="reference internal" href="../_modules/aix/config.html#configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.configure" title="Link to this definition"></a></dt>
+<dd><p>Apply runtime overrides to the active config and return it.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">chat_model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">model</span>
+<span class="go">&#39;openai/gpt-4o-mini&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">chat</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">temperature</span>
+<span class="go">0.2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="aix.constrained_answer">
 <span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">constrained_answer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_answers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">type</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enhance_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/prompts.html#constrained_answer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.constrained_answer" title="Link to this definition"></a></dt>
 <dd><p>Get an answer from the LLM constrained to a set of valid answers or types.</p>
@@ -1676,6 +1705,12 @@ provider-specific API keys.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="aix.get_config">
+<span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="aix/config.html#aix.config.AixConfig" title="aix.config.AixConfig"><span class="pre">AixConfig</span></a></span></span><a class="reference internal" href="../_modules/aix/config.html#get_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.get_config" title="Link to this definition"></a></dt>
+<dd><p>Return the current active <a class="reference internal" href="#aix.AixConfig" title="aix.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="aix.get_model_info">
 <span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">get_model_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="aix/ai_models/base.html#aix.ai_models.base.Model" title="aix.ai_models.base.Model"><span class="pre">Model</span></a></span></span><a class="reference internal" href="../_modules/aix/models.html#get_model_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.get_model_info" title="Link to this definition"></a></dt>
 <dd><p>Get information about a specific model.</p>
@@ -1713,6 +1748,26 @@ provider-specific API keys.</p>
 <span class="go">[&#39;runway&#39;, &#39;pika&#39;]</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.load_config">
+<span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">environ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="aix/config.html#aix.config.AixConfig" title="aix.config.AixConfig"><span class="pre">AixConfig</span></a></span></span><a class="reference internal" href="../_modules/aix/config.html#load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.load_config" title="Link to this definition"></a></dt>
+<dd><p>Resolve an <a class="reference internal" href="#aix.AixConfig" title="aix.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a> from shipped defaults, TOML file, and env.</p>
+<p>Precedence (low to high): shipped defaults &lt; TOML file &lt; environment variables.
+Runtime overrides (<a class="reference internal" href="#aix.configure" title="aix.configure"><code class="xref py py-func docutils literal notranslate"><span class="pre">configure()</span></code></a>/<a class="reference internal" href="#aix.using" title="aix.using"><code class="xref py py-func docutils literal notranslate"><span class="pre">using()</span></code></a>) and explicit call arguments
+sit above this and are applied elsewhere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – Optional explicit TOML path. Defaults to <code class="xref py py-func docutils literal notranslate"><span class="pre">config_file_path()</span></code>.</p></li>
+<li><p><strong>environ</strong> – Optional environment mapping (defaults to <code class="docutils literal notranslate"><span class="pre">os.environ</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A fully resolved <a class="reference internal" href="#aix.AixConfig" title="aix.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -1835,6 +1890,12 @@ With output_schema: Returns structured data (dict, list, etc.)</p>
 <span class="go">True</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.set_config">
+<span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">set_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="aix/config.html#aix.config.AixConfig" title="aix.config.AixConfig"><span class="pre">AixConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="aix/config.html#aix.config.AixConfig" title="aix.config.AixConfig"><span class="pre">AixConfig</span></a></span></span><a class="reference internal" href="../_modules/aix/config.html#set_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.set_config" title="Link to this definition"></a></dt>
+<dd><p>Replace the active config wholesale. Returns the new active config.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1987,6 +2048,19 @@ Otherwise: TranscriptionResult object with metadata</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">english_text</span> <span class="o">=</span> <span class="n">translate_audio</span><span class="p">(</span><span class="s2">&quot;spanish_audio.mp3&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">english_text</span><span class="p">)</span>
 <span class="go">&#39;This is the English translation.&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.using">
+<span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">using</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="aix/config.html#aix.config.AixConfig" title="aix.config.AixConfig"><span class="pre">AixConfig</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/aix/config.html#using"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.using" title="Link to this definition"></a></dt>
+<dd><p>Context manager applying scoped overrides, restored on exit.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">config</span><span class="o">.</span><span class="n">using</span><span class="p">(</span><span class="n">chat_temperature</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span> <span class="k">as</span> <span class="n">c</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">c</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">temperature</span>
+<span class="go">0.0</span>
 </pre></div>
 </div>
 </dd></dl>

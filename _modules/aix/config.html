@@ -1,0 +1,494 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.config &mdash; aix 0.0.28 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=26ffa1e9"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/config.html">aix.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/video.html">aix.video</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aix.config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aix.config</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Central configuration for AIX (single source of truth for defaults).</span>
+
+<span class="sd">This module is the SSOT for *what model (and related parameters) each AIX</span>
+<span class="sd">function uses by default*. Instead of scattering hardcoded ``DFLT_*`` constants</span>
+<span class="sd">across modules, every function resolves its defaults from a single, layered</span>
+<span class="sd">configuration.</span>
+
+<span class="sd">Resolution layers, highest precedence first:</span>
+
+<span class="sd">1. **Explicit call argument** -- e.g. ``chat(..., model=...)`` always wins</span>
+<span class="sd">   (handled at the call site, not here).</span>
+<span class="sd">2. **Runtime override** -- :func:`configure` swaps the active config; :func:`using`</span>
+<span class="sd">   scopes an override to a ``with`` block.</span>
+<span class="sd">3. **Environment variables** -- ``AIX_CHAT_MODEL``, ``AIX_CHAT_TEMPERATURE``,</span>
+<span class="sd">   ``AIX_EMBEDDING_MODEL``, ``AIX_IMAGE_MODEL``, ``AIX_TTS_MODEL``,</span>
+<span class="sd">   ``AIX_TTS_VOICE``, ``AIX_TRANSCRIPTION_MODEL``, ...</span>
+<span class="sd">4. **User config file** -- a TOML file at ``&lt;app config dir&gt;/config.toml``</span>
+<span class="sd">   (override the path with the ``AIX_CONFIG_FILE`` environment variable).</span>
+<span class="sd">5. **Shipped defaults** -- the dataclass field defaults below.</span>
+
+<span class="sd">The schema is a set of frozen dataclasses (immutable). A module-level *active</span>
+<span class="sd">config* pointer holds the currently resolved :class:`AixConfig`; :func:`configure`</span>
+<span class="sd">and :func:`using` swap that pointer rather than mutating in place.</span>
+
+<span class="sd">Examples:</span>
+<span class="sd">    &gt;&gt;&gt; from aix import config</span>
+<span class="sd">    &gt;&gt;&gt; c = config.get_config()</span>
+<span class="sd">    &gt;&gt;&gt; isinstance(c.chat.model, str)</span>
+<span class="sd">    True</span>
+
+<span class="sd">    Scoped override (does not leak outside the block):</span>
+
+<span class="sd">    &gt;&gt;&gt; with config.using(chat_model=&quot;some/model&quot;):</span>
+<span class="sd">    ...     config.get_config().chat.model</span>
+<span class="sd">    &#39;some/model&#39;</span>
+<span class="sd">    &gt;&gt;&gt; config.get_config().chat.model == c.chat.model</span>
+<span class="sd">    True</span>
+
+<span class="sd">    TOML config file shape::</span>
+
+<span class="sd">        [chat]</span>
+<span class="sd">        model = &quot;openai/gpt-4o-mini&quot;</span>
+<span class="sd">        temperature = 1.0</span>
+
+<span class="sd">        [embeddings]</span>
+<span class="sd">        model = &quot;text-embedding-3-small&quot;</span>
+
+<span class="sd">        [image]</span>
+<span class="sd">        model = &quot;dall-e-3&quot;</span>
+<span class="sd">        size = &quot;1024x1024&quot;</span>
+
+<span class="sd">        [audio]</span>
+<span class="sd">        tts_model = &quot;tts-1&quot;</span>
+<span class="sd">        tts_voice = &quot;alloy&quot;</span>
+<span class="sd">        transcription_model = &quot;whisper-1&quot;</span>
+
+<span class="sd">        [aliases]</span>
+<span class="sd">        fast = &quot;openai/gpt-4o-mini&quot;</span>
+<span class="sd">        best = &quot;anthropic/claude-sonnet-4&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">replace</span><span class="p">,</span> <span class="n">is_dataclass</span><span class="p">,</span> <span class="n">MISSING</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Iterator</span>
+
+<span class="k">try</span><span class="p">:</span>  <span class="c1"># Python 3.11+</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">tomllib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_tomllib</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>  <span class="c1"># pragma: no cover - fallback for older interpreters</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">tomli</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_tomllib</span>  <span class="c1"># type: ignore</span>
+    <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">_tomllib</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;ChatConfig&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EmbeddingConfig&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ImageConfig&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AudioConfig&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;VideoConfig&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AixConfig&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;load_config&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_config&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;set_config&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;configure&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;using&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;config_file_path&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_opt</span><span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">flat</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cast</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Define a config field.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        default: The shipped default value.</span>
+<span class="sd">        flat: The flat override name (used both for ``configure(**)`` kwargs and,</span>
+<span class="sd">            uppercased and ``AIX_``-prefixed, for the environment variable).</span>
+<span class="sd">            e.g. ``flat=&quot;chat_model&quot;`` -&gt; env var ``AIX_CHAT_MODEL``.</span>
+<span class="sd">        cast: Callable used to coerce a string (from env var) to the field type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;flat&quot;</span><span class="p">:</span> <span class="n">flat</span><span class="p">,</span> <span class="s2">&quot;cast&quot;</span><span class="p">:</span> <span class="n">cast</span><span class="p">})</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_env_name</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Environment-variable name for a config field (``AIX_`` + flat, uppercased).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;AIX_&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;flat&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="ChatConfig">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.ChatConfig">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ChatConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defaults for ``chat`` / ``ask`` / ``prompt_func``.&quot;&quot;&quot;</span>
+
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;chat_model&quot;</span><span class="p">)</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;chat_temperature&quot;</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;chat_max_tokens&quot;</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="EmbeddingConfig">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.EmbeddingConfig">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EmbeddingConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defaults for ``embeddings`` / ``embed``.&quot;&quot;&quot;</span>
+
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;text-embedding-3-small&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;embedding_model&quot;</span><span class="p">)</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;embedding_batch_size&quot;</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ImageConfig">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.ImageConfig">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ImageConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defaults for ``generate_image`` / ``generate_images``.&quot;&quot;&quot;</span>
+
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;dall-e-2&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;image_model&quot;</span><span class="p">)</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;1024x1024&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;image_size&quot;</span><span class="p">)</span>
+    <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;image_quality&quot;</span><span class="p">)</span>
+    <span class="n">num_images</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;image_num_images&quot;</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="AudioConfig">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.AudioConfig">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AudioConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defaults for ``text_to_speech`` / ``transcribe`` / ``translate_audio``.&quot;&quot;&quot;</span>
+
+    <span class="n">tts_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;tts-1&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;tts_model&quot;</span><span class="p">)</span>
+    <span class="n">tts_voice</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;alloy&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;tts_voice&quot;</span><span class="p">)</span>
+    <span class="n">tts_speed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;tts_speed&quot;</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">transcription_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;whisper-1&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;transcription_model&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="VideoConfig">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.VideoConfig">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">VideoConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defaults for ``generate_video`` (provider-dependent).&quot;&quot;&quot;</span>
+
+    <span class="n">provider</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;video_provider&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Maps the AixConfig attribute name -&gt; (sub-config class, TOML section name).</span>
+<span class="c1"># The attribute name doubles as the TOML section name.</span>
+<span class="n">_SECTIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;chat&quot;</span><span class="p">:</span> <span class="n">ChatConfig</span><span class="p">,</span>
+    <span class="s2">&quot;embeddings&quot;</span><span class="p">:</span> <span class="n">EmbeddingConfig</span><span class="p">,</span>
+    <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">ImageConfig</span><span class="p">,</span>
+    <span class="s2">&quot;audio&quot;</span><span class="p">:</span> <span class="n">AudioConfig</span><span class="p">,</span>
+    <span class="s2">&quot;video&quot;</span><span class="p">:</span> <span class="n">VideoConfig</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="AixConfig">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.AixConfig">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AixConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Top-level AIX configuration (single source of truth for defaults).&quot;&quot;&quot;</span>
+
+    <span class="n">chat</span><span class="p">:</span> <span class="n">ChatConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">ChatConfig</span><span class="p">)</span>
+    <span class="n">embeddings</span><span class="p">:</span> <span class="n">EmbeddingConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">EmbeddingConfig</span><span class="p">)</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">ImageConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">ImageConfig</span><span class="p">)</span>
+    <span class="n">audio</span><span class="p">:</span> <span class="n">AudioConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">AudioConfig</span><span class="p">)</span>
+    <span class="n">video</span><span class="p">:</span> <span class="n">VideoConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">VideoConfig</span><span class="p">)</span>
+    <span class="n">aliases</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1"># Loading (file + env layers)</span>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+
+
+<div class="viewcode-block" id="config_file_path">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.config_file_path">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">config_file_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Path to the user config file (env ``AIX_CONFIG_FILE`` overrides default).&quot;&quot;&quot;</span>
+    <span class="n">explicit</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AIX_CONFIG_FILE&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">explicit</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">explicit</span>
+    <span class="c1"># Imported lazily to avoid importing the data-dir machinery unless needed.</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">aix.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">djoin</span>
+
+    <span class="k">return</span> <span class="n">djoin</span><span class="p">(</span><span class="s2">&quot;config.toml&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_toml</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read a TOML config file, returning ``{}`` if missing or unreadable.&quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">path</span> <span class="ow">or</span> <span class="n">config_file_path</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_tomllib</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_subconfig</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">section</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">environ</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build one sub-config: shipped defaults &lt; TOML section &lt; env vars.&quot;&quot;&quot;</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">toml_key</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="n">toml_key</span> <span class="ow">in</span> <span class="n">section</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">section</span><span class="p">[</span><span class="n">toml_key</span><span class="p">]</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">_env_name</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">environ</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cast&quot;</span><span class="p">](</span><span class="n">environ</span><span class="p">[</span><span class="n">env</span><span class="p">])</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="load_config">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.load_config">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_config</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">environ</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AixConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve an :class:`AixConfig` from shipped defaults, TOML file, and env.</span>
+
+<span class="sd">    Precedence (low to high): shipped defaults &lt; TOML file &lt; environment variables.</span>
+<span class="sd">    Runtime overrides (:func:`configure`/:func:`using`) and explicit call arguments</span>
+<span class="sd">    sit above this and are applied elsewhere.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path: Optional explicit TOML path. Defaults to :func:`config_file_path`.</span>
+<span class="sd">        environ: Optional environment mapping (defaults to ``os.environ``).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A fully resolved :class:`AixConfig`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">environ</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="k">if</span> <span class="n">environ</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">environ</span>
+    <span class="n">toml_data</span> <span class="o">=</span> <span class="n">_read_toml</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="n">sub</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">attr</span><span class="p">:</span> <span class="n">_build_subconfig</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">toml_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="p">{})</span> <span class="ow">or</span> <span class="p">{},</span> <span class="n">environ</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">_SECTIONS</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="n">aliases</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">toml_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aliases&quot;</span><span class="p">,</span> <span class="p">{})</span> <span class="ow">or</span> <span class="p">{})</span>
+    <span class="k">return</span> <span class="n">AixConfig</span><span class="p">(</span><span class="n">aliases</span><span class="o">=</span><span class="n">aliases</span><span class="p">,</span> <span class="o">**</span><span class="n">sub</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1"># Active config + runtime overrides</span>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+
+<span class="n">_active_config</span><span class="p">:</span> <span class="n">AixConfig</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">()</span>
+
+<span class="c1"># Flat override name -&gt; (section attr, field name), built from field metadata.</span>
+<span class="n">_FLAT_INDEX</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;flat&quot;</span><span class="p">]:</span> <span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">_SECTIONS</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="get_config">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.get_config">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AixConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the current active :class:`AixConfig`.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_active_config</span></div>
+
+
+
+<div class="viewcode-block" id="set_config">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.set_config">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">AixConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AixConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Replace the active config wholesale. Returns the new active config.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_active_config</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">AixConfig</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected AixConfig, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">_active_config</span> <span class="o">=</span> <span class="n">config</span>
+    <span class="k">return</span> <span class="n">_active_config</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_apply_overrides</span><span class="p">(</span><span class="n">base</span><span class="p">:</span> <span class="n">AixConfig</span><span class="p">,</span> <span class="n">overrides</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AixConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a new AixConfig with flat ``overrides`` applied to ``base``.</span>
+
+<span class="sd">    Keys are the flat names (e.g. ``chat_model``, ``tts_voice``) or top-level</span>
+<span class="sd">    section names mapped to dicts (e.g. ``chat={&#39;model&#39;: ...}``) or ``aliases``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">section_updates</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">new_aliases</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">overrides</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;aliases&quot;</span><span class="p">:</span>
+            <span class="n">new_aliases</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">_SECTIONS</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+            <span class="n">section_updates</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">_FLAT_INDEX</span><span class="p">:</span>
+            <span class="n">attr</span><span class="p">,</span> <span class="n">fname</span> <span class="o">=</span> <span class="n">_FLAT_INDEX</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">section_updates</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="p">{})[</span><span class="n">fname</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Unknown config override </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2">. Valid flat keys: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">_FLAT_INDEX</span><span class="p">)</span><span class="si">}</span><span class="s2">; or a section name in &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">_SECTIONS</span><span class="p">)</span><span class="si">}</span><span class="s2">; or &#39;aliases&#39;.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="n">changes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">updates</span> <span class="ow">in</span> <span class="n">section_updates</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">changes</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">attr</span><span class="p">),</span> <span class="o">**</span><span class="n">updates</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">new_aliases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">changes</span><span class="p">[</span><span class="s2">&quot;aliases&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_aliases</span>
+    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="o">**</span><span class="n">changes</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="configure">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.configure">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span><span class="o">**</span><span class="n">overrides</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AixConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply runtime overrides to the active config and return it.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix import config</span>
+<span class="sd">        &gt;&gt;&gt; _ = config.configure(chat_model=&quot;openai/gpt-4o-mini&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; config.get_config().chat.model</span>
+<span class="sd">        &#39;openai/gpt-4o-mini&#39;</span>
+<span class="sd">        &gt;&gt;&gt; _ = config.configure(chat={&quot;temperature&quot;: 0.2})</span>
+<span class="sd">        &gt;&gt;&gt; config.get_config().chat.temperature</span>
+<span class="sd">        0.2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">set_config</span><span class="p">(</span><span class="n">_apply_overrides</span><span class="p">(</span><span class="n">_active_config</span><span class="p">,</span> <span class="n">overrides</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="using">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.using">[docs]</a>
+<span class="nd">@contextmanager</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">using</span><span class="p">(</span><span class="o">**</span><span class="n">overrides</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">AixConfig</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Context manager applying scoped overrides, restored on exit.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix import config</span>
+<span class="sd">        &gt;&gt;&gt; with config.using(chat_temperature=0.0) as c:</span>
+<span class="sd">        ...     c.chat.temperature</span>
+<span class="sd">        0.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_active_config</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="n">_active_config</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_active_config</span> <span class="o">=</span> <span class="n">_apply_overrides</span><span class="p">(</span><span class="n">previous</span><span class="p">,</span> <span class="n">overrides</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">_active_config</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">_active_config</span> <span class="o">=</span> <span class="n">previous</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; aix 0.0.27 documentation</title>
+  <title>Index &mdash; aix 0.0.28 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=cee5022b"></script>
+      <script src="_static/documentation_options.js?v=26ffa1e9"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -55,6 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/audio.html">aix.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/batches.html">aix.batches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/config.html">aix.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/embeddings.html">aix.embeddings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
@@ -113,6 +114,8 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
  
 </div>
@@ -197,6 +200,13 @@
 </li>
       </ul></li>
       <li>
+    aix.config
+
+      <ul>
+        <li><a href="module_docs/aix/config.html#module-aix.config">module</a>
+</li>
+      </ul></li>
+      <li>
     aix.embeddings
 
       <ul>
@@ -275,6 +285,12 @@
         <li><a href="module_docs/aix/video.html#module-aix.video">module</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/aix.html#aix.AixConfig">AixConfig (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/config.html#aix.config.AixConfig">(class in aix.config)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/aix/video.html#aix.video.animate_image">animate_image() (in module aix.video)</a>
 </li>
       <li><a href="module_docs/aix.html#aix.animate_image_to_video">animate_image_to_video() (in module aix)</a>
@@ -305,6 +321,8 @@
         <li><a href="module_docs/aix/chat.html#aix.chat.ask">(in module aix.chat)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/aix/config.html#aix.config.AudioConfig">AudioConfig (class in aix.config)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -375,6 +393,8 @@
         <li><a href="module_docs/aix/chat.html#aix.chat.chat_with_history">(in module aix.chat)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/aix/config.html#aix.config.ChatConfig">ChatConfig (class in aix.config)</a>
+</li>
       <li><a href="module_docs/aix.html#aix.ChatSession">ChatSession (class in aix)</a>
 
       <ul>
@@ -397,10 +417,18 @@
         <li><a href="module_docs/aix.html#aix.ChatSession.clear_history">(aix.ChatSession method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/prompts.html#aix.prompts.CommonFuncs">CommonFuncs (class in aix.prompts)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/config.html#aix.config.config_file_path">config_file_path() (in module aix.config)</a>
+</li>
+      <li><a href="module_docs/aix.html#aix.configure">configure() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/config.html#aix.config.configure">(in module aix.config)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/aix/ai_models.html#aix.ai_models.Connector">Connector (class in aix.ai_models)</a>
 
       <ul>
@@ -535,14 +563,16 @@
         <li><a href="module_docs/aix/embeddings.html#aix.embeddings.EmbeddingCache">(class in aix.embeddings)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/aix/config.html#aix.config.EmbeddingConfig">EmbeddingConfig (class in aix.config)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix.html#aix.embeddings">embeddings() (in module aix)</a>
 
       <ul>
         <li><a href="module_docs/aix/embeddings.html#aix.embeddings.embeddings">(in module aix.embeddings)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/video.html#aix.video.estimate_cost">estimate_cost() (in module aix.video)</a>
 </li>
       <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_advanced_filtering">example_advanced_filtering() (in module aix.ai_models.examples)</a>
@@ -667,10 +697,16 @@
         <li><a href="module_docs/aix/video.html#aix.video.GeneratedVideo">(class in aix.video)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/video.html#aix.video.get_available_providers">get_available_providers() (in module aix.video)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix.html#aix.get_config">get_config() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/config.html#aix.config.get_config">(in module aix.config)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.get_connector_metadata">get_connector_metadata() (aix.ai_models.manager.ModelManager method)</a>
 
       <ul>
@@ -723,10 +759,12 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/video.html#aix.video.interpolate_frames">interpolate_frames() (in module aix.video)</a>
+      <li><a href="module_docs/aix/config.html#aix.config.ImageConfig">ImageConfig (class in aix.config)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/video.html#aix.video.interpolate_frames">interpolate_frames() (in module aix.video)</a>
+</li>
       <li><a href="module_docs/aix/embeddings.html#aix.embeddings.iter_batches">iter_batches() (in module aix.embeddings)</a>
 </li>
   </ul></td>
@@ -761,18 +799,24 @@
         <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.list_model_groups">(aix.ai_models.ModelManager method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.list_models">list_models() (aix.ai_models.manager.ModelManager method)</a>
 
       <ul>
         <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.list_models">(aix.ai_models.ModelManager method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.list_sources">list_sources() (aix.ai_models.manager.ModelManager method)</a>
 
       <ul>
         <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.list_sources">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.load_config">load_config() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/config.html#aix.config.load_config">(in module aix.config)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -846,6 +890,8 @@
         <li><a href="module_docs/aix/batches.html#module-aix.batches">aix.batches</a>
 </li>
         <li><a href="module_docs/aix/chat.html#module-aix.chat">aix.chat</a>
+</li>
+        <li><a href="module_docs/aix/config.html#module-aix.config">aix.config</a>
 </li>
         <li><a href="module_docs/aix/embeddings.html#module-aix.embeddings">aix.embeddings</a>
 </li>
@@ -1048,18 +1094,24 @@
         <li><a href="module_docs/aix.html#aix.BatchProcessor.save_results">(aix.BatchProcessor method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/models.html#aix.models.ModelStore.search">search() (aix.models.ModelStore method)</a>
 
       <ul>
         <li><a href="module_docs/aix.html#aix.ModelStore.search">(aix.ModelStore method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/chat.html#aix.chat.ChatSession.send">send() (aix.chat.ChatSession method)</a>
 
       <ul>
         <li><a href="module_docs/aix.html#aix.ChatSession.send">(aix.ChatSession method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.set_config">set_config() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/config.html#aix.config.set_config">(in module aix.config)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.set_custom_metadata">set_custom_metadata() (aix.ai_models.manager.ModelManager method)</a>
@@ -1121,6 +1173,26 @@
 </li>
       </ul></li>
       <li><a href="module_docs/aix/embeddings.html#aix.embeddings.truncate_segment">truncate_segment() (in module aix.embeddings)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix.html#aix.using">using() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/config.html#aix.config.using">(in module aix.config)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/config.html#aix.config.VideoConfig">VideoConfig (class in aix.config)</a>
 </li>
   </ul></td>
 </tr></table>

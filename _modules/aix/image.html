@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.image &mdash; aix 0.0.27 documentation</title>
+  <title>aix.image &mdash; aix 0.0.28 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=cee5022b"></script>
+      <script src="../../_static/documentation_options.js?v=26ffa1e9"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -55,6 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/config.html">aix.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
@@ -141,11 +142,14 @@
     <span class="n">PILImage</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<span class="c1"># Default configurations</span>
-<span class="n">DFLT_IMAGE_MODEL</span> <span class="o">=</span> <span class="s2">&quot;dall-e-2&quot;</span>
-<span class="n">DFLT_IMAGE_SIZE</span> <span class="o">=</span> <span class="s2">&quot;1024x1024&quot;</span>
-<span class="n">DFLT_IMAGE_QUALITY</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span>
-<span class="n">DFLT_NUM_IMAGES</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c1"># Shipped-default constants, kept for backward compatibility. The *active*</span>
+<span class="c1"># defaults are resolved from ``aix.config`` at call time (see aix/config.py).</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_config</span> <span class="k">as</span> <span class="n">_get_config</span><span class="p">,</span> <span class="n">ImageConfig</span> <span class="k">as</span> <span class="n">_ImageConfig</span>
+
+<span class="n">DFLT_IMAGE_MODEL</span> <span class="o">=</span> <span class="n">_ImageConfig</span><span class="p">()</span><span class="o">.</span><span class="n">model</span>
+<span class="n">DFLT_IMAGE_SIZE</span> <span class="o">=</span> <span class="n">_ImageConfig</span><span class="p">()</span><span class="o">.</span><span class="n">size</span>
+<span class="n">DFLT_IMAGE_QUALITY</span> <span class="o">=</span> <span class="n">_ImageConfig</span><span class="p">()</span><span class="o">.</span><span class="n">quality</span>
+<span class="n">DFLT_NUM_IMAGES</span> <span class="o">=</span> <span class="n">_ImageConfig</span><span class="p">()</span><span class="o">.</span><span class="n">num_images</span>
 
 
 <div class="viewcode-block" id="GeneratedImage">
@@ -335,9 +339,10 @@
             <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
         <span class="p">)</span>
 
-    <span class="c1"># Apply defaults</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_IMAGE_MODEL</span>
-    <span class="n">size</span> <span class="o">=</span> <span class="n">size</span> <span class="ow">or</span> <span class="n">DFLT_IMAGE_SIZE</span>
+    <span class="c1"># Apply defaults from the active config (explicit args still win)</span>
+    <span class="n">_img_cfg</span> <span class="o">=</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">image</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">_img_cfg</span><span class="o">.</span><span class="n">model</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">size</span> <span class="ow">or</span> <span class="n">_img_cfg</span><span class="o">.</span><span class="n">size</span>
 
     <span class="c1"># Build parameters</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
@@ -416,10 +421,11 @@
             <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
         <span class="p">)</span>
 
-    <span class="c1"># Apply defaults</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">DFLT_IMAGE_MODEL</span>
-    <span class="n">size</span> <span class="o">=</span> <span class="n">size</span> <span class="ow">or</span> <span class="n">DFLT_IMAGE_SIZE</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="ow">or</span> <span class="n">DFLT_NUM_IMAGES</span>
+    <span class="c1"># Apply defaults from the active config (explicit args still win)</span>
+    <span class="n">_img_cfg</span> <span class="o">=</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">image</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">_img_cfg</span><span class="o">.</span><span class="n">model</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">size</span> <span class="ow">or</span> <span class="n">_img_cfg</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="ow">or</span> <span class="n">_img_cfg</span><span class="o">.</span><span class="n">num_images</span>
 
     <span class="c1"># Build parameters</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
