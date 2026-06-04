@@ -125,3 +125,5 @@ batch_results.json
 *.tmp
 tmp/
 temp/
+# Local session handoffs (not for commit)
+.claude/handoffs/
