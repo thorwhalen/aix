@@ -53,6 +53,7 @@ from aix.config import (
     configure,
     using,
     load_config,
+    resolve_model,
 )
 
 # Core interfaces (new clean API)
@@ -129,6 +130,7 @@ __all__ = [
     "configure",
     "using",
     "load_config",
+    "resolve_model",
     # Core chat
     "chat",
     "ask",

@@ -32,7 +32,11 @@ Examples:
 from collections.abc import Iterable
 from typing import Union, Any
 
-from aix.config import get_config as _get_config, ChatConfig as _ChatConfig
+from aix.config import (
+    get_config as _get_config,
+    resolve_model as _resolve_model,
+    ChatConfig as _ChatConfig,
+)
 
 # Import LiteLLM but keep it private - users shouldn't call it directly
 try:
@@ -188,7 +192,7 @@ def chat(
 
     # Apply defaults from the active config (explicit args still win)
     cfg = _get_config().chat
-    model = model or cfg.model
+    model = _resolve_model(model or cfg.model)
     temperature = temperature if temperature is not None else cfg.temperature
     if max_tokens is None:
         max_tokens = cfg.max_tokens

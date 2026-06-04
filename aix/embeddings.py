@@ -27,7 +27,11 @@ import hashlib
 from collections.abc import Iterable, Iterator, MutableMapping, Sequence
 from typing import Callable, Optional, Union
 
-from aix.config import get_config as _get_config, EmbeddingConfig as _EmbeddingConfig
+from aix.config import (
+    get_config as _get_config,
+    resolve_model as _resolve_model,
+    EmbeddingConfig as _EmbeddingConfig,
+)
 
 # Import LiteLLM but keep it private
 try:
@@ -98,7 +102,7 @@ def embeddings(
         raise ValueError("Cannot generate embeddings for empty sequence")
 
     # Apply defaults from the active config (explicit args still win)
-    model = model or _get_config().embeddings.model
+    model = _resolve_model(model or _get_config().embeddings.model)
 
     # Build LiteLLM parameters
     litellm_kwargs = {
@@ -431,7 +435,7 @@ def text_cache_key(
     >>> len(text_cache_key("hello"))
     16
     """
-    m = model or _get_config().embeddings.model
+    m = _resolve_model(model or _get_config().embeddings.model)
     h = hashlib.sha1((m + "\x00" + text).encode("utf-8")).hexdigest()
     return h[:hash_len]
 

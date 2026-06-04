@@ -8,11 +8,13 @@ from aix import config
 from aix.config import (
     AixConfig,
     ChatConfig,
+    DEFAULT_ALIASES,
     load_config,
     get_config,
     set_config,
     configure,
     using,
+    resolve_model,
 )
 
 
@@ -22,10 +24,10 @@ def test_shipped_defaults():
     assert c.chat.model == ChatConfig().model
     assert c.chat.temperature == 1.0
     assert c.embeddings.model == "text-embedding-3-small"
-    assert c.image.model == "dall-e-2"
-    assert c.audio.tts_model == "tts-1"
+    assert c.image.model == "dall-e-3"
+    assert c.audio.tts_model == "gpt-4o-mini-tts"
     assert c.audio.transcription_model == "whisper-1"
-    assert c.aliases == {}
+    assert c.aliases == DEFAULT_ALIASES
 
 
 def test_env_layer_overrides_defaults():
@@ -54,7 +56,8 @@ def test_toml_layer_and_env_precedence():
     assert c.chat.model == "env/model"
     assert c.chat.temperature == 0.9  # from toml (no env override)
     assert c.image.model == "toml/image"
-    assert c.aliases == {"best": "x/y"}
+    # TOML aliases overlay the shipped defaults (override 'best', keep the rest)
+    assert c.aliases == {**DEFAULT_ALIASES, "best": "x/y"}
 
 
 def test_missing_toml_is_ignored():
@@ -118,6 +121,42 @@ def test_config_is_immutable():
 def test_set_config_type_checked(restore_active_config):
     with pytest.raises(TypeError):
         set_config({"chat": {"model": "x"}})  # not an AixConfig
+
+
+def test_resolve_model_aliases(restore_active_config):
+    # Shipped aliases resolve to concrete ids
+    assert resolve_model("fast") == DEFAULT_ALIASES["fast"]
+    assert resolve_model("best") == DEFAULT_ALIASES["best"]
+    # Non-alias strings (literal model ids) pass through unchanged
+    assert resolve_model("gpt-4o") == "gpt-4o"
+    assert resolve_model("openrouter/anthropic/claude-3.5-sonnet") == (
+        "openrouter/anthropic/claude-3.5-sonnet"
+    )
+    # None passes through
+    assert resolve_model(None) is None
+
+
+def test_resolve_model_custom_alias(restore_active_config):
+    configure(aliases={"smart": "anthropic/claude-sonnet-4"})
+    assert resolve_model("smart") == "anthropic/claude-sonnet-4"
+    # configure merges: shipped aliases are preserved
+    assert resolve_model("fast") == DEFAULT_ALIASES["fast"]
+
+
+def test_resolve_model_chain_and_cycle(restore_active_config):
+    # Chains resolve transitively
+    configure(aliases={"a": "b", "b": "gpt-4o"})
+    assert resolve_model("a") == "gpt-4o"
+    # Cycles terminate instead of looping forever
+    configure(aliases={"x": "y", "y": "x"})
+    assert resolve_model("x") in {"x", "y"}
+
+
+def test_alias_used_in_using_block(restore_active_config):
+    with using(aliases={"fast": "custom/fast"}):
+        assert resolve_model("fast") == "custom/fast"
+    # restored to shipped default outside the block
+    assert resolve_model("fast") == DEFAULT_ALIASES["fast"]
 
 
 def test_active_config_drives_function_defaults(restore_active_config):
