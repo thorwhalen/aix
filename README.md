@@ -82,8 +82,8 @@ import aix
 
 # Inspect the active configuration
 cfg = aix.get_config()
-cfg.chat.model            # e.g. 'gpt-4o-mini'
-cfg.embeddings.model      # e.g. 'text-embedding-3-small'
+cfg.chat.model            # 'gpt-4.1-mini'
+cfg.embeddings.model      # 'text-embedding-3-small'
 
 # Persistently change a default (everything below an explicit arg still respects it)
 aix.configure(chat_model="anthropic/claude-sonnet-4", chat_temperature=0.2)
@@ -94,6 +94,24 @@ with aix.using(chat_model="openai/gpt-4o-mini"):
 # back to the configured default here
 ```
 
+### Semantic aliases
+
+Pass an intent-level name instead of a concrete model id. Shipped aliases:
+`fast` (cheap/low-latency), `best` (highest quality), `cheap` (cheapest).
+
+```python
+aix.chat("hard question", model="best")     # -> resolves via the alias table
+aix.chat("quick question", model="fast")
+
+# Add or override aliases (merges with the shipped set)
+aix.configure(aliases={"smart": "anthropic/claude-sonnet-4"})
+aix.resolve_model("smart")                  # 'anthropic/claude-sonnet-4'
+```
+
+Aliases share a namespace with literal model ids: a name that is not a registered
+alias (e.g. `"gpt-4o"`) is passed through unchanged. Inspect available aliases via
+`aix.get_config().aliases`.
+
 ### Config file
 
 Create a TOML file at your platform's app-config dir (or point `AIX_CONFIG_FILE`
@@ -101,7 +119,7 @@ at any path):
 
 ```toml
 [chat]
-model = "openai/gpt-4o-mini"
+model = "gpt-4.1-mini"
 temperature = 1.0
 
 [embeddings]
@@ -112,12 +130,12 @@ model = "dall-e-3"
 size = "1024x1024"
 
 [audio]
-tts_model = "tts-1"
+tts_model = "gpt-4o-mini-tts"
 tts_voice = "alloy"
 transcription_model = "whisper-1"
 
-[aliases]              # semantic names (resolution coming soon)
-fast = "openai/gpt-4o-mini"
+[aliases]              # semantic names -> concrete ids (override the shipped set)
+fast = "gpt-4.1-mini"
 best = "anthropic/claude-sonnet-4"
 ```
 

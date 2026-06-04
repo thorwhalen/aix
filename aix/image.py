@@ -48,7 +48,11 @@ except ImportError:
 
 # Shipped-default constants, kept for backward compatibility. The *active*
 # defaults are resolved from ``aix.config`` at call time (see aix/config.py).
-from aix.config import get_config as _get_config, ImageConfig as _ImageConfig
+from aix.config import (
+    get_config as _get_config,
+    resolve_model as _resolve_model,
+    ImageConfig as _ImageConfig,
+)
 
 DFLT_IMAGE_MODEL = _ImageConfig().model
 DFLT_IMAGE_SIZE = _ImageConfig().size
@@ -228,7 +232,7 @@ def generate_image(
 
     # Apply defaults from the active config (explicit args still win)
     _img_cfg = _get_config().image
-    model = model or _img_cfg.model
+    model = _resolve_model(model or _img_cfg.model)
     size = size or _img_cfg.size
 
     # Build parameters
@@ -307,7 +311,7 @@ def generate_images(
 
     # Apply defaults from the active config (explicit args still win)
     _img_cfg = _get_config().image
-    model = model or _img_cfg.model
+    model = _resolve_model(model or _img_cfg.model)
     size = size or _img_cfg.size
     n = n or _img_cfg.num_images
 

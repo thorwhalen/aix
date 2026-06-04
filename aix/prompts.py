@@ -37,7 +37,7 @@ from inspect import signature, Parameter
 
 # Import from aix.chat
 from aix.chat import chat, DFLT_CHAT_MODEL
-from aix.config import get_config as _get_config
+from aix.config import get_config as _get_config, resolve_model as _resolve_model
 
 
 def _extract_template_vars(template: str) -> list[str]:
@@ -681,7 +681,7 @@ def constrained_answer(
     # Use LiteLLM's response_format for JSON mode
     # This works across OpenAI, Anthropic (via tools), and other providers
     chat_kwargs = {
-        "model": model or _get_config().chat.model,
+        "model": _resolve_model(model or _get_config().chat.model),
         "response_format": {"type": "json_object"},
     }
     if temperature is not None:

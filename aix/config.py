@@ -86,7 +86,20 @@ __all__ = [
     "configure",
     "using",
     "config_file_path",
+    "resolve_model",
+    "DEFAULT_ALIASES",
 ]
+
+
+# Shipped semantic aliases: intent-level names -> concrete model ids. These are
+# OpenAI-class defaults (so they work with the same OPENAI_API_KEY most users
+# already have); override or extend them via the [aliases] TOML section,
+# ``configure(aliases=...)``, or per-call ``model="..."``.
+DEFAULT_ALIASES = {
+    "fast": "gpt-4.1-mini",  # cheap / low-latency
+    "best": "gpt-5",  # highest quality
+    "cheap": "gpt-4o-mini",  # cheapest
+}
 
 
 def _opt(default: Any, *, flat: str, cast: Callable[[str], Any] = str):
@@ -111,7 +124,7 @@ def _env_name(f) -> str:
 class ChatConfig:
     """Defaults for ``chat`` / ``ask`` / ``prompt_func``."""
 
-    model: str = _opt("gpt-4o-mini", flat="chat_model")
+    model: str = _opt("gpt-4.1-mini", flat="chat_model")
     temperature: float = _opt(1.0, flat="chat_temperature", cast=float)
     max_tokens: Optional[int] = _opt(None, flat="chat_max_tokens", cast=int)
 
@@ -128,7 +141,7 @@ class EmbeddingConfig:
 class ImageConfig:
     """Defaults for ``generate_image`` / ``generate_images``."""
 
-    model: str = _opt("dall-e-2", flat="image_model")
+    model: str = _opt("dall-e-3", flat="image_model")
     size: str = _opt("1024x1024", flat="image_size")
     quality: str = _opt("standard", flat="image_quality")
     num_images: int = _opt(1, flat="image_num_images", cast=int)
@@ -138,7 +151,7 @@ class ImageConfig:
 class AudioConfig:
     """Defaults for ``text_to_speech`` / ``transcribe`` / ``translate_audio``."""
 
-    tts_model: str = _opt("tts-1", flat="tts_model")
+    tts_model: str = _opt("gpt-4o-mini-tts", flat="tts_model")
     tts_voice: str = _opt("alloy", flat="tts_voice")
     tts_speed: float = _opt(1.0, flat="tts_speed", cast=float)
     transcription_model: str = _opt("whisper-1", flat="transcription_model")
@@ -171,7 +184,7 @@ class AixConfig:
     image: ImageConfig = field(default_factory=ImageConfig)
     audio: AudioConfig = field(default_factory=AudioConfig)
     video: VideoConfig = field(default_factory=VideoConfig)
-    aliases: Mapping[str, str] = field(default_factory=dict)
+    aliases: Mapping[str, str] = field(default_factory=lambda: dict(DEFAULT_ALIASES))
 
 
 # --------------------------------------------------------------------------- #
@@ -235,7 +248,8 @@ def load_config(
         attr: _build_subconfig(cls, toml_data.get(attr, {}) or {}, environ)
         for attr, cls in _SECTIONS.items()
     }
-    aliases = dict(toml_data.get("aliases", {}) or {})
+    # Shipped aliases, overlaid by anything in the [aliases] TOML section.
+    aliases = {**DEFAULT_ALIASES, **(toml_data.get("aliases", {}) or {})}
     return AixConfig(aliases=aliases, **sub)
 
 
@@ -277,7 +291,9 @@ def _apply_overrides(base: AixConfig, overrides: Mapping[str, Any]) -> AixConfig
     new_aliases = None
     for key, value in overrides.items():
         if key == "aliases":
-            new_aliases = dict(value)
+            # Merge into existing aliases (add/override individual names) rather
+            # than replacing the whole table, so shipped aliases are preserved.
+            new_aliases = {**base.aliases, **value}
         elif key in _SECTIONS and isinstance(value, Mapping):
             section_updates.setdefault(key, {}).update(value)
         elif key in _FLAT_INDEX:
@@ -330,3 +346,36 @@ def using(**overrides: Any) -> Iterator[AixConfig]:
         yield _active_config
     finally:
         _active_config = previous
+
+
+def resolve_model(
+    model: Optional[str], *, config: Optional[AixConfig] = None
+) -> Optional[str]:
+    """Resolve a semantic alias (``"fast"``, ``"best"``, ...) to a concrete model id.
+
+    Plain substitution: if ``model`` is a key in the active ``aliases`` table it is
+    replaced (following chains, with cycle protection). Anything that is not an
+    alias -- including every literal model id like ``"gpt-4o"`` -- is returned
+    unchanged. ``None`` passes through (callers apply their own default first).
+
+    Note: aliases share a namespace with literal model ids, so an unknown name is
+    treated as a literal id, not an error. Inspect available aliases via
+    ``aix.get_config().aliases``.
+
+    Examples:
+        >>> from aix import config
+        >>> config.resolve_model("fast") in config.DEFAULT_ALIASES.values()
+        True
+        >>> config.resolve_model("gpt-4o")  # not an alias -> unchanged
+        'gpt-4o'
+        >>> config.resolve_model(None) is None
+        True
+    """
+    if model is None:
+        return None
+    aliases = (config or get_config()).aliases
+    seen: set = set()
+    while model in aliases and model not in seen:
+        seen.add(model)
+        model = aliases[model]
+    return model
