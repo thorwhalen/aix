@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.config &mdash; aix 0.0.28 documentation</title>
+  <title>aix.config &mdash; aix 0.0.29 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=26ffa1e9"></script>
+      <script src="../../_static/documentation_options.js?v=828725f0"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -182,7 +182,20 @@
     <span class="s2">&quot;configure&quot;</span><span class="p">,</span>
     <span class="s2">&quot;using&quot;</span><span class="p">,</span>
     <span class="s2">&quot;config_file_path&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;resolve_model&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_ALIASES&quot;</span><span class="p">,</span>
 <span class="p">]</span>
+
+
+<span class="c1"># Shipped semantic aliases: intent-level names -&gt; concrete model ids. These are</span>
+<span class="c1"># OpenAI-class defaults (so they work with the same OPENAI_API_KEY most users</span>
+<span class="c1"># already have); override or extend them via the [aliases] TOML section,</span>
+<span class="c1"># ``configure(aliases=...)``, or per-call ``model=&quot;...&quot;``.</span>
+<span class="n">DEFAULT_ALIASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;fast&quot;</span><span class="p">:</span> <span class="s2">&quot;gpt-4.1-mini&quot;</span><span class="p">,</span>  <span class="c1"># cheap / low-latency</span>
+    <span class="s2">&quot;best&quot;</span><span class="p">:</span> <span class="s2">&quot;gpt-5&quot;</span><span class="p">,</span>  <span class="c1"># highest quality</span>
+    <span class="s2">&quot;cheap&quot;</span><span class="p">:</span> <span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span>  <span class="c1"># cheapest</span>
+<span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_opt</span><span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">flat</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cast</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">):</span>
@@ -209,7 +222,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">ChatConfig</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Defaults for ``chat`` / ``ask`` / ``prompt_func``.&quot;&quot;&quot;</span>
 
-    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;gpt-4o-mini&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;chat_model&quot;</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;gpt-4.1-mini&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;chat_model&quot;</span><span class="p">)</span>
     <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;chat_temperature&quot;</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">max_tokens</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;chat_max_tokens&quot;</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span></div>
 
@@ -232,7 +245,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">ImageConfig</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Defaults for ``generate_image`` / ``generate_images``.&quot;&quot;&quot;</span>
 
-    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;dall-e-2&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;image_model&quot;</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;dall-e-3&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;image_model&quot;</span><span class="p">)</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;1024x1024&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;image_size&quot;</span><span class="p">)</span>
     <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;image_quality&quot;</span><span class="p">)</span>
     <span class="n">num_images</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;image_num_images&quot;</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span></div>
@@ -245,7 +258,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">AudioConfig</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Defaults for ``text_to_speech`` / ``transcribe`` / ``translate_audio``.&quot;&quot;&quot;</span>
 
-    <span class="n">tts_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;tts-1&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;tts_model&quot;</span><span class="p">)</span>
+    <span class="n">tts_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;gpt-4o-mini-tts&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;tts_model&quot;</span><span class="p">)</span>
     <span class="n">tts_voice</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;alloy&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;tts_voice&quot;</span><span class="p">)</span>
     <span class="n">tts_speed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;tts_speed&quot;</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">transcription_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">&quot;whisper-1&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">&quot;transcription_model&quot;</span><span class="p">)</span></div>
@@ -284,7 +297,7 @@
     <span class="n">image</span><span class="p">:</span> <span class="n">ImageConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">ImageConfig</span><span class="p">)</span>
     <span class="n">audio</span><span class="p">:</span> <span class="n">AudioConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">AudioConfig</span><span class="p">)</span>
     <span class="n">video</span><span class="p">:</span> <span class="n">VideoConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">VideoConfig</span><span class="p">)</span>
-    <span class="n">aliases</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+    <span class="n">aliases</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">DEFAULT_ALIASES</span><span class="p">))</span></div>
 
 
 
@@ -354,7 +367,8 @@
         <span class="n">attr</span><span class="p">:</span> <span class="n">_build_subconfig</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">toml_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="p">{})</span> <span class="ow">or</span> <span class="p">{},</span> <span class="n">environ</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">_SECTIONS</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
-    <span class="n">aliases</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">toml_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aliases&quot;</span><span class="p">,</span> <span class="p">{})</span> <span class="ow">or</span> <span class="p">{})</span>
+    <span class="c1"># Shipped aliases, overlaid by anything in the [aliases] TOML section.</span>
+    <span class="n">aliases</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">DEFAULT_ALIASES</span><span class="p">,</span> <span class="o">**</span><span class="p">(</span><span class="n">toml_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aliases&quot;</span><span class="p">,</span> <span class="p">{})</span> <span class="ow">or</span> <span class="p">{})}</span>
     <span class="k">return</span> <span class="n">AixConfig</span><span class="p">(</span><span class="n">aliases</span><span class="o">=</span><span class="n">aliases</span><span class="p">,</span> <span class="o">**</span><span class="n">sub</span><span class="p">)</span></div>
 
 
@@ -403,7 +417,9 @@
     <span class="n">new_aliases</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">overrides</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;aliases&quot;</span><span class="p">:</span>
-            <span class="n">new_aliases</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="c1"># Merge into existing aliases (add/override individual names) rather</span>
+            <span class="c1"># than replacing the whole table, so shipped aliases are preserved.</span>
+            <span class="n">new_aliases</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">base</span><span class="o">.</span><span class="n">aliases</span><span class="p">,</span> <span class="o">**</span><span class="n">value</span><span class="p">}</span>
         <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">_SECTIONS</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
             <span class="n">section_updates</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">_FLAT_INDEX</span><span class="p">:</span>
@@ -461,6 +477,42 @@
         <span class="k">yield</span> <span class="n">_active_config</span>
     <span class="k">finally</span><span class="p">:</span>
         <span class="n">_active_config</span> <span class="o">=</span> <span class="n">previous</span></div>
+
+
+
+<div class="viewcode-block" id="resolve_model">
+<a class="viewcode-back" href="../../module_docs/aix/config.html#aix.resolve_model">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_model</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AixConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve a semantic alias (``&quot;fast&quot;``, ``&quot;best&quot;``, ...) to a concrete model id.</span>
+
+<span class="sd">    Plain substitution: if ``model`` is a key in the active ``aliases`` table it is</span>
+<span class="sd">    replaced (following chains, with cycle protection). Anything that is not an</span>
+<span class="sd">    alias -- including every literal model id like ``&quot;gpt-4o&quot;`` -- is returned</span>
+<span class="sd">    unchanged. ``None`` passes through (callers apply their own default first).</span>
+
+<span class="sd">    Note: aliases share a namespace with literal model ids, so an unknown name is</span>
+<span class="sd">    treated as a literal id, not an error. Inspect available aliases via</span>
+<span class="sd">    ``aix.get_config().aliases``.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix import config</span>
+<span class="sd">        &gt;&gt;&gt; config.resolve_model(&quot;fast&quot;) in config.DEFAULT_ALIASES.values()</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; config.resolve_model(&quot;gpt-4o&quot;)  # not an alias -&gt; unchanged</span>
+<span class="sd">        &#39;gpt-4o&#39;</span>
+<span class="sd">        &gt;&gt;&gt; config.resolve_model(None) is None</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">aliases</span> <span class="o">=</span> <span class="p">(</span><span class="n">config</span> <span class="ow">or</span> <span class="n">get_config</span><span class="p">())</span><span class="o">.</span><span class="n">aliases</span>
+    <span class="n">seen</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">while</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">aliases</span> <span class="ow">and</span> <span class="n">model</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+        <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">aliases</span><span class="p">[</span><span class="n">model</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">model</span></div>
 
 </pre></div>
 
