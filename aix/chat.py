@@ -32,6 +32,8 @@ Examples:
 from collections.abc import Iterable
 from typing import Union, Any
 
+from aix.config import get_config as _get_config, ChatConfig as _ChatConfig
+
 # Import LiteLLM but keep it private - users shouldn't call it directly
 try:
     from litellm import completion as _litellm_completion
@@ -41,10 +43,12 @@ except ImportError:
     _ModelResponse = None
 
 
-# Default configurations
-DFLT_CHAT_MODEL = "gpt-4o-mini"
-DFLT_TEMPERATURE = 1.0
-DFLT_MAX_TOKENS = None
+# Shipped-default constants, kept for backward compatibility. The *active*
+# defaults are resolved from ``aix.config`` at call time (see aix/config.py),
+# so changing config -- not these constants -- is what affects behavior.
+DFLT_CHAT_MODEL = _ChatConfig().model
+DFLT_TEMPERATURE = _ChatConfig().temperature
+DFLT_MAX_TOKENS = _ChatConfig().max_tokens
 
 
 def _normalize_prompt(
@@ -182,9 +186,12 @@ def chat(
     # Normalize inputs
     messages = _normalize_prompt(prompt)
 
-    # Apply defaults
-    model = model or DFLT_CHAT_MODEL
-    temperature = temperature if temperature is not None else DFLT_TEMPERATURE
+    # Apply defaults from the active config (explicit args still win)
+    cfg = _get_config().chat
+    model = model or cfg.model
+    temperature = temperature if temperature is not None else cfg.temperature
+    if max_tokens is None:
+        max_tokens = cfg.max_tokens
 
     # Build LiteLLM parameters
     litellm_kwargs = {

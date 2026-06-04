@@ -29,11 +29,14 @@ except ImportError:
     _litellm_speech = None
 
 
-# Default configurations
-DFLT_TTS_MODEL = "tts-1"
-DFLT_TTS_VOICE = "alloy"  # Options: alloy, echo, fable, onyx, nova, shimmer
-DFLT_TTS_SPEED = 1.0
-DFLT_TRANSCRIPTION_MODEL = "whisper-1"
+# Shipped-default constants, kept for backward compatibility. The *active*
+# defaults are resolved from ``aix.config`` at call time (see aix/config.py).
+from aix.config import get_config as _get_config, AudioConfig as _AudioConfig
+
+DFLT_TTS_MODEL = _AudioConfig().tts_model
+DFLT_TTS_VOICE = _AudioConfig().tts_voice  # alloy, echo, fable, onyx, nova, shimmer
+DFLT_TTS_SPEED = _AudioConfig().tts_speed
+DFLT_TRANSCRIPTION_MODEL = _AudioConfig().transcription_model
 
 
 class GeneratedAudio:
@@ -231,10 +234,11 @@ def text_to_speech(
             "Install it with: pip install litellm"
         )
 
-    # Apply defaults
-    model = model or DFLT_TTS_MODEL
-    voice = voice or DFLT_TTS_VOICE
-    speed = speed if speed is not None else DFLT_TTS_SPEED
+    # Apply defaults from the active config (explicit args still win)
+    _audio_cfg = _get_config().audio
+    model = model or _audio_cfg.tts_model
+    voice = voice or _audio_cfg.tts_voice
+    speed = speed if speed is not None else _audio_cfg.tts_speed
 
     # Build parameters
     params = {
@@ -335,7 +339,7 @@ def transcribe(
         filename = getattr(audio, "name", "audio.mp3")
 
     # Apply defaults
-    model = model or DFLT_TRANSCRIPTION_MODEL
+    model = model or _get_config().audio.transcription_model
 
     # Build parameters
     params = {
@@ -468,7 +472,7 @@ def translate_audio(
         audio_data = audio.read()
         filename = getattr(audio, "name", "audio.mp3")
 
-    model = model or DFLT_TRANSCRIPTION_MODEL
+    model = model or _get_config().audio.transcription_model
 
     # Use translation endpoint
     params = {

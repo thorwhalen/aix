@@ -60,6 +60,75 @@ models.discover()
 print(list(models)[:5])  # ['openai/gpt-4o', 'openai/gpt-4o-mini', ...]
 ```
 
+## Configuration
+
+`aix` works with zero configuration — every function ships with sensible default
+models. When you want to change *which model a function uses by default* (and
+related parameters like temperature, image size, or TTS voice), there is a single
+source of truth: `aix.config`.
+
+Defaults are resolved in layers, **highest precedence first**:
+
+1. **Explicit call argument** — `chat("hi", model="...")` always wins.
+2. **Runtime override** — `aix.configure(...)` (persistent) or `aix.using(...)` (scoped).
+3. **Environment variables** — `AIX_CHAT_MODEL`, `AIX_CHAT_TEMPERATURE`,
+   `AIX_EMBEDDING_MODEL`, `AIX_IMAGE_MODEL`, `AIX_TTS_MODEL`, `AIX_TTS_VOICE`,
+   `AIX_TRANSCRIPTION_MODEL`, …
+4. **User config file** — a TOML file (see below).
+5. **Shipped defaults** — the built-in values.
+
+```python
+import aix
+
+# Inspect the active configuration
+cfg = aix.get_config()
+cfg.chat.model            # e.g. 'gpt-4o-mini'
+cfg.embeddings.model      # e.g. 'text-embedding-3-small'
+
+# Persistently change a default (everything below an explicit arg still respects it)
+aix.configure(chat_model="anthropic/claude-sonnet-4", chat_temperature=0.2)
+
+# Scoped override that restores on exit
+with aix.using(chat_model="openai/gpt-4o-mini"):
+    aix.chat("quick + cheap question")
+# back to the configured default here
+```
+
+### Config file
+
+Create a TOML file at your platform's app-config dir (or point `AIX_CONFIG_FILE`
+at any path):
+
+```toml
+[chat]
+model = "openai/gpt-4o-mini"
+temperature = 1.0
+
+[embeddings]
+model = "text-embedding-3-small"
+
+[image]
+model = "dall-e-3"
+size = "1024x1024"
+
+[audio]
+tts_model = "tts-1"
+tts_voice = "alloy"
+transcription_model = "whisper-1"
+
+[aliases]              # semantic names (resolution coming soon)
+fast = "openai/gpt-4o-mini"
+best = "anthropic/claude-sonnet-4"
+```
+
+Find the active path with `aix.config.config_file_path()`. Environment variables
+override file values; explicit call arguments override everything.
+
+> **Note on credentials:** API keys are currently discovered by the provider
+> backend (LiteLLM) from standard environment variables such as `OPENAI_API_KEY`,
+> `ANTHROPIC_API_KEY`, and `OPENROUTER_API_KEY`. A unified, discoverable key
+> resolver with actionable error messages is in progress.
+
 ## Core Features
 
 ### 1. Chat Interface

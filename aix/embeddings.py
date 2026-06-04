@@ -27,6 +27,8 @@ import hashlib
 from collections.abc import Iterable, Iterator, MutableMapping, Sequence
 from typing import Callable, Optional, Union
 
+from aix.config import get_config as _get_config, EmbeddingConfig as _EmbeddingConfig
+
 # Import LiteLLM but keep it private
 try:
     from litellm import embedding as _litellm_embedding
@@ -34,9 +36,10 @@ except ImportError:
     _litellm_embedding = None
 
 
-# Default configurations
-DFLT_EMBEDDING_MODEL = "text-embedding-3-small"
-DFLT_BATCH_SIZE = 512  # OpenAI batch endpoint accepts up to 2048 but smaller is safer
+# Shipped-default constants, kept for backward compatibility. The *active*
+# defaults are resolved from ``aix.config`` at call time (see aix/config.py).
+DFLT_EMBEDDING_MODEL = _EmbeddingConfig().model
+DFLT_BATCH_SIZE = _EmbeddingConfig().batch_size
 
 
 def embeddings(
@@ -94,8 +97,8 @@ def embeddings(
     if not segments_list:
         raise ValueError("Cannot generate embeddings for empty sequence")
 
-    # Apply defaults
-    model = model or DFLT_EMBEDDING_MODEL
+    # Apply defaults from the active config (explicit args still win)
+    model = model or _get_config().embeddings.model
 
     # Build LiteLLM parameters
     litellm_kwargs = {
@@ -428,7 +431,7 @@ def text_cache_key(
     >>> len(text_cache_key("hello"))
     16
     """
-    m = model or DFLT_EMBEDDING_MODEL
+    m = model or _get_config().embeddings.model
     h = hashlib.sha1((m + "\x00" + text).encode("utf-8")).hexdigest()
     return h[:hash_len]
 

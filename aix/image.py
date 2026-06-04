@@ -46,11 +46,14 @@ except ImportError:
     PILImage = None
 
 
-# Default configurations
-DFLT_IMAGE_MODEL = "dall-e-2"
-DFLT_IMAGE_SIZE = "1024x1024"
-DFLT_IMAGE_QUALITY = "standard"
-DFLT_NUM_IMAGES = 1
+# Shipped-default constants, kept for backward compatibility. The *active*
+# defaults are resolved from ``aix.config`` at call time (see aix/config.py).
+from aix.config import get_config as _get_config, ImageConfig as _ImageConfig
+
+DFLT_IMAGE_MODEL = _ImageConfig().model
+DFLT_IMAGE_SIZE = _ImageConfig().size
+DFLT_IMAGE_QUALITY = _ImageConfig().quality
+DFLT_NUM_IMAGES = _ImageConfig().num_images
 
 
 class GeneratedImage:
@@ -223,9 +226,10 @@ def generate_image(
             "Install it with: pip install litellm"
         )
 
-    # Apply defaults
-    model = model or DFLT_IMAGE_MODEL
-    size = size or DFLT_IMAGE_SIZE
+    # Apply defaults from the active config (explicit args still win)
+    _img_cfg = _get_config().image
+    model = model or _img_cfg.model
+    size = size or _img_cfg.size
 
     # Build parameters
     params = {
@@ -301,10 +305,11 @@ def generate_images(
             "Install it with: pip install litellm"
         )
 
-    # Apply defaults
-    model = model or DFLT_IMAGE_MODEL
-    size = size or DFLT_IMAGE_SIZE
-    n = n or DFLT_NUM_IMAGES
+    # Apply defaults from the active config (explicit args still win)
+    _img_cfg = _get_config().image
+    model = model or _img_cfg.model
+    size = size or _img_cfg.size
+    n = n or _img_cfg.num_images
 
     # Build parameters
     params = {
