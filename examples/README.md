@@ -15,6 +15,14 @@ export ANTHROPIC_API_KEY=your-key-here
 export OPENROUTER_API_KEY=your-key-here
 ```
 
+AIX resolves keys in this order: explicit `api_key=` argument → provider
+environment variable (a project `.env` is picked up when `python-dotenv` is
+installed) → the per-user AIX config store. Check what's discoverable with
+`aix.check_keys()`, and see the
+[Providing credentials](../README.md#providing-credentials) section for the full
+precedence and per-provider env-var table. A missing key raises an actionable
+`aix.MissingCredentialError` naming which key to set and where to get one.
+
 ## Examples
 
 ### 01_simple_chat.py
