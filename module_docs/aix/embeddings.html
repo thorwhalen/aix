@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.embeddings &mdash; aix 0.0.29 documentation</title>
+  <title>aix.embeddings &mdash; aix 0.0.31 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=828725f0"></script>
+      <script src="../../_static/documentation_options.js?v=c5dbc6bb"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="aix.gen_ai" href="gen_ai.html" />
-    <link rel="prev" title="aix.config" href="config.html" /> 
+    <link rel="prev" title="aix.credentials" href="credentials.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -59,6 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="batches.html">aix.batches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="chat.html">aix.chat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">aix.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credentials.html">aix.credentials</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">aix.embeddings</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#aix.embeddings.EmbeddingCache"><code class="docutils literal notranslate"><span class="pre">EmbeddingCache</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aix.embeddings.EmbeddingCache.clear"><code class="docutils literal notranslate"><span class="pre">EmbeddingCache.clear()</span></code></a></li>
@@ -328,7 +329,7 @@ stays bounded even for very large inputs.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.embeddings.embeddings">
-<span class="sig-prename descclassname"><span class="pre">aix.embeddings.</span></span><span class="sig-name descname"><span class="pre">embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/embeddings.html#embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.embeddings.embeddings" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aix.embeddings.</span></span><span class="sig-name descname"><span class="pre">embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/aix/embeddings.html#embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.embeddings.embeddings" title="Link to this definition"></a></dt>
 <dd><p>Generate embeddings for multiple text segments.</p>
 <p>This is the main embedding interface for AIX. It abstracts away provider-specific
 details and provides a clean, consistent API across all embedding models.</p>
@@ -338,6 +339,8 @@ details and provides a clean, consistent API across all embedding models.</p>
 <li><p><strong>segments</strong> – Iterable of text strings to embed</p></li>
 <li><p><strong>model</strong> – Model identifier (e.g., ‘text-embedding-3-small’, ‘text-embedding-ada-002’,
 ‘openrouter/openai/text-embedding-3-small’). If None, uses default.</p></li>
+<li><p><strong>api_key</strong> – Explicit API key. If None, resolved from the environment / .env
+/ AIX config store for the model’s provider (see aix.credentials).</p></li>
 <li><p><strong>**kwargs</strong> – Additional provider-specific parameters passed to LiteLLM</p></li>
 </ul>
 </dd>
@@ -454,7 +457,7 @@ is treated as the default (so cached entries are stable across runs).</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="config.html" class="btn btn-neutral float-left" title="aix.config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="credentials.html" class="btn btn-neutral float-left" title="aix.credentials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="gen_ai.html" class="btn btn-neutral float-right" title="aix.gen_ai" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

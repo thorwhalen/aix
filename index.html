@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to aix’s documentation! &mdash; aix 0.0.29 documentation</title>
+  <title>Welcome to aix’s documentation! &mdash; aix 0.0.31 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=828725f0"></script>
+      <script src="_static/documentation_options.js?v=c5dbc6bb"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -58,6 +58,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/batches.html">aix.batches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/chat.html">aix.chat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/config.html">aix.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/credentials.html">aix.credentials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/embeddings.html">aix.embeddings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
@@ -108,6 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.GeneratedAudio"><code class="docutils literal notranslate"><span class="pre">GeneratedAudio</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.GeneratedImage"><code class="docutils literal notranslate"><span class="pre">GeneratedImage</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.GeneratedVideo"><code class="docutils literal notranslate"><span class="pre">GeneratedVideo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.MissingCredentialError"><code class="docutils literal notranslate"><span class="pre">MissingCredentialError</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.ModelStore"><code class="docutils literal notranslate"><span class="pre">ModelStore</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.PromptFuncs"><code class="docutils literal notranslate"><span class="pre">PromptFuncs</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.TranscriptionResult"><code class="docutils literal notranslate"><span class="pre">TranscriptionResult</span></code></a></li>
@@ -118,6 +120,8 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.batch_process"><code class="docutils literal notranslate"><span class="pre">batch_process()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.chat"><code class="docutils literal notranslate"><span class="pre">chat()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.chat_with_history"><code class="docutils literal notranslate"><span class="pre">chat_with_history()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.check_keys"><code class="docutils literal notranslate"><span class="pre">check_keys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.check_requirements"><code class="docutils literal notranslate"><span class="pre">check_requirements()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.configure"><code class="docutils literal notranslate"><span class="pre">configure()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.constrained_answer"><code class="docutils literal notranslate"><span class="pre">constrained_answer()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.cosine_similarity"><code class="docutils literal notranslate"><span class="pre">cosine_similarity()</span></code></a></li>
@@ -139,6 +143,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.prompt_func"><code class="docutils literal notranslate"><span class="pre">prompt_func()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.prompt_to_json"><code class="docutils literal notranslate"><span class="pre">prompt_to_json()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.prompt_to_text"><code class="docutils literal notranslate"><span class="pre">prompt_to_text()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.resolve_api_key"><code class="docutils literal notranslate"><span class="pre">resolve_api_key()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.resolve_model"><code class="docutils literal notranslate"><span class="pre">resolve_model()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.set_config"><code class="docutils literal notranslate"><span class="pre">set_config()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix.html#aix.text_to_speech"><code class="docutils literal notranslate"><span class="pre">text_to_speech()</span></code></a></li>
@@ -240,6 +245,16 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix/config.html#aix.config.using"><code class="docutils literal notranslate"><span class="pre">using()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/credentials.html">aix.credentials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/credentials.html#aix.credentials.MissingCredentialError"><code class="docutils literal notranslate"><span class="pre">MissingCredentialError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/credentials.html#aix.credentials.check_keys"><code class="docutils literal notranslate"><span class="pre">check_keys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/credentials.html#aix.credentials.check_requirements"><code class="docutils literal notranslate"><span class="pre">check_requirements()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/credentials.html#aix.credentials.infer_provider"><code class="docutils literal notranslate"><span class="pre">infer_provider()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/credentials.html#aix.credentials.provider_env_vars"><code class="docutils literal notranslate"><span class="pre">provider_env_vars()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/credentials.html#aix.credentials.requires_credentials"><code class="docutils literal notranslate"><span class="pre">requires_credentials()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/aix/credentials.html#aix.credentials.resolve_api_key"><code class="docutils literal notranslate"><span class="pre">resolve_api_key()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/embeddings.html">aix.embeddings</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix/embeddings.html#aix.embeddings.EmbeddingCache"><code class="docutils literal notranslate"><span class="pre">EmbeddingCache</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/aix/embeddings.html#aix.embeddings.batched_embeddings"><code class="docutils literal notranslate"><span class="pre">batched_embeddings()</span></code></a></li>
@@ -317,8 +332,8 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-<p>Release: 0.0.29</p>
-<p>Last change: Jun 04, 2026</p>
+<p>Release: 0.0.31</p>
+<p>Last change: Jun 05, 2026</p>
 </section>
 
 

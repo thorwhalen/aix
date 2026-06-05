@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.image &mdash; aix 0.0.29 documentation</title>
+  <title>aix.image &mdash; aix 0.0.31 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=828725f0"></script>
+      <script src="../../_static/documentation_options.js?v=c5dbc6bb"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -56,6 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/config.html">aix.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/credentials.html">aix.credentials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
@@ -144,6 +145,10 @@
 
 <span class="c1"># Shipped-default constants, kept for backward compatibility. The *active*</span>
 <span class="c1"># defaults are resolved from ``aix.config`` at call time (see aix/config.py).</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.credentials</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">resolve_api_key</span> <span class="k">as</span> <span class="n">_resolve_api_key</span><span class="p">,</span>
+    <span class="n">requires_credentials</span> <span class="k">as</span> <span class="n">_requires_credentials</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.config</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">get_config</span> <span class="k">as</span> <span class="n">_get_config</span><span class="p">,</span>
     <span class="n">resolve_model</span> <span class="k">as</span> <span class="n">_resolve_model</span><span class="p">,</span>
@@ -291,6 +296,7 @@
 
 <div class="viewcode-block" id="generate_image">
 <a class="viewcode-back" href="../../module_docs/aix/image.html#aix.generate_image">[docs]</a>
+<span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_image</span><span class="p">(</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -299,6 +305,7 @@
     <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;url&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedImage</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a single image from a text prompt.</span>
@@ -310,6 +317,8 @@
 <span class="sd">        quality: Image quality (&#39;standard&#39; or &#39;hd&#39; for DALL-E 3)</span>
 <span class="sd">        style: Image style (&#39;vivid&#39; or &#39;natural&#39; for DALL-E 3)</span>
 <span class="sd">        response_format: Format of response (&#39;url&#39; or &#39;b64_json&#39;)</span>
+<span class="sd">        api_key: Explicit API key. If None, resolved from the environment / .env</span>
+<span class="sd">            / AIX config store for the model&#39;s provider (see aix.credentials).</span>
 <span class="sd">        **kwargs: Additional provider-specific parameters</span>
 
 <span class="sd">    Returns:</span>
@@ -362,6 +371,11 @@
     <span class="k">if</span> <span class="n">style</span><span class="p">:</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;style&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">style</span>
 
+    <span class="c1"># Resolve and inject the API key (explicit arg &gt; env/.env &gt; config store).</span>
+    <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+
     <span class="c1"># Add additional kwargs</span>
     <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -383,6 +397,7 @@
 
 <div class="viewcode-block" id="generate_images">
 <a class="viewcode-back" href="../../module_docs/aix/image.html#aix.generate_images">[docs]</a>
+<span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_images</span><span class="p">(</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -392,6 +407,7 @@
     <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;url&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate multiple images from a text prompt.</span>
@@ -445,6 +461,11 @@
     <span class="k">if</span> <span class="n">style</span><span class="p">:</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;style&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">style</span>
 
+    <span class="c1"># Resolve and inject the API key (explicit arg &gt; env/.env &gt; config store).</span>
+    <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+
     <span class="c1"># Add additional kwargs</span>
     <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -470,6 +491,7 @@
 
 <div class="viewcode-block" id="edit_image">
 <a class="viewcode-back" href="../../module_docs/aix/image.html#aix.edit_image">[docs]</a>
+<span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s2">&quot;dall-e-2&quot;</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">edit_image</span><span class="p">(</span>
     <span class="n">image_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -478,6 +500,7 @@
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Edit an existing image based on a prompt.</span>
@@ -532,6 +555,11 @@
     <span class="k">if</span> <span class="n">size</span><span class="p">:</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">size</span>
 
+    <span class="c1"># Resolve and inject the API key (explicit arg &gt; env/.env &gt; config store).</span>
+    <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+
     <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Call LiteLLM (using custom_llm_provider for edits)</span>
@@ -555,12 +583,14 @@
 
 <div class="viewcode-block" id="create_variation">
 <a class="viewcode-back" href="../../module_docs/aix/image.html#aix.create_variation">[docs]</a>
+<span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="s2">&quot;dall-e-2&quot;</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_variation</span><span class="p">(</span>
     <span class="n">image_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create variations of an existing image.</span>
@@ -604,6 +634,11 @@
 
     <span class="k">if</span> <span class="n">size</span><span class="p">:</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">size</span>
+
+    <span class="c1"># Resolve and inject the API key (explicit arg &gt; env/.env &gt; config store).</span>
+    <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
 
     <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 

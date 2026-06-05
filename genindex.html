@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; aix 0.0.29 documentation</title>
+  <title>Index &mdash; aix 0.0.31 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=828725f0"></script>
+      <script src="_static/documentation_options.js?v=c5dbc6bb"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -56,6 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/batches.html">aix.batches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/chat.html">aix.chat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/config.html">aix.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/aix/credentials.html">aix.credentials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/embeddings.html">aix.embeddings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
@@ -204,6 +205,13 @@
 
       <ul>
         <li><a href="module_docs/aix/config.html#module-aix.config">module</a>
+</li>
+      </ul></li>
+      <li>
+    aix.credentials
+
+      <ul>
+        <li><a href="module_docs/aix/credentials.html#module-aix.credentials">module</a>
 </li>
       </ul></li>
       <li>
@@ -401,6 +409,18 @@
         <li><a href="module_docs/aix/chat.html#aix.chat.ChatSession">(class in aix.chat)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/aix.html#aix.check_keys">check_keys() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/credentials.html#aix.credentials.check_keys">(in module aix.credentials)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.check_requirements">check_requirements() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/credentials.html#aix.credentials.check_requirements">(in module aix.credentials)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/aix/batches.html#aix.batches.BatchProcessor.clear">clear() (aix.batches.BatchProcessor method)</a>
 
       <ul>
@@ -417,10 +437,10 @@
         <li><a href="module_docs/aix.html#aix.ChatSession.clear_history">(aix.ChatSession method)</a>
 </li>
       </ul></li>
-      <li><a href="module_docs/aix/prompts.html#aix.prompts.CommonFuncs">CommonFuncs (class in aix.prompts)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/prompts.html#aix.prompts.CommonFuncs">CommonFuncs (class in aix.prompts)</a>
+</li>
       <li><a href="module_docs/aix/config.html#aix.config.config_file_path">config_file_path() (in module aix.config)</a>
 </li>
       <li><a href="module_docs/aix.html#aix.configure">configure() (in module aix)</a>
@@ -761,6 +781,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/config.html#aix.config.ImageConfig">ImageConfig (class in aix.config)</a>
 </li>
+      <li><a href="module_docs/aix/credentials.html#aix.credentials.infer_provider">infer_provider() (in module aix.credentials)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/video.html#aix.video.interpolate_frames">interpolate_frames() (in module aix.video)</a>
@@ -831,6 +853,8 @@
         <li><a href="module_docs/aix/ai_models.html#aix.ai_models.Model.matches_filter">(aix.ai_models.Model method)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/aix.html#aix.MissingCredentialError">MissingCredentialError</a>, <a href="module_docs/aix/credentials.html#aix.credentials.MissingCredentialError">[1]</a>
+</li>
       <li><a href="module_docs/aix/ai_models.html#aix.ai_models.Model">Model (class in aix.ai_models)</a>
 
       <ul>
@@ -892,6 +916,8 @@
         <li><a href="module_docs/aix/chat.html#module-aix.chat">aix.chat</a>
 </li>
         <li><a href="module_docs/aix/config.html#module-aix.config">aix.config</a>
+</li>
+        <li><a href="module_docs/aix/credentials.html#module-aix.credentials">aix.credentials</a>
 </li>
         <li><a href="module_docs/aix/embeddings.html#module-aix.embeddings">aix.embeddings</a>
 </li>
@@ -1036,6 +1062,8 @@
         <li><a href="module_docs/aix/prompts.html#aix.prompts.PromptFuncs">(class in aix.prompts)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/aix/credentials.html#aix.credentials.provider_env_vars">provider_env_vars() (in module aix.credentials)</a>
+</li>
       <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ProviderAPISource">ProviderAPISource (class in aix.ai_models)</a>
 
       <ul>
@@ -1060,12 +1088,20 @@
         <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.register_connector">(aix.ai_models.ModelManager method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.register_source">register_source() (aix.ai_models.manager.ModelManager method)</a>
 
       <ul>
         <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.register_source">(aix.ai_models.ModelManager method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/credentials.html#aix.credentials.requires_credentials">requires_credentials() (in module aix.credentials)</a>
+</li>
+      <li><a href="module_docs/aix.html#aix.resolve_api_key">resolve_api_key() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/credentials.html#aix.credentials.resolve_api_key">(in module aix.credentials)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/aix.html#aix.resolve_model">resolve_model() (in module aix)</a>
