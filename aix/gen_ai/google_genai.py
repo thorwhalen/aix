@@ -1,7 +1,7 @@
 """Google GenAI API functionality."""
 
 from contextlib import suppress
-from aix.util import get_config
+from aix.credentials import resolve_api_key
 
 name = "google"
 required_packages = ["google.generativeai"]
@@ -20,7 +20,9 @@ with suppress(ModuleNotFoundError, ImportError):
     import google.generativeai as genai
     from i2 import Sig
 
-    genai.configure(api_key=get_config(Const.GOOGLE_API_KEY))
+    # Resolve via the unified credential path (env / .env / AIX config store).
+    # Non-interactive at import time so importing the package never blocks.
+    genai.configure(api_key=resolve_api_key("google"))
 
     # TODO: Add Literal for model
     _sig = Sig(genai.GenerativeModel.generate_content)

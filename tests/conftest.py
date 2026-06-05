@@ -14,6 +14,30 @@ _aix_chat = sys.modules["aix.chat"]
 _aix_embeddings = sys.modules["aix.embeddings"]
 
 
+@pytest.fixture(autouse=True)
+def dummy_provider_keys(monkeypatch):
+    """Provide dummy provider API keys for the whole suite.
+
+    Credential preflight (``aix.credentials.requires_credentials``) now raises
+    ``MissingCredentialError`` when a key is genuinely absent. Existing tests mock
+    the LiteLLM call but run without real keys, so we inject placeholders here;
+    LiteLLM is mocked, so the dummy values are never used over the wire.
+
+    Credential-specific tests opt out by clearing the relevant env vars
+    (``monkeypatch.delenv``) and patching the config-store lookup. Video
+    providers (runway/pika) are deliberately excluded: test_video asserts on
+    their presence/absence, so the suite must not seed them globally.
+    """
+    from aix.credentials import PROVIDER_ENV_VARS, provider_env_vars
+
+    excluded = {"runway", "pika"}
+    for provider in PROVIDER_ENV_VARS:
+        if provider in excluded:
+            continue
+        for env_name in provider_env_vars(provider):
+            monkeypatch.setenv(env_name, "sk-test-dummy-key")
+
+
 @pytest.fixture
 def mock_litellm_completion():
     """Mock LiteLLM completion function."""

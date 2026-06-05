@@ -48,6 +48,10 @@ except ImportError:
 
 # Shipped-default constants, kept for backward compatibility. The *active*
 # defaults are resolved from ``aix.config`` at call time (see aix/config.py).
+from aix.credentials import (
+    resolve_api_key as _resolve_api_key,
+    requires_credentials as _requires_credentials,
+)
 from aix.config import (
     get_config as _get_config,
     resolve_model as _resolve_model,
@@ -178,6 +182,7 @@ class GeneratedImage:
         return f"GeneratedImage(model={self.model}, url={bool(self.url)})"
 
 
+@_requires_credentials(lambda: _get_config().image.model)
 def generate_image(
     prompt: str,
     *,
@@ -186,6 +191,7 @@ def generate_image(
     quality: str = None,
     style: str = None,
     response_format: str = "url",
+    api_key: str = None,
     **kwargs,
 ) -> GeneratedImage:
     """Generate a single image from a text prompt.
@@ -197,6 +203,8 @@ def generate_image(
         quality: Image quality ('standard' or 'hd' for DALL-E 3)
         style: Image style ('vivid' or 'natural' for DALL-E 3)
         response_format: Format of response ('url' or 'b64_json')
+        api_key: Explicit API key. If None, resolved from the environment / .env
+            / AIX config store for the model's provider (see aix.credentials).
         **kwargs: Additional provider-specific parameters
 
     Returns:
@@ -249,6 +257,11 @@ def generate_image(
     if style:
         params["style"] = style
 
+    # Resolve and inject the API key (explicit arg > env/.env > config store).
+    resolved_key = _resolve_api_key(model, api_key=api_key)
+    if resolved_key is not None:
+        params["api_key"] = resolved_key
+
     # Add additional kwargs
     params.update(kwargs)
 
@@ -267,6 +280,7 @@ def generate_image(
     )
 
 
+@_requires_credentials(lambda: _get_config().image.model)
 def generate_images(
     prompt: str,
     *,
@@ -276,6 +290,7 @@ def generate_images(
     quality: str = None,
     style: str = None,
     response_format: str = "url",
+    api_key: str = None,
     **kwargs,
 ) -> list[GeneratedImage]:
     """Generate multiple images from a text prompt.
@@ -329,6 +344,11 @@ def generate_images(
     if style:
         params["style"] = style
 
+    # Resolve and inject the API key (explicit arg > env/.env > config store).
+    resolved_key = _resolve_api_key(model, api_key=api_key)
+    if resolved_key is not None:
+        params["api_key"] = resolved_key
+
     # Add additional kwargs
     params.update(kwargs)
 
@@ -351,6 +371,7 @@ def generate_images(
     return images
 
 
+@_requires_credentials(lambda: "dall-e-2")
 def edit_image(
     image_path: Union[str, Path],
     prompt: str,
@@ -359,6 +380,7 @@ def edit_image(
     model: str = None,
     size: str = None,
     n: int = 1,
+    api_key: str = None,
     **kwargs,
 ) -> Union[GeneratedImage, list[GeneratedImage]]:
     """Edit an existing image based on a prompt.
@@ -413,6 +435,11 @@ def edit_image(
     if size:
         params["size"] = size
 
+    # Resolve and inject the API key (explicit arg > env/.env > config store).
+    resolved_key = _resolve_api_key(params["model"], api_key=api_key)
+    if resolved_key is not None:
+        params["api_key"] = resolved_key
+
     params.update(kwargs)
 
     # Call LiteLLM (using custom_llm_provider for edits)
@@ -433,12 +460,14 @@ def edit_image(
     return images[0] if n == 1 else images
 
 
+@_requires_credentials(lambda: "dall-e-2")
 def create_variation(
     image_path: Union[str, Path],
     *,
     model: str = None,
     size: str = None,
     n: int = 1,
+    api_key: str = None,
     **kwargs,
 ) -> Union[GeneratedImage, list[GeneratedImage]]:
     """Create variations of an existing image.
@@ -482,6 +511,11 @@ def create_variation(
 
     if size:
         params["size"] = size
+
+    # Resolve and inject the API key (explicit arg > env/.env > config store).
+    resolved_key = _resolve_api_key(params["model"], api_key=api_key)
+    if resolved_key is not None:
+        params["api_key"] = resolved_key
 
     params.update(kwargs)
 

@@ -20,7 +20,9 @@ Thank you for your interest in contributing to AIX! This document provides guide
    pip install pytest pytest-cov pytest-mock ruff
    ```
 
-4. **Set up API keys** (for testing):
+4. **Set up API keys** (only for live/integration testing — the unit suite mocks
+   the provider backend and injects dummy keys automatically, so it runs without
+   any real credentials):
    ```bash
    export OPENAI_API_KEY=your-key-here
    export ANTHROPIC_API_KEY=your-key-here

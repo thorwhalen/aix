@@ -31,6 +31,10 @@ except ImportError:
 
 # Shipped-default constants, kept for backward compatibility. The *active*
 # defaults are resolved from ``aix.config`` at call time (see aix/config.py).
+from aix.credentials import (
+    resolve_api_key as _resolve_api_key,
+    requires_credentials as _requires_credentials,
+)
 from aix.config import (
     get_config as _get_config,
     resolve_model as _resolve_model,
@@ -188,6 +192,7 @@ class TranscriptionResult:
         )
 
 
+@_requires_credentials(lambda: _get_config().audio.tts_model)
 def text_to_speech(
     text: str,
     *,
@@ -195,6 +200,7 @@ def text_to_speech(
     voice: str = None,
     speed: float = None,
     response_format: str = "mp3",
+    api_key: str = None,
     **kwargs,
 ) -> GeneratedAudio:
     """Convert text to speech audio.
@@ -253,6 +259,11 @@ def text_to_speech(
         "speed": speed,
     }
 
+    # Resolve and inject the API key (explicit arg > env/.env > config store).
+    resolved_key = _resolve_api_key(model, api_key=api_key)
+    if resolved_key is not None:
+        params["api_key"] = resolved_key
+
     # Add additional kwargs
     params.update(kwargs)
 
@@ -271,6 +282,7 @@ def text_to_speech(
     )
 
 
+@_requires_credentials(lambda: _get_config().audio.transcription_model)
 def transcribe(
     audio: Union[str, Path, BinaryIO, bytes],
     *,
@@ -280,6 +292,7 @@ def transcribe(
     response_format: str = "text",
     temperature: float = None,
     timestamp_granularities: list[str] = None,
+    api_key: str = None,
     **kwargs,
 ) -> Union[str, TranscriptionResult]:
     """Transcribe audio to text.
@@ -361,6 +374,11 @@ def transcribe(
     if timestamp_granularities:
         params["timestamp_granularities"] = timestamp_granularities
 
+    # Resolve and inject the API key (explicit arg > env/.env > config store).
+    resolved_key = _resolve_api_key(model, api_key=api_key)
+    if resolved_key is not None:
+        params["api_key"] = resolved_key
+
     # Add additional kwargs
     params.update(kwargs)
 
@@ -431,11 +449,13 @@ def transcribe_with_timestamps(
     )
 
 
+@_requires_credentials(lambda: _get_config().audio.transcription_model)
 def translate_audio(
     audio: Union[str, Path, BinaryIO, bytes],
     *,
     model: str = None,
     prompt: str = None,
+    api_key: str = None,
     **kwargs,
 ) -> str:
     """Translate audio from any language to English.
@@ -486,6 +506,11 @@ def translate_audio(
 
     if prompt:
         params["prompt"] = prompt
+
+    # Resolve and inject the API key (explicit arg > env/.env > config store).
+    resolved_key = _resolve_api_key(model, api_key=api_key)
+    if resolved_key is not None:
+        params["api_key"] = resolved_key
 
     params.update(kwargs)
 

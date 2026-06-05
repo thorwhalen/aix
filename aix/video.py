@@ -164,6 +164,7 @@ def generate_video(
     aspect_ratio: str = None,
     style: str = None,
     seed: int = None,
+    api_key: str = None,
     **kwargs,
 ) -> GeneratedVideo:
     """Generate a video from a text prompt.
@@ -181,6 +182,8 @@ def generate_video(
         aspect_ratio: Aspect ratio ('16:9', '9:16', '1:1', etc.)
         style: Video style hint (provider-specific)
         seed: Random seed for reproducibility
+        api_key: Explicit API key for the video provider. If None, resolved from
+            the environment / .env / AIX config store (see aix.credentials).
         **kwargs: Additional provider-specific parameters
 
     Returns:
@@ -400,16 +403,15 @@ def get_available_providers() -> list[str]:
         >>> print(providers)  # doctest: +SKIP
         ['runway', 'pika']
     """
+    from aix.credentials import resolve_api_key
+
     available = []
 
-    # Check for Runway
-    import os
-
-    if os.getenv("RUNWAY_API_KEY"):
+    # Check for Runway / Pika via the unified credential resolver (env / .env /
+    # AIX config store) rather than reading os.environ directly.
+    if resolve_api_key("runway"):
         available.append("runway")
-
-    # Check for Pika
-    if os.getenv("PIKA_API_KEY"):
+    if resolve_api_key("pika"):
         available.append("pika")
 
     # Check for Stable Diffusion
