@@ -137,12 +137,16 @@ class ProviderAPISource(ModelSource):
         self,
         provider_name: str,
         *,
-        api_key: str,
+        api_key: str = None,
         base_url: str = "https://api.openai.com/v1",
         timeout: int = 30,
     ):
+        from aix.credentials import resolve_api_key
+
         self._provider_name = provider_name
-        self._api_key = api_key
+        # Resolve through the unified credential path (explicit arg > env/.env >
+        # AIX config store) instead of requiring the key to be passed in.
+        self._api_key = resolve_api_key(provider_name, api_key=api_key)
         self._base_url = base_url
         self._timeout = timeout
 

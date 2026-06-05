@@ -142,10 +142,69 @@ best = "anthropic/claude-sonnet-4"
 Find the active path with `aix.config.config_file_path()`. Environment variables
 override file values; explicit call arguments override everything.
 
-> **Note on credentials:** API keys are currently discovered by the provider
-> backend (LiteLLM) from standard environment variables such as `OPENAI_API_KEY`,
-> `ANTHROPIC_API_KEY`, and `OPENROUTER_API_KEY`. A unified, discoverable key
-> resolver with actionable error messages is in progress.
+## Providing credentials
+
+Every key-requiring function (`chat`, `embeddings`, `generate_image`,
+`text_to_speech`, `transcribe`, `generate_video`, ...) resolves its API key
+through one documented path. The resolution order, highest precedence first:
+
+1. **Explicit argument** — `chat("hi", api_key="sk-...")` (keyword-only, on every
+   key-requiring function).
+2. **Provider environment variable** — the canonical name for the model's
+   provider (see the table below). A project `.env` is *softly* discovered when
+   `python-dotenv` is installed; an explicitly exported variable always wins over
+   a `.env` value.
+3. **AIX config store** — a per-user store in your app-config folder, keyed by the
+   canonical env-var name (so the store and the env layer share one namespace).
+4. **(Interactive only) prompt + persist** — in a REPL, AIX can ask once and save
+   the key to the config store.
+
+The provider is inferred from the model id, so you rarely name it yourself:
+
+```python
+import aix
+
+aix.chat("Hello", model="gpt-4o")          # uses OPENAI_API_KEY
+aix.chat("Hi", model="claude-sonnet-4")    # uses ANTHROPIC_API_KEY
+aix.chat("Yo", api_key="sk-...")           # explicit key wins
+
+# Check what's discoverable (values are never shown — availability only):
+aix.check_keys()
+# {'openai': {'available': True, 'env_vars': ['OPENAI_API_KEY'], 'source': 'env'}, ...}
+```
+
+When a required key is missing, you get an actionable `MissingCredentialError`
+naming *which* key, *how* to set it, and *where* to get one — instead of a cryptic
+provider error:
+
+```python
+>>> aix.chat("hi", model="gpt-4o")
+aix.credentials.MissingCredentialError: No API key found for provider 'openai'
+(model 'gpt-4o'). Set OPENAI_API_KEY via one of:
+  - export it:  export OPENAI_API_KEY=...
+  - add it to a .env file in your project, or
+  - store it in the AIX config store under the key 'OPENAI_API_KEY'.
+Get a key at: https://platform.openai.com/api-keys
+```
+
+### Provider → environment variable
+
+| Provider | Environment variable | Get a key |
+|---|---|---|
+| OpenAI | `OPENAI_API_KEY` | https://platform.openai.com/api-keys |
+| Anthropic | `ANTHROPIC_API_KEY` | https://console.anthropic.com/settings/keys |
+| Google Gemini | `GEMINI_API_KEY` (or `GOOGLE_API_KEY`) | https://aistudio.google.com/apikey |
+| OpenRouter | `OPENROUTER_API_KEY` | https://openrouter.ai/keys |
+| Mistral | `MISTRAL_API_KEY` | https://console.mistral.ai/api-keys/ |
+| Cohere | `COHERE_API_KEY` | https://dashboard.cohere.com/api-keys |
+| Groq | `GROQ_API_KEY` | https://console.groq.com/keys |
+| DeepSeek | `DEEPSEEK_API_KEY` | https://platform.deepseek.com/api_keys |
+| xAI | `XAI_API_KEY` | https://console.x.ai/ |
+| Perplexity | `PERPLEXITYAI_API_KEY` | https://www.perplexity.ai/settings/api |
+| Runway (video) | `RUNWAY_API_KEY` | https://app.runwayml.com/ |
+
+The full mapping is `aix.PROVIDER_ENV_VARS`. Keys are never logged, and the config
+store lives in your user app-config folder — never in the repo.
 
 ## Core Features
 

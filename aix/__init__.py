@@ -56,6 +56,15 @@ from aix.config import (
     resolve_model,
 )
 
+# Credentials (unified, discoverable API-key resolution)
+from aix.credentials import (
+    resolve_api_key,
+    check_requirements,
+    check_keys,
+    MissingCredentialError,
+    PROVIDER_ENV_VARS,
+)
+
 # Core interfaces (new clean API)
 from aix.chat import chat, ask, chat_with_history, ChatSession
 from aix.embeddings import (
@@ -131,6 +140,12 @@ __all__ = [
     "using",
     "load_config",
     "resolve_model",
+    # Credentials
+    "resolve_api_key",
+    "check_requirements",
+    "check_keys",
+    "MissingCredentialError",
+    "PROVIDER_ENV_VARS",
     # Core chat
     "chat",
     "ask",

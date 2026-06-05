@@ -37,6 +37,10 @@ from aix.config import (
     resolve_model as _resolve_model,
     ChatConfig as _ChatConfig,
 )
+from aix.credentials import (
+    resolve_api_key as _resolve_api_key,
+    requires_credentials as _requires_credentials,
+)
 
 # Import LiteLLM but keep it private - users shouldn't call it directly
 try:
@@ -127,6 +131,7 @@ def _extract_text_from_stream(stream: Iterable) -> Iterable[str]:
             continue
 
 
+@_requires_credentials(lambda: _get_config().chat.model)
 def chat(
     prompt: Union[str, Iterable[dict]],
     *,
@@ -134,6 +139,7 @@ def chat(
     temperature: float = None,
     max_tokens: int = None,
     stream: bool = False,
+    api_key: str = None,
     **kwargs,
 ) -> Union[str, Iterable[str]]:
     """Send a chat prompt and get a response.
@@ -151,6 +157,8 @@ def chat(
         max_tokens: Maximum tokens to generate. If None, uses model's default.
         stream: If True, return an iterator of text chunks. If False, return
             complete response as string.
+        api_key: Explicit API key. If None, resolved from the environment / .env
+            / AIX config store for the model's provider (see aix.credentials).
         **kwargs: Additional provider-specific parameters passed to LiteLLM
 
     Returns:
@@ -207,6 +215,12 @@ def chat(
 
     if max_tokens is not None:
         litellm_kwargs["max_tokens"] = max_tokens
+
+    # Resolve and inject the API key (explicit arg > env/.env > config store).
+    # When None, fall back to LiteLLM's own implicit reading.
+    resolved_key = _resolve_api_key(model, api_key=api_key)
+    if resolved_key is not None:
+        litellm_kwargs["api_key"] = resolved_key
 
     # Add any additional provider-specific kwargs
     litellm_kwargs.update(kwargs)

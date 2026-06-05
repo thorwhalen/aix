@@ -32,6 +32,10 @@ from aix.config import (
     resolve_model as _resolve_model,
     EmbeddingConfig as _EmbeddingConfig,
 )
+from aix.credentials import (
+    resolve_api_key as _resolve_api_key,
+    requires_credentials as _requires_credentials,
+)
 
 # Import LiteLLM but keep it private
 try:
@@ -46,8 +50,9 @@ DFLT_EMBEDDING_MODEL = _EmbeddingConfig().model
 DFLT_BATCH_SIZE = _EmbeddingConfig().batch_size
 
 
+@_requires_credentials(lambda: _get_config().embeddings.model)
 def embeddings(
-    segments: Iterable[str], *, model: str = None, **kwargs
+    segments: Iterable[str], *, model: str = None, api_key: str = None, **kwargs
 ) -> Iterable[Sequence[float]]:
     """Generate embeddings for multiple text segments.
 
@@ -58,6 +63,8 @@ def embeddings(
         segments: Iterable of text strings to embed
         model: Model identifier (e.g., 'text-embedding-3-small', 'text-embedding-ada-002',
             'openrouter/openai/text-embedding-3-small'). If None, uses default.
+        api_key: Explicit API key. If None, resolved from the environment / .env
+            / AIX config store for the model's provider (see aix.credentials).
         **kwargs: Additional provider-specific parameters passed to LiteLLM
 
     Yields:
@@ -109,6 +116,11 @@ def embeddings(
         "model": model,
         "input": segments_list,
     }
+
+    # Resolve and inject the API key (explicit arg > env/.env > config store).
+    resolved_key = _resolve_api_key(model, api_key=api_key)
+    if resolved_key is not None:
+        litellm_kwargs["api_key"] = resolved_key
 
     # Add any additional provider-specific kwargs
     litellm_kwargs.update(kwargs)
