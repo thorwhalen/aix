@@ -171,6 +171,55 @@ class TestPromptFunc:
         assert func.param_names == ["param"]
 
 
+class TestEgressAndName:
+    """Tests for the egress post-processor and name parameters."""
+
+    @patch("aix.prompts.chat")
+    def test_egress_postprocesses_text_output(self, mock_chat):
+        """egress transforms the plain-text result before returning."""
+        mock_chat.return_value = "a\nb\nc"
+        func = prompt_func("List about {topic}", egress=lambda s: s.splitlines())
+        assert func(topic="x") == ["a", "b", "c"]
+
+    @patch("aix.prompts.chat")
+    def test_no_egress_returns_raw_text(self, mock_chat):
+        """Without egress the raw string is returned unchanged (back-compat)."""
+        mock_chat.return_value = "hello"
+        func = prompt_func("Say {x}")
+        assert func(x="hi") == "hello"
+
+    @patch("aix.prompts.chat")
+    def test_egress_applies_to_structured_output(self, mock_chat):
+        """egress also runs on the parsed structured-output path."""
+        mock_chat.return_value = '{"name": "Alice", "age": 30}'
+        func = prompt_func(
+            "Extract {text}",
+            output_schema={"name": str, "age": int},
+            egress=lambda d: d["name"],
+        )
+        assert func(text="...") == "Alice"
+
+    @patch("aix.prompts.chat")
+    def test_name_sets_function_dunder_name(self, mock_chat):
+        """name overrides the generated function's __name__."""
+        mock_chat.return_value = "x"
+        func = prompt_func("Do {x}", name="select_capabilities")
+        assert func.__name__ == "select_capabilities"
+
+    @patch("aix.prompts.chat")
+    def test_default_name_is_unchanged(self, mock_chat):
+        """Omitting name keeps the historical default."""
+        func = prompt_func("Do {x}")
+        assert func.__name__ == "prompt_based_function"
+
+    @patch("aix.prompts.chat")
+    def test_egress_exposed_as_metadata(self, mock_chat):
+        """The egress is introspectable on the returned function."""
+        eg = lambda s: s
+        func = prompt_func("Do {x}", egress=eg)
+        assert func.egress is eg
+
+
 class TestPromptToText:
     """Tests for prompt_to_text convenience function."""
 
