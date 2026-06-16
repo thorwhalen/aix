@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.prompts &mdash; aix 0.0.31 documentation</title>
+  <title>aix.prompts &mdash; aix 0.0.32 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=c5dbc6bb"></script>
+      <script src="../../_static/documentation_options.js?v=f2234cd1"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -277,8 +277,10 @@
     <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">output_schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">egress</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">chat_kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a callable function from a prompt template.</span>
@@ -288,6 +290,7 @@
 
 <span class="sd">    Without output_schema: Returns text</span>
 <span class="sd">    With output_schema: Returns structured data (dict, list, etc.)</span>
+<span class="sd">    With egress: Returns whatever the egress post-processor returns.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        template: Prompt template with {var} placeholders for parameters</span>
@@ -295,8 +298,15 @@
 <span class="sd">            - Dict mapping field names to types: {&quot;name&quot;: str, &quot;age&quot;: int}</span>
 <span class="sd">            - A single type for simple outputs: str, int, list, etc.</span>
 <span class="sd">            - None for plain text output (default)</span>
+<span class="sd">        egress: Optional post-processor ``(result) -&gt; Any`` applied to the output</span>
+<span class="sd">            before returning — on both the text and structured paths. Lets a caller</span>
+<span class="sd">            keep &quot;prompt → typed Python value&quot; inside the facade (e.g. parse the</span>
+<span class="sd">            LLM text into a list of lines/ids) instead of wrapping the returned</span>
+<span class="sd">            function. ``None`` (default) returns the raw result unchanged.</span>
 <span class="sd">        model: Model to use for this function</span>
 <span class="sd">        temperature: Temperature for generation</span>
+<span class="sd">        name: Optional ``__name__`` for the generated function (for tracing /</span>
+<span class="sd">            identity). Defaults to ``&quot;prompt_based_function&quot;``.</span>
 <span class="sd">        **chat_kwargs: Additional parameters passed to chat()</span>
 
 <span class="sd">    Returns:</span>
@@ -370,16 +380,17 @@
                 <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span> <span class="ow">or</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># Lower temp for structured output</span>
                 <span class="o">**</span><span class="n">chat_kwargs</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="k">return</span> <span class="n">_parse_structured_output</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">json_schema</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">_parse_structured_output</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">json_schema</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Plain text output</span>
-            <span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span>
                 <span class="n">formatted_prompt</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span> <span class="o">**</span><span class="n">chat_kwargs</span>
             <span class="p">)</span>
-            <span class="k">return</span> <span class="n">response</span>
+        <span class="c1"># Optional post-processing (e.g. parse text into a list of ids/lines).</span>
+        <span class="k">return</span> <span class="n">egress</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">egress</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">result</span>
 
     <span class="c1"># Set function name and docstring</span>
-    <span class="n">generated_function</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;prompt_based_function&quot;</span>
+    <span class="n">generated_function</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="s2">&quot;prompt_based_function&quot;</span>
     <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;Auto-generated function from prompt template.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
         <span class="sa">f</span><span class="s2">&quot;Template: </span><span class="si">{</span><span class="n">template</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
@@ -398,6 +409,7 @@
     <span class="c1"># Add metadata</span>
     <span class="n">generated_function</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">template</span>
     <span class="n">generated_function</span><span class="o">.</span><span class="n">output_schema</span> <span class="o">=</span> <span class="n">output_schema</span>
+    <span class="n">generated_function</span><span class="o">.</span><span class="n">egress</span> <span class="o">=</span> <span class="n">egress</span>
     <span class="n">generated_function</span><span class="o">.</span><span class="n">param_names</span> <span class="o">=</span> <span class="n">param_names</span>
 
     <span class="k">return</span> <span class="n">generated_function</span></div>
@@ -839,7 +851,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

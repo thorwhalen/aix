@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix &mdash; aix 0.0.31 documentation</title>
+  <title>aix &mdash; aix 0.0.32 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c5dbc6bb"></script>
+      <script src="../_static/documentation_options.js?v=f2234cd1"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -1837,12 +1837,13 @@ sit above this and are applied elsewhere.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.prompt_func">
-<span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">prompt_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">type</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">chat_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../_modules/aix/prompts.html#prompt_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.prompt_func" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">prompt_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">type</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">egress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">chat_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../_modules/aix/prompts.html#prompt_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.prompt_func" title="Link to this definition"></a></dt>
 <dd><p>Create a callable function from a prompt template.</p>
 <p>This is the main function for creating prompt-based functions. It automatically
 detects parameters from the template and creates a function with those parameters.</p>
 <p>Without output_schema: Returns text
-With output_schema: Returns structured data (dict, list, etc.)</p>
+With output_schema: Returns structured data (dict, list, etc.)
+With egress: Returns whatever the egress post-processor returns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1851,8 +1852,15 @@ With output_schema: Returns structured data (dict, list, etc.)</p>
 - Dict mapping field names to types: {“name”: str, “age”: int}
 - A single type for simple outputs: str, int, list, etc.
 - None for plain text output (default)</p></li>
+<li><p><strong>egress</strong> – Optional post-processor <code class="docutils literal notranslate"><span class="pre">(result)</span> <span class="pre">-&gt;</span> <span class="pre">Any</span></code> applied to the output
+before returning — on both the text and structured paths. Lets a caller
+keep “prompt → typed Python value” inside the facade (e.g. parse the
+LLM text into a list of lines/ids) instead of wrapping the returned
+function. <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) returns the raw result unchanged.</p></li>
 <li><p><strong>model</strong> – Model to use for this function</p></li>
 <li><p><strong>temperature</strong> – Temperature for generation</p></li>
+<li><p><strong>name</strong> – Optional <code class="docutils literal notranslate"><span class="pre">__name__</span></code> for the generated function (for tracing /
+identity). Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;prompt_based_function&quot;</span></code>.</p></li>
 <li><p><strong>**chat_kwargs</strong> – Additional parameters passed to chat()</p></li>
 </ul>
 </dd>
@@ -2196,7 +2204,7 @@ Otherwise: TranscriptionResult object with metadata</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
