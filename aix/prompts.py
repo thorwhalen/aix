@@ -178,8 +178,10 @@ def prompt_func(
     template: str,
     *,
     output_schema: Union[dict, type] = None,
+    egress: Callable[[Any], Any] = None,
     model: str = None,
     temperature: float = None,
+    name: str = None,
     **chat_kwargs,
 ) -> Callable:
     """Create a callable function from a prompt template.
@@ -189,6 +191,7 @@ def prompt_func(
 
     Without output_schema: Returns text
     With output_schema: Returns structured data (dict, list, etc.)
+    With egress: Returns whatever the egress post-processor returns.
 
     Args:
         template: Prompt template with {var} placeholders for parameters
@@ -196,8 +199,15 @@ def prompt_func(
             - Dict mapping field names to types: {"name": str, "age": int}
             - A single type for simple outputs: str, int, list, etc.
             - None for plain text output (default)
+        egress: Optional post-processor ``(result) -> Any`` applied to the output
+            before returning — on both the text and structured paths. Lets a caller
+            keep "prompt → typed Python value" inside the facade (e.g. parse the
+            LLM text into a list of lines/ids) instead of wrapping the returned
+            function. ``None`` (default) returns the raw result unchanged.
         model: Model to use for this function
         temperature: Temperature for generation
+        name: Optional ``__name__`` for the generated function (for tracing /
+            identity). Defaults to ``"prompt_based_function"``.
         **chat_kwargs: Additional parameters passed to chat()
 
     Returns:
@@ -271,16 +281,17 @@ def prompt_func(
                 temperature=temperature or 0.0,  # Lower temp for structured output
                 **chat_kwargs,
             )
-            return _parse_structured_output(response, json_schema)
+            result = _parse_structured_output(response, json_schema)
         else:
             # Plain text output
-            response = chat(
+            result = chat(
                 formatted_prompt, model=model, temperature=temperature, **chat_kwargs
             )
-            return response
+        # Optional post-processing (e.g. parse text into a list of ids/lines).
+        return egress(result) if egress is not None else result
 
     # Set function name and docstring
-    generated_function.__name__ = "prompt_based_function"
+    generated_function.__name__ = name or "prompt_based_function"
     generated_function.__doc__ = (
         f"Auto-generated function from prompt template.\n\n"
         f"Template: {template}\n\n"
@@ -299,6 +310,7 @@ def prompt_func(
     # Add metadata
     generated_function.template = template
     generated_function.output_schema = output_schema
+    generated_function.egress = egress
     generated_function.param_names = param_names
 
     return generated_function
