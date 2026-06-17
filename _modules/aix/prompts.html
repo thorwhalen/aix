@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.prompts &mdash; aix 0.0.32 documentation</title>
+  <title>aix.prompts &mdash; aix 0.0.33 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=f2234cd1"></script>
+      <script src="../../_static/documentation_options.js?v=565bc8c8"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -127,6 +127,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">string</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_string</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">get_type_hints</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
@@ -183,6 +184,141 @@
 <span class="sd">        &#39;Hello Alice&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="c1"># --------------------------------------------------------------------------------------</span>
+<span class="c1"># oa-compatible default-aware template dialect</span>
+<span class="c1">#</span>
+<span class="c1"># Fields are written ``{name}`` (required) or ``{name:default}`` (the text after the</span>
+<span class="c1"># colon is the default value). Braces inside ``` fenced ``` regions are left literal</span>
+<span class="c1"># (not treated as fields), so a prompt can show example code that contains braces.</span>
+<span class="c1"># This mirrors ``oa.prompt_function`` so templates written for ``oa`` work unchanged</span>
+<span class="c1"># on aix. Plain ``{name}``-only templates behave exactly as before.</span>
+
+<span class="n">DFLT_IGNORE_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;```.*?```&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+<span class="n">_string_formatter</span> <span class="o">=</span> <span class="n">_string</span><span class="o">.</span><span class="n">Formatter</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_extract_parts</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split ``text`` into (matched, unmatched) parts around regex ``pattern``.</span>
+
+<span class="sd">    ``unmatched`` always has one more element than ``matched`` (the trailing segment).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">matched</span><span class="p">,</span> <span class="n">unmatched</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">span</span><span class="p">()</span>
+        <span class="n">unmatched</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">last</span><span class="p">:</span><span class="n">start</span><span class="p">])</span>
+        <span class="n">matched</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="n">end</span>
+    <span class="n">unmatched</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">last</span><span class="p">:])</span>
+    <span class="k">return</span> <span class="n">matched</span><span class="p">,</span> <span class="n">unmatched</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pattern_based_map</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;unmatched&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply ``func`` to the matched (or unmatched) parts of ``text`` split by regex.</span>
+
+<span class="sd">    &gt;&gt;&gt; _pattern_based_map(str.upper, &quot;a ```b``` c&quot;, r&quot;```.*?```&quot;)</span>
+<span class="sd">    &#39;A ```b``` C&#39;</span>
+<span class="sd">    &gt;&gt;&gt; _pattern_based_map(str.upper, &quot;a ```b``` c&quot;, r&quot;```.*?```&quot;, apply_to=&quot;matched&quot;)</span>
+<span class="sd">    &#39;a ```B``` c&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">matched</span><span class="p">,</span> <span class="n">unmatched</span> <span class="o">=</span> <span class="n">_extract_parts</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">apply_to</span> <span class="o">==</span> <span class="s2">&quot;matched&quot;</span><span class="p">:</span>
+        <span class="n">transformed</span> <span class="o">=</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">matched</span><span class="p">]</span>
+        <span class="n">result_parts</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">unmatched</span><span class="p">,</span> <span class="n">transformed</span><span class="p">),</span> <span class="p">())</span>
+        <span class="n">tail</span> <span class="o">=</span> <span class="n">unmatched</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">transformed</span> <span class="o">=</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">unmatched</span><span class="p">]</span>
+        <span class="n">result_parts</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">transformed</span><span class="p">,</span> <span class="n">matched</span><span class="p">),</span> <span class="p">())</span>
+        <span class="n">tail</span> <span class="o">=</span> <span class="n">transformed</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result_parts</span><span class="p">)</span> <span class="o">+</span> <span class="n">tail</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_strip_ignored</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">ignore_pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">template</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">ignore_pattern</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_template_param_names</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">DFLT_IGNORE_PATTERN</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ordered, unique field names of ``template`` (ignoring fenced regions).</span>
+
+<span class="sd">    &gt;&gt;&gt; _template_param_names(&quot;Greet {name} in {language:English}&quot;)</span>
+<span class="sd">    (&#39;name&#39;, &#39;language&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; _template_param_names(&quot;plain text&quot;)</span>
+<span class="sd">    ()</span>
+<span class="sd">    &gt;&gt;&gt; _template_param_names(&quot;```{ignored}``` but {kept}&quot;)</span>
+<span class="sd">    (&#39;kept&#39;,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">_strip_ignored</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">)</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_string_formatter</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_template_defaults</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">DFLT_IGNORE_PATTERN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map each defaulted field (``{name:default}``) to its default value.</span>
+
+<span class="sd">    &gt;&gt;&gt; _template_defaults(&quot;Greet {name} in {language:English}&quot;)</span>
+<span class="sd">    {&#39;language&#39;: &#39;English&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; _template_defaults(&quot;No defaults {here}&quot;)</span>
+<span class="sd">    {}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">_strip_ignored</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">spec</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_string_formatter</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">spec</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_format_ready_template</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">DFLT_IGNORE_PATTERN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make ``template`` ready for ``str.format``: drop ``:default`` specifiers outside</span>
+<span class="sd">    fenced regions and double braces inside fenced regions so they survive formatting.</span>
+
+<span class="sd">    &gt;&gt;&gt; _format_ready_template(&quot;List {n:100} facts about {topic}&quot;)</span>
+<span class="sd">    &#39;List {n} facts about {topic}&#39;</span>
+<span class="sd">    &gt;&gt;&gt; _format_ready_template(&quot;```{kept}``` and {x:y}&quot;)</span>
+<span class="sd">    &#39;```{{kept}}``` and {x}&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_strip_specifiers</span><span class="p">(</span><span class="n">chunk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">literal</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_string_formatter</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">chunk</span><span class="p">):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">literal</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">field_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_double_braces</span><span class="p">(</span><span class="n">chunk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">chunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="s2">&quot;{{&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="s2">&quot;}}&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ignore_pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_strip_specifiers</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+    <span class="n">ready</span> <span class="o">=</span> <span class="n">_pattern_based_map</span><span class="p">(</span>
+        <span class="n">_strip_specifiers</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;unmatched&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_pattern_based_map</span><span class="p">(</span><span class="n">_double_braces</span><span class="p">,</span> <span class="n">ready</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;matched&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_prepare_template</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">DFLT_IGNORE_PATTERN</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ``(format_ready_template, param_names, defaults)`` for ``template``.</span>
+
+<span class="sd">    Supports the oa-style ``{name:default}`` default-aware dialect and leaves braces</span>
+<span class="sd">    inside ``` fenced ``` regions literal. Plain ``{name}``-only templates are</span>
+<span class="sd">    unchanged, so existing callers behave identically.</span>
+
+<span class="sd">    &gt;&gt;&gt; ready, names, defaults = _prepare_template(&quot;List {n:3} facts about {topic}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; ready</span>
+<span class="sd">    &#39;List {n} facts about {topic}&#39;</span>
+<span class="sd">    &gt;&gt;&gt; names</span>
+<span class="sd">    [&#39;n&#39;, &#39;topic&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; defaults</span>
+<span class="sd">    {&#39;n&#39;: &#39;3&#39;}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_template_param_names</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">ignore_pattern</span><span class="p">))</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="n">_template_defaults</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">ignore_pattern</span><span class="p">)</span>
+    <span class="n">ready</span> <span class="o">=</span> <span class="n">_format_ready_template</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">ignore_pattern</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ready</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">defaults</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_schema_to_json_schema</span><span class="p">(</span><span class="n">schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -292,6 +428,16 @@
 <span class="sd">    With output_schema: Returns structured data (dict, list, etc.)</span>
 <span class="sd">    With egress: Returns whatever the egress post-processor returns.</span>
 
+<span class="sd">    Templates use the default-aware ``{name:default}`` dialect (matching</span>
+<span class="sd">    ``oa.prompt_function``): ``{name}`` is a required parameter, ``{name:default}``</span>
+<span class="sd">    supplies a default value (the text after the colon), and braces inside</span>
+<span class="sd">    ``` fenced ``` regions are left literal. Plain ``{name}``-only templates behave</span>
+<span class="sd">    exactly as before.</span>
+
+<span class="sd">    &gt;&gt;&gt; greet = prompt_func(&quot;Greet {name} in {language:English}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; greet.param_names</span>
+<span class="sd">    [&#39;name&#39;, &#39;language&#39;]</span>
+
 <span class="sd">    Args:</span>
 <span class="sd">        template: Prompt template with {var} placeholders for parameters</span>
 <span class="sd">        output_schema: Optional schema for structured output. Can be:</span>
@@ -349,21 +495,24 @@
 <span class="sd">        &gt;&gt;&gt; creative_writer(topic=&quot;a time-traveling cat&quot;)  # doctest: +SKIP</span>
 <span class="sd">        &#39;Once upon a time, there was a cat named Whiskers...&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Extract parameter names from template</span>
-    <span class="n">param_names</span> <span class="o">=</span> <span class="n">_extract_template_vars</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+    <span class="c1"># Parse the template. Supports the oa-style ``{name:default}`` default-aware</span>
+    <span class="c1"># dialect (braces inside fenced ``` regions stay literal); plain ``{name}``</span>
+    <span class="c1"># templates are unchanged, so existing callers behave identically.</span>
+    <span class="n">format_ready</span><span class="p">,</span> <span class="n">param_names</span><span class="p">,</span> <span class="n">template_defaults</span> <span class="o">=</span> <span class="n">_prepare_template</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
 
     <span class="c1"># Build the actual function</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">generated_function</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="c1"># Validate parameters</span>
-        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_names</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">param</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Missing required parameter: </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">. &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Required parameters: </span><span class="si">{</span><span class="n">param_names</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
+        <span class="c1"># Apply template defaults, then require a value for every field.</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">template_defaults</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">param</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_names</span> <span class="k">if</span> <span class="n">param</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Missing required parameter(s): </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Required parameters: </span><span class="si">{</span><span class="n">param_names</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
-        <span class="c1"># Format the prompt</span>
-        <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">_format_prompt</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># Format the prompt (defaults already merged in)</span>
+        <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">format_ready</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">values</span><span class="p">)</span>
 
         <span class="c1"># If structured output is requested, modify the prompt</span>
         <span class="k">if</span> <span class="n">output_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

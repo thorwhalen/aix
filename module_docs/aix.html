@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix &mdash; aix 0.0.32 documentation</title>
+  <title>aix &mdash; aix 0.0.33 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=f2234cd1"></script>
+      <script src="../_static/documentation_options.js?v=565bc8c8"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -1844,6 +1844,16 @@ detects parameters from the template and creates a function with those parameter
 <p>Without output_schema: Returns text
 With output_schema: Returns structured data (dict, list, etc.)
 With egress: Returns whatever the egress post-processor returns.</p>
+<p>Templates use the default-aware <code class="docutils literal notranslate"><span class="pre">{name:default}</span></code> dialect (matching
+<code class="docutils literal notranslate"><span class="pre">oa.prompt_function</span></code>): <code class="docutils literal notranslate"><span class="pre">{name}</span></code> is a required parameter, <code class="docutils literal notranslate"><span class="pre">{name:default}</span></code>
+supplies a default value (the text after the colon), and braces inside
+<code class="docutils literal notranslate"><span class="pre">`</span> <span class="pre">fenced</span> <span class="pre">`</span></code> regions are left literal. Plain <code class="docutils literal notranslate"><span class="pre">{name}</span></code>-only templates behave
+exactly as before.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">greet</span> <span class="o">=</span> <span class="n">prompt_func</span><span class="p">(</span><span class="s2">&quot;Greet </span><span class="si">{name}</span><span class="s2"> in {language:English}&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">greet</span><span class="o">.</span><span class="n">param_names</span>
+<span class="go">[&#39;name&#39;, &#39;language&#39;]</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
