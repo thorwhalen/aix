@@ -7,9 +7,31 @@ name = "aix"
 version = "0.0.34"
 description = "Artificial Intelligence eXtensions"
 readme = "README.md"
+license = "Apache-2.0"
 requires-python = ">=3.10"
-keywords = []
+keywords = [
+    "ai",
+    "llm",
+    "openai",
+    "anthropic",
+    "litellm",
+    "embeddings",
+    "prompt-engineering",
+    "multi-provider",
+]
 authors = [{ name = "Thor Whalen" }]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 # aix is a headless facade -- it keeps hard dependencies to a minimum.
 # `litellm` is the provider backend (imported lazily, only when a call is made);
 # `config2py` reads API keys / config. Everything else lives in the extras below
@@ -22,11 +44,12 @@ dependencies = [
     "tomli; python_version < '3.11'",
 ]
 
-[project.license]
-text = "Apache-2.0"
-
 [project.urls]
+Documentation = "https://thorwhalen.github.io/aix/"
 Homepage = "https://github.com/thorwhalen/aix"
+Repository = "https://github.com/thorwhalen/aix"
+Issues = "https://github.com/thorwhalen/aix/issues"
+Changelog = "https://github.com/thorwhalen/aix/blob/master/CHANGELOG.md"
 
 [project.optional-dependencies]
 # Provider SDKs used by the legacy aix.gen_ai backends
