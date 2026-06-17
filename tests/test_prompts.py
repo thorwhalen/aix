@@ -171,6 +171,47 @@ class TestPromptFunc:
         assert func.param_names == ["param"]
 
 
+class TestDefaultAwareTemplates:
+    """Tests for the oa-style ``{name:default}`` default-aware template dialect."""
+
+    @patch("aix.prompts.chat")
+    def test_default_used_when_omitted(self, mock_chat):
+        """A ``{name:default}`` field uses its default when the arg is omitted."""
+        mock_chat.return_value = "ok"
+        func = prompt_func("List {n:100} facts about {topic}")
+        func(topic="cats")
+        assert mock_chat.call_args[0][0] == "List 100 facts about cats"
+
+    @patch("aix.prompts.chat")
+    def test_default_overridden_when_provided(self, mock_chat):
+        """An explicit value overrides the field's default."""
+        mock_chat.return_value = "ok"
+        func = prompt_func("List {n:100} facts about {topic}")
+        func(topic="cats", n=3)
+        assert mock_chat.call_args[0][0] == "List 3 facts about cats"
+
+    @patch("aix.prompts.chat")
+    def test_param_without_default_is_required(self, mock_chat):
+        """A field with no default is still required."""
+        func = prompt_func("List {n:100} facts about {topic}")
+        with pytest.raises(TypeError, match="Missing required parameter"):
+            func()  # topic has no default
+
+    @patch("aix.prompts.chat")
+    def test_braces_in_fenced_region_are_literal(self, mock_chat):
+        """Braces inside ``` fenced ``` regions are left literal, not substituted."""
+        mock_chat.return_value = "ok"
+        func = prompt_func("```\ncode {keep_me}\n``` for {topic}")
+        func(topic="x")
+        assert mock_chat.call_args[0][0] == "```\ncode {keep_me}\n``` for x"
+
+    @patch("aix.prompts.chat")
+    def test_param_names_excludes_fenced_includes_defaulted(self, mock_chat):
+        """param_names lists required + defaulted fields, but not fenced ones."""
+        func = prompt_func("```{ignored}``` {required} and {opt:default}")
+        assert func.param_names == ["required", "opt"]
+
+
 class TestEgressAndName:
     """Tests for the egress post-processor and name parameters."""
 
