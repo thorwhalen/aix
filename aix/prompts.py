@@ -30,6 +30,7 @@ Examples:
 
 import re
 import json
+import string as _string
 from collections.abc import Callable
 from typing import Union, Any, get_type_hints
 from functools import wraps
@@ -86,6 +87,141 @@ def _format_prompt(template: str, **kwargs) -> str:
         'Hello Alice'
     """
     return template.format(**kwargs)
+
+
+# --------------------------------------------------------------------------------------
+# oa-compatible default-aware template dialect
+#
+# Fields are written ``{name}`` (required) or ``{name:default}`` (the text after the
+# colon is the default value). Braces inside ``` fenced ``` regions are left literal
+# (not treated as fields), so a prompt can show example code that contains braces.
+# This mirrors ``oa.prompt_function`` so templates written for ``oa`` work unchanged
+# on aix. Plain ``{name}``-only templates behave exactly as before.
+
+DFLT_IGNORE_PATTERN = re.compile(r"```.*?```", re.DOTALL)
+_string_formatter = _string.Formatter()
+
+
+def _extract_parts(text: str, pattern):
+    """Split ``text`` into (matched, unmatched) parts around regex ``pattern``.
+
+    ``unmatched`` always has one more element than ``matched`` (the trailing segment).
+    """
+    matched, unmatched, last = [], [], 0
+    for m in re.finditer(pattern, text):
+        start, end = m.span()
+        unmatched.append(text[last:start])
+        matched.append(text[start:end])
+        last = end
+    unmatched.append(text[last:])
+    return matched, unmatched
+
+
+def _pattern_based_map(func: Callable, text: str, pattern, *, apply_to="unmatched"):
+    """Apply ``func`` to the matched (or unmatched) parts of ``text`` split by regex.
+
+    >>> _pattern_based_map(str.upper, "a ```b``` c", r"```.*?```")
+    'A ```b``` C'
+    >>> _pattern_based_map(str.upper, "a ```b``` c", r"```.*?```", apply_to="matched")
+    'a ```B``` c'
+    """
+    matched, unmatched = _extract_parts(text, pattern)
+    if apply_to == "matched":
+        transformed = [func(p) for p in matched]
+        result_parts = sum(zip(unmatched, transformed), ())
+        tail = unmatched[-1]
+    else:
+        transformed = [func(p) for p in unmatched]
+        result_parts = sum(zip(transformed, matched), ())
+        tail = transformed[-1]
+    return "".join(result_parts) + tail
+
+
+def _strip_ignored(template: str, ignore_pattern) -> str:
+    if ignore_pattern is None:
+        return template
+    return re.compile(ignore_pattern).sub("", template)
+
+
+def _template_param_names(template: str, *, ignore_pattern=DFLT_IGNORE_PATTERN):
+    """Ordered, unique field names of ``template`` (ignoring fenced regions).
+
+    >>> _template_param_names("Greet {name} in {language:English}")
+    ('name', 'language')
+    >>> _template_param_names("plain text")
+    ()
+    >>> _template_param_names("```{ignored}``` but {kept}")
+    ('kept',)
+    """
+    text = _strip_ignored(template, ignore_pattern)
+    names = [name for _, name, _, _ in _string_formatter.parse(text) if name]
+    return tuple(dict.fromkeys(names))
+
+
+def _template_defaults(template: str, *, ignore_pattern=DFLT_IGNORE_PATTERN) -> dict:
+    """Map each defaulted field (``{name:default}``) to its default value.
+
+    >>> _template_defaults("Greet {name} in {language:English}")
+    {'language': 'English'}
+    >>> _template_defaults("No defaults {here}")
+    {}
+    """
+    text = _strip_ignored(template, ignore_pattern)
+    return {
+        name: spec
+        for _, name, spec, _ in _string_formatter.parse(text)
+        if name and spec
+    }
+
+
+def _format_ready_template(template: str, *, ignore_pattern=DFLT_IGNORE_PATTERN) -> str:
+    """Make ``template`` ready for ``str.format``: drop ``:default`` specifiers outside
+    fenced regions and double braces inside fenced regions so they survive formatting.
+
+    >>> _format_ready_template("List {n:100} facts about {topic}")
+    'List {n} facts about {topic}'
+    >>> _format_ready_template("```{kept}``` and {x:y}")
+    '```{{kept}}``` and {x}'
+    """
+
+    def _strip_specifiers(chunk: str) -> str:
+        out = []
+        for literal, field_name, _, _ in _string_formatter.parse(chunk):
+            out.append(literal)
+            if field_name is not None:
+                out.append("{" + field_name + "}")
+        return "".join(out)
+
+    def _double_braces(chunk: str) -> str:
+        return chunk.replace("{", "{{").replace("}", "}}")
+
+    if ignore_pattern is None:
+        return _strip_specifiers(template)
+    ready = _pattern_based_map(
+        _strip_specifiers, template, ignore_pattern, apply_to="unmatched"
+    )
+    return _pattern_based_map(_double_braces, ready, ignore_pattern, apply_to="matched")
+
+
+def _prepare_template(template: str, *, ignore_pattern=DFLT_IGNORE_PATTERN):
+    """Return ``(format_ready_template, param_names, defaults)`` for ``template``.
+
+    Supports the oa-style ``{name:default}`` default-aware dialect and leaves braces
+    inside ``` fenced ``` regions literal. Plain ``{name}``-only templates are
+    unchanged, so existing callers behave identically.
+
+    >>> ready, names, defaults = _prepare_template("List {n:3} facts about {topic}")
+    >>> ready
+    'List {n} facts about {topic}'
+    >>> names
+    ['n', 'topic']
+    >>> defaults
+    {'n': '3'}
+    """
+    names = list(_template_param_names(template, ignore_pattern=ignore_pattern))
+    defaults = _template_defaults(template, ignore_pattern=ignore_pattern)
+    ready = _format_ready_template(template, ignore_pattern=ignore_pattern)
+    return ready, names, defaults
 
 
 def _schema_to_json_schema(schema: Union[dict, type]) -> dict:
@@ -193,6 +329,16 @@ def prompt_func(
     With output_schema: Returns structured data (dict, list, etc.)
     With egress: Returns whatever the egress post-processor returns.
 
+    Templates use the default-aware ``{name:default}`` dialect (matching
+    ``oa.prompt_function``): ``{name}`` is a required parameter, ``{name:default}``
+    supplies a default value (the text after the colon), and braces inside
+    ``` fenced ``` regions are left literal. Plain ``{name}``-only templates behave
+    exactly as before.
+
+    >>> greet = prompt_func("Greet {name} in {language:English}")
+    >>> greet.param_names
+    ['name', 'language']
+
     Args:
         template: Prompt template with {var} placeholders for parameters
         output_schema: Optional schema for structured output. Can be:
@@ -250,21 +396,24 @@ def prompt_func(
         >>> creative_writer(topic="a time-traveling cat")  # doctest: +SKIP
         'Once upon a time, there was a cat named Whiskers...'
     """
-    # Extract parameter names from template
-    param_names = _extract_template_vars(template)
+    # Parse the template. Supports the oa-style ``{name:default}`` default-aware
+    # dialect (braces inside fenced ``` regions stay literal); plain ``{name}``
+    # templates are unchanged, so existing callers behave identically.
+    format_ready, param_names, template_defaults = _prepare_template(template)
 
     # Build the actual function
     def generated_function(**kwargs):
-        # Validate parameters
-        for param in param_names:
-            if param not in kwargs:
-                raise TypeError(
-                    f"Missing required parameter: {param}. "
-                    f"Required parameters: {param_names}"
-                )
+        # Apply template defaults, then require a value for every field.
+        values = {**template_defaults, **kwargs}
+        missing = [param for param in param_names if param not in values]
+        if missing:
+            raise TypeError(
+                f"Missing required parameter(s): {missing}. "
+                f"Required parameters: {param_names}"
+            )
 
-        # Format the prompt
-        formatted_prompt = _format_prompt(template, **kwargs)
+        # Format the prompt (defaults already merged in)
+        formatted_prompt = format_ready.format(**values)
 
         # If structured output is requested, modify the prompt
         if output_schema is not None:
