@@ -54,6 +54,9 @@ Examples:
         tts_voice = "alloy"
         transcription_model = "whisper-1"
 
+        [vision]
+        model = "gpt-4o-mini"
+
         [aliases]
         fast = "openai/gpt-4o-mini"
         best = "anthropic/claude-sonnet-4"
@@ -79,6 +82,7 @@ __all__ = [
     "ImageConfig",
     "AudioConfig",
     "VideoConfig",
+    "VisionConfig",
     "AixConfig",
     "load_config",
     "get_config",
@@ -164,6 +168,19 @@ class VideoConfig:
     provider: Optional[str] = _opt(None, flat="video_provider")
 
 
+@dataclass(frozen=True)
+class VisionConfig:
+    """Defaults for ``describe_image`` (image→text).
+
+    The default is a cheap, vision-capable OpenAI model so it works with the
+    same ``OPENAI_API_KEY`` most users already have; override per call
+    (``describe_image(..., model=...)``), via ``configure(vision_model=...)``,
+    or the ``[vision]`` TOML section to route to Claude / Gemini / etc.
+    """
+
+    model: str = _opt("gpt-4o-mini", flat="vision_model")
+
+
 # Maps the AixConfig attribute name -> (sub-config class, TOML section name).
 # The attribute name doubles as the TOML section name.
 _SECTIONS = {
@@ -172,6 +189,7 @@ _SECTIONS = {
     "image": ImageConfig,
     "audio": AudioConfig,
     "video": VideoConfig,
+    "vision": VisionConfig,
 }
 
 
@@ -184,6 +202,7 @@ class AixConfig:
     image: ImageConfig = field(default_factory=ImageConfig)
     audio: AudioConfig = field(default_factory=AudioConfig)
     video: VideoConfig = field(default_factory=VideoConfig)
+    vision: VisionConfig = field(default_factory=VisionConfig)
     aliases: Mapping[str, str] = field(default_factory=lambda: dict(DEFAULT_ALIASES))
 
 

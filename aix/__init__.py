@@ -122,6 +122,10 @@ from aix.video import (
     GeneratedVideo,
     get_available_providers as get_video_providers,
 )
+from aix.vision import (
+    describe_image,
+    to_image_content,
+)
 
 # Legacy interfaces (for backward compatibility)
 from aix.gen_ai import chat_models, chat_funcs
@@ -194,6 +198,9 @@ __all__ = [
     "extend_video",
     "GeneratedVideo",
     "get_video_providers",
+    # Vision (image -> text)
+    "describe_image",
+    "to_image_content",
     # Legacy
     "chat_models",
     "chat_funcs",
