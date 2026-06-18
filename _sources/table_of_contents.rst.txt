@@ -24,3 +24,4 @@
    module_docs/aix/stores
    module_docs/aix/util
    module_docs/aix/video
+   module_docs/aix/vision

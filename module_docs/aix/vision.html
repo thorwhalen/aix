@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix.vision &mdash; aix 0.0.35 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=39aadc1c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="aix.video" href="video.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../aix.html">aix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">aix.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credentials.html">aix.credentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="video.html">aix.video</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aix.vision</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aix.vision.DFLT_VISION_MODEL"><code class="docutils literal notranslate"><span class="pre">DFLT_VISION_MODEL</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.vision.DFLT_VISION_PROMPT"><code class="docutils literal notranslate"><span class="pre">DFLT_VISION_PROMPT</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.vision.describe_image"><code class="docutils literal notranslate"><span class="pre">describe_image()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix.vision.to_image_content"><code class="docutils literal notranslate"><span class="pre">to_image_content()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aix.vision</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/aix/vision.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aix.vision">
+<span id="aix-vision"></span><h1>aix.vision<a class="headerlink" href="#module-aix.vision" title="Link to this heading"></a></h1>
+<p>Image-to-text (vision) interface for AIX.</p>
+<p>The cross-modal counterpart to <a class="reference internal" href="image.html#module-aix.image" title="aix.image"><code class="xref py py-mod docutils literal notranslate"><span class="pre">aix.image</span></code></a> (which is text→image): given an
+image, produce text — a caption, an answer to a question about it, or a
+structured judgement. Like the rest of AIX it is a thin, provider-neutral facade
+over LiteLLM’s multimodal <code class="docutils literal notranslate"><span class="pre">completion</span></code> (the same backend <code class="docutils literal notranslate"><span class="pre">chat</span></code> uses), so the
+same call routes to any vision-capable provider (OpenAI, Anthropic, Gemini,
+OpenRouter, …) by model id alone.</p>
+<p><a class="reference internal" href="#aix.vision.describe_image" title="aix.vision.describe_image"><code class="xref py py-func docutils literal notranslate"><span class="pre">describe_image()</span></code></a> is the primitive: image (URL / local path / bytes / PIL
+image / <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI) + a prompt → text. <a class="reference internal" href="#aix.vision.to_image_content" title="aix.vision.to_image_content"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_image_content()</span></code></a> exposes the
+multimodal content block builder so callers can assemble richer messages (e.g.
+multiple images in one turn) and pass them straight to <a class="reference internal" href="chat.html#module-aix.chat" title="aix.chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.chat()</span></code></a>.</p>
+<p class="rubric">Examples</p>
+<p>Caption an image (any vision-capable model):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.vision</span><span class="w"> </span><span class="kn">import</span> <span class="n">describe_image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">describe_image</span><span class="p">(</span><span class="s2">&quot;https://example.com/cat.jpg&quot;</span><span class="p">)</span>
+<span class="go">&#39;A grey tabby cat sitting on a windowsill in afternoon light.&#39;</span>
+</pre></div>
+</div>
+<p>Ask a specific question:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">describe_image</span><span class="p">(</span><span class="s2">&quot;photo.png&quot;</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;What colour is the car?&quot;</span><span class="p">)</span>
+<span class="go">&#39;The car is red.&#39;</span>
+</pre></div>
+</div>
+<p>Build a multi-image message yourself and hand it to <code class="docutils literal notranslate"><span class="pre">chat</span></code>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">chat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.vision</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_image_content</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Which is brighter?&quot;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="n">to_image_content</span><span class="p">(</span><span class="s2">&quot;a.jpg&quot;</span><span class="p">),</span> <span class="n">to_image_content</span><span class="p">(</span><span class="s2">&quot;b.jpg&quot;</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">]}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chat</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o&quot;</span><span class="p">)</span>
+<span class="go">&#39;The second image is brighter.&#39;</span>
+</pre></div>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="aix.vision.DFLT_VISION_MODEL">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">DFLT_VISION_MODEL</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'gpt-4o-mini'</span></span><a class="headerlink" href="#aix.vision.DFLT_VISION_MODEL" title="Link to this definition"></a></dt>
+<dd><p>Shipped-default vision model, kept for reference. The <em>active</em> default is
+resolved from <code class="docutils literal notranslate"><span class="pre">aix.config</span></code> at call time (see <a class="reference internal" href="config.html#aix.config.VisionConfig" title="aix.config.VisionConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">aix.config.VisionConfig</span></code></a>).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="aix.vision.DFLT_VISION_PROMPT">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">DFLT_VISION_PROMPT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Describe</span> <span class="pre">this</span> <span class="pre">image</span> <span class="pre">in</span> <span class="pre">detail.'</span></span><a class="headerlink" href="#aix.vision.DFLT_VISION_PROMPT" title="Link to this definition"></a></dt>
+<dd><p>Default instruction when the caller doesn’t supply one.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.vision.describe_image">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">describe_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Describe</span> <span class="pre">this</span> <span class="pre">image</span> <span class="pre">in</span> <span class="pre">detail.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/aix/vision.html#describe_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.vision.describe_image" title="Link to this definition"></a></dt>
+<dd><p>Describe (or answer a question about) <code class="docutils literal notranslate"><span class="pre">image</span></code> and return the text.</p>
+<p>The image→text primitive. <code class="docutils literal notranslate"><span class="pre">image</span></code> accepts a URL, a local path, raw bytes,
+a PIL image, or a <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI (see <a class="reference internal" href="#aix.vision.to_image_content" title="aix.vision.to_image_content"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_image_content()</span></code></a>). <code class="docutils literal notranslate"><span class="pre">prompt</span></code> is
+the instruction (default: a generic “describe this image”); pass a question
+for VQA or a rubric for a judgement. Everything past <code class="docutils literal notranslate"><span class="pre">image</span></code> is keyword.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – The image (URL / path / bytes / PIL image / <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI).</p></li>
+<li><p><strong>prompt</strong> – The text instruction accompanying the image.</p></li>
+<li><p><strong>model</strong> – Vision-capable model id (e.g. <code class="docutils literal notranslate"><span class="pre">gpt-4o</span></code>, <code class="docutils literal notranslate"><span class="pre">claude-sonnet-4-6</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gemini/gemini-1.5-pro</span></code>) or an alias. <code class="docutils literal notranslate"><span class="pre">None</span></code> → the configured
+default (<a class="reference internal" href="config.html#aix.config.VisionConfig" title="aix.config.VisionConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">aix.config.VisionConfig</span></code></a>).</p></li>
+<li><p><strong>api_key</strong> – Explicit API key; <code class="docutils literal notranslate"><span class="pre">None</span></code> resolves it from the environment /
+<code class="docutils literal notranslate"><span class="pre">.env</span></code> / config store for the model’s provider.</p></li>
+<li><p><strong>max_tokens</strong> – Cap on generated tokens (<code class="docutils literal notranslate"><span class="pre">None</span></code> → provider default).</p></li>
+<li><p><strong>temperature</strong> – Sampling temperature (<code class="docutils literal notranslate"><span class="pre">None</span></code> → provider default).</p></li>
+<li><p><strong>detail</strong> – Image detail hint (<code class="docutils literal notranslate"><span class="pre">&quot;low&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;high&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>).</p></li>
+<li><p><strong>**kwargs</strong> – Extra provider-specific params forwarded to LiteLLM.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The model’s text response.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ImportError</strong> – If LiteLLM is not installed.</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">describe_image</span><span class="p">(</span><span class="s2">&quot;cat.jpg&quot;</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;Caption it.&quot;</span><span class="p">)</span>
+<span class="go">&#39;A cat on a sofa.&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.vision.to_image_content">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">to_image_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/aix/vision.html#to_image_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.vision.to_image_content" title="Link to this definition"></a></dt>
+<dd><p>Build a multimodal <code class="docutils literal notranslate"><span class="pre">image_url</span></code> content block for <code class="docutils literal notranslate"><span class="pre">image</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">image</span></code> may be:</p>
+<ul class="simple">
+<li><p>an <code class="docutils literal notranslate"><span class="pre">http(s)://</span></code> URL or a <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI — passed through verbatim;</p></li>
+<li><p>a local file path (<code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code>) — read and inlined
+as a base64 <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI with a guessed MIME type;</p></li>
+<li><p>raw <code class="docutils literal notranslate"><span class="pre">bytes</span></code> — base64-inlined (MIME sniffed from magic bytes, else JPEG);</p></li>
+<li><p>a PIL <code class="docutils literal notranslate"><span class="pre">Image</span></code> — encoded to PNG and inlined.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">detail</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;low&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;high&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>) is forwarded when set; the
+block is the OpenAI/LiteLLM multimodal shape understood across providers.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">to_image_content</span><span class="p">(</span><span class="s2">&quot;https://x/y.jpg&quot;</span><span class="p">)</span>
+<span class="go">{&#39;type&#39;: &#39;image_url&#39;, &#39;image_url&#39;: {&#39;url&#39;: &#39;https://x/y.jpg&#39;}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_image_content</span><span class="p">(</span><span class="s2">&quot;data:image/png;base64,AAAA&quot;</span><span class="p">)[</span><span class="s2">&quot;image_url&quot;</span><span class="p">][</span><span class="s2">&quot;url&quot;</span><span class="p">][:</span><span class="mi">10</span><span class="p">]</span>
+<span class="go">&#39;data:image&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="video.html" class="btn btn-neutral float-left" title="aix.video" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
