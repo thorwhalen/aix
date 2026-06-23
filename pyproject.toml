@@ -63,6 +63,8 @@ video = ["diffusers", "torch", "requests"]
 # Misc utilities
 tables = ["tabled"]              # aix.misc.get_llm_leaderboards
 hub = ["huggingface_hub"]        # aix.ai_models.examples
+# Multi-engine transcription via scribed (aix.transcribe(audio, engine=...))
+scribed = ["scribed"]
 # Everything above, for "give me all the optional backends"
 all = [
     "google-generativeai",
@@ -72,6 +74,7 @@ all = [
     "pillow",
     "tabled",
     "huggingface_hub",
+    "scribed",
 ]
 testing = ["pytest", "hypothesis"]
 

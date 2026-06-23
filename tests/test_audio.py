@@ -221,3 +221,95 @@ class TestTranscribeWithTimestamps:
 
         call_kwargs = mock_transcribe.call_args[1]
         assert "word" in call_kwargs["timestamp_granularities"]
+
+
+def _fake_scribed_module():
+    """A stand-in `scribed` module whose transcribe() returns a fake Transcript."""
+    import types
+
+    class _Seg:
+        def __init__(self, start, end, text, speaker=None, confidence=None):
+            self.start = start
+            self.end = end
+            self.text = text
+            self.speaker = speaker
+            self.confidence = confidence
+
+    class _Transcript:
+        text = "Hello world."
+        language = "en"
+        duration = 1.5
+        srt = "1\n00:00:00,000 --> 00:00:01,500\nHello world.\n"
+        vtt = "WEBVTT\n\n00:00:00.000 --> 00:00:01.500\nHello world.\n"
+        segments = [_Seg(0.0, 1.5, "Hello world.", "A", 0.9)]
+
+    mod = types.ModuleType("scribed")
+    mod._last_call = {}
+
+    def transcribe_(audio, *, backend=None, **kwargs):
+        mod._last_call = {"audio": audio, "backend": backend, "kwargs": kwargs}
+        return _Transcript()
+
+    mod.transcribe = transcribe_
+    return mod
+
+
+class TestTranscribeScribedDelegation:
+    """The non-breaking engine= delegation to the `scribed` package."""
+
+    def test_engine_text_returns_str(self):
+        import sys
+
+        fake = _fake_scribed_module()
+        with patch.dict(sys.modules, {"scribed": fake}):
+            out = transcribe("a.wav", engine="faster-whisper")
+        assert out == "Hello world."
+        assert fake._last_call["backend"] == "faster-whisper"
+
+    def test_engine_srt_and_vtt(self):
+        import sys
+
+        fake = _fake_scribed_module()
+        with patch.dict(sys.modules, {"scribed": fake}):
+            srt = transcribe("a.wav", engine="deepgram", response_format="srt")
+            vtt = transcribe("a.wav", engine="deepgram", response_format="vtt")
+        assert srt.startswith("1\n")
+        assert vtt.startswith("WEBVTT")
+
+    def test_engine_verbose_returns_transcription_result(self):
+        import sys
+
+        fake = _fake_scribed_module()
+        with patch.dict(sys.modules, {"scribed": fake}):
+            res = transcribe(
+                "a.wav",
+                engine="faster-whisper",
+                language="en",
+                diarize=True,
+                response_format="verbose_json",
+            )
+        assert isinstance(res, TranscriptionResult)
+        assert res.text == "Hello world."
+        assert res.language == "en"
+        assert res.model == "scribed:faster-whisper"
+        assert res.segments[0]["speaker"] == "A"
+        assert res.segments[0]["start"] == 0.0
+        # extra kwargs (diarize) and language flow through to scribed
+        assert fake._last_call["kwargs"].get("diarize") is True
+        assert fake._last_call["kwargs"].get("language") == "en"
+
+    @patch("aix.audio._transcribe_litellm")
+    def test_no_engine_uses_litellm(self, mock_litellm):
+        """Without engine=, behavior is unchanged (LiteLLM path)."""
+        mock_litellm.return_value = "litellm text"
+        out = transcribe("a.wav")
+        assert out == "litellm text"
+        mock_litellm.assert_called_once()
+
+    def test_missing_scribed_raises_helpful_error(self):
+        import sys
+
+        # Mapping the name to None makes `import scribed` raise ImportError.
+        with patch.dict(sys.modules, {"scribed": None}):
+            with pytest.raises(ImportError, match="aix\\[scribed\\]"):
+                transcribe("a.wav", engine="faster-whisper")

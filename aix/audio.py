@@ -282,8 +282,143 @@ def text_to_speech(
     )
 
 
-@_requires_credentials(lambda: _get_config().audio.transcription_model)
 def transcribe(
+    audio: Union[str, Path, BinaryIO, bytes],
+    *,
+    engine: str = None,
+    model: str = None,
+    language: str = None,
+    prompt: str = None,
+    response_format: str = "text",
+    temperature: float = None,
+    timestamp_granularities: list[str] = None,
+    api_key: str = None,
+    **kwargs,
+) -> Union[str, TranscriptionResult]:
+    """Transcribe audio to text.
+
+    By default this routes through LiteLLM (OpenAI-style transcription). Pass
+    ``engine=`` to instead delegate to a ``scribed`` backend — one façade over
+    many ASR engines (local Whisper / faster-whisper / vosk, or cloud Deepgram /
+    AssemblyAI / Groq / ElevenLabs / Google …) with speaker diarization and
+    SRT/VTT output. The return type is unchanged either way, so existing callers
+    are unaffected.
+
+    Args:
+        audio: Audio file path, file object, or bytes.
+        engine: Optional ``scribed`` backend id (e.g. ``"faster-whisper"``,
+            ``"deepgram"``). When given, transcription is delegated to scribed
+            (which resolves that engine's own credentials); the LiteLLM path is
+            bypassed. Requires ``pip install 'aix[scribed]'``. See
+            ``scribed.list_backends()``.
+        model: Transcription model (e.g. ``'whisper-1'``); for a scribed engine,
+            the engine-specific model (e.g. a Whisper size).
+        language: Source language (ISO-639-1 code, e.g. ``'en'``, ``'es'``).
+        prompt: Optional text to guide the model's style (LiteLLM path).
+        response_format: ``'text'`` (default) → ``str``; ``'srt'``/``'vtt'`` →
+            subtitle ``str`` (scribed path); else → :class:`TranscriptionResult`.
+        temperature: Sampling temperature (LiteLLM path).
+        timestamp_granularities: Timestamp types ('word', 'segment') (LiteLLM path).
+        **kwargs: Additional parameters (forwarded to LiteLLM, or to the scribed
+            backend — e.g. ``diarize=True``).
+
+    Returns:
+        ``str`` for ``response_format`` in {text, srt, vtt}, else a
+        :class:`TranscriptionResult`.
+
+    Examples:
+        >>> from aix.audio import transcribe
+        >>> text = transcribe("recording.mp3")  # doctest: +SKIP
+        >>> # delegate to a scribed engine (local, free, diarized SRT):
+        >>> srt = transcribe(
+        ...     "meeting.wav", engine="faster-whisper", response_format="srt"
+        ... )  # doctest: +SKIP
+        >>> dg = transcribe(
+        ...     "call.mp3", engine="deepgram", diarize=True,
+        ...     response_format="verbose_json",
+        ... )  # doctest: +SKIP
+    """
+    if engine is not None:
+        return _transcribe_via_scribed(
+            audio,
+            engine=engine,
+            model=model,
+            language=language,
+            response_format=response_format,
+            **kwargs,
+        )
+    return _transcribe_litellm(
+        audio,
+        model=model,
+        language=language,
+        prompt=prompt,
+        response_format=response_format,
+        temperature=temperature,
+        timestamp_granularities=timestamp_granularities,
+        api_key=api_key,
+        **kwargs,
+    )
+
+
+def _transcribe_via_scribed(
+    audio,
+    *,
+    engine: str,
+    model: str = None,
+    language: str = None,
+    response_format: str = "text",
+    **kwargs,
+) -> Union[str, TranscriptionResult]:
+    """Delegate transcription to a ``scribed`` backend (the ``engine=`` path).
+
+    Non-breaking bridge: returns the SAME types as :func:`transcribe` — a ``str``
+    for ``response_format`` in {text, srt, vtt}, else a :class:`TranscriptionResult`
+    built from scribed's ``Transcript`` (so aix's contract is preserved). scribed
+    resolves the chosen engine's own credentials, so the LiteLLM credential
+    preflight is intentionally bypassed here.
+    """
+    try:
+        import scribed
+    except ImportError as e:  # pragma: no cover - exercised only without the extra
+        raise ImportError(
+            "Transcription via engine=... requires the 'scribed' package. "
+            "Install it with: pip install 'aix[scribed]'  (or: pip install scribed)"
+        ) from e
+
+    sc_kwargs = dict(kwargs)
+    if language:
+        sc_kwargs["language"] = language
+    if model:
+        sc_kwargs["model"] = model
+    transcript = scribed.transcribe(audio, backend=engine, **sc_kwargs)
+
+    if response_format == "text":
+        return transcript.text
+    if response_format == "srt":
+        return transcript.srt
+    if response_format == "vtt":
+        return transcript.vtt
+    segments = [
+        {
+            "start": s.start,
+            "end": s.end,
+            "text": s.text,
+            "speaker": s.speaker,
+            "confidence": s.confidence,
+        }
+        for s in transcript.segments
+    ]
+    return TranscriptionResult(
+        text=transcript.text,
+        language=transcript.language,
+        duration=transcript.duration,
+        segments=segments,
+        model=f"scribed:{engine}",
+    )
+
+
+@_requires_credentials(lambda: _get_config().audio.transcription_model)
+def _transcribe_litellm(
     audio: Union[str, Path, BinaryIO, bytes],
     *,
     model: str = None,
