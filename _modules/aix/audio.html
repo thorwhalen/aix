@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.audio &mdash; aix 0.0.35 documentation</title>
+  <title>aix.audio &mdash; aix 0.0.36 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=39aadc1c"></script>
+      <script src="../../_static/documentation_options.js?v=0e525676"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -400,8 +400,144 @@
 
 <div class="viewcode-block" id="transcribe">
 <a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.transcribe">[docs]</a>
-<span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcription_model</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">transcribe</span><span class="p">(</span>
+    <span class="n">audio</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">timestamp_granularities</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TranscriptionResult</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transcribe audio to text.</span>
+
+<span class="sd">    By default this routes through LiteLLM (OpenAI-style transcription). Pass</span>
+<span class="sd">    ``engine=`` to instead delegate to a ``scribed`` backend — one façade over</span>
+<span class="sd">    many ASR engines (local Whisper / faster-whisper / vosk, or cloud Deepgram /</span>
+<span class="sd">    AssemblyAI / Groq / ElevenLabs / Google …) with speaker diarization and</span>
+<span class="sd">    SRT/VTT output. The return type is unchanged either way, so existing callers</span>
+<span class="sd">    are unaffected.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        audio: Audio file path, file object, or bytes.</span>
+<span class="sd">        engine: Optional ``scribed`` backend id (e.g. ``&quot;faster-whisper&quot;``,</span>
+<span class="sd">            ``&quot;deepgram&quot;``). When given, transcription is delegated to scribed</span>
+<span class="sd">            (which resolves that engine&#39;s own credentials); the LiteLLM path is</span>
+<span class="sd">            bypassed. Requires ``pip install &#39;aix[scribed]&#39;``. See</span>
+<span class="sd">            ``scribed.list_backends()``.</span>
+<span class="sd">        model: Transcription model (e.g. ``&#39;whisper-1&#39;``); for a scribed engine,</span>
+<span class="sd">            the engine-specific model (e.g. a Whisper size).</span>
+<span class="sd">        language: Source language (ISO-639-1 code, e.g. ``&#39;en&#39;``, ``&#39;es&#39;``).</span>
+<span class="sd">        prompt: Optional text to guide the model&#39;s style (LiteLLM path).</span>
+<span class="sd">        response_format: ``&#39;text&#39;`` (default) → ``str``; ``&#39;srt&#39;``/``&#39;vtt&#39;`` →</span>
+<span class="sd">            subtitle ``str`` (scribed path); else → :class:`TranscriptionResult`.</span>
+<span class="sd">        temperature: Sampling temperature (LiteLLM path).</span>
+<span class="sd">        timestamp_granularities: Timestamp types (&#39;word&#39;, &#39;segment&#39;) (LiteLLM path).</span>
+<span class="sd">        **kwargs: Additional parameters (forwarded to LiteLLM, or to the scribed</span>
+<span class="sd">            backend — e.g. ``diarize=True``).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``str`` for ``response_format`` in {text, srt, vtt}, else a</span>
+<span class="sd">        :class:`TranscriptionResult`.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from aix.audio import transcribe</span>
+<span class="sd">        &gt;&gt;&gt; text = transcribe(&quot;recording.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; # delegate to a scribed engine (local, free, diarized SRT):</span>
+<span class="sd">        &gt;&gt;&gt; srt = transcribe(</span>
+<span class="sd">        ...     &quot;meeting.wav&quot;, engine=&quot;faster-whisper&quot;, response_format=&quot;srt&quot;</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; dg = transcribe(</span>
+<span class="sd">        ...     &quot;call.mp3&quot;, engine=&quot;deepgram&quot;, diarize=True,</span>
+<span class="sd">        ...     response_format=&quot;verbose_json&quot;,</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">engine</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_transcribe_via_scribed</span><span class="p">(</span>
+            <span class="n">audio</span><span class="p">,</span>
+            <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span>
+            <span class="n">response_format</span><span class="o">=</span><span class="n">response_format</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_transcribe_litellm</span><span class="p">(</span>
+        <span class="n">audio</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span>
+        <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+        <span class="n">response_format</span><span class="o">=</span><span class="n">response_format</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+        <span class="n">timestamp_granularities</span><span class="o">=</span><span class="n">timestamp_granularities</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_transcribe_via_scribed</span><span class="p">(</span>
+    <span class="n">audio</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">engine</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TranscriptionResult</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delegate transcription to a ``scribed`` backend (the ``engine=`` path).</span>
+
+<span class="sd">    Non-breaking bridge: returns the SAME types as :func:`transcribe` — a ``str``</span>
+<span class="sd">    for ``response_format`` in {text, srt, vtt}, else a :class:`TranscriptionResult`</span>
+<span class="sd">    built from scribed&#39;s ``Transcript`` (so aix&#39;s contract is preserved). scribed</span>
+<span class="sd">    resolves the chosen engine&#39;s own credentials, so the LiteLLM credential</span>
+<span class="sd">    preflight is intentionally bypassed here.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">scribed</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover - exercised only without the extra</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;Transcription via engine=... requires the &#39;scribed&#39; package. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install &#39;aix[scribed]&#39;  (or: pip install scribed)&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+    <span class="n">sc_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">language</span><span class="p">:</span>
+        <span class="n">sc_kwargs</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">language</span>
+    <span class="k">if</span> <span class="n">model</span><span class="p">:</span>
+        <span class="n">sc_kwargs</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span>
+    <span class="n">transcript</span> <span class="o">=</span> <span class="n">scribed</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="o">**</span><span class="n">sc_kwargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">transcript</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">&quot;srt&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">transcript</span><span class="o">.</span><span class="n">srt</span>
+    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">&quot;vtt&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">transcript</span><span class="o">.</span><span class="n">vtt</span>
+    <span class="n">segments</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+            <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">end</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s2">&quot;speaker&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">speaker</span><span class="p">,</span>
+            <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">transcript</span><span class="o">.</span><span class="n">segments</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">TranscriptionResult</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+        <span class="n">language</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">language</span><span class="p">,</span>
+        <span class="n">duration</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+        <span class="n">segments</span><span class="o">=</span><span class="n">segments</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;scribed:</span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcription_model</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_transcribe_litellm</span><span class="p">(</span>
     <span class="n">audio</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -528,8 +664,7 @@
             <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span>
             <span class="n">segments</span><span class="o">=</span><span class="n">segments</span><span class="p">,</span>
             <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-        <span class="p">)</span></div>
-
+        <span class="p">)</span>
 
 
 <div class="viewcode-block" id="transcribe_with_timestamps">

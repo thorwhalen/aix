@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.audio &mdash; aix 0.0.35 documentation</title>
+  <title>aix.audio &mdash; aix 0.0.36 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=39aadc1c"></script>
+      <script src="../../_static/documentation_options.js?v=0e525676"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -237,52 +237,51 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.audio.transcribe">
-<span class="sig-prename descclassname"><span class="pre">aix.audio.</span></span><span class="sig-name descname"><span class="pre">transcribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">BinaryIO</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'text'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_granularities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#aix.audio.TranscriptionResult" title="aix.audio.TranscriptionResult"><span class="pre">TranscriptionResult</span></a></span></span><a class="reference internal" href="../../_modules/aix/audio.html#transcribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.audio.transcribe" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aix.audio.</span></span><span class="sig-name descname"><span class="pre">transcribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">BinaryIO</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'text'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_granularities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#aix.audio.TranscriptionResult" title="aix.audio.TranscriptionResult"><span class="pre">TranscriptionResult</span></a></span></span><a class="reference internal" href="../../_modules/aix/audio.html#transcribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.audio.transcribe" title="Link to this definition"></a></dt>
 <dd><p>Transcribe audio to text.</p>
+<p>By default this routes through LiteLLM (OpenAI-style transcription). Pass
+<code class="docutils literal notranslate"><span class="pre">engine=</span></code> to instead delegate to a <code class="docutils literal notranslate"><span class="pre">scribed</span></code> backend — one façade over
+many ASR engines (local Whisper / faster-whisper / vosk, or cloud Deepgram /
+AssemblyAI / Groq / ElevenLabs / Google …) with speaker diarization and
+SRT/VTT output. The return type is unchanged either way, so existing callers
+are unaffected.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>audio</strong> – Audio file path, file object, or bytes</p></li>
-<li><p><strong>model</strong> – Transcription model (e.g., ‘whisper-1’)</p></li>
-<li><p><strong>language</strong> – Source language (ISO-639-1 code, e.g., ‘en’, ‘es’)</p></li>
-<li><p><strong>prompt</strong> – Optional text to guide the model’s style</p></li>
-<li><p><strong>response_format</strong> – Format of response (‘text’, ‘json’, ‘verbose_json’, ‘srt’, ‘vtt’)</p></li>
-<li><p><strong>temperature</strong> – Sampling temperature (0 to 1)</p></li>
-<li><p><strong>timestamp_granularities</strong> – List of timestamp types (‘word’, ‘segment’)</p></li>
-<li><p><strong>**kwargs</strong> – Additional provider-specific parameters</p></li>
+<li><p><strong>audio</strong> – Audio file path, file object, or bytes.</p></li>
+<li><p><strong>engine</strong> – Optional <code class="docutils literal notranslate"><span class="pre">scribed</span></code> backend id (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;faster-whisper&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;deepgram&quot;</span></code>). When given, transcription is delegated to scribed
+(which resolves that engine’s own credentials); the LiteLLM path is
+bypassed. Requires <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">'aix[scribed]'</span></code>. See
+<code class="docutils literal notranslate"><span class="pre">scribed.list_backends()</span></code>.</p></li>
+<li><p><strong>model</strong> – Transcription model (e.g. <code class="docutils literal notranslate"><span class="pre">'whisper-1'</span></code>); for a scribed engine,
+the engine-specific model (e.g. a Whisper size).</p></li>
+<li><p><strong>language</strong> – Source language (ISO-639-1 code, e.g. <code class="docutils literal notranslate"><span class="pre">'en'</span></code>, <code class="docutils literal notranslate"><span class="pre">'es'</span></code>).</p></li>
+<li><p><strong>prompt</strong> – Optional text to guide the model’s style (LiteLLM path).</p></li>
+<li><p><strong>response_format</strong> – <code class="docutils literal notranslate"><span class="pre">'text'</span></code> (default) → <code class="docutils literal notranslate"><span class="pre">str</span></code>; <code class="docutils literal notranslate"><span class="pre">'srt'</span></code>/<code class="docutils literal notranslate"><span class="pre">'vtt'</span></code> →
+subtitle <code class="docutils literal notranslate"><span class="pre">str</span></code> (scribed path); else → <a class="reference internal" href="#aix.audio.TranscriptionResult" title="aix.audio.TranscriptionResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">TranscriptionResult</span></code></a>.</p></li>
+<li><p><strong>temperature</strong> – Sampling temperature (LiteLLM path).</p></li>
+<li><p><strong>timestamp_granularities</strong> – Timestamp types (‘word’, ‘segment’) (LiteLLM path).</p></li>
+<li><p><strong>**kwargs</strong> – Additional parameters (forwarded to LiteLLM, or to the scribed
+backend — e.g. <code class="docutils literal notranslate"><span class="pre">diarize=True</span></code>).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>String with transcription
-Otherwise: TranscriptionResult object with metadata</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If response_format=’text’</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ImportError</strong> – If LiteLLM is not installed</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">str</span></code> for <code class="docutils literal notranslate"><span class="pre">response_format</span></code> in {text, srt, vtt}, else a
+<a class="reference internal" href="#aix.audio.TranscriptionResult" title="aix.audio.TranscriptionResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">TranscriptionResult</span></code></a>.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcribe</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="n">transcribe</span><span class="p">(</span><span class="s2">&quot;recording.mp3&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="go">&#39;This is the transcribed text.&#39;</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># With language hint</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="n">transcribe</span><span class="p">(</span><span class="s2">&quot;spanish.mp3&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;es&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get detailed results</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transcribe</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="s2">&quot;meeting.mp3&quot;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;verbose_json&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># delegate to a scribed engine (local, free, diarized SRT):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">srt</span> <span class="o">=</span> <span class="n">transcribe</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;meeting.wav&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;faster-whisper&quot;</span><span class="p">,</span> <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;srt&quot;</span>
 <span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">language</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">segments</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">segment</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">segment</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dg</span> <span class="o">=</span> <span class="n">transcribe</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;call.mp3&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;deepgram&quot;</span><span class="p">,</span> <span class="n">diarize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;verbose_json&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
