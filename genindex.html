@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; aix 0.0.36 documentation</title>
+  <title>Index &mdash; aix 0.0.37 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=0e525676"></script>
+      <script src="_static/documentation_options.js?v=aa2ad26f"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -236,8 +236,6 @@
         <li><a href="module_docs/aix/gen_ai/google_genai.html#module-aix.gen_ai.google_genai">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     aix.gen_ai.openai_genai
 
@@ -245,6 +243,8 @@
         <li><a href="module_docs/aix/gen_ai/openai_genai.html#module-aix.gen_ai.openai_genai">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     aix.image
 
@@ -335,6 +335,18 @@
 
       <ul>
         <li><a href="module_docs/aix/chat.html#aix.chat.ask">(in module aix.chat)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.RubricVerdict.aspect">aspect (aix.RubricVerdict attribute)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/vision.html#aix.vision.RubricVerdict.aspect">(aix.vision.RubricVerdict attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.ImageComparison.aspects">aspects (aix.ImageComparison attribute)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/vision.html#aix.vision.ImageComparison.aspects">(aix.vision.ImageComparison attribute)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/aix/config.html#aix.config.AudioConfig">AudioConfig (class in aix.config)</a>
@@ -445,10 +457,26 @@
         <li><a href="module_docs/aix.html#aix.ChatSession.clear_history">(aix.ChatSession method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/prompts.html#aix.prompts.CommonFuncs">CommonFuncs (class in aix.prompts)</a>
 </li>
+      <li><a href="module_docs/aix.html#aix.compare_images">compare_images() (in module aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/vision.html#aix.vision.compare_images">(in module aix.vision)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix.html#aix.ImageComparison.confidence">confidence (aix.ImageComparison attribute)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.RubricVerdict.confidence">(aix.RubricVerdict attribute)</a>
+</li>
+        <li><a href="module_docs/aix/vision.html#aix.vision.ImageComparison.confidence">(aix.vision.ImageComparison attribute)</a>
+</li>
+        <li><a href="module_docs/aix/vision.html#aix.vision.RubricVerdict.confidence">(aix.vision.RubricVerdict attribute)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/aix/config.html#aix.config.config_file_path">config_file_path() (in module aix.config)</a>
 </li>
       <li><a href="module_docs/aix.html#aix.configure">configure() (in module aix)</a>
@@ -511,6 +539,10 @@
         <li><a href="module_docs/aix/vision.html#aix.vision.describe_image">(in module aix.vision)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/aix/vision.html#aix.vision.DFLT_COMPARE_RUBRIC">DFLT_COMPARE_RUBRIC (in module aix.vision)</a>
+</li>
+      <li><a href="module_docs/aix/vision.html#aix.vision.DFLT_FILM_RUBRIC">DFLT_FILM_RUBRIC (in module aix.vision)</a>
+</li>
       <li><a href="module_docs/aix/vision.html#aix.vision.DFLT_VISION_MODEL">DFLT_VISION_MODEL (in module aix.vision)</a>
 </li>
       <li><a href="module_docs/aix/vision.html#aix.vision.DFLT_VISION_PROMPT">DFLT_VISION_PROMPT (in module aix.vision)</a>
@@ -533,14 +565,14 @@
         <li><a href="module_docs/aix/models.html#aix.models.discover_available_models">(in module aix.models)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/ai_models/manager.html#aix.ai_models.manager.ModelManager.discover_from_source">discover_from_source() (aix.ai_models.manager.ModelManager method)</a>
 
       <ul>
         <li><a href="module_docs/aix/ai_models.html#aix.ai_models.ModelManager.discover_from_source">(aix.ai_models.ModelManager method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.ModelSource.discover_models">discover_models() (aix.ai_models.base.ModelSource method)</a>
 
       <ul>
@@ -603,14 +635,14 @@
       </ul></li>
       <li><a href="module_docs/aix/config.html#aix.config.EmbeddingConfig">EmbeddingConfig (class in aix.config)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix.html#aix.embeddings">embeddings() (in module aix)</a>
 
       <ul>
         <li><a href="module_docs/aix/embeddings.html#aix.embeddings.embeddings">(in module aix.embeddings)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/aix/video.html#aix.video.estimate_cost">estimate_cost() (in module aix.video)</a>
 </li>
       <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_advanced_filtering">example_advanced_filtering() (in module aix.ai_models.examples)</a>
@@ -625,6 +657,12 @@
 </li>
       <li><a href="module_docs/aix/ai_models/examples.html#aix.ai_models.examples.example_mall_usage">example_mall_usage() (in module aix.ai_models.examples)</a>
 </li>
+      <li><a href="module_docs/aix.html#aix.ImageComparison.explanation">explanation (aix.ImageComparison attribute)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/vision.html#aix.vision.ImageComparison.explanation">(aix.vision.ImageComparison attribute)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/aix.html#aix.extend_video">extend_video() (in module aix)</a>
 
       <ul>
@@ -735,10 +773,16 @@
         <li><a href="module_docs/aix/video.html#aix.video.GeneratedVideo">(class in aix.video)</a>
 </li>
       </ul></li>
-      <li><a href="module_docs/aix/video.html#aix.video.get_available_providers">get_available_providers() (in module aix.video)</a>
+      <li><a href="module_docs/aix.html#aix.ImageComparison.get">get() (aix.ImageComparison method)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/vision.html#aix.vision.ImageComparison.get">(aix.vision.ImageComparison method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/video.html#aix.video.get_available_providers">get_available_providers() (in module aix.video)</a>
+</li>
       <li><a href="module_docs/aix.html#aix.get_config">get_config() (in module aix)</a>
 
       <ul>
@@ -797,12 +841,18 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/aix/config.html#aix.config.ImageConfig">ImageConfig (class in aix.config)</a>
+      <li><a href="module_docs/aix.html#aix.ImageComparison">ImageComparison (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/vision.html#aix.vision.ImageComparison">(class in aix.vision)</a>
 </li>
-      <li><a href="module_docs/aix/credentials.html#aix.credentials.infer_provider">infer_provider() (in module aix.credentials)</a>
+      </ul></li>
+      <li><a href="module_docs/aix/config.html#aix.config.ImageConfig">ImageConfig (class in aix.config)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix/credentials.html#aix.credentials.infer_provider">infer_provider() (in module aix.credentials)</a>
+</li>
       <li><a href="module_docs/aix/video.html#aix.video.interpolate_frames">interpolate_frames() (in module aix.video)</a>
 </li>
       <li><a href="module_docs/aix/embeddings.html#aix.embeddings.iter_batches">iter_batches() (in module aix.embeddings)</a>
@@ -865,6 +915,16 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix.html#aix.ImageComparison.match">match (aix.ImageComparison attribute)</a>
+
+      <ul>
+        <li><a href="module_docs/aix.html#aix.RubricVerdict.match">(aix.RubricVerdict attribute)</a>
+</li>
+        <li><a href="module_docs/aix/vision.html#aix.vision.ImageComparison.match">(aix.vision.ImageComparison attribute)</a>
+</li>
+        <li><a href="module_docs/aix/vision.html#aix.vision.RubricVerdict.match">(aix.vision.RubricVerdict attribute)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/aix/ai_models/base.html#aix.ai_models.base.Model.matches_filter">matches_filter() (aix.ai_models.base.Model method)</a>
 
       <ul>
@@ -873,6 +933,12 @@
       </ul></li>
       <li><a href="module_docs/aix.html#aix.MissingCredentialError">MissingCredentialError</a>, <a href="module_docs/aix/credentials.html#aix.credentials.MissingCredentialError">[1]</a>
 </li>
+      <li><a href="module_docs/aix.html#aix.ImageComparison.model">model (aix.ImageComparison attribute)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/vision.html#aix.vision.ImageComparison.model">(aix.vision.ImageComparison attribute)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/aix/ai_models.html#aix.ai_models.Model">Model (class in aix.ai_models)</a>
 
       <ul>
@@ -992,6 +1058,14 @@
         <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenAIConnector.name">(aix.ai_models.sources.OpenAIConnector property)</a>
 </li>
         <li><a href="module_docs/aix/ai_models/sources.html#aix.ai_models.sources.OpenRouterConnector.name">(aix.ai_models.sources.OpenRouterConnector property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/aix.html#aix.RubricVerdict.note">note (aix.RubricVerdict attribute)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/vision.html#aix.vision.RubricVerdict.note">(aix.vision.RubricVerdict attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1128,6 +1202,12 @@
 
       <ul>
         <li><a href="module_docs/aix/config.html#aix.config.resolve_model">(in module aix.config)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/aix.html#aix.RubricVerdict">RubricVerdict (class in aix)</a>
+
+      <ul>
+        <li><a href="module_docs/aix/vision.html#aix.vision.RubricVerdict">(class in aix.vision)</a>
 </li>
       </ul></li>
   </ul></td>

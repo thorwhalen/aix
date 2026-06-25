@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.vision &mdash; aix 0.0.36 documentation</title>
+  <title>aix.vision &mdash; aix 0.0.37 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=0e525676"></script>
+      <script src="../../_static/documentation_options.js?v=aa2ad26f"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -132,14 +132,28 @@
 <span class="sd">    ... ]}]</span>
 <span class="sd">    &gt;&gt;&gt; chat(msg, model=&quot;gpt-4o&quot;)  # doctest: +SKIP</span>
 <span class="sd">    &#39;The second image is brighter.&#39;</span>
+
+<span class="sd">:func:`compare_images` builds on these primitives: it puts a *candidate* image</span>
+<span class="sd">beside one or more *reference* images and asks a vision model, via a structured</span>
+<span class="sd">JSON path, for an explainable per-aspect likeness verdict — the &quot;explain the</span>
+<span class="sd">drift&quot; half of a reference supervisor (face / costume / setting / lighting /</span>
+<span class="sd">props matched?). The numeric identity-cosine gate lives elsewhere (lookbook);</span>
+<span class="sd">this layer is the explainable checklist on top of it.</span>
+
+<span class="sd">    &gt;&gt;&gt; from aix.vision import compare_images</span>
+<span class="sd">    &gt;&gt;&gt; verdict = compare_images(&quot;gen.png&quot;, &quot;locked_ref.png&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; verdict.match, verdict[&quot;identity&quot;].match  # doctest: +SKIP</span>
+<span class="sd">    (True, True)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">mimetypes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.config</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">get_config</span> <span class="k">as</span> <span class="n">_get_config</span><span class="p">,</span>
@@ -160,8 +174,13 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;describe_image&quot;</span><span class="p">,</span>
     <span class="s2">&quot;to_image_content&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;compare_images&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RubricVerdict&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ImageComparison&quot;</span><span class="p">,</span>
     <span class="s2">&quot;DFLT_VISION_MODEL&quot;</span><span class="p">,</span>
     <span class="s2">&quot;DFLT_VISION_PROMPT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DFLT_COMPARE_RUBRIC&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DFLT_FILM_RUBRIC&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="c1">#: Shipped-default vision model, kept for reference. The *active* default is</span>
@@ -170,6 +189,22 @@
 
 <span class="c1">#: Default instruction when the caller doesn&#39;t supply one.</span>
 <span class="n">DFLT_VISION_PROMPT</span> <span class="o">=</span> <span class="s2">&quot;Describe this image in detail.&quot;</span>
+
+<span class="c1">#: Default rubric for :func:`compare_images` — a generic likeness checklist.</span>
+<span class="c1">#: Each entry is one aspect the vision model judges independently.</span>
+<span class="n">DFLT_COMPARE_RUBRIC</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;identity&quot;</span><span class="p">,</span> <span class="s2">&quot;costume&quot;</span><span class="p">,</span> <span class="s2">&quot;setting&quot;</span><span class="p">,</span> <span class="s2">&quot;lighting&quot;</span><span class="p">,</span> <span class="s2">&quot;props&quot;</span><span class="p">)</span>
+
+<span class="c1">#: Filmmaking-oriented rubric (Noel&#39;s reference-supervisor checklist): the</span>
+<span class="c1">#: locked face, the architecture/set, the lighting, and the props. Pass it as</span>
+<span class="c1">#: ``rubric=`` when comparing a generated frame against a locked reference.</span>
+<span class="n">DFLT_FILM_RUBRIC</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;face_identity&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;costume&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;setting_architecture&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lighting&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;props&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;skin_realism&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="c1">#: Default JPEG when raw bytes can&#39;t be sniffed (most stock images are JPEG).</span>
 <span class="n">_DFLT_IMAGE_MIME</span> <span class="o">=</span> <span class="s2">&quot;image/jpeg&quot;</span>
@@ -295,7 +330,364 @@
 
 
 
+<span class="c1"># --- compare_images: structured two-image likeness check --------------------</span>
+
+
+<div class="viewcode-block" id="RubricVerdict">
+<a class="viewcode-back" href="../../module_docs/aix/vision.html#aix.RubricVerdict">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RubricVerdict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A vision model&#39;s verdict on a single rubric aspect.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        aspect: The rubric item this verdict is about (e.g. ``&quot;identity&quot;``).</span>
+<span class="sd">        match: Whether the candidate matches the reference for this aspect.</span>
+<span class="sd">        confidence: The model&#39;s self-reported confidence in ``[0.0, 1.0]``.</span>
+<span class="sd">        note: A short free-text explanation of the verdict.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">aspect</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">match</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="ImageComparison">
+<a class="viewcode-back" href="../../module_docs/aix/vision.html#aix.ImageComparison">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ImageComparison</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structured result of comparing a candidate image to reference(s).</span>
+
+<span class="sd">    Behaves like an ordered, read-only mapping of ``aspect -&gt; RubricVerdict``</span>
+<span class="sd">    (``comparison[&quot;identity&quot;]``, ``in``, iteration, ``len``) so per-aspect</span>
+<span class="sd">    lookups read naturally, while also carrying the overall verdict.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        match: Overall pass/fail across the whole rubric.</span>
+<span class="sd">        confidence: Overall confidence in ``[0.0, 1.0]``.</span>
+<span class="sd">        explanation: A short overall summary of the comparison.</span>
+<span class="sd">        aspects: The per-aspect verdicts, one :class:`RubricVerdict` per</span>
+<span class="sd">            rubric item, in rubric order.</span>
+<span class="sd">        model: The vision model id that produced the verdict.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">match</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">explanation</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">aspects</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">RubricVerdict</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_by_aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;dict[str, RubricVerdict]&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">verdict</span><span class="o">.</span><span class="n">aspect</span><span class="p">:</span> <span class="n">verdict</span> <span class="k">for</span> <span class="n">verdict</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspect</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RubricVerdict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_aspect</span><span class="p">()[</span><span class="n">aspect</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspect</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_aspect</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_by_aspect</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ImageComparison.get">
+<a class="viewcode-back" href="../../module_docs/aix/vision.html#aix.ImageComparison.get">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">aspect</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="s2">&quot;RubricVerdict | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RubricVerdict | None&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the verdict for ``aspect``, or ``default`` if absent.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_aspect</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">aspect</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1">#: Instruction prefix for the comparison prompt. Kept here (not inlined) so the</span>
+<span class="c1">#: phrasing is a single, tunable source of truth.</span>
+<span class="n">_COMPARE_INSTRUCTION</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;You are a strict visual continuity supervisor. The FIRST image is the &quot;</span>
+    <span class="s2">&quot;CANDIDATE; the remaining image(s) are the locked REFERENCE the candidate &quot;</span>
+    <span class="s2">&quot;must match. Judge each rubric aspect INDEPENDENTLY (do not let one aspect &quot;</span>
+    <span class="s2">&quot;color another). For each aspect decide whether the candidate matches the &quot;</span>
+    <span class="s2">&quot;reference, give a confidence in [0.0, 1.0], and a short note explaining &quot;</span>
+    <span class="s2">&quot;what matches or drifts. Then give an overall match (true only if every &quot;</span>
+    <span class="s2">&quot;important aspect matches), an overall confidence, and a one-sentence &quot;</span>
+    <span class="s2">&quot;explanation.&quot;</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="compare_images">
+<a class="viewcode-back" href="../../module_docs/aix/vision.html#aix.compare_images">[docs]</a>
+<span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">vision</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compare_images</span><span class="p">(</span>
+    <span class="n">candidate</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path, bytes, Any]&quot;</span><span class="p">,</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path, bytes, Any, Sequence[Any]]&quot;</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rubric</span><span class="p">:</span> <span class="s2">&quot;Sequence[str]&quot;</span> <span class="o">=</span> <span class="n">DFLT_COMPARE_RUBRIC</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="s2">&quot;int | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="s2">&quot;float | None&quot;</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">detail</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">instruction</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_COMPARE_INSTRUCTION</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageComparison</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare a ``candidate`` image to ``reference`` image(s) on a rubric.</span>
+
+<span class="sd">    The explainable half of a reference supervisor: a vision model returns a</span>
+<span class="sd">    per-aspect pass/fail checklist (does the face match? the costume? the set?</span>
+<span class="sd">    the lighting? the props?) plus an overall verdict — the explainable layer</span>
+<span class="sd">    over a cheap numeric identity-cosine gate (which lives elsewhere, e.g.</span>
+<span class="sd">    lookbook). Built on :func:`to_image_content` (multi-image content block)</span>
+<span class="sd">    and the same multimodal ``completion`` path as :func:`describe_image`,</span>
+<span class="sd">    asked via a JSON contract for a structured answer.</span>
+
+<span class="sd">    The comparison is *pointwise* (each aspect judged on its own), not a ranked</span>
+<span class="sd">    pairwise comparison, to avoid position bias.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        candidate: The image under review (URL / path / bytes / PIL image /</span>
+<span class="sd">            ``data:`` URI — anything :func:`to_image_content` accepts).</span>
+<span class="sd">        reference: The locked reference — a single image *or* a sequence of</span>
+<span class="sd">            images (a locked set) in the same flexible formats. An empty</span>
+<span class="sd">            sequence is an error.</span>
+<span class="sd">        rubric: The aspects to evaluate, one verdict per item. Defaults to</span>
+<span class="sd">            :data:`DFLT_COMPARE_RUBRIC`; pass :data:`DFLT_FILM_RUBRIC` (or any</span>
+<span class="sd">            custom sequence) to override — e.g. ``(&quot;face&quot;, &quot;architecture&quot;,</span>
+<span class="sd">            &quot;props&quot;, &quot;lighting&quot;)``. Must be non-empty.</span>
+<span class="sd">        model: Vision-capable model id or alias. ``None`` → the configured</span>
+<span class="sd">            default (:class:`aix.config.VisionConfig`).</span>
+<span class="sd">        api_key: Explicit API key; ``None`` resolves it for the model&#39;s</span>
+<span class="sd">            provider from the environment / ``.env`` / config store.</span>
+<span class="sd">        max_tokens: Cap on generated tokens (``None`` → provider default).</span>
+<span class="sd">        temperature: Sampling temperature (default ``0.0`` for a stable,</span>
+<span class="sd">            reproducible verdict; ``None`` → provider default).</span>
+<span class="sd">        detail: Image detail hint (``&quot;low&quot;`` | ``&quot;high&quot;`` | ``&quot;auto&quot;``),</span>
+<span class="sd">            applied to every image block.</span>
+<span class="sd">        instruction: The system-style framing prepended to the rubric. Has a</span>
+<span class="sd">            sensible default; override to retune the supervisor&#39;s strictness.</span>
+<span class="sd">        **kwargs: Extra provider-specific params forwarded to LiteLLM.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An :class:`ImageComparison` — overall ``match`` / ``confidence`` /</span>
+<span class="sd">        ``explanation`` plus an ordered, mapping-like collection of</span>
+<span class="sd">        :class:`RubricVerdict` (one per rubric aspect, keyed by aspect).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If LiteLLM is not installed.</span>
+<span class="sd">        ValueError: If ``rubric`` is empty or ``reference`` is an empty</span>
+<span class="sd">            sequence, or if the model&#39;s reply can&#39;t be parsed as the expected</span>
+<span class="sd">            JSON verdict.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        Default rubric, single reference:</span>
+
+<span class="sd">        &gt;&gt;&gt; compare_images(&quot;gen.png&quot;, &quot;ref.png&quot;)  # doctest: +SKIP</span>
+<span class="sd">        ImageComparison(match=True, confidence=0.9, ...)</span>
+
+<span class="sd">        Filmmaking rubric, a locked reference *set*:</span>
+
+<span class="sd">        &gt;&gt;&gt; from aix.vision import DFLT_FILM_RUBRIC</span>
+<span class="sd">        &gt;&gt;&gt; compare_images(  # doctest: +SKIP</span>
+<span class="sd">        ...     candidate=&quot;frame_042.png&quot;,</span>
+<span class="sd">        ...     reference=[&quot;ref_front.png&quot;, &quot;ref_side.png&quot;],</span>
+<span class="sd">        ...     rubric=DFLT_FILM_RUBRIC,</span>
+<span class="sd">        ... )[&quot;face_identity&quot;].match</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Validate arguments before checking the optional dependency, so a bad call</span>
+    <span class="c1"># (empty rubric / empty reference set) is reported the same way regardless of</span>
+    <span class="c1"># whether LiteLLM happens to be installed.</span>
+    <span class="n">rubric</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">rubric</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rubric</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`rubric` must contain at least one aspect to evaluate.&quot;</span><span class="p">)</span>
+
+    <span class="n">references</span> <span class="o">=</span> <span class="n">_as_image_sequence</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">references</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;`reference` must be at least one image (got an empty sequence).&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">_litellm_completion</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;LiteLLM is required for vision functionality. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">vision</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">_resolve_model</span><span class="p">(</span><span class="n">model</span> <span class="ow">or</span> <span class="n">cfg</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="n">text_block</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">_compare_prompt</span><span class="p">(</span><span class="n">instruction</span><span class="p">,</span> <span class="n">rubric</span><span class="p">)}</span>
+    <span class="n">image_blocks</span> <span class="o">=</span> <span class="p">[</span><span class="n">to_image_content</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span>
+        <span class="n">to_image_content</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">references</span>
+    <span class="p">]</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">text_block</span><span class="p">,</span> <span class="o">*</span><span class="n">image_blocks</span><span class="p">]}]</span>
+
+    <span class="n">litellm_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span> <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="n">messages</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">&quot;max_tokens&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_tokens</span>
+    <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
+
+    <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+
+    <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_completion</span><span class="p">(</span><span class="o">**</span><span class="n">litellm_kwargs</span><span class="p">)</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">_extract_text</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_parse_comparison</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">rubric</span><span class="o">=</span><span class="n">rubric</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span></div>
+
+
+
 <span class="c1"># --- internals --------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_image_sequence</span><span class="p">(</span><span class="n">reference</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[Any]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalise ``reference`` to a list of image inputs.</span>
+
+<span class="sd">    A single image (URL str / path / bytes / PIL image / ``data:`` URI) becomes</span>
+<span class="sd">    a one-element list; a non-string, non-bytes sequence is taken as a locked</span>
+<span class="sd">    set and returned as a list. ``str`` and ``bytes`` are *atomic* images here,</span>
+<span class="sd">    never iterated character/byte-wise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">reference</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="s2">&quot;save&quot;</span><span class="p">):</span>  <span class="c1"># a PIL image is iterable-ish; treat as atomic</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">reference</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+    <span class="c1"># Any other iterable (generator, tuple already handled by Sequence) — be lenient.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">reference</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_compare_prompt</span><span class="p">(</span><span class="n">instruction</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rubric</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the JSON-contract prompt asking for a per-aspect verdict.&quot;&quot;&quot;</span>
+    <span class="n">aspect_list</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rubric</span><span class="p">)</span>
+    <span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;match&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean — overall match across the whole rubric&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="s2">&quot;number in [0.0, 1.0] — overall confidence&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;explanation&quot;</span><span class="p">:</span> <span class="s2">&quot;string — one-sentence overall summary&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aspects&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;aspect&quot;</span><span class="p">:</span> <span class="s2">&quot;string — one of the rubric aspects, verbatim&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;match&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="s2">&quot;number in [0.0, 1.0]&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="s2">&quot;string — short explanation&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">instruction</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Rubric aspects to evaluate (one verdict each, use these exact names): &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">aspect_list</span><span class="si">}</span><span class="s2">.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Respond with ONLY valid JSON of this shape (no prose, no code fence):</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Include exactly one entry in </span><span class="se">\&quot;</span><span class="s2">aspects</span><span class="se">\&quot;</span><span class="s2"> for each rubric aspect above.&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_coerce_bool</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_coerce_confidence</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">conf</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_comparison</span><span class="p">(</span>
+    <span class="n">raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rubric</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...]&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageComparison</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the model&#39;s JSON reply into an :class:`ImageComparison`.</span>
+
+<span class="sd">    Tolerant of a markdown code fence around the JSON; raises ``ValueError`` if</span>
+<span class="sd">    no JSON object can be recovered. Missing aspects are filled with a</span>
+<span class="sd">    low-confidence non-match so the result always covers the full rubric.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">_loads_lenient</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expected a JSON object verdict from the model, got: </span><span class="si">{</span><span class="n">raw</span><span class="p">[:</span><span class="mi">120</span><span class="p">]</span><span class="si">!r}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">by_aspect</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RubricVerdict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aspects&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">aspect</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aspect&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">aspect</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">by_aspect</span><span class="p">[</span><span class="n">aspect</span><span class="p">]</span> <span class="o">=</span> <span class="n">RubricVerdict</span><span class="p">(</span>
+            <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span>
+            <span class="n">match</span><span class="o">=</span><span class="n">_coerce_bool</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">)),</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">_coerce_confidence</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;confidence&quot;</span><span class="p">)),</span>
+            <span class="n">note</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;note&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Emit one verdict per requested rubric aspect, in rubric order, filling any</span>
+    <span class="c1"># the model omitted with a conservative non-match.</span>
+    <span class="n">ordered</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="n">by_aspect</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">aspect</span><span class="p">,</span>
+            <span class="n">RubricVerdict</span><span class="p">(</span>
+                <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span>
+                <span class="n">match</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">confidence</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;No verdict returned for this aspect.&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">rubric</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ImageComparison</span><span class="p">(</span>
+        <span class="n">match</span><span class="o">=</span><span class="n">_coerce_bool</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">)),</span>
+        <span class="n">confidence</span><span class="o">=</span><span class="n">_coerce_confidence</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;confidence&quot;</span><span class="p">)),</span>
+        <span class="n">explanation</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;explanation&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+        <span class="n">aspects</span><span class="o">=</span><span class="n">ordered</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_loads_lenient</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse JSON, tolerating a surrounding ```/```json code fence or prose.</span>
+
+<span class="sd">    Tries a direct parse, then a fence strip, then the first ``{...}`` span.</span>
+<span class="sd">    Raises ``ValueError`` if nothing parses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stripped</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">stripped</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;```&quot;</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">stripped</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">inner</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">inner</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">):</span>
+            <span class="n">inner</span> <span class="o">=</span> <span class="n">inner</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner</span><span class="p">)</span>
+    <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">stripped</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">),</span> <span class="n">stripped</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">start</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">end</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">end</span> <span class="o">&gt;</span> <span class="n">start</span><span class="p">:</span>
+        <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stripped</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">continue</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Could not parse a JSON verdict from the model reply: </span><span class="si">{</span><span class="n">text</span><span class="p">[:</span><span class="mi">120</span><span class="p">]</span><span class="si">!r}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_to_image_url</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path, bytes, Any]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
