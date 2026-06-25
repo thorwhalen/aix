@@ -473,7 +473,7 @@ def _compare_prompt(instruction: str, rubric: "tuple[str, ...]") -> str:
         f"{aspect_list}.\n\n"
         f"Respond with ONLY valid JSON of this shape (no prose, no code fence):\n"
         f"{json.dumps(schema)}\n"
-        f"Include exactly one entry in \"aspects\" for each rubric aspect above."
+        f'Include exactly one entry in "aspects" for each rubric aspect above.'
     )
 
 
