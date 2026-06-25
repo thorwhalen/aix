@@ -125,6 +125,9 @@ from aix.video import (
 from aix.vision import (
     describe_image,
     to_image_content,
+    compare_images,
+    RubricVerdict,
+    ImageComparison,
 )
 
 # Legacy interfaces (for backward compatibility)
@@ -201,6 +204,9 @@ __all__ = [
     # Vision (image -> text)
     "describe_image",
     "to_image_content",
+    "compare_images",
+    "RubricVerdict",
+    "ImageComparison",
     # Legacy
     "chat_models",
     "chat_funcs",
