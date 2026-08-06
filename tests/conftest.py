@@ -4,6 +4,10 @@ import sys
 import pytest
 from unittest.mock import Mock, patch
 
+# Note: the litellm model-cost-map opt-out that keeps this suite off the
+# network lives in the *root* conftest.py, so it also covers CI's
+# `pytest --doctest-modules aix/` run. See that file for why.
+
 # `aix/__init__.py` exports `chat`/`embeddings` (the function) under the same
 # name as their submodule, so `aix.chat` resolves to the function on some
 # Python builds. Patch the submodule objects directly to stay version-robust.

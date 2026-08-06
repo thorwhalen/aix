@@ -67,11 +67,25 @@ from aix.credentials import (
     requires_credentials as _requires_credentials,
 )
 
-# LiteLLM is a soft dependency, imported privately (mirrors aix.chat).
-try:
-    from litellm import completion as _litellm_completion
-except ImportError:  # pragma: no cover - exercised only without litellm
-    _litellm_completion = None
+from aix._litellm import UNRESOLVED as _UNRESOLVED, litellm_attr as _litellm_attr
+
+# LiteLLM is a soft dependency, imported privately (mirrors aix.chat) *and*
+# deferred: importing it fetches litellm's model-cost map over HTTPS, so
+# `import aix` must not do it. See aix/_litellm.py for the rationale.
+_litellm_completion = _UNRESOLVED
+
+
+def _completion():
+    """Resolve litellm's ``completion``, importing litellm on first use.
+
+    Returns ``None`` when litellm is unavailable, which call sites turn into an
+    :class:`ImportError` carrying an install hint.
+    """
+    global _litellm_completion
+    if _litellm_completion is _UNRESOLVED:
+        _litellm_completion = _litellm_attr("completion")
+    return _litellm_completion
+
 
 __all__ = [
     "describe_image",
@@ -191,7 +205,8 @@ def describe_image(
     >>> describe_image("cat.jpg", prompt="Caption it.")  # doctest: +SKIP
     'A cat on a sofa.'
     """
-    if _litellm_completion is None:
+    completion = _completion()
+    if completion is None:
         raise ImportError(
             "LiteLLM is required for vision functionality. "
             "Install it with: pip install litellm"
@@ -222,7 +237,7 @@ def describe_image(
 
     litellm_kwargs.update(kwargs)
 
-    response = _litellm_completion(**litellm_kwargs)
+    response = completion(**litellm_kwargs)
     return _extract_text(response)
 
 
@@ -395,7 +410,8 @@ def compare_images(
             "`reference` must be at least one image (got an empty sequence)."
         )
 
-    if _litellm_completion is None:
+    completion = _completion()
+    if completion is None:
         raise ImportError(
             "LiteLLM is required for vision functionality. "
             "Install it with: pip install litellm"
@@ -422,7 +438,7 @@ def compare_images(
 
     litellm_kwargs.update(kwargs)
 
-    response = _litellm_completion(**litellm_kwargs)
+    response = completion(**litellm_kwargs)
     raw = _extract_text(response)
     return _parse_comparison(raw, rubric=rubric, model=model)
 

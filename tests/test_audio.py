@@ -7,9 +7,17 @@ from aix.audio import (
     text_to_speech,
     transcribe,
     transcribe_with_timestamps,
+    translate_audio,
     GeneratedAudio,
     TranscriptionResult,
 )
+
+# `aix.audio` is patched via sys.modules for the same reason conftest does it:
+# the package `__init__` re-exports names that can shadow the submodule.
+import sys
+import aix.audio  # noqa: F401
+
+_aix_audio = sys.modules["aix.audio"]
 
 
 class TestGeneratedAudio:
@@ -313,3 +321,59 @@ class TestTranscribeScribedDelegation:
         with patch.dict(sys.modules, {"scribed": None}):
             with pytest.raises(ImportError, match="aix\\[scribed\\]"):
                 transcribe("a.wav", engine="faster-whisper")
+
+
+class TestTranslateAudio:
+    """Tests for translate_audio, which had no coverage at all.
+
+    Both branches are worth pinning, and the *fallback* one especially: current
+    litellm releases expose no ``translation`` entry point, so translating
+    really does go through ``transcription(task="translate")``. That made it the
+    live path with nothing asserting it.
+    """
+
+    def _litellm_stub(self, **attrs):
+        """A stand-in ``litellm`` module, so no real import (or fetch) happens.
+
+        Provider inference goes through litellm too, so the tests pass an
+        explicit ``api_key`` rather than relying on it.
+        """
+        import types
+
+        module = types.ModuleType("litellm")
+        for name, value in attrs.items():
+            setattr(module, name, value)
+        return module
+
+    def test_uses_litellm_translation_when_available(self):
+        import sys
+
+        translation = Mock(return_value=Mock(text="bonjour -> hello"))
+        transcription = Mock()
+        with patch.dict(
+            sys.modules, {"litellm": self._litellm_stub(translation=translation)}
+        ):
+            with patch.object(_aix_audio, "_litellm_transcription", transcription):
+                out = translate_audio(b"fake_audio", model="whisper-1", api_key="sk-test")
+
+        assert out == "bonjour -> hello"
+        translation.assert_called_once()
+        transcription.assert_not_called()
+
+    def test_falls_back_to_transcription_with_translate_task(self):
+        """The live path today: no ``litellm.translation`` -> transcribe(task='translate')."""
+        import sys
+
+        transcription = Mock(return_value=Mock(text="hello"))
+        with patch.dict(sys.modules, {"litellm": self._litellm_stub()}):
+            with patch.object(_aix_audio, "_litellm_transcription", transcription):
+                out = translate_audio(b"fake_audio", model="whisper-1", api_key="sk-test")
+
+        assert out == "hello"
+        transcription.assert_called_once()
+        assert transcription.call_args[1]["task"] == "translate"
+
+    def test_raises_when_litellm_missing(self):
+        with patch.object(_aix_audio, "_litellm_transcription", None):
+            with pytest.raises(ImportError, match="LiteLLM is required"):
+                translate_audio(b"fake_audio", model="whisper-1", api_key="sk-test")

@@ -33,9 +33,11 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 # aix is a headless facade -- it keeps hard dependencies to a minimum.
-# `litellm` is the provider backend (imported lazily, only when a call is made);
-# `config2py` reads API keys / config. Everything else lives in the extras below
-# and is imported lazily, with a clear install hint when missing.
+# `litellm` is the provider backend, resolved on the first call rather than at
+# import time -- deliberately, because importing litellm fetches its model-cost
+# map over HTTPS, and `import aix` must not reach the network (see aix/_litellm.py
+# and issue #38). `config2py` reads API keys / config. Everything else lives in
+# the extras below and is imported lazily, with a clear install hint when missing.
 dependencies = [
     "litellm>=1.0.0",
     "config2py",

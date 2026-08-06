@@ -20,13 +20,36 @@ from typing import Union, BinaryIO
 from pathlib import Path
 import mimetypes
 
-# Import LiteLLM but keep it private
-try:
-    from litellm import transcription as _litellm_transcription
-    from litellm import speech as _litellm_speech
-except ImportError:
-    _litellm_transcription = None
-    _litellm_speech = None
+from aix._litellm import UNRESOLVED as _UNRESOLVED, litellm_attr as _litellm_attr
+
+# LiteLLM is deferred: importing it fetches litellm's model-cost map over
+# HTTPS, so `import aix` must not do it. See aix/_litellm.py for the rationale.
+_litellm_transcription = _UNRESOLVED
+_litellm_speech = _UNRESOLVED
+
+
+def _transcription():
+    """Resolve litellm's ``transcription``, importing litellm on first use.
+
+    Returns ``None`` when litellm is unavailable, which call sites turn into an
+    :class:`ImportError` carrying an install hint.
+    """
+    global _litellm_transcription
+    if _litellm_transcription is _UNRESOLVED:
+        _litellm_transcription = _litellm_attr("transcription")
+    return _litellm_transcription
+
+
+def _speech():
+    """Resolve litellm's ``speech``, importing litellm on first use.
+
+    Returns ``None`` when litellm is unavailable, which call sites turn into an
+    :class:`ImportError` carrying an install hint.
+    """
+    global _litellm_speech
+    if _litellm_speech is _UNRESOLVED:
+        _litellm_speech = _litellm_attr("speech")
+    return _litellm_speech
 
 
 # Shipped-default constants, kept for backward compatibility. The *active*
@@ -238,7 +261,8 @@ def text_to_speech(
         ...     voice="onyx"
         ... )  # doctest: +SKIP
     """
-    if _litellm_speech is None:
+    speech = _speech()
+    if speech is None:
         raise ImportError(
             "LiteLLM is required for text-to-speech. "
             "Install it with: pip install litellm"
@@ -268,7 +292,7 @@ def text_to_speech(
     params.update(kwargs)
 
     # Call LiteLLM
-    response = _litellm_speech(**params)
+    response = speech(**params)
 
     # Response is audio data (bytes)
     if isinstance(response, bytes):
@@ -468,7 +492,8 @@ def _transcribe_litellm(
         >>> for segment in result.segments:  # doctest: +SKIP
         ...     print(f"{segment['start']}: {segment['text']}")
     """
-    if _litellm_transcription is None:
+    transcription = _transcription()
+    if transcription is None:
         raise ImportError(
             "LiteLLM is required for transcription. "
             "Install it with: pip install litellm"
@@ -518,7 +543,7 @@ def _transcribe_litellm(
     params.update(kwargs)
 
     # Call LiteLLM
-    response = _litellm_transcription(**params)
+    response = transcription(**params)
 
     # Parse response based on format
     if response_format == "text":
@@ -612,7 +637,8 @@ def translate_audio(
         >>> print(english_text)  # doctest: +SKIP
         'This is the English translation.'
     """
-    if _litellm_transcription is None:
+    transcription = _transcription()
+    if transcription is None:
         raise ImportError(
             "LiteLLM is required for audio translation. "
             "Install it with: pip install litellm"
@@ -659,7 +685,7 @@ def translate_audio(
     except (ImportError, AttributeError):
         # Fallback: some models support translation via transcription
         params["task"] = "translate"
-        response = _litellm_transcription(**params)
+        response = transcription(**params)
 
     if isinstance(response, str):
         return response

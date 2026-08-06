@@ -37,11 +37,23 @@ from aix.credentials import (
     requires_credentials as _requires_credentials,
 )
 
-# Import LiteLLM but keep it private
-try:
-    from litellm import embedding as _litellm_embedding
-except ImportError:
-    _litellm_embedding = None
+from aix._litellm import UNRESOLVED as _UNRESOLVED, litellm_attr as _litellm_attr
+
+# LiteLLM is deferred: importing it fetches litellm's model-cost map over
+# HTTPS, so `import aix` must not do it. See aix/_litellm.py for the rationale.
+_litellm_embedding = _UNRESOLVED
+
+
+def _embedding():
+    """Resolve litellm's ``embedding``, importing litellm on first use.
+
+    Returns ``None`` when litellm is unavailable, which call sites turn into an
+    :class:`ImportError` carrying an install hint.
+    """
+    global _litellm_embedding
+    if _litellm_embedding is _UNRESOLVED:
+        _litellm_embedding = _litellm_attr("embedding")
+    return _litellm_embedding
 
 
 # Shipped-default constants, kept for backward compatibility. The *active*
@@ -96,7 +108,8 @@ def embeddings(
         >>> for chunk in chunk_texts(large_dataset):  # doctest: +SKIP
         ...     all_vecs.extend(embeddings(chunk))
     """
-    if _litellm_embedding is None:
+    embedding_fn = _embedding()
+    if embedding_fn is None:
         raise ImportError(
             "LiteLLM is required for embeddings functionality. "
             "Install it with: pip install litellm"
@@ -126,7 +139,7 @@ def embeddings(
     litellm_kwargs.update(kwargs)
 
     # Call LiteLLM
-    response = _litellm_embedding(**litellm_kwargs)
+    response = embedding_fn(**litellm_kwargs)
 
     # Extract embeddings from response
     # LiteLLM returns a response with .data list
