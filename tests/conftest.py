@@ -1,8 +1,19 @@
 """Pytest configuration and shared fixtures."""
 
+import os
 import sys
 import pytest
 from unittest.mock import Mock, patch
+
+# Keep the suite off the network. `import aix` no longer imports litellm (see
+# aix/_litellm.py), but the first call that resolves a provider does -- and
+# importing litellm fetches its model-cost map over HTTPS. Opting out belongs
+# *here*, in the test process: it is a whole-process setting, so the library
+# itself must not make it for its consumers. `setdefault` leaves an explicit
+# value alone (litellm treats any non-empty value as "use the bundled map").
+# tests/test_import_is_hermetic.py deliberately strips this from its
+# subprocesses -- with it set, its socket guard could not fail.
+os.environ.setdefault("LITELLM_LOCAL_MODEL_COST_MAP", "1")
 
 # `aix/__init__.py` exports `chat`/`embeddings` (the function) under the same
 # name as their submodule, so `aix.chat` resolves to the function on some

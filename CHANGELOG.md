@@ -6,6 +6,12 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/);
 each section corresponds to a git version tag (which is also the release
 published to PyPI). Entries are commit subjects and PR titles, verbatim.
 
+## [Unreleased]
+
+### Fixed
+
+- fix: resolve litellm on first call, not at import — `import aix` no longer reaches the network ([#38](https://github.com/thorwhalen/aix/issues/38))
+
 ## [0.0.34] - 2026-06-17
 
 ### Added

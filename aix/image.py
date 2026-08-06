@@ -30,11 +30,24 @@ from pathlib import Path
 import base64
 from io import BytesIO
 
-# Import LiteLLM but keep it private
-try:
-    from litellm import image_generation as _litellm_image_generation
-except ImportError:
-    _litellm_image_generation = None
+from aix._litellm import UNRESOLVED as _UNRESOLVED, litellm_attr as _litellm_attr
+
+# LiteLLM is deferred: importing it fetches litellm's model-cost map over
+# HTTPS, so `import aix` must not do it. See aix/_litellm.py for the rationale.
+_litellm_image_generation = _UNRESOLVED
+
+
+def _image_generation():
+    """Resolve litellm's ``image_generation``, importing litellm on first use.
+
+    Returns ``None`` when litellm is unavailable, which call sites turn into an
+    :class:`ImportError` carrying an install hint.
+    """
+    global _litellm_image_generation
+    if _litellm_image_generation is _UNRESOLVED:
+        _litellm_image_generation = _litellm_attr("image_generation")
+    return _litellm_image_generation
+
 
 # Try to import PIL for image handling
 try:
@@ -232,7 +245,8 @@ def generate_image(
         ...     size="1792x1024"
         ... )  # doctest: +SKIP
     """
-    if _litellm_image_generation is None:
+    image_generation = _image_generation()
+    if image_generation is None:
         raise ImportError(
             "LiteLLM is required for image generation. "
             "Install it with: pip install litellm"
@@ -266,7 +280,7 @@ def generate_image(
     params.update(kwargs)
 
     # Call LiteLLM
-    response = _litellm_image_generation(**params)
+    response = image_generation(**params)
 
     # Extract image data
     image_data = response.data[0]
@@ -318,7 +332,8 @@ def generate_images(
         >>> for i, img in enumerate(images):  # doctest: +SKIP
         ...     img.save(f"robot_{i}.png")
     """
-    if _litellm_image_generation is None:
+    image_generation = _image_generation()
+    if image_generation is None:
         raise ImportError(
             "LiteLLM is required for image generation. "
             "Install it with: pip install litellm"
@@ -353,7 +368,7 @@ def generate_images(
     params.update(kwargs)
 
     # Call LiteLLM
-    response = _litellm_image_generation(**params)
+    response = image_generation(**params)
 
     # Extract all images
     images = []
@@ -406,7 +421,8 @@ def edit_image(
         ... )  # doctest: +SKIP
         >>> edited.save("edited_photo.png")  # doctest: +SKIP
     """
-    if _litellm_image_generation is None:
+    image_generation = _image_generation()
+    if image_generation is None:
         raise ImportError(
             "LiteLLM is required for image editing. "
             "Install it with: pip install litellm"
@@ -443,7 +459,7 @@ def edit_image(
     params.update(kwargs)
 
     # Call LiteLLM (using custom_llm_provider for edits)
-    response = _litellm_image_generation(**params)
+    response = image_generation(**params)
 
     # Extract images
     images = []
@@ -492,7 +508,8 @@ def create_variation(
         >>> for i, var in enumerate(variations):  # doctest: +SKIP
         ...     var.save(f"variation_{i}.png")
     """
-    if _litellm_image_generation is None:
+    image_generation = _image_generation()
+    if image_generation is None:
         raise ImportError(
             "LiteLLM is required for image variations. "
             "Install it with: pip install litellm"
@@ -520,7 +537,7 @@ def create_variation(
     params.update(kwargs)
 
     # Call LiteLLM
-    response = _litellm_image_generation(**params)
+    response = image_generation(**params)
 
     # Extract images
     images = []

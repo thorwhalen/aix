@@ -561,6 +561,29 @@ AIX uses [LiteLLM](https://github.com/BerriAI/litellm) as the backend for provid
 - Cohere
 - And 100+ more
 
+#### `import aix` does not touch the network
+
+LiteLLM fetches its model-cost map over HTTPS **as a side effect of being
+imported**. `aix` therefore resolves LiteLLM on the *first call* rather than at
+import time, so importing `aix` (or any of its submodules) opens no outbound
+connection: a server cold start doesn't block on it, an offline or
+restricted-egress deployment doesn't eat a connect timeout, and a test suite
+that merely imports `aix` stays hermetic. The first actual provider call pays
+the import, and gets the live cost map — so provider resolution is unaffected.
+
+If you also want the *first call* to stay offline, set LiteLLM's own knob in
+your environment. `aix` deliberately never sets it for you — it is a
+whole-process setting, so the choice is the operator's:
+
+```bash
+export LITELLM_LOCAL_MODEL_COST_MAP=1
+```
+
+The trade-off: LiteLLM then reads the cost map bundled in its wheel, which is a
+snapshot. Bare model names newer than your installed `litellm` release may stop
+resolving — pass those provider-prefixed (`"openai/gpt-5.2"` rather than
+`"gpt-5.2"`), which works either way.
+
 ## Design Patterns
 
 ### From `oa` (OpenAI facade)

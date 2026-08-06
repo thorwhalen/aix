@@ -42,13 +42,24 @@ from aix.credentials import (
     requires_credentials as _requires_credentials,
 )
 
-# Import LiteLLM but keep it private - users shouldn't call it directly
-try:
-    from litellm import completion as _litellm_completion
-    from litellm import ModelResponse as _ModelResponse
-except ImportError:
-    _litellm_completion = None
-    _ModelResponse = None
+from aix._litellm import UNRESOLVED as _UNRESOLVED, litellm_attr as _litellm_attr
+
+# LiteLLM is kept private (users shouldn't call it directly) *and* deferred:
+# importing it fetches litellm's model-cost map over HTTPS, so `import aix`
+# must not do it. See aix/_litellm.py for the full rationale.
+_litellm_completion = _UNRESOLVED
+
+
+def _completion():
+    """Resolve litellm's ``completion``, importing litellm on first use.
+
+    Returns ``None`` when litellm is unavailable, which call sites turn into an
+    :class:`ImportError` carrying an install hint.
+    """
+    global _litellm_completion
+    if _litellm_completion is _UNRESOLVED:
+        _litellm_completion = _litellm_attr("completion")
+    return _litellm_completion
 
 
 # Shipped-default constants, kept for backward compatibility. The *active*
@@ -189,7 +200,8 @@ def chat(
         >>> chat(messages)  # doctest: +SKIP
         '2+2 equals 4.'
     """
-    if _litellm_completion is None:
+    completion = _completion()
+    if completion is None:
         raise ImportError(
             "LiteLLM is required for chat functionality. "
             "Install it with: pip install litellm"
@@ -226,7 +238,7 @@ def chat(
     litellm_kwargs.update(kwargs)
 
     # Call LiteLLM
-    response = _litellm_completion(**litellm_kwargs)
+    response = completion(**litellm_kwargs)
 
     # Extract and return text
     if stream:
