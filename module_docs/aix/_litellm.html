@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aix._litellm &mdash; aix 0.0.38 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=423071ad"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="aix.ai_models" href="ai_models.html" />
+    <link rel="prev" title="aix" href="../aix.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            aix
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../aix.html">aix</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">aix._litellm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why-not-force-litellm-s-bundled-map-instead">Why not force litellm’s bundled map instead</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix._litellm.UNRESOLVED"><code class="docutils literal notranslate"><span class="pre">UNRESOLVED</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aix._litellm.litellm_attr"><code class="docutils literal notranslate"><span class="pre">litellm_attr()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models.html">aix.ai_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/base.html">aix.ai_models.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/examples.html">aix.ai_models.examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_models/sources.html">aix.ai_models.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">aix.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batches.html">aix.batches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chat.html">aix.chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">aix.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credentials.html">aix.credentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">aix.embeddings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai.html">aix.gen_ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">aix.image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">aix.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">aix.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prompts.html">aix.prompts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">aix.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">aix.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="video.html">aix.video</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vision.html">aix.vision</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aix</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">aix._litellm</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/aix/_litellm.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aix._litellm">
+<span id="aix-litellm"></span><h1>aix._litellm<a class="headerlink" href="#module-aix._litellm" title="Link to this heading"></a></h1>
+<p>Deferred access to the <code class="docutils literal notranslate"><span class="pre">litellm</span></code> backend.</p>
+<p><code class="docutils literal notranslate"><span class="pre">aix</span></code> never imports <code class="docutils literal notranslate"><span class="pre">litellm</span></code> at <em>its own</em> import time, because importing
+<code class="docutils literal notranslate"><span class="pre">litellm</span></code> is not free:</p>
+<ul class="simple">
+<li><p>it costs roughly a second of CPU on its own, and</p></li>
+<li><p><strong>as a side effect of the import itself</strong> it fetches its model-cost map over
+HTTPS from a raw-content host (5 s timeout, silent fallback to a bundled
+copy on any failure).</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">aix</span></code> is a facade that downstream projects import at process start, so paying
+that on <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">aix</span></code> makes every consumer inherit an unbounded outbound
+request before doing any work: a server cold start blocks on it, an offline or
+restricted-egress deployment eats a connect timeout, and a test suite that only
+does <code class="docutils literal notranslate"><span class="pre">importorskip(&quot;aix.audio&quot;)</span></code> reaches the network.  See
+<a class="reference external" href="https://github.com/thorwhalen/aix/issues/38">https://github.com/thorwhalen/aix/issues/38</a>.</p>
+<p>The fix is <em>when</em>, not <em>whether</em>.  Each <code class="docutils literal notranslate"><span class="pre">aix</span></code> module binds its litellm entry
+points to the <a class="reference internal" href="#aix._litellm.UNRESOLVED" title="aix._litellm.UNRESOLVED"><code class="xref py py-data docutils literal notranslate"><span class="pre">UNRESOLVED</span></code></a> sentinel and resolves them through
+<a class="reference internal" href="#aix._litellm.litellm_attr" title="aix._litellm.litellm_attr"><code class="xref py py-func docutils literal notranslate"><span class="pre">litellm_attr()</span></code></a> on first use, so the import — and therefore the cost-map
+fetch — happens on the first actual provider call.  That call is already going
+over the network, so the map is still the fresh remote one and provider
+resolution is unchanged.</p>
+<section id="why-not-force-litellm-s-bundled-map-instead">
+<h2>Why not force litellm’s bundled map instead<a class="headerlink" href="#why-not-force-litellm-s-bundled-map-instead" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">litellm</span></code> honours <code class="docutils literal notranslate"><span class="pre">LITELLM_LOCAL_MODEL_COST_MAP</span></code>: set it to any non-empty
+value and litellm reads a copy bundled in the wheel instead of fetching.  It is
+tempting for <code class="docutils literal notranslate"><span class="pre">aix</span></code> to set that itself, but it is the wrong default here:</p>
+<ul class="simple">
+<li><p><strong>It is not free.</strong> <code class="docutils literal notranslate"><span class="pre">aix</span></code> reads none of litellm’s cost data (model pricing
+in <a class="reference internal" href="ai_models.html#module-aix.ai_models" title="aix.ai_models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">aix.ai_models</span></code></a> comes from provider APIs), but the cost map also
+backs litellm’s per-provider model lists, which is how a <em>bare</em> model name
+such as <code class="docutils literal notranslate"><span class="pre">&quot;gpt-5.2&quot;</span></code> is routed to a provider.  The bundled copy is a
+snapshot: at the time of writing it carried 1911 entries against the remote
+map’s 2988, so bare names newer than the installed <code class="docutils literal notranslate"><span class="pre">litellm</span></code> release stop
+resolving.  (Provider-prefixed names such as <code class="docutils literal notranslate"><span class="pre">&quot;openai/gpt-5.2&quot;</span></code> resolve
+either way.)</p></li>
+<li><p><strong>It does not fix the import cost</strong>, only the request — deferring the import
+fixes both.</p></li>
+<li><p><strong>It is a whole-process mutation.</strong> <code class="docutils literal notranslate"><span class="pre">os.environ</span></code> is global, so a library
+setting it changes the behaviour of every other litellm user in the process.</p></li>
+</ul>
+<p>So <code class="docutils literal notranslate"><span class="pre">aix</span></code> sets no environment variable.  Operators who want the first call to
+be offline too can export <code class="docutils literal notranslate"><span class="pre">LITELLM_LOCAL_MODEL_COST_MAP=1</span></code> themselves, with
+the narrower bare-name resolution above as the known trade-off; <code class="docutils literal notranslate"><span class="pre">aix</span></code> stays
+out of that decision.</p>
+</section>
+<dl class="py data">
+<dt class="sig sig-object py" id="aix._litellm.UNRESOLVED">
+<span class="sig-prename descclassname"><span class="pre">aix._litellm.</span></span><span class="sig-name descname"><span class="pre">UNRESOLVED</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">UNRESOLVED</span></span><a class="headerlink" href="#aix._litellm.UNRESOLVED" title="Link to this definition"></a></dt>
+<dd><p>Marker for “this litellm entry point has not been looked up yet”.</p>
+<p>Distinct from <code class="docutils literal notranslate"><span class="pre">None</span></code>, which means “looked up, and litellm is not
+installed” — the state the call sites turn into an actionable
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ImportError</span></code>.  It is deliberately not falsy: a stray
+<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">_litellm_completion:</span></code> would otherwise silently take the
+not-installed branch for an entry point that is merely unresolved.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix._litellm.litellm_attr">
+<span class="sig-prename descclassname"><span class="pre">aix._litellm.</span></span><span class="sig-name descname"><span class="pre">litellm_attr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/aix/_litellm.html#litellm_attr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix._litellm.litellm_attr" title="Link to this definition"></a></dt>
+<dd><p>Import <code class="docutils literal notranslate"><span class="pre">litellm</span></code> and return the attribute <em>name</em>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if absent.</p>
+<p><code class="docutils literal notranslate"><span class="pre">None</span></code> is returned both when <code class="docutils literal notranslate"><span class="pre">litellm</span></code> is not installed and when it is
+installed but does not expose <em>name</em> (an entry point added or removed
+across litellm versions).  Both mean the same thing to a caller: this
+backend cannot serve the request, so raise an install hint.</p>
+<p>Callers are expected to cache the result in a module global so the import
+is attempted once per entry point.  That cache needs no lock: <code class="docutils literal notranslate"><span class="pre">import</span></code> is
+already serialised per module by the interpreter, and two threads racing to
+resolve the same entry point compute and store the <em>same</em> object, so the
+worst case is a duplicated <code class="docutils literal notranslate"><span class="pre">getattr</span></code> (<a class="reference internal" href="batches.html#module-aix.batches" title="aix.batches"><code class="xref py py-mod docutils literal notranslate"><span class="pre">aix.batches</span></code></a> calls these from
+a thread pool, so the race is real, not hypothetical).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">callable</span><span class="p">(</span><span class="n">litellm_attr</span><span class="p">(</span><span class="s2">&quot;completion&quot;</span><span class="p">))</span> <span class="ow">or</span> <span class="n">litellm_attr</span><span class="p">(</span><span class="s2">&quot;completion&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">litellm_attr</span><span class="p">(</span><span class="s2">&quot;no_such_litellm_entry_point_&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../aix.html" class="btn btn-neutral float-left" title="aix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ai_models.html" class="btn btn-neutral float-right" title="aix.ai_models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

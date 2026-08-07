@@ -3,6 +3,7 @@
    :caption: Contents:
 
    module_docs/aix
+   module_docs/aix/_litellm
    module_docs/aix/ai_models
    module_docs/aix/ai_models/base
    module_docs/aix/ai_models/examples
