@@ -52,15 +52,15 @@ from litellm import completion, embedding
 ```python
 # Good - Mapping interface
 models = ModelStore()
-gpt4 = models['openai/gpt-4o']
+gpt4 = models["openai/gpt-4o"]
 result = gpt4("Hello")
 
 # Also good - Attribute access for convenience
 result = models.gpt_4o("Hello")
 
 # Bad - Verbose OOP
-client = ModelClient(provider='openai')
-model = client.get_model('gpt-4o')
+client = ModelClient(provider="openai")
+model = client.get_model("gpt-4o")
 result = model.chat(messages=[...])
 ```
 
@@ -80,15 +80,15 @@ def chat(
     temperature: float = 1.0,
     max_tokens: int = None,
     stream: bool = False,
-    **kwargs
+    **kwargs,
 ) -> str | Iterable[str]:
     """
     Simple chat completion.
-    
+
     Examples:
         >>> chat("What is 2+2?")
         'The answer is 4.'
-        
+
         >>> chat([{"role": "user", "content": "Hello"}], model="gpt-4o")
         'Hello! How can I help you today?'
     """
@@ -111,20 +111,20 @@ def prompt_based_func(
     *,
     output_schema: dict | type = None,  # If provided, enables structured output
     model: str = None,
-    **kwargs
+    **kwargs,
 ) -> callable:
     """
     Create a callable function from a prompt.
-    
+
     Without output_schema: Returns text
     With output_schema: Returns structured data
-    
+
     Examples:
         # Text generation
         >>> summarize = prompt_based_func("Summarize: {text}")
         >>> summarize(text="Long article...")
         'Brief summary...'
-        
+
         # Structured output
         >>> extract = prompt_based_func(
         ...     "Extract person info from: {text}",
@@ -140,6 +140,7 @@ def prompt_based_func(
 # Keep separate for clarity
 def prompt_to_text_func(prompt, **kwargs) -> callable: ...
 def prompt_to_json_func(prompt, output_schema, **kwargs) -> callable: ...
+
 
 # But provide unified interface
 def prompt_based_func(prompt, output_schema=None, **kwargs):
@@ -161,14 +162,11 @@ Whatever you choose, document it well and provide doctests.
 
 ```python
 def embeddings(
-    segments: Iterable[str],
-    *,
-    model: str = None,
-    **kwargs
+    segments: Iterable[str], *, model: str = None, **kwargs
 ) -> Iterable[Sequence[float]]:
     """
     Get embeddings for text segments.
-    
+
     Examples:
         >>> vecs = list(embeddings(["hello", "world"]))
         >>> len(vecs)
@@ -188,14 +186,14 @@ models = ModelStore()  # Uses OpenRouter + provider APIs for discovery
 
 # Access patterns
 list(models)  # All model IDs
-models['openai/gpt-4o']  # Get specific model metadata
-models[{'task': 'chat', 'max_cost_per_mtok': 5}]  # Query by criteria
+models["openai/gpt-4o"]  # Get specific model metadata
+models[{"task": "chat", "max_cost_per_mtok": 5}]  # Query by criteria
 
 # Convenience attributes
 models.gpt_4o  # Tab-completable access
 
 # Get model info
-info = models.get_model_info('openai/gpt-4o')
+info = models.get_model_info("openai/gpt-4o")
 # Returns: {'provider': 'openai', 'pricing': {...}, 'benchmarks': {...}, ...}
 ```
 
@@ -213,7 +211,8 @@ Study `oa/batches.py` and `oa/batch_embeddings.py`. Check if LiteLLM offers batc
 ```python
 def batch_chat(prompts: Iterable[str], **kwargs) -> Iterable[str]:
     """Process multiple prompts in batch for efficiency"""
-    
+
+
 def batch_embeddings(segments: Iterable[str], **kwargs) -> Iterable[Sequence[float]]:
     """Get embeddings for many segments efficiently"""
 ```
@@ -320,6 +319,7 @@ aix/
 ```python
 # Bad
 from litellm import completion
+
 user_result = completion(...)  # User calls litellm directly
 ```
 
@@ -327,6 +327,7 @@ user_result = completion(...)  # User calls litellm directly
 ```python
 # Good - in aix internals
 from litellm import completion as _litellm_completion
+
 
 def chat(prompt, **kwargs):
     # Normalize inputs
@@ -346,13 +347,13 @@ def chat(prompt, **kwargs):
 def chat(prompt, model=None, **kwargs):
     if model is None:
         model = get_default_model()
-    
+
     # Support both string and ModelInfo objects
     if isinstance(model, str):
         model_id = model
     else:
-        model_id = getattr(model, 'id', str(model))
-    
+        model_id = getattr(model, "id", str(model))
+
     # Now use model_id with litellm
     ...
 ```
@@ -362,8 +363,9 @@ def chat(prompt, model=None, **kwargs):
 Follow the `oa` pattern of cascading defaults:
 ```python
 # Global defaults
-DFLT_CHAT_MODEL = 'gpt-4o-mini'
+DFLT_CHAT_MODEL = "gpt-4o-mini"
 DFLT_TEMPERATURE = 1.0
+
 
 # Function-specific defaults via kwargs
 def chat(prompt, model=None, temperature=None, **kwargs):
@@ -466,6 +468,7 @@ def test_chat_with_string_prompt():
     assert isinstance(result, str)
     assert len(result) > 0
 
+
 def test_chat_with_messages():
     messages = [{"role": "user", "content": "Hello"}]
     result = chat(messages)
@@ -536,10 +539,7 @@ translate = prompt_based_func("Translate to French: {text}")
 result = translate(text="Hello world")
 
 # Structured output
-extract = prompt_based_func(
-    "Extract: {text}",
-    output_schema={"name": str, "age": int}
-)
+extract = prompt_based_func("Extract: {text}", output_schema={"name": str, "age": int})
 data = extract(text="Alice is 30")  # Returns dict
 
 # Get embeddings
@@ -548,7 +548,7 @@ vecs = list(embeddings(["hello", "world"]))
 # Discover models
 list(models)[:5]  # Show first 5
 models.gpt_4o  # Get model info
-models[{'task': 'chat'}]  # Filter by task
+models[{"task": "chat"}]  # Filter by task
 ```
 
 ---

@@ -202,7 +202,7 @@ mall["by_provider", "openai"]  # All OpenAI models
 mall["by_capability", "streaming"]  # All streaming models
 
 # Access collections
-mall["local"]   # Local models
+mall["local"]  # Local models
 mall["remote"]  # Remote models
 mall["groups"]  # All named groups
 ```
@@ -214,6 +214,7 @@ class MyCustomSource(ModelSource):
     def discover_models(self) -> Iterable[Model]:
         # Your discovery logic
         yield Model(...)
+
 
 manager.register_source("custom", MyCustomSource())
 manager.discover_from_source("custom", auto_register=True)
@@ -303,8 +304,8 @@ model = Model(
     connector_metadata={
         "openai": {"id": "gpt-4"},
         "openrouter": {"id": "openai/gpt-4"},
-        "azure": {"id": "gpt-4-deployment-name"}
-    }
+        "azure": {"id": "gpt-4-deployment-name"},
+    },
 )
 
 # Connector picks the right one

@@ -82,8 +82,8 @@ import aix
 
 # Inspect the active configuration
 cfg = aix.get_config()
-cfg.chat.model            # 'gpt-4.1-mini'
-cfg.embeddings.model      # 'text-embedding-3-small'
+cfg.chat.model  # 'gpt-4.1-mini'
+cfg.embeddings.model  # 'text-embedding-3-small'
 
 # Persistently change a default (everything below an explicit arg still respects it)
 aix.configure(chat_model="anthropic/claude-sonnet-4", chat_temperature=0.2)
@@ -100,12 +100,12 @@ Pass an intent-level name instead of a concrete model id. Shipped aliases:
 `fast` (cheap/low-latency), `best` (highest quality), `cheap` (cheapest).
 
 ```python
-aix.chat("hard question", model="best")     # -> resolves via the alias table
+aix.chat("hard question", model="best")  # -> resolves via the alias table
 aix.chat("quick question", model="fast")
 
 # Add or override aliases (merges with the shipped set)
 aix.configure(aliases={"smart": "anthropic/claude-sonnet-4"})
-aix.resolve_model("smart")                  # 'anthropic/claude-sonnet-4'
+aix.resolve_model("smart")  # 'anthropic/claude-sonnet-4'
 ```
 
 Aliases share a namespace with literal model ids: a name that is not a registered
@@ -164,9 +164,9 @@ The provider is inferred from the model id, so you rarely name it yourself:
 ```python
 import aix
 
-aix.chat("Hello", model="gpt-4o")          # uses OPENAI_API_KEY
-aix.chat("Hi", model="claude-sonnet-4")    # uses ANTHROPIC_API_KEY
-aix.chat("Yo", api_key="sk-...")           # explicit key wins
+aix.chat("Hello", model="gpt-4o")  # uses OPENAI_API_KEY
+aix.chat("Hi", model="claude-sonnet-4")  # uses ANTHROPIC_API_KEY
+aix.chat("Yo", api_key="sk-...")  # explicit key wins
 
 # Check what's discoverable (values are never shown — availability only):
 aix.check_keys()
@@ -225,13 +225,13 @@ response = chat("Hello!", model="gpt-4o-mini")
 messages = [
     {"role": "user", "content": "My name is Alice"},
     {"role": "assistant", "content": "Nice to meet you, Alice!"},
-    {"role": "user", "content": "What's my name?"}
+    {"role": "user", "content": "What's my name?"},
 ]
 response = chat(messages, model="gpt-4o")
 
 # Streaming responses
 for chunk in chat("Count to 5", stream=True):
-    print(chunk, end='', flush=True)
+    print(chunk, end="", flush=True)
 
 # Stateful conversations
 from aix import chat_with_history
@@ -265,7 +265,7 @@ query = "What is machine learning?"
 docs = [
     "Machine learning is a type of AI",
     "Python is a programming language",
-    "Neural networks are used in deep learning"
+    "Neural networks are used in deep learning",
 ]
 results = find_most_similar(query, docs, top_k=2)
 # Returns: [('Machine learning is a type of AI', 0.95), ...]
@@ -292,20 +292,14 @@ summary = summarize(text="Long article...")
 # Structured output
 extract_person = prompt_func(
     "Extract person information from: {text}",
-    output_schema={"name": str, "age": int, "email": str}
+    output_schema={"name": str, "age": int, "email": str},
 )
 result = extract_person(text="Contact John at john@example.com. He is 30 years old.")
 # Returns: {'name': 'John', 'age': 30, 'email': 'john@example.com'}
 
 # Multiple parameters
-compare = prompt_func(
-    "Compare {item1} and {item2} in terms of {aspect}"
-)
-result = compare(
-    item1="Python",
-    item2="JavaScript",
-    aspect="learning curve"
-)
+compare = prompt_func("Compare {item1} and {item2} in terms of {aspect}")
+result = compare(item1="Python", item2="JavaScript", aspect="learning curve")
 
 # Pre-built common functions
 from aix import common_funcs
@@ -318,8 +312,8 @@ sentiment = common_funcs.sentiment(text="I love this product!")
 from aix import PromptFuncs
 
 my_funcs = PromptFuncs(model="gpt-4o")
-my_funcs.add('analyze', "Analyze this code: {code}")
-my_funcs.add('fix_bugs', "Fix bugs in: {code}")
+my_funcs.add("analyze", "Analyze this code: {code}")
+my_funcs.add("fix_bugs", "Fix bugs in: {code}")
 
 result = my_funcs.analyze(code="def foo(): return bar")
 ```
@@ -332,36 +326,34 @@ Discover and filter models across providers:
 from aix import models
 
 # Discover available models
-models.discover('openrouter')  # Fetch 400+ models from OpenRouter
+models.discover("openrouter")  # Fetch 400+ models from OpenRouter
 
 # List all models
 all_models = list(models)
 
 # Get specific model info
-info = models['openai/gpt-4o']
+info = models["openai/gpt-4o"]
 print(info.provider)  # 'openai'
 print(info.context_size)  # 128000
 
 # Filter models
-openai_models = models.filter(provider='openai')
+openai_models = models.filter(provider="openai")
 cheap_models = models.filter(
-    custom_filter=lambda m: m.cost_per_token.get('input', 0) < 0.001
+    custom_filter=lambda m: m.cost_per_token.get("input", 0) < 0.001
 )
 local_models = models.filter(is_local=True)
 
 # Search models
-results = models.search('gpt-4')
-results = models.search('claude')
+results = models.search("gpt-4")
+results = models.search("claude")
 
 # Get recommendations
 recommended = models.recommend(
-    task='chat',
-    max_cost_per_mtok=5.0,
-    min_context_size=16000
+    task="chat", max_cost_per_mtok=5.0, min_context_size=16000
 )
 
 # Use with chat
-model = models['gpt-4o-mini']
+model = models["gpt-4o-mini"]
 response = chat("Hello", model=model.id)
 ```
 
@@ -378,25 +370,18 @@ results = list(batch_chat(prompts, batch_size=10, max_workers=5))
 
 # Batch embeddings
 texts = ["hello", "world", "foo", "bar"] * 100
-vectors = list(batch_embeddings(
-    texts,
-    batch_size=20,
-    show_progress=True
-))
+vectors = list(batch_embeddings(texts, batch_size=20, show_progress=True))
 
 # Generic batch processing
 from aix import batch_process
 
+
 def analyze(text):
     return chat(f"Analyze sentiment: {text}")
 
+
 texts = ["I love it!", "It's okay", "Terrible"]
-results = list(batch_process(
-    texts,
-    analyze,
-    batch_size=5,
-    retry_attempts=3
-))
+results = list(batch_process(texts, analyze, batch_size=5, retry_attempts=3))
 
 # Stateful batch processor
 processor = BatchProcessor(show_progress=True)
@@ -417,29 +402,18 @@ image.save("landscape.png")
 
 # High quality with DALL-E 3
 image = generate_image(
-    "Abstract art with vibrant colors",
-    model="dall-e-3",
-    quality="hd",
-    style="vivid"
+    "Abstract art with vibrant colors", model="dall-e-3", quality="hd", style="vivid"
 )
 
 # Generate multiple variations
-images = generate_images(
-    "A cute robot waving hello",
-    n=3,
-    size="512x512"
-)
+images = generate_images("A cute robot waving hello", n=3, size="512x512")
 for i, img in enumerate(images):
     img.save(f"robot_{i}.png")
 
 # Edit existing images
 from aix import edit_image
 
-edited = edit_image(
-    "photo.jpg",
-    "Add a rainbow in the sky",
-    mask_path="sky_mask.png"
-)
+edited = edit_image("photo.jpg", "Add a rainbow in the sky", mask_path="sky_mask.png")
 
 # Create variations
 from aix import create_variation
@@ -459,11 +433,7 @@ audio = text_to_speech("Hello, world!")
 audio.save("hello.mp3")
 
 # Different voices
-audio = text_to_speech(
-    "This is a test",
-    voice="nova",
-    speed=1.2
-)
+audio = text_to_speech("This is a test", voice="nova", speed=1.2)
 
 # Transcribe audio
 text = transcribe("recording.mp3")
@@ -496,9 +466,7 @@ print(providers)  # ['runway', 'pika', ...]
 
 # Generate video (requires provider setup)
 video = generate_video(
-    "A cat walking through a garden",
-    duration=5,
-    resolution="1920x1080"
+    "A cat walking through a garden", duration=5, resolution="1920x1080"
 )
 video.save("cat_video.mp4")
 
@@ -506,8 +474,7 @@ video.save("cat_video.mp4")
 from aix import animate_image_to_video
 
 video = animate_image_to_video(
-    "landscape.jpg",
-    prompt="Gentle camera pan across the scene"
+    "landscape.jpg", prompt="Gentle camera pan across the scene"
 )
 ```
 
@@ -535,7 +502,7 @@ video = animate_image_to_video(
    chat("Hello", model="openrouter/anthropic/claude-3.5-sonnet")
 
    # Discover available models
-   models.discover('openrouter')
+   models.discover("openrouter")
    ```
 
 All standard AIX features work with OpenRouter models.
@@ -615,14 +582,14 @@ from aix.ai_models import ModelManager, OpenRouterSource
 
 manager = ModelManager()
 source = OpenRouterSource()
-models = manager.discover_from_source('openrouter')
+models = manager.discover_from_source("openrouter")
 ```
 
 ### Connector-Specific Metadata
 
 ```python
 # Get provider-specific parameters
-metadata = models.get_connector_metadata('openai/gpt-4o', 'openai')
+metadata = models.get_connector_metadata("openai/gpt-4o", "openai")
 # Use with native SDK: openai.ChatCompletion.create(**metadata, messages=[...])
 ```
 
@@ -649,7 +616,7 @@ list(chat_funcs)  # ['gpt-4o', 'gpt-4o-mini', ...]
 response = chat_funcs.gpt_4o("Hello")
 
 # Model metadata
-info = chat_models['gpt-4o']
+info = chat_models["gpt-4o"]
 # {'price_per_million_tokens': 5.0, 'provider': 'openai', ...}
 ```
 
@@ -681,17 +648,16 @@ from aix import prompt_func, batch_process
 # Define extraction function
 extract = prompt_func(
     "Extract product info from: {text}",
-    output_schema={"name": str, "price": float, "category": str}
+    output_schema={"name": str, "price": float, "category": str},
 )
 
 # Process many product descriptions
 descriptions = [...]  # Your data
-results = list(batch_process(
-    descriptions,
-    lambda d: extract(text=d),
-    batch_size=10,
-    show_progress=True
-))
+results = list(
+    batch_process(
+        descriptions, lambda d: extract(text=d), batch_size=10, show_progress=True
+    )
+)
 ```
 
 ### Multi-Model Comparison
@@ -702,7 +668,7 @@ from aix import chat
 prompt = "Explain quantum computing in one sentence"
 
 # Try different models
-for model_id in ['gpt-4o-mini', 'claude-sonnet-4', 'gemini-1.5-flash']:
+for model_id in ["gpt-4o-mini", "claude-sonnet-4", "gemini-1.5-flash"]:
     response = chat(prompt, model=model_id)
     print(f"{model_id}: {response}")
 ```

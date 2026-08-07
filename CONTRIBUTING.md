@@ -56,8 +56,7 @@ def chat(
     *,
     model: str = None,
     temperature: float = None,
-) -> str:
-    ...
+) -> str: ...
 ```
 
 ### Docstrings
@@ -109,7 +108,7 @@ pytest --doctest-modules aix/
 Example:
 
 ```python
-@patch('aix.chat._litellm_completion')
+@patch("aix.chat._litellm_completion")
 def test_simple_chat(mock_completion):
     """Test simple chat with string prompt."""
     mock_response = Mock()

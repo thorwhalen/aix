@@ -40,16 +40,14 @@ from collections import Counter
 from dol import Pipe
 from aix.prompts import constrained_answer
 
-display = lambda x: print('\n'.join(['result\tcount', *(f'{xi[0]}\t{xi[1]}' for xi in x.items())]))
+display = lambda x: print(
+    "\n".join(["result\tcount", *(f"{xi[0]}\t{xi[1]}" for xi in x.items())])
+)
 
-poll = Pipe(
-     partial(constrained_answer, model="gpt-4o-mini", n=10),
-     Counter,
-     display
- )
+poll = Pipe(partial(constrained_answer, model="gpt-4o-mini", n=10), Counter, display)
 
 # Get varied responses (uses default temperature)
-poll('how tall is a tree?', float)
+poll("how tall is a tree?", float)
 # Output:
 # result    count
 # 20.0      2
@@ -58,19 +56,19 @@ poll('how tall is a tree?', float)
 # ...
 
 # Boolean questions
-poll('Is Python a good language?', bool)
+poll("Is Python a good language?", bool)
 
 # Multiple choice
-poll('Which is better: cats or dogs?', ['cats', 'dogs'])
+poll("Which is better: cats or dogs?", ["cats", "dogs"])
 
 # With explicit temperature for more determinism
-constrained_answer('What is 2+2?', int, temperature=0.0)  # Always same answer
+constrained_answer("What is 2+2?", int, temperature=0.0)  # Always same answer
 
 # With enhanced prompts for stricter enforcement
 constrained_answer(
-    'Pick a color',
-    ['red', 'blue', 'green'],
-    enhance_prompt=True  # Adds detailed constraints to prompt
+    "Pick a color",
+    ["red", "blue", "green"],
+    enhance_prompt=True,  # Adds detailed constraints to prompt
 )
 ```
 

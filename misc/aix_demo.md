@@ -38,7 +38,7 @@ values are a `chat` function with the model set to that model name.
 
 
 ```python
-chat_funcs['o1-mini']
+chat_funcs["o1-mini"]
 ```
 
 
@@ -55,7 +55,7 @@ Note that different providers have different interfaces, but the functions that
 ```python
 from inspect import signature
 
-signature(chat_funcs['o1-mini'])
+signature(chat_funcs["o1-mini"])
 ```
 
 
@@ -67,7 +67,7 @@ signature(chat_funcs['o1-mini'])
 
 
 ```python
-signature(chat_funcs['gemini-1.5-flash'])
+signature(chat_funcs["gemini-1.5-flash"])
 ```
 
 
@@ -82,7 +82,7 @@ were placed as attributes of `chat_funcs`, so you can access them directly there
 
 
 ```python
-print(chat_funcs.gemini_1_5_flash('What is the capital of France?'))
+print(chat_funcs.gemini_1_5_flash("What is the capital of France?"))
 ```
 
     The capital of France is **Paris**. 
@@ -91,7 +91,7 @@ print(chat_funcs.gemini_1_5_flash('What is the capital of France?'))
 
 
 ```python
-print(chat_funcs.gpt_3_5_turbo('What is the capital of France?'))
+print(chat_funcs.gpt_3_5_turbo("What is the capital of France?"))
 ```
 
     The capital of France is Paris.
@@ -125,7 +125,7 @@ But here the values are some useful metadatas on the model, like pricing...
 
 
 ```python
-chat_models['gpt-4o']
+chat_models["gpt-4o"]
 ```
 
 
@@ -161,7 +161,7 @@ For example, you can enter it yourself in the general `chat` function:
 ```python
 from aix import chat, chat_models
 
-chat('How many Rs in "Strawberry"?', model=chat_models.gpt_4o, frequency_penalty=0.5)  
+chat('How many Rs in "Strawberry"?', model=chat_models.gpt_4o, frequency_penalty=0.5)
 ```
 
 

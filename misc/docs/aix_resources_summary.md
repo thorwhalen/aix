@@ -35,6 +35,7 @@ Comprehensive notes from the `aix_discussions.md` and `aix_py.md` files, focusin
 - **Python example**:
 ```python
 import requests
+
 r = requests.get("https://openrouter.ai/api/v1/models", timeout=30)
 data = r.json()
 for m in data.get("data", []):
@@ -54,6 +55,7 @@ Official APIs from each provider:
 - **Python API**:
 ```python
 from huggingface_hub import HfApi
+
 api = HfApi()
 models = api.list_models(filter="text-generation")
 for m in models[:5]:
@@ -151,6 +153,7 @@ for m in models[:5]:
 - **Usage**:
 ```python
 from litellm import completion
+
 response = completion(model="anthropic/claude-sonnet-4", messages=messages)
 ```
 
@@ -173,6 +176,7 @@ response = completion(model="anthropic/claude-sonnet-4", messages=messages)
 - **Usage**:
 ```python
 from llm_registry import CapabilityRegistry
+
 registry = CapabilityRegistry()
 models = registry.get_models()
 model = registry.get_model("gpt-4")
@@ -185,7 +189,8 @@ model = registry.get_model("gpt-4")
 - **Usage**:
 ```python
 import llms
-model = llms.init('gpt-4')
+
+model = llms.init("gpt-4")
 result = model.complete("Hello world?")
 print(result.text, result.meta)
 ```
@@ -290,18 +295,20 @@ print(result.text, result.meta)
 
 ```python
 # Core abstraction - Models as Mapping
-class ModelStore(Mapping[str, 'ModelInfo']):
+class ModelStore(Mapping[str, "ModelInfo"]):
     """Discover and access model metadata"""
-    def __getitem__(self, key) -> 'ModelInfo':
+
+    def __getitem__(self, key) -> "ModelInfo":
         # Support various access patterns:
         # models['openai/gpt-4o']  # Direct ID
         # models['provider:openai']  # Filter by provider
         # models[{'kind': 'chat', 'max_cost': 5.0}]  # Query
         ...
-    
+
     def __iter__(self):
         """Iterate model IDs"""
         ...
+
 
 # Inference as callable
 class ChatModel:
@@ -311,14 +318,14 @@ class ChatModel:
         *,
         temperature: float = 1.0,
         stream: bool = False,
-        **provider_specific
-    ) -> dict | Iterable[dict]:
-        ...
+        **provider_specific,
+    ) -> dict | Iterable[dict]: ...
+
 
 # Usage
-models = ModelStore(backend='litellm')  # or 'native', 'openrouter'
-gpt4 = models['openai/gpt-4o']
-result = gpt4(messages=[{'role': 'user', 'content': 'Hello'}])
+models = ModelStore(backend="litellm")  # or 'native', 'openrouter'
+gpt4 = models["openai/gpt-4o"]
+result = gpt4(messages=[{"role": "user", "content": "Hello"}])
 ```
 
 ### Backend Strategy Options
