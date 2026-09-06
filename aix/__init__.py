@@ -86,6 +86,7 @@ from aix.prompts import (
     PromptFuncs,
     common_funcs,
     constrained_answer,
+    ConstraintViolation,
 )
 from aix.models import (
     models,
@@ -99,6 +100,7 @@ from aix.batches import (
     batch_embeddings,
     batch_process,
     BatchProcessor,
+    BatchError,
 )
 from aix.image import (
     generate_image,
@@ -171,6 +173,7 @@ __all__ = [
     "PromptFuncs",
     "common_funcs",
     "constrained_answer",
+    "ConstraintViolation",
     # Models
     "models",
     "ModelStore",
@@ -182,6 +185,7 @@ __all__ = [
     "batch_embeddings",
     "batch_process",
     "BatchProcessor",
+    "BatchError",
     # Image
     "generate_image",
     "generate_images",

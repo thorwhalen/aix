@@ -32,7 +32,7 @@ import re
 import json
 import string as _string
 from collections.abc import Callable
-from typing import Union, Any, get_type_hints
+from typing import Union, Any, Literal, get_type_hints
 from functools import wraps
 from inspect import signature, Parameter
 
@@ -626,6 +626,152 @@ common_funcs = CommonFuncs()
 # constrained_answer: Force LLM to choose from valid options
 
 
+class ConstraintViolation(ValueError):
+    """Raised when an LLM answer does not satisfy the requested constraint.
+
+    A subclass of ``ValueError`` so that callers who already guard
+    :func:`constrained_answer` with ``except ValueError`` keep working.
+
+    Attributes:
+        answer: The offending value, as it came back from the model.
+        valid_answers: The constraint the value failed, verbatim as passed in.
+
+    Examples:
+        >>> violation = ConstraintViolation("nope", answer="nope", valid_answers=["a"])
+        >>> violation.answer, violation.valid_answers
+        ('nope', ['a'])
+        >>> isinstance(violation, ValueError)
+        True
+    """
+
+    def __init__(self, message: str, *, answer: Any = None, valid_answers: Any = None):
+        super().__init__(message)
+        self.answer = answer
+        self.valid_answers = valid_answers
+
+
+# Tokens a model plausibly returns for a boolean. `bool(answer)` cannot be used
+# because `bool('false')` is True -- a falsy answer would silently become True.
+_TRUE_TOKENS = frozenset({"true", "t", "yes", "y", "1"})
+_FALSE_TOKENS = frozenset({"false", "f", "no", "n", "0"})
+
+
+def _coerce_to_bool(answer: Any) -> bool:
+    """Interpret an LLM answer as a boolean, strictly.
+
+    Args:
+        answer: The value parsed out of the model's JSON response.
+
+    Returns:
+        The boolean the answer denotes.
+
+    Raises:
+        ValueError: If the answer denotes neither True nor False.
+
+    Examples:
+        >>> _coerce_to_bool(True), _coerce_to_bool("FALSE "), _coerce_to_bool(1)
+        (True, False, True)
+        >>> _coerce_to_bool("maybe")
+        Traceback (most recent call last):
+            ...
+        ValueError: Cannot interpret 'maybe' as a boolean
+    """
+    if isinstance(answer, bool):
+        return answer
+    if isinstance(answer, (int, float)) and answer in (0, 1):
+        return bool(answer)
+    if isinstance(answer, str):
+        token = answer.strip().lower()
+        if token in _TRUE_TOKENS:
+            return True
+        if token in _FALSE_TOKENS:
+            return False
+    raise ValueError(f"Cannot interpret {answer!r} as a boolean")
+
+
+def _coerce_answer_leniently(answer: Any, expected_type: type) -> Any:
+    """Coerce to ``expected_type``, returning the answer untouched if that fails.
+
+    This is the historical, unchecked behaviour of :func:`constrained_answer`,
+    kept intact for callers who opt out of enforcement with
+    ``on_violation='return'``.
+
+    Examples:
+        >>> _coerce_answer_leniently("4", int)
+        4
+        >>> _coerce_answer_leniently("not-an-int", int)
+        'not-an-int'
+    """
+    if expected_type is not None and not isinstance(answer, expected_type):
+        try:
+            answer = expected_type(answer)
+        except (ValueError, TypeError):
+            pass
+    return answer
+
+
+def _validate_constrained_answer(
+    answer: Any, valid_answers: Any, expected_type: type
+) -> Any:
+    """Coerce an answer to its declared type and check it against the constraint.
+
+    Args:
+        answer: The value parsed out of the model's JSON response.
+        valid_answers: The constraint, in the form accepted by
+            :func:`constrained_answer`.
+        expected_type: The type the constraint implies.
+
+    Returns:
+        The coerced answer, guaranteed to satisfy the constraint.
+
+    Raises:
+        ConstraintViolation: If the answer cannot be coerced, is not a member of
+            an options list, or falls outside a ``(min, max)`` range.
+
+    Examples:
+        >>> _validate_constrained_answer("4", [2, 4, 6], int)
+        4
+        >>> _validate_constrained_answer(9.0, (1, 5), float)
+        Traceback (most recent call last):
+            ...
+        aix.prompts.ConstraintViolation: Answer 9.0 is outside the range [1, 5]
+    """
+    if expected_type is bool:
+        try:
+            answer = _coerce_to_bool(answer)
+        except ValueError as e:
+            raise ConstraintViolation(
+                str(e), answer=answer, valid_answers=valid_answers
+            ) from e
+    elif expected_type is not None and not isinstance(answer, expected_type):
+        try:
+            answer = expected_type(answer)
+        except (ValueError, TypeError) as e:
+            raise ConstraintViolation(
+                f"Answer {answer!r} cannot be converted to {expected_type.__name__}",
+                answer=answer,
+                valid_answers=valid_answers,
+            ) from e
+
+    if isinstance(valid_answers, list):
+        if answer not in valid_answers:
+            raise ConstraintViolation(
+                f"Answer {answer!r} is not one of {valid_answers!r}",
+                answer=answer,
+                valid_answers=valid_answers,
+            )
+    elif isinstance(valid_answers, tuple) and len(valid_answers) == 2:
+        min_val, max_val = valid_answers
+        if not min_val <= answer <= max_val:
+            raise ConstraintViolation(
+                f"Answer {answer} is outside the range [{min_val}, {max_val}]",
+                answer=answer,
+                valid_answers=valid_answers,
+            )
+
+    return answer
+
+
 def _enhance_prompt_for_json(
     prompt: str,
     valid_answers: Union[list[str], list[int], list[float], type, tuple[float, float]],
@@ -682,6 +828,8 @@ def constrained_answer(
     temperature: float = None,
     enhance_prompt: bool = False,
     n: int = 1,
+    on_violation: Literal["raise", "return"] = "raise",
+    max_retries: int = 0,
 ):
     """
     Get an answer from the LLM constrained to a set of valid answers or types.
@@ -711,10 +859,23 @@ def constrained_answer(
             JSON formatting and constraints. If False (default), relies on
             response_format alone. Default is False to match oa behavior.
         n: Number of times to call the LLM (default: 1)
+        on_violation: What to do when the model's answer does not satisfy
+            `valid_answers`. `'raise'` (default) raises `ConstraintViolation`.
+            `'return'` returns the model's value unchecked -- the behaviour of
+            this function before enforcement existed, kept as an escape hatch.
+        max_retries: How many times to re-ask the model after a violation
+            before giving up (default: 0, i.e. ask exactly once). Ignored when
+            `on_violation='return'`, which never detects a violation.
 
     Returns:
         One of the valid answers, respecting the type constraint.
         If n > 1, returns a list of answers.
+
+    Raises:
+        ConstraintViolation: If the answer is not a member of an options list,
+            falls outside a `(min, max)` range, or cannot be converted to the
+            declared type -- unless `on_violation='return'`.
+        ValueError: If the response is not JSON, or has no "answer" field.
 
     Examples:
         >>> # String options
@@ -757,7 +918,21 @@ def constrained_answer(
         ... )  # doctest: +SKIP
         >>> len(answers)  # doctest: +SKIP
         10
+
+        >>> # Tolerate an off-constraint answer instead of raising
+        >>> answer = constrained_answer(
+        ...     "Is Python compiled or interpreted?",
+        ...     ["compiled", "interpreted"],
+        ...     on_violation="return",
+        ... )  # doctest: +SKIP
     """
+    if on_violation not in ("raise", "return"):
+        raise ValueError(
+            f"on_violation must be 'raise' or 'return', got {on_violation!r}"
+        )
+    if max_retries < 0:
+        raise ValueError(f"max_retries must be >= 0, got {max_retries!r}")
+
     if n != 1:
         from functools import partial
 
@@ -769,6 +944,8 @@ def constrained_answer(
             temperature=temperature,
             enhance_prompt=enhance_prompt,
             n=1,
+            on_violation=on_violation,
+            max_retries=max_retries,
         )
         return [f() for _ in range(n)]
 
@@ -848,25 +1025,29 @@ def constrained_answer(
     if temperature is not None:
         chat_kwargs["temperature"] = temperature
 
-    response = chat(template, **chat_kwargs)
+    def ask_once():
+        """Call the LLM once and pull the "answer" field out of its JSON."""
+        response = chat(template, **chat_kwargs)
+        try:
+            return json.loads(response)["answer"]
+        except (json.JSONDecodeError, KeyError) as e:
+            # Failed to parse - raise informative error
+            raise ValueError(
+                f"Failed to parse constrained answer. Response: {response[:200]}..."
+            ) from e
 
-    try:
-        result = json.loads(response)
-        answer = result["answer"]
+    if on_violation == "return":
+        # Historical behaviour: coerce if we can, hand back whatever came in if
+        # we can't, and never check the answer against the constraint.
+        return _coerce_answer_leniently(ask_once(), expected_type)
 
-        # Convert to expected type if needed
-        if expected_type is not None and not isinstance(answer, expected_type):
-            # JSON might parse integers as strings or vice versa
-            # Try to convert to the expected type
-            try:
-                answer = expected_type(answer)
-            except (ValueError, TypeError):
-                # If conversion fails, just return as-is
-                pass
+    violation = None
+    for _ in range(max_retries + 1):
+        try:
+            return _validate_constrained_answer(
+                ask_once(), valid_answers, expected_type
+            )
+        except ConstraintViolation as e:
+            violation = e
 
-        return answer
-    except (json.JSONDecodeError, KeyError) as e:
-        # Failed to parse - raise informative error
-        raise ValueError(
-            f"Failed to parse constrained answer. Response: {response[:200]}..."
-        ) from e
+    raise violation

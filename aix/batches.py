@@ -2,6 +2,12 @@
 
 Efficiently process multiple prompts or embeddings in batches.
 
+An item whose call raises does not stop the batch: its slot holds a
+:class:`BatchError` -- a ``str`` subclass equal to the ``"ERROR: <message>"``
+text these functions have always produced, but carrying the real exception so a
+failure can be told apart from a model reply that happens to start "ERROR:".
+Pass ``on_error='raise'`` or ``on_error='skip'`` to opt out of that slot.
+
 Examples:
     Batch chat:
     >>> from aix.batches import batch_chat
@@ -19,7 +25,7 @@ Examples:
 """
 
 from collections.abc import Iterable, Sequence
-from typing import Union, Any
+from typing import Union, Any, Literal
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 
@@ -32,6 +38,86 @@ DFLT_BATCH_SIZE = 10
 DFLT_MAX_WORKERS = 5
 DFLT_RETRY_ATTEMPTS = 3
 DFLT_RETRY_DELAY = 1.0
+
+# What a batch function does with an item that raised.
+OnError = Literal["return", "raise", "skip"]
+_ON_ERROR_CHOICES = ("return", "raise", "skip")
+
+
+class BatchError(str):
+    """A batch result slot standing in for an item that raised.
+
+    Subclasses ``str`` so it *is* the ``"ERROR: ..."`` string these functions
+    have always put in the failed slot -- comparisons, ``.startswith``,
+    slicing, JSON serialisation and logging all behave identically. What it
+    adds is the ability to tell a failure apart from a model that legitimately
+    replied with text starting "ERROR:", and to reach the original exception.
+
+    Attributes:
+        exception: The exception that was caught.
+        index: Position of the failed item in the input, when known.
+
+    Examples:
+        >>> err = BatchError(RuntimeError("rate limit exceeded"), index=1)
+        >>> err == "ERROR: rate limit exceeded"
+        True
+        >>> isinstance(err, str), isinstance(err.exception, RuntimeError)
+        (True, True)
+        >>> err.index
+        1
+    """
+
+    exception: BaseException
+    index: Union[int, None]
+
+    def __new__(
+        cls,
+        exception: BaseException,
+        *,
+        index: int = None,
+        message: str = None,
+    ):
+        """Build the slot value.
+
+        Args:
+            exception: The exception that was caught.
+            index: Position of the failed item in the input.
+            message: The string value, when it must be restored verbatim
+                (pickle round-trips). Defaults to the historical text.
+        """
+        obj = super().__new__(
+            cls, f"ERROR: {exception}" if message is None else message
+        )
+        obj.exception = exception
+        obj.index = index
+        return obj
+
+    def __getnewargs_ex__(self):
+        """Keep the exception, index and exact text across a pickle round-trip.
+
+        Without this, ``str.__getnewargs__`` would feed the *text* back into
+        ``__new__`` as the exception, doubling the "ERROR: " prefix.
+        """
+        return (self.exception,), {"index": self.index, "message": str(self)}
+
+    def __repr__(self):
+        return f"{type(self).__name__}({str(self)!r}, index={self.index!r})"
+
+
+def _check_on_error(on_error: str) -> None:
+    """Reject an unsupported ``on_error`` value instead of ignoring it.
+
+    Examples:
+        >>> _check_on_error("skip")
+        >>> _check_on_error("ignore")
+        Traceback (most recent call last):
+            ...
+        ValueError: on_error must be one of ('return', 'raise', 'skip'), got 'ignore'
+    """
+    if on_error not in _ON_ERROR_CHOICES:
+        raise ValueError(
+            f"on_error must be one of {_ON_ERROR_CHOICES}, got {on_error!r}"
+        )
 
 
 def _chunk_iterable(iterable: Iterable, chunk_size: int) -> Iterable[list]:
@@ -65,6 +151,7 @@ def batch_chat(
     batch_size: int = None,
     max_workers: int = None,
     show_progress: bool = False,
+    on_error: OnError = "return",
     **chat_kwargs,
 ) -> Iterable[str]:
     """Process multiple chat prompts in batches.
@@ -80,10 +167,21 @@ def batch_chat(
         batch_size: Number of prompts to process in each batch
         max_workers: Maximum number of parallel workers
         show_progress: If True, print progress information
+        on_error: What to do with a prompt whose call raised.
+            `'return'` (default) yields a `BatchError` in that slot, keeping
+            the stream the same length and order as the input.
+            `'raise'` stops after the batch in which the first failure landed
+            and re-raises the lowest-indexed exception of that batch.
+            `'skip'` omits the failed slots from the stream.
         **chat_kwargs: Additional parameters passed to chat()
 
     Yields:
-        Responses in the same order as input prompts
+        Responses in the same order as input prompts. A prompt that raised
+        yields a `BatchError` -- a `str` subclass equal to `"ERROR: <message>"`,
+        carrying the original exception on `.exception`.
+
+    Raises:
+        ValueError: If `on_error` is not one of 'return', 'raise', 'skip'.
 
     Examples:
         >>> from aix.batches import batch_chat
@@ -113,7 +211,14 @@ def batch_chat(
         ... )  # doctest: +SKIP
         >>> for i, result in enumerate(results):  # doctest: +SKIP
         ...     print(f"Result {i}: {result[:50]}...")
+
+        >>> # Tell a failure apart from a reply that starts with "ERROR:"
+        >>> for result in batch_chat(prompts):  # doctest: +SKIP
+        ...     if isinstance(result, BatchError):
+        ...         raise result.exception
     """
+    _check_on_error(on_error)
+
     batch_size = batch_size or DFLT_BATCH_SIZE
     max_workers = max_workers or DFLT_MAX_WORKERS
 
@@ -125,6 +230,7 @@ def batch_chat(
         print(f"Processing {total} prompts in batches of {batch_size}...")
 
     results = [None] * total
+    errors = {}
     processed = 0
 
     # Process in chunks with parallel execution
@@ -150,15 +256,24 @@ def batch_chat(
 
                 except Exception as e:
                     # Store error as result
-                    results[idx] = f"ERROR: {str(e)}"
+                    errors[idx] = results[idx] = BatchError(e, index=idx)
                     if show_progress:
                         print(f"Error processing prompt {idx}: {e}")
+
+            if errors and on_error == "raise":
+                # Don't spend the rest of the budget on a batch already lost.
+                break
+
+    if errors and on_error == "raise":
+        raise errors[min(errors)].exception
 
     if show_progress:
         print(f"Completed processing {total} prompts")
 
     # Yield results in order
-    for result in results:
+    for idx, result in enumerate(results):
+        if on_error == "skip" and idx in errors:
+            continue
         yield result
 
 
@@ -241,6 +356,7 @@ def batch_process(
     show_progress: bool = False,
     retry_attempts: int = None,
     retry_delay: float = None,
+    on_error: OnError = "return",
 ) -> Iterable[Any]:
     """Generic batch processing with parallel execution and retries.
 
@@ -255,9 +371,17 @@ def batch_process(
         show_progress: Show progress information
         retry_attempts: Number of retry attempts on failure
         retry_delay: Delay between retries (seconds)
+        on_error: What to do with an item still failing after every retry.
+            `'return'` (default) yields a `BatchError` in that slot, `'raise'`
+            re-raises, `'skip'` omits it. See :func:`batch_chat`.
 
     Yields:
-        Results in same order as input
+        Results in same order as input. An item that raised yields a
+        `BatchError` -- a `str` subclass equal to `"ERROR: <message>"`,
+        carrying the original exception on `.exception`.
+
+    Raises:
+        ValueError: If `on_error` is not one of 'return', 'raise', 'skip'.
 
     Examples:
         >>> from aix.batches import batch_process
@@ -286,6 +410,8 @@ def batch_process(
         ...     retry_delay=2.0
         ... )  # doctest: +SKIP
     """
+    _check_on_error(on_error)
+
     batch_size = batch_size or DFLT_BATCH_SIZE
     max_workers = max_workers or DFLT_MAX_WORKERS
     retry_attempts = retry_attempts or DFLT_RETRY_ATTEMPTS
@@ -298,6 +424,7 @@ def batch_process(
         print(f"Processing {total} items with {max_workers} workers...")
 
     results = [None] * total
+    errors = {}
     processed = 0
 
     def process_with_retry(item, idx):
@@ -334,14 +461,23 @@ def batch_process(
                         print(f"Processed {processed}/{total} items")
 
                 except Exception as e:
-                    results[idx] = f"ERROR: {str(e)}"
+                    errors[idx] = results[idx] = BatchError(e, index=idx)
                     if show_progress:
                         print(f"Error processing item {idx}: {e}")
+
+            if errors and on_error == "raise":
+                # Don't spend the rest of the budget on a batch already lost.
+                break
+
+    if errors and on_error == "raise":
+        raise errors[min(errors)].exception
 
     if show_progress:
         print(f"Completed {total} items")
 
-    for result in results:
+    for idx, result in enumerate(results):
+        if on_error == "skip" and idx in errors:
+            continue
         yield result
 
 
