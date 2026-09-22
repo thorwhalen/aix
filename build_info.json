@@ -1,32 +1,32 @@
 {
   "schema_version": 1,
-  "built_at": "2026-09-22T13:00:51Z",
+  "built_at": "2026-09-22T13:08:34Z",
   "package": {
     "name": "aix",
-    "version": "0.0.39",
+    "version": "0.0.40",
     "display_name": "aix",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "9fa374f8fec3b7bd21fb9e83fe69ff44c696e7e3",
-    "short_commit": "9fa374f",
+    "commit": "763e26a3f556afae00b3680d1d17586c78011479",
+    "short_commit": "763e26a",
     "branch": "master",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/aix",
-    "commit_url": "https://github.com/thorwhalen/aix/commit/9fa374f8fec3b7bd21fb9e83fe69ff44c696e7e3",
+    "commit_url": "https://github.com/thorwhalen/aix/commit/763e26a3f556afae00b3680d1d17586c78011479",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/aix",
-    "sha": "9fa374f8fec3b7bd21fb9e83fe69ff44c696e7e3",
+    "sha": "763e26a3f556afae00b3680d1d17586c78011479",
     "sha_in_history": true,
     "ref": "refs/heads/master",
     "ref_name": "master",
-    "run_id": "35730473566",
-    "run_url": "https://github.com/thorwhalen/aix/actions/runs/35730473566",
+    "run_id": "35731325656",
+    "run_url": "https://github.com/thorwhalen/aix/actions/runs/35731325656",
     "server_url": "https://github.com"
   },
   "tools": {
@@ -61,15 +61,13 @@
   "pypi": {
     "checked": true,
     "latest": "0.0.40",
-    "relation": "behind",
+    "relation": "same",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/aix && cd aix\ngit checkout 9fa374f8fec3b7bd21fb9e83fe69ff44c696e7e3\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/aix && cd aix\ngit checkout 763e26a3f556afae00b3680d1d17586c78011479\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
-    "aligned": false,
-    "notes": [
-      "The documented version (0.0.39) is behind the latest release on PyPI (0.0.40): `pip install aix` gives newer code than these docs describe."
-    ]
+    "aligned": true,
+    "notes": []
   }
 }

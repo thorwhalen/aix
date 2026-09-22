@@ -290,6 +290,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Sequence</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThreadPoolExecutor</span><span class="p">,</span> <span class="n">as_completed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
 <span class="c1"># Import from aix modules</span>
@@ -386,6 +387,29 @@
         <span class="p">)</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_on_error_at_call</span><span class="p">(</span><span class="n">gen_func</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Validate ``on_error`` when the batch function is *called*, not iterated.</span>
+
+<span class="sd">    The batch functions are generators, so a check in their body would only run</span>
+<span class="sd">    on the first ``next()`` -- a typo such as ``on_error='ignore'`` would go</span>
+<span class="sd">    unnoticed until results were consumed, possibly far from the call site.</span>
+<span class="sd">    ``on_error`` is keyword-only, so it is always in ``kwargs`` when passed.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; batch_chat(["hi"], on_error="ignore")</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">            ...</span>
+<span class="sd">        ValueError: on_error must be one of ('return', 'raise', 'skip'), got 'ignore'</span>
+<span class="sd">    """</span>
+
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">gen_func</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">_check_on_error</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"on_error"</span><span class="p">,</span> <span class="s2">"return"</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">gen_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_chunk_iterable</span><span class="p">(</span><span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">list</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">"""Split an iterable into chunks.</span>
 
@@ -412,6 +436,7 @@
 
 <div class="viewcode-block" id="batch_chat">
 <a class="viewcode-back" href="../../_autosummary/aix.batches.html#aix.batch_chat">[docs]</a>
+<span class="nd">@_check_on_error_at_call</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">batch_chat</span><span class="p">(</span>
     <span class="n">prompts</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]],</span>
     <span class="o">*</span><span class="p">,</span>
@@ -485,8 +510,6 @@
 <span class="sd">        ...     if isinstance(result, BatchError):</span>
 <span class="sd">        ...         raise result.exception</span>
 <span class="sd">    """</span>
-    <span class="n">_check_on_error</span><span class="p">(</span><span class="n">on_error</span><span class="p">)</span>
-
     <span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="ow">or</span> <span class="n">DFLT_BATCH_SIZE</span>
     <span class="n">max_workers</span> <span class="o">=</span> <span class="n">max_workers</span> <span class="ow">or</span> <span class="n">DFLT_MAX_WORKERS</span>
 
@@ -621,6 +644,7 @@
 
 <div class="viewcode-block" id="batch_process">
 <a class="viewcode-back" href="../../_autosummary/aix.batches.html#aix.batch_process">[docs]</a>
+<span class="nd">@_check_on_error_at_call</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">batch_process</span><span class="p">(</span>
     <span class="n">items</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
     <span class="n">process_func</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
@@ -684,8 +708,6 @@
 <span class="sd">        ...     retry_delay=2.0</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
 <span class="sd">    """</span>
-    <span class="n">_check_on_error</span><span class="p">(</span><span class="n">on_error</span><span class="p">)</span>
-
     <span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="ow">or</span> <span class="n">DFLT_BATCH_SIZE</span>
     <span class="n">max_workers</span> <span class="o">=</span> <span class="n">max_workers</span> <span class="ow">or</span> <span class="n">DFLT_MAX_WORKERS</span>
     <span class="n">retry_attempts</span> <span class="o">=</span> <span class="n">retry_attempts</span> <span class="ow">or</span> <span class="n">DFLT_RETRY_ATTEMPTS</span>
@@ -895,7 +917,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=3b2cf976"></script>
+</div><script src="../../_static/documentation_options.js?v=13b1ad2a"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

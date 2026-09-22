@@ -997,6 +997,58 @@
     <span class="k">return</span> <span class="n">answer</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_coerce_to_int</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Interpret an LLM answer as an integer, refusing to truncate.</span>
+
+<span class="sd">    ``int(2.7)`` is ``2``, so plain ``int()`` would turn a non-integral answer</span>
+<span class="sd">    into a *different, possibly valid* one. Integral floats and numeric strings</span>
+<span class="sd">    ("2", "2.0") are accepted; anything with a fractional part is rejected.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _coerce_to_int(2), _coerce_to_int(2.0), _coerce_to_int(" 2.0 "), _coerce_to_int(True)</span>
+<span class="sd">        (2, 2, 2, 1)</span>
+<span class="sd">        &gt;&gt;&gt; _coerce_to_int(2.7)</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">            ...</span>
+<span class="sd">        ValueError: Answer 2.7 is not an integer</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>  <span class="c1"># also normalises a bool to 0/1</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>  <span class="c1"># may itself raise ValueError</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">answer</span><span class="o">.</span><span class="n">is_integer</span><span class="p">():</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Answer </span><span class="si">{</span><span class="n">answer</span><span class="si">!r}</span><span class="s2"> is not an integer"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_match_str_option</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Map a string answer to its option, forgiving case and surrounding space.</span>
+
+<span class="sd">    Models routinely answer "Interpreted" or " interpreted" for the option</span>
+<span class="sd">    "interpreted". An exact match wins; otherwise a unique case- and</span>
+<span class="sd">    whitespace-insensitive match returns the *canonical* option. Returns the</span>
+<span class="sd">    answer unchanged when nothing (or more than one option) matches, leaving</span>
+<span class="sd">    the membership check to reject it.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _match_str_option(" Interpreted", ["compiled", "interpreted"])</span>
+<span class="sd">        'interpreted'</span>
+<span class="sd">        &gt;&gt;&gt; _match_str_option("Yes", ["yes", "YES"])</span>
+<span class="sd">        'Yes'</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">answer</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">opt</span> <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">options</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">opt</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span> <span class="o">==</span> <span class="n">key</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">answer</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_constrained_answer</span><span class="p">(</span>
     <span class="n">answer</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">valid_answers</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="nb">type</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
@@ -1030,9 +1082,12 @@
             <span class="k">raise</span> <span class="n">ConstraintViolation</span><span class="p">(</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span> <span class="n">valid_answers</span><span class="o">=</span><span class="n">valid_answers</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
-    <span class="k">elif</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="n">expected_type</span> <span class="ow">is</span> <span class="nb">int</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="n">coerce</span> <span class="o">=</span> <span class="n">_coerce_to_int</span> <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="nb">int</span> <span class="k">else</span> <span class="n">expected_type</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">answer</span> <span class="o">=</span> <span class="n">expected_type</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">coerce</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ConstraintViolation</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"Answer </span><span class="si">{</span><span class="n">answer</span><span class="si">!r}</span><span class="s2"> cannot be converted to </span><span class="si">{</span><span class="n">expected_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
@@ -1041,6 +1096,8 @@
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">_match_str_option</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">valid_answers</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">answer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_answers</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ConstraintViolation</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"Answer </span><span class="si">{</span><span class="n">answer</span><span class="si">!r}</span><span class="s2"> is not one of </span><span class="si">{</span><span class="n">valid_answers</span><span class="si">!r}</span><span class="s2">"</span><span class="p">,</span>
@@ -1369,7 +1426,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=3b2cf976"></script>
+</div><script src="../../_static/documentation_options.js?v=13b1ad2a"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
