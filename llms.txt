@@ -27,7 +27,8 @@
 - [aix.util](_autosummary/aix.util.html.md): Utils for AIX.
 - [aix.video](_autosummary/aix.video.html.md): Video generation interface for AIX.
 - [aix.vision](_autosummary/aix.vision.html.md): Image-to-text (vision) interface for AIX.
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-09-22 13:08 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+- [For AI agents](ai-agents.html.md): &#96;aix&#96; ships artifacts for coding agents alongside its code. This page lists
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-09-22 14:32 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
 
 ## Optional
 
