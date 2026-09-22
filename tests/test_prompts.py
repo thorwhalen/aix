@@ -560,3 +560,36 @@ class TestConstrainedAnswerCoercion:
 
         with pytest.raises(ConstraintViolation):
             self._ask(mock_chat, "Yes", ["yes", "YES"])
+
+    @pytest.mark.parametrize(
+        "answer, valid_answers, expected",
+        [
+            ("unsure", [1, 2, "unsure"], "unsure"),
+            ("Unsure ", [1, 2, "unsure"], "unsure"),
+            (2, ["none", 1, 2], 2),
+            ("maybe", [True, False, "maybe"], "maybe"),
+            (2.5, [1, 2.5], 2.5),
+        ],
+    )
+    @patch("aix.prompts.chat")
+    def test_member_of_a_mixed_options_list_is_accepted(
+        self, mock_chat, answer, valid_answers, expected
+    ):
+        """Options are typed by their first item; that must not reject the others."""
+        result = self._ask(mock_chat, answer, valid_answers)
+        assert result == expected and type(result) is type(expected)
+
+    @pytest.mark.parametrize("answer", [2.7, "2.7", "three"])
+    @patch("aix.prompts.chat")
+    def test_non_member_of_a_mixed_options_list_still_violates(self, mock_chat, answer):
+        from aix.prompts import ConstraintViolation
+
+        with pytest.raises(ConstraintViolation):
+            self._ask(mock_chat, answer, [1, 2, 3, "unsure"])
+
+    @patch("aix.prompts.chat")
+    def test_unconvertible_answer_to_a_type_constraint_still_violates(self, mock_chat):
+        from aix.prompts import ConstraintViolation
+
+        with pytest.raises(ConstraintViolation, match="cannot be converted to int"):
+            self._ask(mock_chat, "three", int)

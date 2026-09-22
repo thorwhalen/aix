@@ -10,6 +10,7 @@ published to PyPI). Entries are commit subjects and PR titles, verbatim.
 
 ### Fixed
 
+- fix: `constrained_answer` no longer rejects a valid member of a mixed options list such as `[1, 2, "unsure"]` (follow-up to [#47](https://github.com/thorwhalen/aix/pull/47))
 - fix: `constrained_answer` no longer truncates 2.7 into the valid option 2, accepts "2.0" for an int, and matches string options ignoring case/whitespace; `batch_*` reject a bad `on_error` at call time (follow-up to [#46](https://github.com/thorwhalen/aix/pull/46))
 - fix: `constrained_answer` now validates the answer against `valid_answers` ([#40](https://github.com/thorwhalen/aix/issues/40))
 - fix: `batch_chat`/`batch_process` report failures as `BatchError`, not a bare `"ERROR: ..."` string ([#45](https://github.com/thorwhalen/aix/issues/45))

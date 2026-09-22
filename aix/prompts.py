@@ -762,6 +762,56 @@ def _match_str_option(answer: str, options: list) -> Any:
     return matches[0] if len(matches) == 1 else answer
 
 
+def _coerce_to_expected_type(answer: Any, expected_type: type) -> Any:
+    """Strictly coerce an answer to the type its constraint implies.
+
+    Raises ``ValueError`` (or ``TypeError``) when the answer does not denote a
+    value of that type -- never truncates, never guesses a boolean.
+
+    Examples:
+        >>> _coerce_to_expected_type("4", int), _coerce_to_expected_type("no", bool)
+        (4, False)
+        >>> _coerce_to_expected_type("4.5", int)
+        Traceback (most recent call last):
+            ...
+        ValueError: Answer '4.5' cannot be converted to int
+    """
+    if expected_type is bool:
+        return _coerce_to_bool(answer)
+    if expected_type is None or (
+        expected_type is not int and isinstance(answer, expected_type)
+    ):
+        return answer
+    coerce = _coerce_to_int if expected_type is int else expected_type
+    try:
+        return coerce(answer)
+    except (ValueError, TypeError) as e:
+        raise ValueError(
+            f"Answer {answer!r} cannot be converted to {expected_type.__name__}"
+        ) from e
+
+
+_NO_OPTION = object()
+
+
+def _exact_option(answer: Any, options: list) -> Any:
+    """Return the option equal to ``answer`` *and of the same type*, if any.
+
+    The type check keeps ``2.0`` from matching ``2`` and ``True`` from matching
+    ``1``: those still go through coercion, which returns the canonical int.
+
+    Examples:
+        >>> _exact_option("unsure", [1, 2, "unsure"])
+        'unsure'
+        >>> _exact_option(True, [0, 1]) is _NO_OPTION
+        True
+    """
+    for option in options:
+        if type(option) is type(answer) and option == answer:
+            return option
+    return _NO_OPTION
+
+
 def _validate_constrained_answer(
     answer: Any, valid_answers: Any, expected_type: type
 ) -> Any:
@@ -788,24 +838,23 @@ def _validate_constrained_answer(
             ...
         aix.prompts.ConstraintViolation: Answer 9.0 is outside the range [1, 5]
     """
-    if expected_type is bool:
-        try:
-            answer = _coerce_to_bool(answer)
-        except ValueError as e:
+    if isinstance(valid_answers, list):
+        # An answer that already *is* one of the options is valid as-is. Coercing
+        # it first to the type of the *first* option would reject a legitimate
+        # member of a mixed list, e.g. "unsure" in [1, 2, "unsure"].
+        exact = _exact_option(answer, valid_answers)
+        if exact is not _NO_OPTION:
+            return exact
+
+    try:
+        answer = _coerce_to_expected_type(answer, expected_type)
+    except (ValueError, TypeError) as e:
+        # A mixed options list is typed by its first item, so an answer that
+        # doesn't coerce to that type may still name another option (up to case
+        # and whitespace); the membership check below decides.
+        if not isinstance(valid_answers, list):
             raise ConstraintViolation(
                 str(e), answer=answer, valid_answers=valid_answers
-            ) from e
-    elif expected_type is not None and (
-        expected_type is int or not isinstance(answer, expected_type)
-    ):
-        coerce = _coerce_to_int if expected_type is int else expected_type
-        try:
-            answer = coerce(answer)
-        except (ValueError, TypeError) as e:
-            raise ConstraintViolation(
-                f"Answer {answer!r} cannot be converted to {expected_type.__name__}",
-                answer=answer,
-                valid_answers=valid_answers,
             ) from e
 
     if isinstance(valid_answers, list):
