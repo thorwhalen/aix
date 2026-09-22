@@ -27,6 +27,7 @@ Examples:
 from collections.abc import Iterable, Sequence
 from typing import Union, Any, Literal
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from functools import wraps
 import time
 
 # Import from aix modules
@@ -120,6 +121,29 @@ def _check_on_error(on_error: str) -> None:
         )
 
 
+def _check_on_error_at_call(gen_func):
+    """Validate ``on_error`` when the batch function is *called*, not iterated.
+
+    The batch functions are generators, so a check in their body would only run
+    on the first ``next()`` -- a typo such as ``on_error='ignore'`` would go
+    unnoticed until results were consumed, possibly far from the call site.
+    ``on_error`` is keyword-only, so it is always in ``kwargs`` when passed.
+
+    Examples:
+        >>> batch_chat(["hi"], on_error="ignore")
+        Traceback (most recent call last):
+            ...
+        ValueError: on_error must be one of ('return', 'raise', 'skip'), got 'ignore'
+    """
+
+    @wraps(gen_func)
+    def wrapper(*args, **kwargs):
+        _check_on_error(kwargs.get("on_error", "return"))
+        return gen_func(*args, **kwargs)
+
+    return wrapper
+
+
 def _chunk_iterable(iterable: Iterable, chunk_size: int) -> Iterable[list]:
     """Split an iterable into chunks.
 
@@ -144,6 +168,7 @@ def _chunk_iterable(iterable: Iterable, chunk_size: int) -> Iterable[list]:
         yield chunk
 
 
+@_check_on_error_at_call
 def batch_chat(
     prompts: Iterable[Union[str, list[dict]]],
     *,
@@ -217,8 +242,6 @@ def batch_chat(
         ...     if isinstance(result, BatchError):
         ...         raise result.exception
     """
-    _check_on_error(on_error)
-
     batch_size = batch_size or DFLT_BATCH_SIZE
     max_workers = max_workers or DFLT_MAX_WORKERS
 
@@ -347,6 +370,7 @@ def batch_embeddings(
         print(f"Completed {total} embeddings")
 
 
+@_check_on_error_at_call
 def batch_process(
     items: Iterable[Any],
     process_func: callable,
@@ -410,8 +434,6 @@ def batch_process(
         ...     retry_delay=2.0
         ... )  # doctest: +SKIP
     """
-    _check_on_error(on_error)
-
     batch_size = batch_size or DFLT_BATCH_SIZE
     max_workers = max_workers or DFLT_MAX_WORKERS
     retry_attempts = retry_attempts or DFLT_RETRY_ATTEMPTS

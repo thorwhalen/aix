@@ -710,6 +710,58 @@ def _coerce_answer_leniently(answer: Any, expected_type: type) -> Any:
     return answer
 
 
+def _coerce_to_int(answer: Any) -> int:
+    """Interpret an LLM answer as an integer, refusing to truncate.
+
+    ``int(2.7)`` is ``2``, so plain ``int()`` would turn a non-integral answer
+    into a *different, possibly valid* one. Integral floats and numeric strings
+    ("2", "2.0") are accepted; anything with a fractional part is rejected.
+
+    Examples:
+        >>> _coerce_to_int(2), _coerce_to_int(2.0), _coerce_to_int(" 2.0 "), _coerce_to_int(True)
+        (2, 2, 2, 1)
+        >>> _coerce_to_int(2.7)
+        Traceback (most recent call last):
+            ...
+        ValueError: Answer 2.7 is not an integer
+    """
+    if isinstance(answer, int):
+        return int(answer)  # also normalises a bool to 0/1
+    if isinstance(answer, str):
+        text = answer.strip()
+        try:
+            return int(text)
+        except ValueError:
+            answer = float(text)  # may itself raise ValueError
+    if isinstance(answer, float) and answer.is_integer():
+        return int(answer)
+    raise ValueError(f"Answer {answer!r} is not an integer")
+
+
+def _match_str_option(answer: str, options: list) -> Any:
+    """Map a string answer to its option, forgiving case and surrounding space.
+
+    Models routinely answer "Interpreted" or " interpreted" for the option
+    "interpreted". An exact match wins; otherwise a unique case- and
+    whitespace-insensitive match returns the *canonical* option. Returns the
+    answer unchanged when nothing (or more than one option) matches, leaving
+    the membership check to reject it.
+
+    Examples:
+        >>> _match_str_option(" Interpreted", ["compiled", "interpreted"])
+        'interpreted'
+        >>> _match_str_option("Yes", ["yes", "YES"])
+        'Yes'
+    """
+    if answer in options:
+        return answer
+    key = answer.strip().casefold()
+    matches = [
+        opt for opt in options if isinstance(opt, str) and opt.strip().casefold() == key
+    ]
+    return matches[0] if len(matches) == 1 else answer
+
+
 def _validate_constrained_answer(
     answer: Any, valid_answers: Any, expected_type: type
 ) -> Any:
@@ -743,9 +795,12 @@ def _validate_constrained_answer(
             raise ConstraintViolation(
                 str(e), answer=answer, valid_answers=valid_answers
             ) from e
-    elif expected_type is not None and not isinstance(answer, expected_type):
+    elif expected_type is not None and (
+        expected_type is int or not isinstance(answer, expected_type)
+    ):
+        coerce = _coerce_to_int if expected_type is int else expected_type
         try:
-            answer = expected_type(answer)
+            answer = coerce(answer)
         except (ValueError, TypeError) as e:
             raise ConstraintViolation(
                 f"Answer {answer!r} cannot be converted to {expected_type.__name__}",
@@ -754,6 +809,8 @@ def _validate_constrained_answer(
             ) from e
 
     if isinstance(valid_answers, list):
+        if isinstance(answer, str):
+            answer = _match_str_option(answer, valid_answers)
         if answer not in valid_answers:
             raise ConstraintViolation(
                 f"Answer {answer!r} is not one of {valid_answers!r}",
