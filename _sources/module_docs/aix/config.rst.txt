@@ -1,4 +1,0 @@
-aix.config
-==========
-.. automodule:: aix.config
-   :members:

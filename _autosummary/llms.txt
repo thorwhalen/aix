@@ -1,0 +1,31 @@
+# aix
+
+> Artificial Intelligence eXtensions
+
+
+## Pages in this subsection
+
+- [aix](aix.html.md): AIX: Artificial Intelligence eXtensions
+- [aix.config](aix.config.html.md): Central configuration for AIX (single source of truth for defaults).
+- [aix.ai_models](aix.ai_models.html.md): AI Model Management Module.
+- [aix.ai_models.base](aix.ai_models.base.html.md): Core types for AI model management.
+- [aix.ai_models.manager](aix.ai_models.manager.html.md): Unified model management interface.
+- [aix.ai_models.sources](aix.ai_models.sources.html.md): Concrete implementations of model sources and connectors.
+- [aix.audio](aix.audio.html.md): Audio operations interface for AIX.
+- [aix.batches](aix.batches.html.md): Batch processing interface for AIX.
+- [aix.credentials](aix.credentials.html.md): Unified, discoverable API-key / secret resolution for AIX.
+- [aix.gen_ai](aix.gen_ai.html.md): Generative AI modules.
+- [aix.gen_ai.google_genai](aix.gen_ai.google_genai.html.md): Google GenAI API functionality.
+- [aix.gen_ai.openai_genai](aix.gen_ai.openai_genai.html.md): OpenAI GenAI API functionality.
+- [aix.image](aix.image.html.md): Image generation interface for AIX.
+- [aix.misc](aix.misc.html.md): Misc AIX functions.
+- [aix.models](aix.models.html.md): User-friendly interface for model discovery and selection.
+- [aix.prompts](aix.prompts.html.md): Prompt-based function creation for AIX.
+- [aix.stores](aix.stores.html.md): Storage layers for AIX.
+- [aix.util](aix.util.html.md): Utils for AIX.
+- [aix.video](aix.video.html.md): Video generation interface for AIX.
+- [aix.vision](aix.vision.html.md): Image-to-text (vision) interface for AIX.
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.

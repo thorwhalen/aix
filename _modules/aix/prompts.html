@@ -1,103 +1,267 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+<link rel="alternate" type="text/markdown" href="prompts.html.md">
+<link rel="describedby" href="../../llms.txt" type="text/markdown"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>aix.prompts - aix</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
 
 
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.prompts &mdash; aix 0.0.38 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
-
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  --color-brand-primary: #2b559f;
+  --color-brand-content: #2b559f;
   
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=423071ad"></script>
-      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-</head>
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
 
-          
-          
-          <a href="../../index.html" class="icon icon-home">
-            aix
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/_litellm.html">aix._litellm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/config.html">aix.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/credentials.html">aix.credentials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/image.html">aix.image</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/models.html">aix.models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/prompts.html">aix.prompts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/stores.html">aix.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/video.html">aix.video</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/vision.html">aix.vision</a></li>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">aix</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">aix</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api.html">API reference</a><input aria-label="Toggle navigation of API reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../_autosummary/aix.html">aix</a><input aria-label="Toggle navigation of aix" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.config.html">aix.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../_autosummary/aix.ai_models.html">aix.ai_models</a><input aria-label="Toggle navigation of aix.ai_models" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.ai_models.base.html">aix.ai_models.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.ai_models.manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.ai_models.sources.html">aix.ai_models.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.audio.html">aix.audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.batches.html">aix.batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.credentials.html">aix.credentials</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../_autosummary/aix.gen_ai.html">aix.gen_ai</a><input aria-label="Toggle navigation of aix.gen_ai" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.gen_ai.google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.gen_ai.openai_genai.html">aix.gen_ai.openai_genai</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.image.html">aix.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.misc.html">aix.misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.models.html">aix.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.prompts.html">aix.prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.util.html">aix.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.video.html">aix.video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.vision.html">aix.vision</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">aix</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">aix.prompts</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <h1>Source code for aix.prompts</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Prompt-based function creation for AIX.</span>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for aix.prompts</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Prompt-based function creation for AIX.</span>
 
 <span class="sd">Transform text prompts into callable Python functions with automatic parameter extraction.</span>
 
@@ -107,31 +271,31 @@
 <span class="sd">Examples:</span>
 <span class="sd">    Create a simple text function:</span>
 <span class="sd">    &gt;&gt;&gt; from aix.prompts import prompt_func</span>
-<span class="sd">    &gt;&gt;&gt; translate = prompt_func(&quot;Translate to French: {text}&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; translate(text=&quot;Hello world&quot;)  # doctest: +SKIP</span>
-<span class="sd">    &#39;Bonjour le monde&#39;</span>
+<span class="sd">    &gt;&gt;&gt; translate = prompt_func("Translate to French: {text}")</span>
+<span class="sd">    &gt;&gt;&gt; translate(text="Hello world")  # doctest: +SKIP</span>
+<span class="sd">    'Bonjour le monde'</span>
 
 <span class="sd">    Create a function with structured output:</span>
 <span class="sd">    &gt;&gt;&gt; extract_person = prompt_func(</span>
-<span class="sd">    ...     &quot;Extract person information from: {text}&quot;,</span>
-<span class="sd">    ...     output_schema={&quot;name&quot;: str, &quot;age&quot;: int}</span>
+<span class="sd">    ...     "Extract person information from: {text}",</span>
+<span class="sd">    ...     output_schema={"name": str, "age": int}</span>
 <span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; extract_person(text=&quot;Alice is 30 years old&quot;)  # doctest: +SKIP</span>
-<span class="sd">    {&#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 30}</span>
+<span class="sd">    &gt;&gt;&gt; extract_person(text="Alice is 30 years old")  # doctest: +SKIP</span>
+<span class="sd">    {'name': 'Alice', 'age': 30}</span>
 
 <span class="sd">    Multiple parameters:</span>
 <span class="sd">    &gt;&gt;&gt; compare = prompt_func(</span>
-<span class="sd">    ...     &quot;Compare {item1} and {item2} in terms of {aspect}&quot;</span>
+<span class="sd">    ...     "Compare {item1} and {item2} in terms of {aspect}"</span>
 <span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; compare(item1=&quot;Python&quot;, item2=&quot;JavaScript&quot;, aspect=&quot;performance&quot;)  # doctest: +SKIP</span>
-<span class="sd">    &#39;Python generally has better...&#39;</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; compare(item1="Python", item2="JavaScript", aspect="performance")  # doctest: +SKIP</span>
+<span class="sd">    'Python generally has better...'</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">string</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_string</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">get_type_hints</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">get_type_hints</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">inspect</span><span class="w"> </span><span class="kn">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">Parameter</span>
 
@@ -141,7 +305,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_extract_template_vars</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract variable names from a template string.</span>
+<span class="w">    </span><span class="sd">"""Extract variable names from a template string.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        template: Template string with {var} placeholders</span>
@@ -150,17 +314,17 @@
 <span class="sd">        List of variable names found in template</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; _extract_template_vars(&quot;Translate {text} to {language}&quot;)</span>
-<span class="sd">        [&#39;text&#39;, &#39;language&#39;]</span>
+<span class="sd">        &gt;&gt;&gt; _extract_template_vars("Translate {text} to {language}")</span>
+<span class="sd">        ['text', 'language']</span>
 
-<span class="sd">        &gt;&gt;&gt; _extract_template_vars(&quot;No variables here&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; _extract_template_vars("No variables here")</span>
 <span class="sd">        []</span>
 
-<span class="sd">        &gt;&gt;&gt; _extract_template_vars(&quot;{a} {b} {a}&quot;)  # Duplicates removed</span>
-<span class="sd">        [&#39;a&#39;, &#39;b&#39;]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; _extract_template_vars("{a} {b} {a}")  # Duplicates removed</span>
+<span class="sd">        ['a', 'b']</span>
+<span class="sd">    """</span>
     <span class="c1"># Find all {var} patterns</span>
-    <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\{(\w+)\}&quot;</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\{(\w+)\}"</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
     <span class="c1"># Remove duplicates while preserving order</span>
     <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
@@ -172,7 +336,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_format_prompt</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a prompt template with given parameters.</span>
+<span class="w">    </span><span class="sd">"""Format a prompt template with given parameters.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        template: Template string</span>
@@ -182,9 +346,9 @@
 <span class="sd">        Formatted prompt string</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; _format_prompt(&quot;Hello {name}&quot;, name=&quot;Alice&quot;)</span>
-<span class="sd">        &#39;Hello Alice&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; _format_prompt("Hello {name}", name="Alice")</span>
+<span class="sd">        'Hello Alice'</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
@@ -197,15 +361,15 @@
 <span class="c1"># This mirrors ``oa.prompt_function`` so templates written for ``oa`` work unchanged</span>
 <span class="c1"># on aix. Plain ``{name}``-only templates behave exactly as before.</span>
 
-<span class="n">DFLT_IGNORE_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;```.*?```&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+<span class="n">DFLT_IGNORE_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"```.*?```"</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
 <span class="n">_string_formatter</span> <span class="o">=</span> <span class="n">_string</span><span class="o">.</span><span class="n">Formatter</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_extract_parts</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split ``text`` into (matched, unmatched) parts around regex ``pattern``.</span>
+<span class="w">    </span><span class="sd">"""Split ``text`` into (matched, unmatched) parts around regex ``pattern``.</span>
 
 <span class="sd">    ``unmatched`` always has one more element than ``matched`` (the trailing segment).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">matched</span><span class="p">,</span> <span class="n">unmatched</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">span</span><span class="p">()</span>
@@ -216,16 +380,16 @@
     <span class="k">return</span> <span class="n">matched</span><span class="p">,</span> <span class="n">unmatched</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_pattern_based_map</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;unmatched&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply ``func`` to the matched (or unmatched) parts of ``text`` split by regex.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_pattern_based_map</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"unmatched"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Apply ``func`` to the matched (or unmatched) parts of ``text`` split by regex.</span>
 
-<span class="sd">    &gt;&gt;&gt; _pattern_based_map(str.upper, &quot;a ```b``` c&quot;, r&quot;```.*?```&quot;)</span>
-<span class="sd">    &#39;A ```b``` C&#39;</span>
-<span class="sd">    &gt;&gt;&gt; _pattern_based_map(str.upper, &quot;a ```b``` c&quot;, r&quot;```.*?```&quot;, apply_to=&quot;matched&quot;)</span>
-<span class="sd">    &#39;a ```B``` c&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; _pattern_based_map(str.upper, "a ```b``` c", r"```.*?```")</span>
+<span class="sd">    'A ```b``` C'</span>
+<span class="sd">    &gt;&gt;&gt; _pattern_based_map(str.upper, "a ```b``` c", r"```.*?```", apply_to="matched")</span>
+<span class="sd">    'a ```B``` c'</span>
+<span class="sd">    """</span>
     <span class="n">matched</span><span class="p">,</span> <span class="n">unmatched</span> <span class="o">=</span> <span class="n">_extract_parts</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">apply_to</span> <span class="o">==</span> <span class="s2">&quot;matched&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">apply_to</span> <span class="o">==</span> <span class="s2">"matched"</span><span class="p">:</span>
         <span class="n">transformed</span> <span class="o">=</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">matched</span><span class="p">]</span>
         <span class="n">result_parts</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">unmatched</span><span class="p">,</span> <span class="n">transformed</span><span class="p">),</span> <span class="p">())</span>
         <span class="n">tail</span> <span class="o">=</span> <span class="n">unmatched</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -233,38 +397,38 @@
         <span class="n">transformed</span> <span class="o">=</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">unmatched</span><span class="p">]</span>
         <span class="n">result_parts</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">transformed</span><span class="p">,</span> <span class="n">matched</span><span class="p">),</span> <span class="p">())</span>
         <span class="n">tail</span> <span class="o">=</span> <span class="n">transformed</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result_parts</span><span class="p">)</span> <span class="o">+</span> <span class="n">tail</span>
+    <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result_parts</span><span class="p">)</span> <span class="o">+</span> <span class="n">tail</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_strip_ignored</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">ignore_pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">template</span>
-    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">ignore_pattern</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">ignore_pattern</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_template_param_names</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">DFLT_IGNORE_PATTERN</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ordered, unique field names of ``template`` (ignoring fenced regions).</span>
+<span class="w">    </span><span class="sd">"""Ordered, unique field names of ``template`` (ignoring fenced regions).</span>
 
-<span class="sd">    &gt;&gt;&gt; _template_param_names(&quot;Greet {name} in {language:English}&quot;)</span>
-<span class="sd">    (&#39;name&#39;, &#39;language&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; _template_param_names(&quot;plain text&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; _template_param_names("Greet {name} in {language:English}")</span>
+<span class="sd">    ('name', 'language')</span>
+<span class="sd">    &gt;&gt;&gt; _template_param_names("plain text")</span>
 <span class="sd">    ()</span>
-<span class="sd">    &gt;&gt;&gt; _template_param_names(&quot;```{ignored}``` but {kept}&quot;)</span>
-<span class="sd">    (&#39;kept&#39;,)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; _template_param_names("```{ignored}``` but {kept}")</span>
+<span class="sd">    ('kept',)</span>
+<span class="sd">    """</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">_strip_ignored</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">)</span>
     <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_string_formatter</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span><span class="p">]</span>
     <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_template_defaults</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">DFLT_IGNORE_PATTERN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map each defaulted field (``{name:default}``) to its default value.</span>
+<span class="w">    </span><span class="sd">"""Map each defaulted field (``{name:default}``) to its default value.</span>
 
-<span class="sd">    &gt;&gt;&gt; _template_defaults(&quot;Greet {name} in {language:English}&quot;)</span>
-<span class="sd">    {&#39;language&#39;: &#39;English&#39;}</span>
-<span class="sd">    &gt;&gt;&gt; _template_defaults(&quot;No defaults {here}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; _template_defaults("Greet {name} in {language:English}")</span>
+<span class="sd">    {'language': 'English'}</span>
+<span class="sd">    &gt;&gt;&gt; _template_defaults("No defaults {here}")</span>
 <span class="sd">    {}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">_strip_ignored</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="n">name</span><span class="p">:</span> <span class="n">spec</span>
@@ -274,49 +438,49 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_format_ready_template</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">DFLT_IGNORE_PATTERN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make ``template`` ready for ``str.format``: drop ``:default`` specifiers outside</span>
+<span class="w">    </span><span class="sd">"""Make ``template`` ready for ``str.format``: drop ``:default`` specifiers outside</span>
 <span class="sd">    fenced regions and double braces inside fenced regions so they survive formatting.</span>
 
-<span class="sd">    &gt;&gt;&gt; _format_ready_template(&quot;List {n:100} facts about {topic}&quot;)</span>
-<span class="sd">    &#39;List {n} facts about {topic}&#39;</span>
-<span class="sd">    &gt;&gt;&gt; _format_ready_template(&quot;```{kept}``` and {x:y}&quot;)</span>
-<span class="sd">    &#39;```{{kept}}``` and {x}&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; _format_ready_template("List {n:100} facts about {topic}")</span>
+<span class="sd">    'List {n} facts about {topic}'</span>
+<span class="sd">    &gt;&gt;&gt; _format_ready_template("```{kept}``` and {x:y}")</span>
+<span class="sd">    '```{{kept}}``` and {x}'</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_strip_specifiers</span><span class="p">(</span><span class="n">chunk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">literal</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_string_formatter</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">chunk</span><span class="p">):</span>
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">literal</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">field_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"{"</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span> <span class="s2">"}"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_double_braces</span><span class="p">(</span><span class="n">chunk</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">chunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="s2">&quot;{{&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="s2">&quot;}}&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">chunk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"{"</span><span class="p">,</span> <span class="s2">"{{"</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"}"</span><span class="p">,</span> <span class="s2">"}}"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">ignore_pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_strip_specifiers</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
     <span class="n">ready</span> <span class="o">=</span> <span class="n">_pattern_based_map</span><span class="p">(</span>
-        <span class="n">_strip_specifiers</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;unmatched&quot;</span>
+        <span class="n">_strip_specifiers</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"unmatched"</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">_pattern_based_map</span><span class="p">(</span><span class="n">_double_braces</span><span class="p">,</span> <span class="n">ready</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;matched&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_pattern_based_map</span><span class="p">(</span><span class="n">_double_braces</span><span class="p">,</span> <span class="n">ready</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"matched"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_template</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">DFLT_IGNORE_PATTERN</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ``(format_ready_template, param_names, defaults)`` for ``template``.</span>
+<span class="w">    </span><span class="sd">"""Return ``(format_ready_template, param_names, defaults)`` for ``template``.</span>
 
 <span class="sd">    Supports the oa-style ``{name:default}`` default-aware dialect and leaves braces</span>
 <span class="sd">    inside ``` fenced ``` regions literal. Plain ``{name}``-only templates are</span>
 <span class="sd">    unchanged, so existing callers behave identically.</span>
 
-<span class="sd">    &gt;&gt;&gt; ready, names, defaults = _prepare_template(&quot;List {n:3} facts about {topic}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; ready, names, defaults = _prepare_template("List {n:3} facts about {topic}")</span>
 <span class="sd">    &gt;&gt;&gt; ready</span>
-<span class="sd">    &#39;List {n} facts about {topic}&#39;</span>
+<span class="sd">    'List {n} facts about {topic}'</span>
 <span class="sd">    &gt;&gt;&gt; names</span>
-<span class="sd">    [&#39;n&#39;, &#39;topic&#39;]</span>
+<span class="sd">    ['n', 'topic']</span>
 <span class="sd">    &gt;&gt;&gt; defaults</span>
-<span class="sd">    {&#39;n&#39;: &#39;3&#39;}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    {'n': '3'}</span>
+<span class="sd">    """</span>
     <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_template_param_names</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">ignore_pattern</span><span class="p">))</span>
     <span class="n">defaults</span> <span class="o">=</span> <span class="n">_template_defaults</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">ignore_pattern</span><span class="p">)</span>
     <span class="n">ready</span> <span class="o">=</span> <span class="n">_format_ready_template</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">ignore_pattern</span><span class="o">=</span><span class="n">ignore_pattern</span><span class="p">)</span>
@@ -324,7 +488,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_schema_to_json_schema</span><span class="p">(</span><span class="n">schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a simple schema to JSON Schema format.</span>
+<span class="w">    </span><span class="sd">"""Convert a simple schema to JSON Schema format.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        schema: Either a dict mapping field names to types, or a type annotation</span>
@@ -333,12 +497,12 @@
 <span class="sd">        JSON Schema dict</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; _schema_to_json_schema({&quot;name&quot;: str, &quot;age&quot;: int})</span>
-<span class="sd">        {&#39;type&#39;: &#39;object&#39;, &#39;properties&#39;: {&#39;name&#39;: {&#39;type&#39;: &#39;string&#39;}, &#39;age&#39;: {&#39;type&#39;: &#39;integer&#39;}}, &#39;required&#39;: [&#39;name&#39;, &#39;age&#39;]}</span>
+<span class="sd">        &gt;&gt;&gt; _schema_to_json_schema({"name": str, "age": int})</span>
+<span class="sd">        {'type': 'object', 'properties': {'name': {'type': 'string'}, 'age': {'type': 'integer'}}, 'required': ['name', 'age']}</span>
 
 <span class="sd">        &gt;&gt;&gt; _schema_to_json_schema(str)</span>
-<span class="sd">        {&#39;type&#39;: &#39;string&#39;}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        {'type': 'string'}</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="c1"># Dictionary mapping field names to types</span>
         <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
@@ -346,9 +510,9 @@
             <span class="n">properties</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_type_to_json_type</span><span class="p">(</span><span class="n">field_type</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">properties</span><span class="p">,</span>
-            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
+            <span class="s2">"properties"</span><span class="p">:</span> <span class="n">properties</span><span class="p">,</span>
+            <span class="s2">"required"</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
         <span class="p">}</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Single type</span>
@@ -356,28 +520,28 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_type_to_json_type</span><span class="p">(</span><span class="n">python_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert Python type to JSON Schema type.</span>
+<span class="w">    </span><span class="sd">"""Convert Python type to JSON Schema type.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        python_type: Python type (str, int, float, bool, list, dict)</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        JSON Schema type definition</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">type_map</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nb">str</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
-        <span class="nb">int</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">},</span>
-        <span class="nb">float</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">},</span>
-        <span class="nb">bool</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">},</span>
-        <span class="nb">list</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">},</span>
-        <span class="nb">dict</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">},</span>
+        <span class="nb">str</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">},</span>
+        <span class="nb">int</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">},</span>
+        <span class="nb">float</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"number"</span><span class="p">},</span>
+        <span class="nb">bool</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"boolean"</span><span class="p">},</span>
+        <span class="nb">list</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"array"</span><span class="p">},</span>
+        <span class="nb">dict</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">},</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">type_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">python_type</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">type_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">python_type</span><span class="p">,</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">})</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_parse_structured_output</span><span class="p">(</span><span class="n">response_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse structured output from LLM response.</span>
+<span class="w">    </span><span class="sd">"""Parse structured output from LLM response.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        response_text: Raw text response from LLM</span>
@@ -388,29 +552,29 @@
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError: If response cannot be parsed</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Try to extract JSON from response</span>
     <span class="c1"># Handle cases where LLM wraps JSON in markdown code blocks</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">response_text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
     <span class="c1"># Remove markdown code blocks if present</span>
-    <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;```&quot;</span><span class="p">):</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"```"</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
         <span class="c1"># Remove first and last lines (``` markers)</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"json"</span><span class="p">):</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Failed to parse structured output. Expected JSON, got: </span><span class="si">{</span><span class="n">text</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
+            <span class="sa">f</span><span class="s2">"Failed to parse structured output. Expected JSON, got: </span><span class="si">{</span><span class="n">text</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span><span class="si">}</span><span class="s2">..."</span>
         <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
 
 <div class="viewcode-block" id="prompt_func">
-<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.prompt_func">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.prompts.html#aix.prompt_func">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">prompt_func</span><span class="p">(</span>
     <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -421,7 +585,7 @@
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">chat_kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a callable function from a prompt template.</span>
+<span class="w">    </span><span class="sd">"""Create a callable function from a prompt template.</span>
 
 <span class="sd">    This is the main function for creating prompt-based functions. It automatically</span>
 <span class="sd">    detects parameters from the template and creates a function with those parameters.</span>
@@ -436,25 +600,25 @@
 <span class="sd">    ``` fenced ``` regions are left literal. Plain ``{name}``-only templates behave</span>
 <span class="sd">    exactly as before.</span>
 
-<span class="sd">    &gt;&gt;&gt; greet = prompt_func(&quot;Greet {name} in {language:English}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; greet = prompt_func("Greet {name} in {language:English}")</span>
 <span class="sd">    &gt;&gt;&gt; greet.param_names</span>
-<span class="sd">    [&#39;name&#39;, &#39;language&#39;]</span>
+<span class="sd">    ['name', 'language']</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        template: Prompt template with {var} placeholders for parameters</span>
 <span class="sd">        output_schema: Optional schema for structured output. Can be:</span>
-<span class="sd">            - Dict mapping field names to types: {&quot;name&quot;: str, &quot;age&quot;: int}</span>
+<span class="sd">            - Dict mapping field names to types: {"name": str, "age": int}</span>
 <span class="sd">            - A single type for simple outputs: str, int, list, etc.</span>
 <span class="sd">            - None for plain text output (default)</span>
 <span class="sd">        egress: Optional post-processor ``(result) -&gt; Any`` applied to the output</span>
 <span class="sd">            before returning — on both the text and structured paths. Lets a caller</span>
-<span class="sd">            keep &quot;prompt → typed Python value&quot; inside the facade (e.g. parse the</span>
+<span class="sd">            keep "prompt → typed Python value" inside the facade (e.g. parse the</span>
 <span class="sd">            LLM text into a list of lines/ids) instead of wrapping the returned</span>
 <span class="sd">            function. ``None`` (default) returns the raw result unchanged.</span>
 <span class="sd">        model: Model to use for this function</span>
 <span class="sd">        temperature: Temperature for generation</span>
 <span class="sd">        name: Optional ``__name__`` for the generated function (for tracing /</span>
-<span class="sd">            identity). Defaults to ``&quot;prompt_based_function&quot;``.</span>
+<span class="sd">            identity). Defaults to ``"prompt_based_function"``.</span>
 <span class="sd">        **chat_kwargs: Additional parameters passed to chat()</span>
 
 <span class="sd">    Returns:</span>
@@ -462,41 +626,41 @@
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; # Simple text generation</span>
-<span class="sd">        &gt;&gt;&gt; summarize = prompt_func(&quot;Summarize this text: {text}&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; summarize(text=&quot;Long article...&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &#39;Brief summary...&#39;</span>
+<span class="sd">        &gt;&gt;&gt; summarize = prompt_func("Summarize this text: {text}")</span>
+<span class="sd">        &gt;&gt;&gt; summarize(text="Long article...")  # doctest: +SKIP</span>
+<span class="sd">        'Brief summary...'</span>
 
 <span class="sd">        &gt;&gt;&gt; # Structured output</span>
 <span class="sd">        &gt;&gt;&gt; extract = prompt_func(</span>
-<span class="sd">        ...     &quot;Extract contact info from: {text}&quot;,</span>
-<span class="sd">        ...     output_schema={&quot;name&quot;: str, &quot;email&quot;: str, &quot;phone&quot;: str}</span>
+<span class="sd">        ...     "Extract contact info from: {text}",</span>
+<span class="sd">        ...     output_schema={"name": str, "email": str, "phone": str}</span>
 <span class="sd">        ... )</span>
-<span class="sd">        &gt;&gt;&gt; result = extract(text=&quot;Contact John at john@example.com, 555-1234&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &gt;&gt;&gt; result[&#39;name&#39;]  # doctest: +SKIP</span>
-<span class="sd">        &#39;John&#39;</span>
+<span class="sd">        &gt;&gt;&gt; result = extract(text="Contact John at john@example.com, 555-1234")  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; result['name']  # doctest: +SKIP</span>
+<span class="sd">        'John'</span>
 
 <span class="sd">        &gt;&gt;&gt; # Multiple parameters</span>
 <span class="sd">        &gt;&gt;&gt; compare = prompt_func(</span>
-<span class="sd">        ...     &quot;Compare {item1} and {item2} in terms of {aspect}. &quot;</span>
-<span class="sd">        ...     &quot;Keep it under {word_limit} words.&quot;</span>
+<span class="sd">        ...     "Compare {item1} and {item2} in terms of {aspect}. "</span>
+<span class="sd">        ...     "Keep it under {word_limit} words."</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; compare(</span>
-<span class="sd">        ...     item1=&quot;Python&quot;,</span>
-<span class="sd">        ...     item2=&quot;Java&quot;,</span>
-<span class="sd">        ...     aspect=&quot;learning curve&quot;,</span>
+<span class="sd">        ...     item1="Python",</span>
+<span class="sd">        ...     item2="Java",</span>
+<span class="sd">        ...     aspect="learning curve",</span>
 <span class="sd">        ...     word_limit=50</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
-<span class="sd">        &#39;Python has a gentler learning curve...&#39;</span>
+<span class="sd">        'Python has a gentler learning curve...'</span>
 
 <span class="sd">        &gt;&gt;&gt; # With specific model</span>
 <span class="sd">        &gt;&gt;&gt; creative_writer = prompt_func(</span>
-<span class="sd">        ...     &quot;Write a creative story about {topic}&quot;,</span>
-<span class="sd">        ...     model=&quot;gpt-4o&quot;,</span>
+<span class="sd">        ...     "Write a creative story about {topic}",</span>
+<span class="sd">        ...     model="gpt-4o",</span>
 <span class="sd">        ...     temperature=1.5</span>
 <span class="sd">        ... )</span>
-<span class="sd">        &gt;&gt;&gt; creative_writer(topic=&quot;a time-traveling cat&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &#39;Once upon a time, there was a cat named Whiskers...&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; creative_writer(topic="a time-traveling cat")  # doctest: +SKIP</span>
+<span class="sd">        'Once upon a time, there was a cat named Whiskers...'</span>
+<span class="sd">    """</span>
     <span class="c1"># Parse the template. Supports the oa-style ``{name:default}`` default-aware</span>
     <span class="c1"># dialect (braces inside fenced ``` regions stay literal); plain ``{name}``</span>
     <span class="c1"># templates are unchanged, so existing callers behave identically.</span>
@@ -509,8 +673,8 @@
         <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">param</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_names</span> <span class="k">if</span> <span class="n">param</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Missing required parameter(s): </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Required parameters: </span><span class="si">{</span><span class="n">param_names</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Missing required parameter(s): </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="sa">f</span><span class="s2">"Required parameters: </span><span class="si">{</span><span class="n">param_names</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
         <span class="c1"># Format the prompt (defaults already merged in)</span>
@@ -521,9 +685,9 @@
             <span class="n">json_schema</span> <span class="o">=</span> <span class="n">_schema_to_json_schema</span><span class="p">(</span><span class="n">output_schema</span><span class="p">)</span>
             <span class="c1"># Add instruction for JSON output</span>
             <span class="n">structured_prompt</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">formatted_prompt</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Respond with valid JSON matching this schema: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_schema</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Only return the JSON, no additional text.&quot;</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">formatted_prompt</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"Respond with valid JSON matching this schema: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_schema</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"Only return the JSON, no additional text."</span>
             <span class="p">)</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span>
                 <span class="n">structured_prompt</span><span class="p">,</span>
@@ -541,21 +705,21 @@
         <span class="k">return</span> <span class="n">egress</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">egress</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">result</span>
 
     <span class="c1"># Set function name and docstring</span>
-    <span class="n">generated_function</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="s2">&quot;prompt_based_function&quot;</span>
+    <span class="n">generated_function</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="s2">"prompt_based_function"</span>
     <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Auto-generated function from prompt template.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;Template: </span><span class="si">{</span><span class="n">template</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;Parameters:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"Auto-generated function from prompt template.</span><span class="se">\n\n</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"Template: </span><span class="si">{</span><span class="n">template</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"Parameters:</span><span class="se">\n</span><span class="s2">"</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_names</span><span class="p">:</span>
-        <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">: Parameter from template</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">: Parameter from template</span><span class="se">\n</span><span class="s2">"</span>
 
     <span class="k">if</span> <span class="n">output_schema</span><span class="p">:</span>
         <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Returns: Structured data matching schema: </span><span class="si">{</span><span class="n">output_schema</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Returns: Structured data matching schema: </span><span class="si">{</span><span class="n">output_schema</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Returns: Generated text&quot;</span>
+        <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Returns: Generated text"</span>
 
     <span class="c1"># Add metadata</span>
     <span class="n">generated_function</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">template</span>
@@ -569,9 +733,9 @@
 
 <span class="c1"># Convenience aliases for explicit intent</span>
 <div class="viewcode-block" id="prompt_to_text">
-<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.prompt_to_text">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.prompts.html#aix.prompt_to_text">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">prompt_to_text</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a function that returns text output.</span>
+<span class="w">    </span><span class="sd">"""Create a function that returns text output.</span>
 
 <span class="sd">    This is an explicit alias for prompt_func without output_schema.</span>
 
@@ -583,19 +747,19 @@
 <span class="sd">        Function that returns text</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; summarize = prompt_to_text(&quot;Summarize: {text}&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; result = summarize(text=&quot;Long text...&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; summarize = prompt_to_text("Summarize: {text}")</span>
+<span class="sd">        &gt;&gt;&gt; result = summarize(text="Long text...")  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; isinstance(result, str)  # doctest: +SKIP</span>
 <span class="sd">        True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">prompt_func</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">output_schema</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="prompt_to_json">
-<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.prompt_to_json">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.prompts.html#aix.prompt_to_json">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">prompt_to_json</span><span class="p">(</span><span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a function that returns structured JSON output.</span>
+<span class="w">    </span><span class="sd">"""Create a function that returns structured JSON output.</span>
 
 <span class="sd">    This is an explicit alias for prompt_func with output_schema.</span>
 
@@ -609,48 +773,48 @@
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; extract = prompt_to_json(</span>
-<span class="sd">        ...     &quot;Extract name and age from: {text}&quot;,</span>
-<span class="sd">        ...     schema={&quot;name&quot;: str, &quot;age&quot;: int}</span>
+<span class="sd">        ...     "Extract name and age from: {text}",</span>
+<span class="sd">        ...     schema={"name": str, "age": int}</span>
 <span class="sd">        ... )</span>
-<span class="sd">        &gt;&gt;&gt; result = extract(text=&quot;Alice is 30&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; result = extract(text="Alice is 30")  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; isinstance(result, dict)  # doctest: +SKIP</span>
 <span class="sd">        True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">prompt_func</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">output_schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="PromptFuncs">
-<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.PromptFuncs">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.prompts.html#aix.PromptFuncs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PromptFuncs</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Collection of prompt-based functions.</span>
+<span class="w">    </span><span class="sd">"""Collection of prompt-based functions.</span>
 
 <span class="sd">    Provides a namespace for organizing related prompt functions with</span>
 <span class="sd">    attribute-based access.</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; funcs = PromptFuncs()  # doctest: +SKIP</span>
-<span class="sd">        &gt;&gt;&gt; funcs.add(&#39;summarize&#39;, &quot;Summarize: {text}&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &gt;&gt;&gt; funcs.add(&#39;translate&#39;, &quot;Translate {text} to {language}&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &gt;&gt;&gt; funcs.summarize(text=&quot;Long article...&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &#39;Summary...&#39;</span>
-<span class="sd">        &gt;&gt;&gt; funcs.translate(text=&quot;Hello&quot;, language=&quot;Spanish&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &#39;Hola&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; funcs.add('summarize', "Summarize: {text}")  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; funcs.add('translate', "Translate {text} to {language}")  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; funcs.summarize(text="Long article...")  # doctest: +SKIP</span>
+<span class="sd">        'Summary...'</span>
+<span class="sd">        &gt;&gt;&gt; funcs.translate(text="Hello", language="Spanish")  # doctest: +SKIP</span>
+<span class="sd">        'Hola'</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">default_kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize collection.</span>
+<span class="w">        </span><span class="sd">"""Initialize collection.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            model: Default model for all functions</span>
 <span class="sd">            **default_kwargs: Default parameters for all functions</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_default_kwargs</span> <span class="o">=</span> <span class="n">default_kwargs</span>
 
 <div class="viewcode-block" id="PromptFuncs.add">
-<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.PromptFuncs.add">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.prompts.html#aix.PromptFuncs.add">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -659,18 +823,18 @@
         <span class="n">output_schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a function to the collection.</span>
+<span class="w">        </span><span class="sd">"""Add a function to the collection.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name: Function name (will be accessible as attribute)</span>
 <span class="sd">            template: Prompt template</span>
 <span class="sd">            output_schema: Optional schema for structured output</span>
 <span class="sd">            **kwargs: Additional parameters for prompt_func</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Merge default kwargs</span>
         <span class="n">func_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_default_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">:</span>
-            <span class="n">func_kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span>
+            <span class="n">func_kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"model"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span>
 
         <span class="c1"># Create function</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">prompt_func</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">output_schema</span><span class="o">=</span><span class="n">output_schema</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">)</span>
@@ -681,17 +845,17 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get function by name.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get function by name."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if function exists.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check if function exists."""</span>
         <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span>
 
 <div class="viewcode-block" id="PromptFuncs.keys">
-<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.PromptFuncs.keys">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.prompts.html#aix.PromptFuncs.keys">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all function names.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get all function names."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functions</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
 </div>
 
@@ -699,42 +863,42 @@
 
 <span class="c1"># Pre-built common functions</span>
 <div class="viewcode-block" id="CommonFuncs">
-<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.CommonFuncs">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.prompts.html#aix.CommonFuncs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CommonFuncs</span><span class="p">(</span><span class="n">PromptFuncs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Collection of commonly used prompt functions.</span>
+<span class="w">    </span><span class="sd">"""Collection of commonly used prompt functions.</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; from aix.prompts import common_funcs</span>
-<span class="sd">        &gt;&gt;&gt; common_funcs.summarize(text=&quot;Long article...&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &#39;Summary...&#39;</span>
-<span class="sd">        &gt;&gt;&gt; common_funcs.extract_keywords(text=&quot;Article about AI&quot;)  # doctest: +SKIP</span>
-<span class="sd">        [&#39;AI&#39;, &#39;artificial&#39;, &#39;intelligence&#39;]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; common_funcs.summarize(text="Long article...")  # doctest: +SKIP</span>
+<span class="sd">        'Summary...'</span>
+<span class="sd">        &gt;&gt;&gt; common_funcs.extract_keywords(text="Article about AI")  # doctest: +SKIP</span>
+<span class="sd">        ['AI', 'artificial', 'intelligence']</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
 
         <span class="c1"># Text transformation functions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;summarize&quot;</span><span class="p">,</span> <span class="s2">&quot;Summarize this text concisely: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;explain&quot;</span><span class="p">,</span> <span class="s2">&quot;Explain this concept simply: </span><span class="si">{concept}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;translate&quot;</span><span class="p">,</span> <span class="s2">&quot;Translate </span><span class="si">{text}</span><span class="s2"> to </span><span class="si">{language}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;paraphrase&quot;</span><span class="p">,</span> <span class="s2">&quot;Paraphrase this text: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"summarize"</span><span class="p">,</span> <span class="s2">"Summarize this text concisely: </span><span class="si">{text}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"explain"</span><span class="p">,</span> <span class="s2">"Explain this concept simply: </span><span class="si">{concept}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"translate"</span><span class="p">,</span> <span class="s2">"Translate </span><span class="si">{text}</span><span class="s2"> to </span><span class="si">{language}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"paraphrase"</span><span class="p">,</span> <span class="s2">"Paraphrase this text: </span><span class="si">{text}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="c1"># Analysis functions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-            <span class="s2">&quot;extract_keywords&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Extract the main keywords from: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">"extract_keywords"</span><span class="p">,</span>
+            <span class="s2">"Extract the main keywords from: </span><span class="si">{text}</span><span class="s2">"</span><span class="p">,</span>
             <span class="n">output_schema</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-            <span class="s2">&quot;sentiment&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Analyze the sentiment of: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">output_schema</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sentiment&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;explanation&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">},</span>
+            <span class="s2">"sentiment"</span><span class="p">,</span>
+            <span class="s2">"Analyze the sentiment of: </span><span class="si">{text}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">output_schema</span><span class="o">=</span><span class="p">{</span><span class="s2">"sentiment"</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">"explanation"</span><span class="p">:</span> <span class="nb">str</span><span class="p">},</span>
         <span class="p">)</span>
 
         <span class="c1"># Generation functions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;continue_text&quot;</span><span class="p">,</span> <span class="s2">&quot;Continue this text naturally: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;generate_title&quot;</span><span class="p">,</span> <span class="s2">&quot;Generate a catchy title for: </span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"continue_text"</span><span class="p">,</span> <span class="s2">"Continue this text naturally: </span><span class="si">{text}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"generate_title"</span><span class="p">,</span> <span class="s2">"Generate a catchy title for: </span><span class="si">{text}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 
@@ -746,56 +910,205 @@
 <span class="c1"># constrained_answer: Force LLM to choose from valid options</span>
 
 
+<div class="viewcode-block" id="ConstraintViolation">
+<a class="viewcode-back" href="../../_autosummary/aix.prompts.html#aix.ConstraintViolation">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConstraintViolation</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Raised when an LLM answer does not satisfy the requested constraint.</span>
+
+<span class="sd">    A subclass of ``ValueError`` so that callers who already guard</span>
+<span class="sd">    :func:`constrained_answer` with ``except ValueError`` keep working.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        answer: The offending value, as it came back from the model.</span>
+<span class="sd">        valid_answers: The constraint the value failed, verbatim as passed in.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; violation = ConstraintViolation("nope", answer="nope", valid_answers=["a"])</span>
+<span class="sd">        &gt;&gt;&gt; violation.answer, violation.valid_answers</span>
+<span class="sd">        ('nope', ['a'])</span>
+<span class="sd">        &gt;&gt;&gt; isinstance(violation, ValueError)</span>
+<span class="sd">        True</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">answer</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">valid_answers</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">answer</span> <span class="o">=</span> <span class="n">answer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_answers</span> <span class="o">=</span> <span class="n">valid_answers</span></div>
+
+
+
+<span class="c1"># Tokens a model plausibly returns for a boolean. `bool(answer)` cannot be used</span>
+<span class="c1"># because `bool('false')` is True -- a falsy answer would silently become True.</span>
+<span class="n">_TRUE_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"true"</span><span class="p">,</span> <span class="s2">"t"</span><span class="p">,</span> <span class="s2">"yes"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">})</span>
+<span class="n">_FALSE_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"false"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"n"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">})</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_coerce_to_bool</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Interpret an LLM answer as a boolean, strictly.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        answer: The value parsed out of the model's JSON response.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The boolean the answer denotes.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the answer denotes neither True nor False.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _coerce_to_bool(True), _coerce_to_bool("FALSE "), _coerce_to_bool(1)</span>
+<span class="sd">        (True, False, True)</span>
+<span class="sd">        &gt;&gt;&gt; _coerce_to_bool("maybe")</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">            ...</span>
+<span class="sd">        ValueError: Cannot interpret 'maybe' as a boolean</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">answer</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">and</span> <span class="n">answer</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">_TRUE_TOKENS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">_FALSE_TOKENS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Cannot interpret </span><span class="si">{</span><span class="n">answer</span><span class="si">!r}</span><span class="s2"> as a boolean"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_coerce_answer_leniently</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Coerce to ``expected_type``, returning the answer untouched if that fails.</span>
+
+<span class="sd">    This is the historical, unchecked behaviour of :func:`constrained_answer`,</span>
+<span class="sd">    kept intact for callers who opt out of enforcement with</span>
+<span class="sd">    ``on_violation='return'``.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _coerce_answer_leniently("4", int)</span>
+<span class="sd">        4</span>
+<span class="sd">        &gt;&gt;&gt; _coerce_answer_leniently("not-an-int", int)</span>
+<span class="sd">        'not-an-int'</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">expected_type</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">answer</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_constrained_answer</span><span class="p">(</span>
+    <span class="n">answer</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">valid_answers</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="nb">type</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Coerce an answer to its declared type and check it against the constraint.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        answer: The value parsed out of the model's JSON response.</span>
+<span class="sd">        valid_answers: The constraint, in the form accepted by</span>
+<span class="sd">            :func:`constrained_answer`.</span>
+<span class="sd">        expected_type: The type the constraint implies.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The coerced answer, guaranteed to satisfy the constraint.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ConstraintViolation: If the answer cannot be coerced, is not a member of</span>
+<span class="sd">            an options list, or falls outside a ``(min, max)`` range.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _validate_constrained_answer("4", [2, 4, 6], int)</span>
+<span class="sd">        4</span>
+<span class="sd">        &gt;&gt;&gt; _validate_constrained_answer(9.0, (1, 5), float)</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">            ...</span>
+<span class="sd">        aix.prompts.ConstraintViolation: Answer 9.0 is outside the range [1, 5]</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">_coerce_to_bool</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConstraintViolation</span><span class="p">(</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span> <span class="n">valid_answers</span><span class="o">=</span><span class="n">valid_answers</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="k">elif</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">expected_type</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConstraintViolation</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Answer </span><span class="si">{</span><span class="n">answer</span><span class="si">!r}</span><span class="s2"> cannot be converted to </span><span class="si">{</span><span class="n">expected_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span>
+                <span class="n">valid_answers</span><span class="o">=</span><span class="n">valid_answers</span><span class="p">,</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">answer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_answers</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConstraintViolation</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Answer </span><span class="si">{</span><span class="n">answer</span><span class="si">!r}</span><span class="s2"> is not one of </span><span class="si">{</span><span class="n">valid_answers</span><span class="si">!r}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span>
+                <span class="n">valid_answers</span><span class="o">=</span><span class="n">valid_answers</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">min_val</span><span class="p">,</span> <span class="n">max_val</span> <span class="o">=</span> <span class="n">valid_answers</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">min_val</span> <span class="o">&lt;=</span> <span class="n">answer</span> <span class="o">&lt;=</span> <span class="n">max_val</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConstraintViolation</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Answer </span><span class="si">{</span><span class="n">answer</span><span class="si">}</span><span class="s2"> is outside the range [</span><span class="si">{</span><span class="n">min_val</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">max_val</span><span class="si">}</span><span class="s2">]"</span><span class="p">,</span>
+                <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span>
+                <span class="n">valid_answers</span><span class="o">=</span><span class="n">valid_answers</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">answer</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_enhance_prompt_for_json</span><span class="p">(</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">valid_answers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
     <span class="n">min_val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">max_val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add JSON formatting instructions to the prompt.</span>
+<span class="w">    </span><span class="sd">"""Add JSON formatting instructions to the prompt.</span>
 
 <span class="sd">    This is a helper that adds explicit instructions for JSON output.</span>
 <span class="sd">    Only used when enhance_prompt=True.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="n">valid_answers_list</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">answer</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">answer</span> <span class="ow">in</span> <span class="n">valid_answers</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="n">valid_answers_list</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"- </span><span class="si">{</span><span class="n">answer</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">answer</span> <span class="ow">in</span> <span class="n">valid_answers</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"""</span>
 <span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
 <span class="s2">You must respond with EXACTLY one of these options:</span>
 <span class="si">{</span><span class="n">valid_answers_list</span><span class="si">}</span>
-<span class="s2">Choose the most appropriate answer. Return your response as JSON with an &quot;answer&quot; field.</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Choose the most appropriate answer. Return your response as JSON with an "answer" field.</span>
+<span class="s2">"""</span>
     <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"""</span>
 <span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
 <span class="s2">You must respond with either true or false.</span>
-<span class="s2">Return your response as JSON with an &quot;answer&quot; field.</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Return your response as JSON with an "answer" field.</span>
+<span class="s2">"""</span>
     <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"""</span>
 <span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
 <span class="s2">You must respond with an integer number.</span>
-<span class="s2">Return your response as JSON with an &quot;answer&quot; field.</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Return your response as JSON with an "answer" field.</span>
+<span class="s2">"""</span>
     <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"""</span>
 <span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
 <span class="s2">You must respond with a number.</span>
-<span class="s2">Return your response as JSON with an &quot;answer&quot; field.</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Return your response as JSON with an "answer" field.</span>
+<span class="s2">"""</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"""</span>
 <span class="si">{</span><span class="n">prompt</span><span class="si">}</span>
 <span class="s2">You must respond with a number between </span><span class="si">{</span><span class="n">min_val</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">max_val</span><span class="si">}</span><span class="s2"> (inclusive).</span>
-<span class="s2">Return your response as JSON with an &quot;answer&quot; field.</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Return your response as JSON with an "answer" field.</span>
+<span class="s2">"""</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Fallback - just add minimal JSON instruction</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n</span><span class="s2">Return your response as JSON with an &#39;answer&#39; field.&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n</span><span class="s2">Return your response as JSON with an 'answer' field."</span>
 
 
 <div class="viewcode-block" id="constrained_answer">
-<a class="viewcode-back" href="../../module_docs/aix/prompts.html#aix.constrained_answer">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.prompts.html#aix.constrained_answer">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">constrained_answer</span><span class="p">(</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">valid_answers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
@@ -804,8 +1117,10 @@
     <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">enhance_prompt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">on_violation</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"raise"</span><span class="p">,</span> <span class="s2">"return"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"raise"</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Get an answer from the LLM constrained to a set of valid answers or types.</span>
 
 <span class="sd">    Uses JSON mode to ensure the LLM returns a valid response based on constraints.</span>
@@ -826,30 +1141,43 @@
 <span class="sd">            - float: Any number</span>
 <span class="sd">            - tuple[float, float]: Numerical range (min, max) inclusive</span>
 <span class="sd">        model: The model to use for the LLM (default: uses DFLT_CHAT_MODEL)</span>
-<span class="sd">        temperature: Temperature for sampling (default: None, uses model&#39;s default).</span>
+<span class="sd">        temperature: Temperature for sampling (default: None, uses model's default).</span>
 <span class="sd">            Higher values (e.g., 1.0) give more random/varied results.</span>
 <span class="sd">            Lower values (e.g., 0.0) give more deterministic results.</span>
 <span class="sd">        enhance_prompt: If True, adds explicit instructions to the prompt about</span>
 <span class="sd">            JSON formatting and constraints. If False (default), relies on</span>
 <span class="sd">            response_format alone. Default is False to match oa behavior.</span>
 <span class="sd">        n: Number of times to call the LLM (default: 1)</span>
+<span class="sd">        on_violation: What to do when the model's answer does not satisfy</span>
+<span class="sd">            `valid_answers`. `'raise'` (default) raises `ConstraintViolation`.</span>
+<span class="sd">            `'return'` returns the model's value unchecked -- the behaviour of</span>
+<span class="sd">            this function before enforcement existed, kept as an escape hatch.</span>
+<span class="sd">        max_retries: How many times to re-ask the model after a violation</span>
+<span class="sd">            before giving up (default: 0, i.e. ask exactly once). Ignored when</span>
+<span class="sd">            `on_violation='return'`, which never detects a violation.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        One of the valid answers, respecting the type constraint.</span>
 <span class="sd">        If n &gt; 1, returns a list of answers.</span>
 
+<span class="sd">    Raises:</span>
+<span class="sd">        ConstraintViolation: If the answer is not a member of an options list,</span>
+<span class="sd">            falls outside a `(min, max)` range, or cannot be converted to the</span>
+<span class="sd">            declared type -- unless `on_violation='return'`.</span>
+<span class="sd">        ValueError: If the response is not JSON, or has no "answer" field.</span>
+
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; # String options</span>
 <span class="sd">        &gt;&gt;&gt; answer = constrained_answer(</span>
-<span class="sd">        ...     &quot;Is Python compiled or interpreted?&quot;,</span>
-<span class="sd">        ...     [&quot;compiled&quot;, &quot;interpreted&quot;, &quot;both&quot;]</span>
+<span class="sd">        ...     "Is Python compiled or interpreted?",</span>
+<span class="sd">        ...     ["compiled", "interpreted", "both"]</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
-<span class="sd">        &gt;&gt;&gt; answer in [&quot;compiled&quot;, &quot;interpreted&quot;, &quot;both&quot;]  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; answer in ["compiled", "interpreted", "both"]  # doctest: +SKIP</span>
 <span class="sd">        True</span>
 
 <span class="sd">        &gt;&gt;&gt; # Boolean</span>
 <span class="sd">        &gt;&gt;&gt; answer = constrained_answer(</span>
-<span class="sd">        ...     &quot;Is Python dynamically typed?&quot;,</span>
+<span class="sd">        ...     "Is Python dynamically typed?",</span>
 <span class="sd">        ...     bool</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; isinstance(answer, bool)  # doctest: +SKIP</span>
@@ -857,7 +1185,7 @@
 
 <span class="sd">        &gt;&gt;&gt; # Integer options</span>
 <span class="sd">        &gt;&gt;&gt; answer = constrained_answer(</span>
-<span class="sd">        ...     &quot;How many wheels does a car have?&quot;,</span>
+<span class="sd">        ...     "How many wheels does a car have?",</span>
 <span class="sd">        ...     [2, 3, 4, 6, 8]</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; answer in [2, 3, 4, 6, 8]  # doctest: +SKIP</span>
@@ -865,7 +1193,7 @@
 
 <span class="sd">        &gt;&gt;&gt; # Numerical range</span>
 <span class="sd">        &gt;&gt;&gt; answer = constrained_answer(</span>
-<span class="sd">        ...     &quot;What is a reasonable hourly rate for a senior Python developer? (USD)&quot;,</span>
+<span class="sd">        ...     "What is a reasonable hourly rate for a senior Python developer? (USD)",</span>
 <span class="sd">        ...     (50.0, 300.0)</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; 50.0 &lt;= answer &lt;= 300.0  # doctest: +SKIP</span>
@@ -873,13 +1201,27 @@
 
 <span class="sd">        &gt;&gt;&gt; # Multiple samples for statistics</span>
 <span class="sd">        &gt;&gt;&gt; answers = constrained_answer(</span>
-<span class="sd">        ...     &quot;Which is better: cats or dogs?&quot;,</span>
-<span class="sd">        ...     [&quot;cats&quot;, &quot;dogs&quot;],</span>
+<span class="sd">        ...     "Which is better: cats or dogs?",</span>
+<span class="sd">        ...     ["cats", "dogs"],</span>
 <span class="sd">        ...     n=10</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; len(answers)  # doctest: +SKIP</span>
 <span class="sd">        10</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+
+<span class="sd">        &gt;&gt;&gt; # Tolerate an off-constraint answer instead of raising</span>
+<span class="sd">        &gt;&gt;&gt; answer = constrained_answer(</span>
+<span class="sd">        ...     "Is Python compiled or interpreted?",</span>
+<span class="sd">        ...     ["compiled", "interpreted"],</span>
+<span class="sd">        ...     on_violation="return",</span>
+<span class="sd">        ... )  # doctest: +SKIP</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">on_violation</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"raise"</span><span class="p">,</span> <span class="s2">"return"</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"on_violation must be 'raise' or 'return', got </span><span class="si">{</span><span class="n">on_violation</span><span class="si">!r}</span><span class="s2">"</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">max_retries</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"max_retries must be &gt;= 0, got </span><span class="si">{</span><span class="n">max_retries</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 
@@ -891,6 +1233,8 @@
             <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
             <span class="n">enhance_prompt</span><span class="o">=</span><span class="n">enhance_prompt</span><span class="p">,</span>
             <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">on_violation</span><span class="o">=</span><span class="n">on_violation</span><span class="p">,</span>
+            <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
 
@@ -900,11 +1244,11 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="c1"># List of specific options</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_answers</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;valid_answers list cannot be empty&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"valid_answers list cannot be empty"</span><span class="p">)</span>
 
         <span class="n">first_item</span> <span class="o">=</span> <span class="n">valid_answers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">first_item</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported list item type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">first_item</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unsupported list item type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">first_item</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="n">expected_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">first_item</span><span class="p">)</span>
 
@@ -923,12 +1267,12 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_val</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
             <span class="n">max_val</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
         <span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Range tuple must contain two numbers&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Range tuple must contain two numbers"</span><span class="p">)</span>
 
         <span class="n">expected_type</span> <span class="o">=</span> <span class="nb">float</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported valid_answers type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unsupported valid_answers type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Build the prompt template</span>
     <span class="k">if</span> <span class="n">enhance_prompt</span><span class="p">:</span>
@@ -944,82 +1288,450 @@
             <span class="n">template</span> <span class="o">=</span> <span class="n">_enhance_prompt_for_json</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">valid_answers</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Use the prompt as-is, but add minimal JSON instruction with type hint</span>
-        <span class="c1"># (OpenAI requires the word &quot;json&quot; to appear in the prompt when using json_object mode)</span>
+        <span class="c1"># (OpenAI requires the word "json" to appear in the prompt when using json_object mode)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="c1"># For lists, we need to be more specific</span>
-            <span class="n">type_hint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;one of: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="w"> </span><span class="n">valid_answers</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"one of: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="w"> </span><span class="n">valid_answers</span><span class="p">))</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
-            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">&quot;true or false&quot;</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">"true or false"</span>
         <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
-            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">&quot;a number (integer)&quot;</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">"a number (integer)"</span>
         <span class="k">elif</span> <span class="n">valid_answers</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
-            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">&quot;a number&quot;</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">"a number"</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-            <span class="n">type_hint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;a number between </span><span class="si">{</span><span class="n">valid_answers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">valid_answers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"a number between </span><span class="si">{</span><span class="n">valid_answers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">valid_answers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">&quot;your answer&quot;</span>
+            <span class="n">type_hint</span> <span class="o">=</span> <span class="s2">"your answer"</span>
 
-        <span class="n">template</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n</span><span class="s1">Respond in JSON format with an &quot;answer&quot; field containing </span><span class="si">{</span><span class="n">type_hint</span><span class="si">}</span><span class="s1">.&#39;</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n</span><span class="s1">Respond in JSON format with an "answer" field containing </span><span class="si">{</span><span class="n">type_hint</span><span class="si">}</span><span class="s1">.'</span>
 
-    <span class="c1"># Use LiteLLM&#39;s response_format for JSON mode</span>
+    <span class="c1"># Use LiteLLM's response_format for JSON mode</span>
     <span class="c1"># This works across OpenAI, Anthropic (via tools), and other providers</span>
     <span class="n">chat_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">_resolve_model</span><span class="p">(</span><span class="n">model</span> <span class="ow">or</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">model</span><span class="p">),</span>
-        <span class="s2">&quot;response_format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">},</span>
+        <span class="s2">"model"</span><span class="p">:</span> <span class="n">_resolve_model</span><span class="p">(</span><span class="n">model</span> <span class="ow">or</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">model</span><span class="p">),</span>
+        <span class="s2">"response_format"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"json_object"</span><span class="p">},</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">chat_kwargs</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
+        <span class="n">chat_kwargs</span><span class="p">[</span><span class="s2">"temperature"</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
 
-    <span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">**</span><span class="n">chat_kwargs</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ask_once</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">"""Call the LLM once and pull the "answer" field out of its JSON."""</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="o">**</span><span class="n">chat_kwargs</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)[</span><span class="s2">"answer"</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Failed to parse - raise informative error</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Failed to parse constrained answer. Response: </span><span class="si">{</span><span class="n">response</span><span class="p">[:</span><span class="mi">200</span><span class="p">]</span><span class="si">}</span><span class="s2">..."</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-        <span class="n">answer</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;answer&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">on_violation</span> <span class="o">==</span> <span class="s2">"return"</span><span class="p">:</span>
+        <span class="c1"># Historical behaviour: coerce if we can, hand back whatever came in if</span>
+        <span class="c1"># we can't, and never check the answer against the constraint.</span>
+        <span class="k">return</span> <span class="n">_coerce_answer_leniently</span><span class="p">(</span><span class="n">ask_once</span><span class="p">(),</span> <span class="n">expected_type</span><span class="p">)</span>
 
-        <span class="c1"># Convert to expected type if needed</span>
-        <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">):</span>
-            <span class="c1"># JSON might parse integers as strings or vice versa</span>
-            <span class="c1"># Try to convert to the expected type</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">answer</span> <span class="o">=</span> <span class="n">expected_type</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
-                <span class="c1"># If conversion fails, just return as-is</span>
-                <span class="k">pass</span>
+    <span class="n">violation</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_retries</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_validate_constrained_answer</span><span class="p">(</span>
+                <span class="n">ask_once</span><span class="p">(),</span> <span class="n">valid_answers</span><span class="p">,</span> <span class="n">expected_type</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">ConstraintViolation</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">violation</span> <span class="o">=</span> <span class="n">e</span>
 
-        <span class="k">return</span> <span class="n">answer</span>
-    <span class="k">except</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="c1"># Failed to parse - raise informative error</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Failed to parse constrained answer. Response: </span><span class="si">{</span><span class="n">response</span><span class="p">[:</span><span class="mi">200</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
-        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
+    <span class="k">raise</span> <span class="n">violation</span></div>
 
 </pre></div>
-
-           </div>
-          </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+        </article>
       </div>
-    </section>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
   </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+</div><script src="../../_static/documentation_options.js?v=3b2cf976"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
 
-</body>
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    </body>
 </html>

@@ -1,4 +1,0 @@
-aix
-===
-.. automodule:: aix
-   :members:

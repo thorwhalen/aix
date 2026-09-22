@@ -1,0 +1,40 @@
+aix.ai\_models
+==============
+
+.. automodule:: aix.ai_models
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_manager
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Model
+      ModelRegistry
+      ModelSource
+      Connector
+      ConnectorRegistry
+      OpenRouterSource
+      OllamaSource
+      ProviderAPISource
+      OpenAIConnector
+      OpenRouterConnector
+      LangChainConnector
+      OllamaConnector
+      DSPyConnector
+      ModelManager
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   base
+   manager
+   sources

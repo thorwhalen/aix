@@ -1,4 +1,0 @@
-aix.util
-========
-.. automodule:: aix.util
-   :members:

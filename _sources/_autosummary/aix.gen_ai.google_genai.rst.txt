@@ -1,0 +1,12 @@
+aix.gen\_ai.google\_genai
+=========================
+
+.. automodule:: aix.gen_ai.google_genai
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Const
+   

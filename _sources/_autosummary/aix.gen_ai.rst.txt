@@ -1,0 +1,21 @@
+aix.gen\_ai
+===========
+
+.. automodule:: aix.gen_ai
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      chat
+      chat_function_for_model
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   google_genai
+   openai_genai

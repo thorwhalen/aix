@@ -1,0 +1,717 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="alternate" type="text/markdown" href="aix.batches.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+<link rel="alternate" type="text/markdown" href="aix.batches.html.md">
+<link rel="describedby" href="llms.txt"><link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="aix.credentials" href="aix.credentials.html"><link rel="prev" title="aix.audio" href="aix.audio.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>aix.batches - aix</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  --color-brand-primary: #2b559f;
+  --color-brand-content: #2b559f;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">aix</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">aix</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../api.html">API reference</a><input aria-label="Toggle navigation of API reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="aix.html">aix</a><input aria-label="Toggle navigation of aix" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="aix.config.html">aix.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="aix.ai_models.html">aix.ai_models</a><input aria-label="Toggle navigation of aix.ai_models" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="aix.ai_models.base.html">aix.ai_models.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aix.ai_models.manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aix.ai_models.sources.html">aix.ai_models.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="aix.audio.html">aix.audio</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">aix.batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.credentials.html">aix.credentials</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="aix.gen_ai.html">aix.gen_ai</a><input aria-label="Toggle navigation of aix.gen_ai" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="aix.gen_ai.google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aix.gen_ai.openai_genai.html">aix.gen_ai.openai_genai</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="aix.image.html">aix.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.misc.html">aix.misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.models.html">aix.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.prompts.html">aix.prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.util.html">aix.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.video.html">aix.video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.vision.html">aix.vision</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/_autosummary/aix.batches.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="module-aix.batches">
+<span id="aix-batches"></span><h1>aix.batches<a class="headerlink" href="#module-aix.batches" title="Link to this heading">¶</a></h1>
+<p>Batch processing interface for AIX.</p>
+<p>Efficiently process multiple prompts or embeddings in batches.</p>
+<p>An item whose call raises does not stop the batch: its slot holds a
+<a class="reference internal" href="#aix.batches.BatchError" title="aix.batches.BatchError"><code class="xref py py-class docutils literal notranslate"><span class="pre">BatchError</span></code></a> – a <code class="docutils literal notranslate"><span class="pre">str</span></code> subclass equal to the <code class="docutils literal notranslate"><span class="pre">&quot;ERROR:</span> <span class="pre">&lt;message&gt;&quot;</span></code>
+text these functions have always produced, but carrying the real exception so a
+failure can be told apart from a model reply that happens to start “ERROR:”.
+Pass <code class="docutils literal notranslate"><span class="pre">on_error='raise'</span></code> or <code class="docutils literal notranslate"><span class="pre">on_error='skip'</span></code> to opt out of that slot.</p>
+<p class="rubric">Examples</p>
+<p>Batch chat:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.batches</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_chat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prompts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"What is 2+2?"</span><span class="p">,</span> <span class="s2">"What is 3+3?"</span><span class="p">,</span> <span class="s2">"What is 4+4?"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">batch_chat</span><span class="p">(</span><span class="n">prompts</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>Batch embeddings:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.batches</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_embeddings</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"hello"</span><span class="p">,</span> <span class="s2">"world"</span><span class="p">,</span> <span class="s2">"foo"</span><span class="p">,</span> <span class="s2">"bar"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vectors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">batch_embeddings</span><span class="p">(</span><span class="n">texts</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">vectors</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.batches.batch_chat" title="aix.batches.batch_chat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">batch_chat</span></code></a>(prompts, *[, model, batch_size, ...])</p></td>
+<td><p>Process multiple chat prompts in batches.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#aix.batches.batch_embeddings" title="aix.batches.batch_embeddings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">batch_embeddings</span></code></a>(segments, *[, model, ...])</p></td>
+<td><p>Generate embeddings for multiple texts in batches.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.batches.batch_process" title="aix.batches.batch_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">batch_process</span></code></a>(items, process_func, *[, ...])</p></td>
+<td><p>Generic batch processing with parallel execution and retries.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.batches.BatchError" title="aix.batches.BatchError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BatchError</span></code></a>(exception, *[, index, message])</p></td>
+<td><p>A batch result slot standing in for an item that raised.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#aix.batches.BatchProcessor" title="aix.batches.BatchProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BatchProcessor</span></code></a>(*[, batch_size, max_workers, ...])</p></td>
+<td><p>Stateful batch processor for managing long-running operations.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.batches.BatchError">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.batches.</span></span><span class="sig-name descname"><span class="pre">BatchError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/batches.html#BatchError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<p>A batch result slot standing in for an item that raised.</p>
+<p>Subclasses <code class="docutils literal notranslate"><span class="pre">str</span></code> so it <em>is</em> the <code class="docutils literal notranslate"><span class="pre">&quot;ERROR:</span> <span class="pre">...&quot;</span></code> string these functions
+have always put in the failed slot – comparisons, <code class="docutils literal notranslate"><span class="pre">.startswith</span></code>,
+slicing, JSON serialisation and logging all behave identically. What it
+adds is the ability to tell a failure apart from a model that legitimately
+replied with text starting “ERROR:”, and to reach the original exception.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.batches.BatchError.exception">
+<span class="sig-name descname"><span class="pre">exception</span></span><a class="headerlink" href="#aix.batches.BatchError.exception" title="Link to this definition">¶</a></dt>
+<dd><p>The exception that was caught.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.batches.BatchError.index">
+<span class="sig-name descname"><span class="pre">index</span></span><a class="headerlink" href="#aix.batches.BatchError.index" title="Link to this definition">¶</a></dt>
+<dd><p>Position of the failed item in the input, when known.</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">err</span> <span class="o">=</span> <span class="n">BatchError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"rate limit exceeded"</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">err</span> <span class="o">==</span> <span class="s2">"ERROR: rate limit exceeded"</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">exception</span><span class="p">,</span> <span class="ne">RuntimeError</span><span class="p">)</span>
+<span class="go">(True, True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">err</span><span class="o">.</span><span class="n">index</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.batches.BatchProcessor">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.batches.</span></span><span class="sig-name descname"><span class="pre">BatchProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/batches.html#BatchProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchProcessor" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Stateful batch processor for managing long-running operations.</p>
+<p>Provides a higher-level interface for batch processing with
+progress tracking, error handling, and result caching.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span> <span class="o">=</span> <span class="n">BatchProcessor</span><span class="p">(</span><span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">process_chats</span><span class="p">(</span><span class="n">prompts</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="s2">"output.json"</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.batches.BatchProcessor.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/batches.html#BatchProcessor.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchProcessor.clear" title="Link to this definition">¶</a></dt>
+<dd><p>Clear stored results and errors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.batches.BatchProcessor.process_chats">
+<span class="sig-name descname"><span class="pre">process_chats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompts</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/batches.html#BatchProcessor.process_chats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchProcessor.process_chats" title="Link to this definition">¶</a></dt>
+<dd><p>Process chat prompts and store results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prompts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]]]</span>) – Prompts to process</p></li>
+<li><p><strong>**kwargs</strong> – Additional parameters for batch_chat()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of results</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.batches.BatchProcessor.process_embeddings">
+<span class="sig-name descname"><span class="pre">process_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texts</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/batches.html#BatchProcessor.process_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchProcessor.process_embeddings" title="Link to this definition">¶</a></dt>
+<dd><p>Process embeddings and store results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>texts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Texts to embed</p></li>
+<li><p><strong>**kwargs</strong> – Additional parameters for batch_embeddings()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of embedding vectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.batches.BatchProcessor.save_results">
+<span class="sig-name descname"><span class="pre">save_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/batches.html#BatchProcessor.save_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.BatchProcessor.save_results" title="Link to this definition">¶</a></dt>
+<dd><p>Save results to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Path to save results (JSON)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.batches.batch_chat">
+<span class="sig-prename descclassname"><span class="pre">aix.batches.</span></span><span class="sig-name descname"><span class="pre">batch_chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompts</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'return'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">chat_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/batches.html#batch_chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.batch_chat" title="Link to this definition">¶</a></dt>
+<dd><p>Process multiple chat prompts in batches.</p>
+<p>This function processes multiple prompts efficiently by:</p>
+<ol class="arabic simple">
+<li><p>Chunking prompts into batches</p></li>
+<li><p>Processing batches in parallel where possible</p></li>
+<li><p>Yielding results in the same order as input</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prompts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]]]</span>) – Iterable of prompts (strings or message lists)</p></li>
+<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Model to use for all prompts</p></li>
+<li><p><strong>batch_size</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of prompts to process in each batch</p></li>
+<li><p><strong>max_workers</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum number of parallel workers</p></li>
+<li><p><strong>show_progress</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If True, print progress information</p></li>
+<li><p><strong>on_error</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'return'</span></code>, <code class="docutils literal notranslate"><span class="pre">'raise'</span></code>, <code class="docutils literal notranslate"><span class="pre">'skip'</span></code>]</span>) – What to do with a prompt whose call raised.
+<code class="code docutils literal notranslate"><span class="pre">'return'</span></code> (default) yields a <code class="code docutils literal notranslate"><span class="pre">BatchError</span></code> in that slot, keeping
+the stream the same length and order as the input.
+<code class="code docutils literal notranslate"><span class="pre">'raise'</span></code> stops after the batch in which the first failure landed
+and re-raises the lowest-indexed exception of that batch.
+<code class="code docutils literal notranslate"><span class="pre">'skip'</span></code> omits the failed slots from the stream.</p></li>
+<li><p><strong>**chat_kwargs</strong> – Additional parameters passed to chat()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p>Responses in the same order as input prompts. A prompt that raised
+yields a <code class="code docutils literal notranslate"><span class="pre">BatchError</span></code> – a <code class="code docutils literal notranslate"><span class="pre">str</span></code> subclass equal to <code class="code docutils literal notranslate"><span class="pre">&quot;ERROR:</span> <span class="pre">&lt;message&gt;&quot;</span></code>,
+carrying the original exception on <code class="code docutils literal notranslate"><span class="pre">.exception</span></code>.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="code docutils literal notranslate"><span class="pre">on_error</span></code> is not one of ‘return’, ‘raise’, ‘skip’.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.batches</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_chat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prompts</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="s2">"What is 2+2?"</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">"What is 3+3?"</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">"What is 5+5?"</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">batch_chat</span><span class="p">(</span><span class="n">prompts</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># With specific model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">batch_chat</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">prompts</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-4o-mini"</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">5</span>
+<span class="gp">... </span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Process large dataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">generate_prompts</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">yield</span> <span class="sa">f</span><span class="s2">"Explain concept </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">batch_chat</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">generate_prompts</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Result </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">result</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Tell a failure apart from a reply that starts with "ERROR:"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">batch_chat</span><span class="p">(</span><span class="n">prompts</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">BatchError</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">raise</span> <span class="n">result</span><span class="o">.</span><span class="n">exception</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.batches.batch_embeddings">
+<span class="sig-prename descclassname"><span class="pre">aix.batches.</span></span><span class="sig-name descname"><span class="pre">batch_embeddings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segments</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">embedding_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/batches.html#batch_embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.batch_embeddings" title="Link to this definition">¶</a></dt>
+<dd><p>Generate embeddings for multiple texts in batches.</p>
+<p>For efficiency, this function processes embeddings in chunks,
+as most embedding APIs can handle multiple texts per request.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segments</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Iterable of text strings to embed</p></li>
+<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Embedding model to use</p></li>
+<li><p><strong>batch_size</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of texts per batch</p></li>
+<li><p><strong>show_progress</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If True, print progress information</p></li>
+<li><p><strong>**embedding_kwargs</strong> – Additional parameters for embeddings()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p>Vector embeddings in the same order as input</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]</span></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.batches</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_embeddings</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"hello"</span><span class="p">,</span> <span class="s2">"world"</span><span class="p">,</span> <span class="s2">"foo"</span><span class="p">,</span> <span class="s2">"bar"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">25</span>  <span class="c1"># 100 texts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vectors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">batch_embeddings</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">texts</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">vectors</span><span class="p">)</span>
+<span class="go">100</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Process large dataset efficiently</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">read_documents</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="c1"># Generator that yields documents</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">yield</span> <span class="sa">f</span><span class="s2">"Document </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> content"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_vectors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">vec</span> <span class="ow">in</span> <span class="n">batch_embeddings</span><span class="p">(</span><span class="n">read_documents</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="n">all_vectors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.batches.batch_process">
+<span class="sig-prename descclassname"><span class="pre">aix.batches.</span></span><span class="sig-name descname"><span class="pre">batch_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_func</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_attempts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'return'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/batches.html#batch_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.batches.batch_process" title="Link to this definition">¶</a></dt>
+<dd><p>Generic batch processing with parallel execution and retries.</p>
+<p>This is a general-purpose batch processor that can be used for
+any operation, not just chat or embeddings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>items</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Items to process</p></li>
+<li><p><strong>process_func</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">callable</span></code></span>) – Function to apply to each item</p></li>
+<li><p><strong>batch_size</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Batch size for chunking</p></li>
+<li><p><strong>max_workers</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum parallel workers</p></li>
+<li><p><strong>show_progress</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Show progress information</p></li>
+<li><p><strong>retry_attempts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of retry attempts on failure</p></li>
+<li><p><strong>retry_delay</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Delay between retries (seconds)</p></li>
+<li><p><strong>on_error</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'return'</span></code>, <code class="docutils literal notranslate"><span class="pre">'raise'</span></code>, <code class="docutils literal notranslate"><span class="pre">'skip'</span></code>]</span>) – What to do with an item still failing after every retry.
+<code class="code docutils literal notranslate"><span class="pre">'return'</span></code> (default) yields a <code class="code docutils literal notranslate"><span class="pre">BatchError</span></code> in that slot, <code class="code docutils literal notranslate"><span class="pre">'raise'</span></code>
+re-raises, <code class="code docutils literal notranslate"><span class="pre">'skip'</span></code> omits it. See <a class="reference internal" href="#aix.batches.batch_chat" title="aix.batches.batch_chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">batch_chat()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p>Results in same order as input. An item that raised yields a
+<code class="code docutils literal notranslate"><span class="pre">BatchError</span></code> – a <code class="code docutils literal notranslate"><span class="pre">str</span></code> subclass equal to <code class="code docutils literal notranslate"><span class="pre">&quot;ERROR:</span> <span class="pre">&lt;message&gt;&quot;</span></code>,
+carrying the original exception on <code class="code docutils literal notranslate"><span class="pre">.exception</span></code>.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="code docutils literal notranslate"><span class="pre">on_error</span></code> is not one of ‘return’, ‘raise’, ‘skip’.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.batches</span><span class="w"> </span><span class="kn">import</span> <span class="n">batch_process</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.chat</span><span class="w"> </span><span class="kn">import</span> <span class="n">chat</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Custom processing function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">analyze_sentiment</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">chat</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Analyze sentiment: </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"I love this!"</span><span class="p">,</span> <span class="s2">"This is terrible"</span><span class="p">,</span> <span class="s2">"It's okay"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">batch_process</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">texts</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">analyze_sentiment</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">5</span>
+<span class="gp">... </span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># With retries for flaky operations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">flaky_api_call</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># Some API that might fail</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">call_api</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">batch_process</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">items</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">flaky_api_call</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">retry_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">retry_delay</span><span class="o">=</span><span class="mf">2.0</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="aix.credentials.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">aix.credentials</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="aix.audio.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">aix.audio</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">aix.batches</a><ul>
+<li><a class="reference internal" href="#aix.batches.BatchError"><code class="docutils literal notranslate"><span class="pre">BatchError</span></code></a><ul>
+<li><a class="reference internal" href="#aix.batches.BatchError.exception"><code class="docutils literal notranslate"><span class="pre">BatchError.exception</span></code></a></li>
+<li><a class="reference internal" href="#aix.batches.BatchError.index"><code class="docutils literal notranslate"><span class="pre">BatchError.index</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aix.batches.BatchProcessor"><code class="docutils literal notranslate"><span class="pre">BatchProcessor</span></code></a><ul>
+<li><a class="reference internal" href="#aix.batches.BatchProcessor.clear"><code class="docutils literal notranslate"><span class="pre">BatchProcessor.clear()</span></code></a></li>
+<li><a class="reference internal" href="#aix.batches.BatchProcessor.process_chats"><code class="docutils literal notranslate"><span class="pre">BatchProcessor.process_chats()</span></code></a></li>
+<li><a class="reference internal" href="#aix.batches.BatchProcessor.process_embeddings"><code class="docutils literal notranslate"><span class="pre">BatchProcessor.process_embeddings()</span></code></a></li>
+<li><a class="reference internal" href="#aix.batches.BatchProcessor.save_results"><code class="docutils literal notranslate"><span class="pre">BatchProcessor.save_results()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aix.batches.batch_chat"><code class="docutils literal notranslate"><span class="pre">batch_chat()</span></code></a></li>
+<li><a class="reference internal" href="#aix.batches.batch_embeddings"><code class="docutils literal notranslate"><span class="pre">batch_embeddings()</span></code></a></li>
+<li><a class="reference internal" href="#aix.batches.batch_process"><code class="docutils literal notranslate"><span class="pre">batch_process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=3b2cf976"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fd10adb8"></script>
+    </body>
+</html>

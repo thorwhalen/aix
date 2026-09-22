@@ -1,0 +1,22 @@
+aix.audio
+=========
+
+.. automodule:: aix.audio
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      text_to_speech
+      transcribe
+      transcribe_with_timestamps
+      translate_audio
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GeneratedAudio
+      TranscriptionResult
+   

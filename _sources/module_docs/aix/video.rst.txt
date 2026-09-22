@@ -1,4 +1,0 @@
-aix.video
-=========
-.. automodule:: aix.video
-   :members:

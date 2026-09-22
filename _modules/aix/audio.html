@@ -1,118 +1,282 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+<link rel="alternate" type="text/markdown" href="audio.html.md">
+<link rel="describedby" href="../../llms.txt" type="text/markdown"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>aix.audio - aix</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
 
 
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.audio &mdash; aix 0.0.38 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
-
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  --color-brand-primary: #2b559f;
+  --color-brand-content: #2b559f;
   
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=423071ad"></script>
-      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-</head>
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
 
-          
-          
-          <a href="../../index.html" class="icon icon-home">
-            aix
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/_litellm.html">aix._litellm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/config.html">aix.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/credentials.html">aix.credentials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/image.html">aix.image</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/models.html">aix.models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/prompts.html">aix.prompts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/stores.html">aix.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/video.html">aix.video</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/vision.html">aix.vision</a></li>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">aix</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">aix</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api.html">API reference</a><input aria-label="Toggle navigation of API reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../_autosummary/aix.html">aix</a><input aria-label="Toggle navigation of aix" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.config.html">aix.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../_autosummary/aix.ai_models.html">aix.ai_models</a><input aria-label="Toggle navigation of aix.ai_models" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.ai_models.base.html">aix.ai_models.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.ai_models.manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.ai_models.sources.html">aix.ai_models.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.audio.html">aix.audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.batches.html">aix.batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.credentials.html">aix.credentials</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../_autosummary/aix.gen_ai.html">aix.gen_ai</a><input aria-label="Toggle navigation of aix.gen_ai" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.gen_ai.google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.gen_ai.openai_genai.html">aix.gen_ai.openai_genai</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.image.html">aix.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.misc.html">aix.misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.models.html">aix.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.prompts.html">aix.prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.util.html">aix.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.video.html">aix.video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.vision.html">aix.vision</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">aix</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">aix.audio</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <h1>Source code for aix.audio</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Audio operations interface for AIX.</span>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for aix.audio</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Audio operations interface for AIX.</span>
 
 <span class="sd">Provides text-to-speech (TTS) and speech-to-text (transcription) capabilities.</span>
 
 <span class="sd">Examples:</span>
 <span class="sd">    Text to speech:</span>
 <span class="sd">    &gt;&gt;&gt; from aix.audio import text_to_speech</span>
-<span class="sd">    &gt;&gt;&gt; audio = text_to_speech(&quot;Hello, world!&quot;)  # doctest: +SKIP</span>
-<span class="sd">    &gt;&gt;&gt; audio.save(&quot;hello.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; audio = text_to_speech("Hello, world!")  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; audio.save("hello.mp3")  # doctest: +SKIP</span>
 
 <span class="sd">    Transcription:</span>
 <span class="sd">    &gt;&gt;&gt; from aix.audio import transcribe</span>
-<span class="sd">    &gt;&gt;&gt; text = transcribe(&quot;speech.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; text = transcribe("speech.mp3")  # doctest: +SKIP</span>
 <span class="sd">    &gt;&gt;&gt; print(text)  # doctest: +SKIP</span>
-<span class="sd">    &#39;Hello, this is a test recording.&#39;</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    'Hello, this is a test recording.'</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">BinaryIO</span>
@@ -121,33 +285,33 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix._litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">UNRESOLVED</span> <span class="k">as</span> <span class="n">_UNRESOLVED</span><span class="p">,</span> <span class="n">litellm_attr</span> <span class="k">as</span> <span class="n">_litellm_attr</span>
 
-<span class="c1"># LiteLLM is deferred: importing it fetches litellm&#39;s model-cost map over</span>
+<span class="c1"># LiteLLM is deferred: importing it fetches litellm's model-cost map over</span>
 <span class="c1"># HTTPS, so `import aix` must not do it. See aix/_litellm.py for the rationale.</span>
 <span class="n">_litellm_transcription</span> <span class="o">=</span> <span class="n">_UNRESOLVED</span>
 <span class="n">_litellm_speech</span> <span class="o">=</span> <span class="n">_UNRESOLVED</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_transcription</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve litellm&#39;s ``transcription``, importing litellm on first use.</span>
+<span class="w">    </span><span class="sd">"""Resolve litellm's ``transcription``, importing litellm on first use.</span>
 
 <span class="sd">    Returns ``None`` when litellm is unavailable, which call sites turn into an</span>
 <span class="sd">    :class:`ImportError` carrying an install hint.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_litellm_transcription</span>
     <span class="k">if</span> <span class="n">_litellm_transcription</span> <span class="ow">is</span> <span class="n">_UNRESOLVED</span><span class="p">:</span>
-        <span class="n">_litellm_transcription</span> <span class="o">=</span> <span class="n">_litellm_attr</span><span class="p">(</span><span class="s2">&quot;transcription&quot;</span><span class="p">)</span>
+        <span class="n">_litellm_transcription</span> <span class="o">=</span> <span class="n">_litellm_attr</span><span class="p">(</span><span class="s2">"transcription"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_litellm_transcription</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_speech</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve litellm&#39;s ``speech``, importing litellm on first use.</span>
+<span class="w">    </span><span class="sd">"""Resolve litellm's ``speech``, importing litellm on first use.</span>
 
 <span class="sd">    Returns ``None`` when litellm is unavailable, which call sites turn into an</span>
 <span class="sd">    :class:`ImportError` carrying an install hint.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_litellm_speech</span>
     <span class="k">if</span> <span class="n">_litellm_speech</span> <span class="ow">is</span> <span class="n">_UNRESOLVED</span><span class="p">:</span>
-        <span class="n">_litellm_speech</span> <span class="o">=</span> <span class="n">_litellm_attr</span><span class="p">(</span><span class="s2">&quot;speech&quot;</span><span class="p">)</span>
+        <span class="n">_litellm_speech</span> <span class="o">=</span> <span class="n">_litellm_attr</span><span class="p">(</span><span class="s2">"speech"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_litellm_speech</span>
 
 
@@ -170,17 +334,17 @@
 
 
 <div class="viewcode-block" id="GeneratedAudio">
-<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.GeneratedAudio">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.audio.html#aix.GeneratedAudio">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GeneratedAudio</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper for generated audio.</span>
+<span class="w">    </span><span class="sd">"""Wrapper for generated audio.</span>
 
 <span class="sd">    Provides convenient access to audio data and saving.</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; audio = GeneratedAudio(data=b&#39;...&#39;, model=&quot;tts-1&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &gt;&gt;&gt; audio.save(&quot;output.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; audio = GeneratedAudio(data=b'...', model="tts-1")  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; audio.save("output.mp3")  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; data = audio.as_bytes()  # doctest: +SKIP</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -188,9 +352,9 @@
         <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">voice</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mp3&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"mp3"</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize generated audio.</span>
+<span class="w">        </span><span class="sd">"""Initialize generated audio.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data: Audio data as bytes</span>
@@ -198,7 +362,7 @@
 <span class="sd">            text: Original text</span>
 <span class="sd">            voice: Voice used</span>
 <span class="sd">            format: Audio format (mp3, opus, aac, flac)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
@@ -206,49 +370,49 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="nb">format</span>
 
 <div class="viewcode-block" id="GeneratedAudio.as_bytes">
-<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.GeneratedAudio.as_bytes">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.audio.html#aix.GeneratedAudio.as_bytes">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">as_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get audio as bytes.</span>
+<span class="w">        </span><span class="sd">"""Get audio as bytes.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Audio data as bytes</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
 
 
 <div class="viewcode-block" id="GeneratedAudio.save">
-<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.GeneratedAudio.save">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.audio.html#aix.GeneratedAudio.save">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save audio to file.</span>
+<span class="w">        </span><span class="sd">"""Save audio to file.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            path: Output file path</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; audio.save(&quot;output.mp3&quot;)  # doctest: +SKIP</span>
-<span class="sd">            &gt;&gt;&gt; audio.save(&quot;speech.wav&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            &gt;&gt;&gt; audio.save("output.mp3")  # doctest: +SKIP</span>
+<span class="sd">            &gt;&gt;&gt; audio.save("speech.wav")  # doctest: +SKIP</span>
+<span class="sd">        """</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GeneratedAudio.play">
-<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.GeneratedAudio.play">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.audio.html#aix.GeneratedAudio.play">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Play the audio.</span>
+<span class="w">        </span><span class="sd">"""Play the audio.</span>
 
 <span class="sd">        Requires a system audio player or library like pygame/pyaudio.</span>
 
 <span class="sd">        Examples:</span>
 <span class="sd">            &gt;&gt;&gt; audio.play()  # doctest: +SKIP</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Try to play using system tools</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
 
         <span class="c1"># Save to temporary file</span>
-        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">temp_path</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
@@ -256,11 +420,11 @@
             <span class="c1"># Try different players based on platform</span>
             <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
-            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>  <span class="c1"># macOS</span>
-                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;afplay&quot;</span><span class="p">,</span> <span class="n">temp_path</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;linux&quot;</span><span class="p">:</span>
-                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;aplay&quot;</span><span class="p">,</span> <span class="n">temp_path</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>  <span class="c1"># Windows</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">"darwin"</span><span class="p">:</span>  <span class="c1"># macOS</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">"afplay"</span><span class="p">,</span> <span class="n">temp_path</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">"linux"</span><span class="p">:</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">"aplay"</span><span class="p">,</span> <span class="n">temp_path</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">"win32"</span><span class="p">:</span>  <span class="c1"># Windows</span>
                 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
                 <span class="n">os</span><span class="o">.</span><span class="n">startfile</span><span class="p">(</span><span class="n">temp_path</span><span class="p">)</span>
@@ -275,24 +439,24 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;String representation.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""String representation."""</span>
         <span class="n">size_kb</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1024</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;GeneratedAudio(format=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="si">}</span><span class="s2">, size=</span><span class="si">{</span><span class="n">size_kb</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">KB, voice=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"GeneratedAudio(format=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="si">}</span><span class="s2">, size=</span><span class="si">{</span><span class="n">size_kb</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">KB, voice=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="s2">)"</span></div>
 
 
 
 <div class="viewcode-block" id="TranscriptionResult">
-<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.TranscriptionResult">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.audio.html#aix.TranscriptionResult">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TranscriptionResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of audio transcription.</span>
+<span class="w">    </span><span class="sd">"""Result of audio transcription.</span>
 
 <span class="sd">    Contains the transcribed text and optional metadata like segments and timestamps.</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; result = TranscriptionResult(text=&quot;Hello world&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; result = TranscriptionResult(text="Hello world")  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; print(result.text)  # doctest: +SKIP</span>
-<span class="sd">        &#39;Hello world&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        'Hello world'</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -302,7 +466,7 @@
         <span class="n">segments</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize transcription result.</span>
+<span class="w">        </span><span class="sd">"""Initialize transcription result.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            text: Transcribed text</span>
@@ -310,7 +474,7 @@
 <span class="sd">            duration: Audio duration in seconds</span>
 <span class="sd">            segments: List of transcript segments with timestamps</span>
 <span class="sd">            model: Model used for transcription</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">language</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
@@ -318,19 +482,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get text representation.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get text representation."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;String representation.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""String representation."""</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;TranscriptionResult(text=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">...&#39;, language=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">language</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="sa">f</span><span class="s2">"TranscriptionResult(text='</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">...', language=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">language</span><span class="si">}</span><span class="s2">)"</span>
         <span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="text_to_speech">
-<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.text_to_speech">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.audio.html#aix.text_to_speech">[docs]</a>
 <span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">tts_model</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">text_to_speech</span><span class="p">(</span>
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -338,18 +502,18 @@
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">voice</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">speed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mp3&quot;</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"mp3"</span><span class="p">,</span>
     <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedAudio</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert text to speech audio.</span>
+<span class="w">    </span><span class="sd">"""Convert text to speech audio.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        text: Text to convert to speech</span>
-<span class="sd">        model: TTS model to use (e.g., &#39;tts-1&#39;, &#39;tts-1-hd&#39;)</span>
-<span class="sd">        voice: Voice to use (&#39;alloy&#39;, &#39;echo&#39;, &#39;fable&#39;, &#39;onyx&#39;, &#39;nova&#39;, &#39;shimmer&#39;)</span>
+<span class="sd">        model: TTS model to use (e.g., 'tts-1', 'tts-1-hd')</span>
+<span class="sd">        voice: Voice to use ('alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer')</span>
 <span class="sd">        speed: Playback speed (0.25 to 4.0)</span>
-<span class="sd">        response_format: Audio format (&#39;mp3&#39;, &#39;opus&#39;, &#39;aac&#39;, &#39;flac&#39;)</span>
+<span class="sd">        response_format: Audio format ('mp3', 'opus', 'aac', 'flac')</span>
 <span class="sd">        **kwargs: Additional provider-specific parameters</span>
 
 <span class="sd">    Returns:</span>
@@ -360,28 +524,28 @@
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; from aix.audio import text_to_speech</span>
-<span class="sd">        &gt;&gt;&gt; audio = text_to_speech(&quot;Hello, how are you?&quot;)  # doctest: +SKIP</span>
-<span class="sd">        &gt;&gt;&gt; audio.save(&quot;greeting.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; audio = text_to_speech("Hello, how are you?")  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; audio.save("greeting.mp3")  # doctest: +SKIP</span>
 
 <span class="sd">        &gt;&gt;&gt; # Different voice and speed</span>
 <span class="sd">        &gt;&gt;&gt; audio = text_to_speech(</span>
-<span class="sd">        ...     &quot;This is a test.&quot;,</span>
-<span class="sd">        ...     voice=&quot;nova&quot;,</span>
+<span class="sd">        ...     "This is a test.",</span>
+<span class="sd">        ...     voice="nova",</span>
 <span class="sd">        ...     speed=1.2</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
 
 <span class="sd">        &gt;&gt;&gt; # High quality</span>
 <span class="sd">        &gt;&gt;&gt; audio = text_to_speech(</span>
-<span class="sd">        ...     &quot;Important announcement&quot;,</span>
-<span class="sd">        ...     model=&quot;tts-1-hd&quot;,</span>
-<span class="sd">        ...     voice=&quot;onyx&quot;</span>
+<span class="sd">        ...     "Important announcement",</span>
+<span class="sd">        ...     model="tts-1-hd",</span>
+<span class="sd">        ...     voice="onyx"</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">speech</span> <span class="o">=</span> <span class="n">_speech</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">speech</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;LiteLLM is required for text-to-speech. &quot;</span>
-            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+            <span class="s2">"LiteLLM is required for text-to-speech. "</span>
+            <span class="s2">"Install it with: pip install litellm"</span>
         <span class="p">)</span>
 
     <span class="c1"># Apply defaults from the active config (explicit args still win)</span>
@@ -392,17 +556,17 @@
 
     <span class="c1"># Build parameters</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
-        <span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span>
-        <span class="s2">&quot;voice&quot;</span><span class="p">:</span> <span class="n">voice</span><span class="p">,</span>
-        <span class="s2">&quot;response_format&quot;</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
-        <span class="s2">&quot;speed&quot;</span><span class="p">:</span> <span class="n">speed</span><span class="p">,</span>
+        <span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s2">"input"</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span>
+        <span class="s2">"voice"</span><span class="p">:</span> <span class="n">voice</span><span class="p">,</span>
+        <span class="s2">"response_format"</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
+        <span class="s2">"speed"</span><span class="p">:</span> <span class="n">speed</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="c1"># Resolve and inject the API key (explicit arg &gt; env/.env &gt; config store).</span>
     <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"api_key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
 
     <span class="c1"># Add additional kwargs</span>
     <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
@@ -415,7 +579,7 @@
         <span class="n">audio_data</span> <span class="o">=</span> <span class="n">response</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Some responses might be objects with content</span>
-        <span class="n">audio_data</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+        <span class="n">audio_data</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">GeneratedAudio</span><span class="p">(</span>
         <span class="n">data</span><span class="o">=</span><span class="n">audio_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">voice</span><span class="o">=</span><span class="n">voice</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">response_format</span>
@@ -424,7 +588,7 @@
 
 
 <div class="viewcode-block" id="transcribe">
-<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.transcribe">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.audio.html#aix.transcribe">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">transcribe</span><span class="p">(</span>
     <span class="n">audio</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
@@ -432,13 +596,13 @@
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"text"</span><span class="p">,</span>
     <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">timestamp_granularities</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TranscriptionResult</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transcribe audio to text.</span>
+<span class="w">    </span><span class="sd">"""Transcribe audio to text.</span>
 
 <span class="sd">    By default this routes through LiteLLM (OpenAI-style transcription). Pass</span>
 <span class="sd">    ``engine=`` to instead delegate to a ``scribed`` backend — one façade over</span>
@@ -449,19 +613,19 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        audio: Audio file path, file object, or bytes.</span>
-<span class="sd">        engine: Optional ``scribed`` backend id (e.g. ``&quot;faster-whisper&quot;``,</span>
-<span class="sd">            ``&quot;deepgram&quot;``). When given, transcription is delegated to scribed</span>
-<span class="sd">            (which resolves that engine&#39;s own credentials); the LiteLLM path is</span>
-<span class="sd">            bypassed. Requires ``pip install &#39;aix[scribed]&#39;``. See</span>
+<span class="sd">        engine: Optional ``scribed`` backend id (e.g. ``"faster-whisper"``,</span>
+<span class="sd">            ``"deepgram"``). When given, transcription is delegated to scribed</span>
+<span class="sd">            (which resolves that engine's own credentials); the LiteLLM path is</span>
+<span class="sd">            bypassed. Requires ``pip install 'aix[scribed]'``. See</span>
 <span class="sd">            ``scribed.list_backends()``.</span>
-<span class="sd">        model: Transcription model (e.g. ``&#39;whisper-1&#39;``); for a scribed engine,</span>
+<span class="sd">        model: Transcription model (e.g. ``'whisper-1'``); for a scribed engine,</span>
 <span class="sd">            the engine-specific model (e.g. a Whisper size).</span>
-<span class="sd">        language: Source language (ISO-639-1 code, e.g. ``&#39;en&#39;``, ``&#39;es&#39;``).</span>
-<span class="sd">        prompt: Optional text to guide the model&#39;s style (LiteLLM path).</span>
-<span class="sd">        response_format: ``&#39;text&#39;`` (default) → ``str``; ``&#39;srt&#39;``/``&#39;vtt&#39;`` →</span>
+<span class="sd">        language: Source language (ISO-639-1 code, e.g. ``'en'``, ``'es'``).</span>
+<span class="sd">        prompt: Optional text to guide the model's style (LiteLLM path).</span>
+<span class="sd">        response_format: ``'text'`` (default) → ``str``; ``'srt'``/``'vtt'`` →</span>
 <span class="sd">            subtitle ``str`` (scribed path); else → :class:`TranscriptionResult`.</span>
 <span class="sd">        temperature: Sampling temperature (LiteLLM path).</span>
-<span class="sd">        timestamp_granularities: Timestamp types (&#39;word&#39;, &#39;segment&#39;) (LiteLLM path).</span>
+<span class="sd">        timestamp_granularities: Timestamp types ('word', 'segment') (LiteLLM path).</span>
 <span class="sd">        **kwargs: Additional parameters (forwarded to LiteLLM, or to the scribed</span>
 <span class="sd">            backend — e.g. ``diarize=True``).</span>
 
@@ -471,16 +635,16 @@
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; from aix.audio import transcribe</span>
-<span class="sd">        &gt;&gt;&gt; text = transcribe(&quot;recording.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; text = transcribe("recording.mp3")  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; # delegate to a scribed engine (local, free, diarized SRT):</span>
 <span class="sd">        &gt;&gt;&gt; srt = transcribe(</span>
-<span class="sd">        ...     &quot;meeting.wav&quot;, engine=&quot;faster-whisper&quot;, response_format=&quot;srt&quot;</span>
+<span class="sd">        ...     "meeting.wav", engine="faster-whisper", response_format="srt"</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; dg = transcribe(</span>
-<span class="sd">        ...     &quot;call.mp3&quot;, engine=&quot;deepgram&quot;, diarize=True,</span>
-<span class="sd">        ...     response_format=&quot;verbose_json&quot;,</span>
+<span class="sd">        ...     "call.mp3", engine="deepgram", diarize=True,</span>
+<span class="sd">        ...     response_format="verbose_json",</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">engine</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_transcribe_via_scribed</span><span class="p">(</span>
             <span class="n">audio</span><span class="p">,</span>
@@ -510,45 +674,45 @@
     <span class="n">engine</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"text"</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TranscriptionResult</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delegate transcription to a ``scribed`` backend (the ``engine=`` path).</span>
+<span class="w">    </span><span class="sd">"""Delegate transcription to a ``scribed`` backend (the ``engine=`` path).</span>
 
 <span class="sd">    Non-breaking bridge: returns the SAME types as :func:`transcribe` — a ``str``</span>
 <span class="sd">    for ``response_format`` in {text, srt, vtt}, else a :class:`TranscriptionResult`</span>
-<span class="sd">    built from scribed&#39;s ``Transcript`` (so aix&#39;s contract is preserved). scribed</span>
-<span class="sd">    resolves the chosen engine&#39;s own credentials, so the LiteLLM credential</span>
+<span class="sd">    built from scribed's ``Transcript`` (so aix's contract is preserved). scribed</span>
+<span class="sd">    resolves the chosen engine's own credentials, so the LiteLLM credential</span>
 <span class="sd">    preflight is intentionally bypassed here.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">scribed</span>
     <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover - exercised only without the extra</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;Transcription via engine=... requires the &#39;scribed&#39; package. &quot;</span>
-            <span class="s2">&quot;Install it with: pip install &#39;aix[scribed]&#39;  (or: pip install scribed)&quot;</span>
+            <span class="s2">"Transcription via engine=... requires the 'scribed' package. "</span>
+            <span class="s2">"Install it with: pip install 'aix[scribed]'  (or: pip install scribed)"</span>
         <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="n">sc_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">language</span><span class="p">:</span>
-        <span class="n">sc_kwargs</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">language</span>
+        <span class="n">sc_kwargs</span><span class="p">[</span><span class="s2">"language"</span><span class="p">]</span> <span class="o">=</span> <span class="n">language</span>
     <span class="k">if</span> <span class="n">model</span><span class="p">:</span>
-        <span class="n">sc_kwargs</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="n">sc_kwargs</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span>
     <span class="n">transcript</span> <span class="o">=</span> <span class="n">scribed</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="o">**</span><span class="n">sc_kwargs</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">"text"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">transcript</span><span class="o">.</span><span class="n">text</span>
-    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">&quot;srt&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">"srt"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">transcript</span><span class="o">.</span><span class="n">srt</span>
-    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">&quot;vtt&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">"vtt"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">transcript</span><span class="o">.</span><span class="n">vtt</span>
     <span class="n">segments</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
-            <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">end</span><span class="p">,</span>
-            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
-            <span class="s2">&quot;speaker&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">speaker</span><span class="p">,</span>
-            <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="s2">"start"</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+            <span class="s2">"end"</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">end</span><span class="p">,</span>
+            <span class="s2">"text"</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+            <span class="s2">"speaker"</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">speaker</span><span class="p">,</span>
+            <span class="s2">"confidence"</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">transcript</span><span class="o">.</span><span class="n">segments</span>
     <span class="p">]</span>
@@ -557,7 +721,7 @@
         <span class="n">language</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">language</span><span class="p">,</span>
         <span class="n">duration</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
         <span class="n">segments</span><span class="o">=</span><span class="n">segments</span><span class="p">,</span>
-        <span class="n">model</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;scribed:</span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="sa">f</span><span class="s2">"scribed:</span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
     <span class="p">)</span>
 
 
@@ -568,26 +732,26 @@
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"text"</span><span class="p">,</span>
     <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">timestamp_granularities</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TranscriptionResult</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transcribe audio to text.</span>
+<span class="w">    </span><span class="sd">"""Transcribe audio to text.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        audio: Audio file path, file object, or bytes</span>
-<span class="sd">        model: Transcription model (e.g., &#39;whisper-1&#39;)</span>
-<span class="sd">        language: Source language (ISO-639-1 code, e.g., &#39;en&#39;, &#39;es&#39;)</span>
-<span class="sd">        prompt: Optional text to guide the model&#39;s style</span>
-<span class="sd">        response_format: Format of response (&#39;text&#39;, &#39;json&#39;, &#39;verbose_json&#39;, &#39;srt&#39;, &#39;vtt&#39;)</span>
+<span class="sd">        model: Transcription model (e.g., 'whisper-1')</span>
+<span class="sd">        language: Source language (ISO-639-1 code, e.g., 'en', 'es')</span>
+<span class="sd">        prompt: Optional text to guide the model's style</span>
+<span class="sd">        response_format: Format of response ('text', 'json', 'verbose_json', 'srt', 'vtt')</span>
 <span class="sd">        temperature: Sampling temperature (0 to 1)</span>
-<span class="sd">        timestamp_granularities: List of timestamp types (&#39;word&#39;, &#39;segment&#39;)</span>
+<span class="sd">        timestamp_granularities: List of timestamp types ('word', 'segment')</span>
 <span class="sd">        **kwargs: Additional provider-specific parameters</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        If response_format=&#39;text&#39;: String with transcription</span>
+<span class="sd">        If response_format='text': String with transcription</span>
 <span class="sd">        Otherwise: TranscriptionResult object with metadata</span>
 
 <span class="sd">    Raises:</span>
@@ -595,69 +759,69 @@
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; from aix.audio import transcribe</span>
-<span class="sd">        &gt;&gt;&gt; text = transcribe(&quot;recording.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; text = transcribe("recording.mp3")  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; print(text)  # doctest: +SKIP</span>
-<span class="sd">        &#39;This is the transcribed text.&#39;</span>
+<span class="sd">        'This is the transcribed text.'</span>
 
 <span class="sd">        &gt;&gt;&gt; # With language hint</span>
-<span class="sd">        &gt;&gt;&gt; text = transcribe(&quot;spanish.mp3&quot;, language=&quot;es&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; text = transcribe("spanish.mp3", language="es")  # doctest: +SKIP</span>
 
 <span class="sd">        &gt;&gt;&gt; # Get detailed results</span>
 <span class="sd">        &gt;&gt;&gt; result = transcribe(</span>
-<span class="sd">        ...     &quot;meeting.mp3&quot;,</span>
-<span class="sd">        ...     response_format=&quot;verbose_json&quot;</span>
+<span class="sd">        ...     "meeting.mp3",</span>
+<span class="sd">        ...     response_format="verbose_json"</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; print(result.text)  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; print(result.language)  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; for segment in result.segments:  # doctest: +SKIP</span>
-<span class="sd">        ...     print(f&quot;{segment[&#39;start&#39;]}: {segment[&#39;text&#39;]}&quot;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        ...     print(f"{segment['start']}: {segment['text']}")</span>
+<span class="sd">    """</span>
     <span class="n">transcription</span> <span class="o">=</span> <span class="n">_transcription</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">transcription</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;LiteLLM is required for transcription. &quot;</span>
-            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+            <span class="s2">"LiteLLM is required for transcription. "</span>
+            <span class="s2">"Install it with: pip install litellm"</span>
         <span class="p">)</span>
 
     <span class="c1"># Handle different audio input types</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
         <span class="c1"># File path</span>
         <span class="n">audio_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">audio_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">audio_path</span><span class="o">.</span><span class="n">name</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
         <span class="c1"># Raw bytes</span>
         <span class="n">audio_data</span> <span class="o">=</span> <span class="n">audio</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;audio.mp3&quot;</span>  <span class="c1"># Default filename</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">"audio.mp3"</span>  <span class="c1"># Default filename</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># File-like object</span>
         <span class="n">audio_data</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;audio.mp3&quot;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">,</span> <span class="s2">"audio.mp3"</span><span class="p">)</span>
 
     <span class="c1"># Apply defaults</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">_resolve_model</span><span class="p">(</span><span class="n">model</span> <span class="ow">or</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcription_model</span><span class="p">)</span>
 
     <span class="c1"># Build parameters</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
-        <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">audio_data</span><span class="p">),</span>
-        <span class="s2">&quot;response_format&quot;</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
+        <span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s2">"file"</span><span class="p">:</span> <span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">audio_data</span><span class="p">),</span>
+        <span class="s2">"response_format"</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">if</span> <span class="n">language</span><span class="p">:</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">language</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"language"</span><span class="p">]</span> <span class="o">=</span> <span class="n">language</span>
     <span class="k">if</span> <span class="n">prompt</span><span class="p">:</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;prompt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prompt</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"prompt"</span><span class="p">]</span> <span class="o">=</span> <span class="n">prompt</span>
     <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"temperature"</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
     <span class="k">if</span> <span class="n">timestamp_granularities</span><span class="p">:</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;timestamp_granularities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">timestamp_granularities</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"timestamp_granularities"</span><span class="p">]</span> <span class="o">=</span> <span class="n">timestamp_granularities</span>
 
     <span class="c1"># Resolve and inject the API key (explicit arg &gt; env/.env &gt; config store).</span>
     <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"api_key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
 
     <span class="c1"># Add additional kwargs</span>
     <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
@@ -666,12 +830,12 @@
     <span class="n">response</span> <span class="o">=</span> <span class="n">transcription</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
 
     <span class="c1"># Parse response based on format</span>
-    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">response_format</span> <span class="o">==</span> <span class="s2">"text"</span><span class="p">:</span>
         <span class="c1"># Simple text response</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">response</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Structured response</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -679,10 +843,10 @@
             <span class="k">return</span> <span class="n">TranscriptionResult</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">response</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
 
         <span class="c1"># Extract metadata</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">language</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">&quot;language&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">duration</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">&quot;duration&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">segments</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">&quot;segments&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="n">language</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"language"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"duration"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">segments</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"segments"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">TranscriptionResult</span><span class="p">(</span>
             <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
@@ -694,19 +858,19 @@
 
 
 <div class="viewcode-block" id="transcribe_with_timestamps">
-<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.transcribe_with_timestamps">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.audio.html#aix.transcribe_with_timestamps">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">transcribe_with_timestamps</span><span class="p">(</span>
     <span class="n">audio</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">granularity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;segment&quot;</span><span class="p">,</span>
+    <span class="n">granularity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"segment"</span><span class="p">,</span>
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TranscriptionResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transcribe audio with detailed timestamps.</span>
+<span class="w">    </span><span class="sd">"""Transcribe audio with detailed timestamps.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        audio: Audio file path, file object, or bytes</span>
-<span class="sd">        granularity: Timestamp granularity (&#39;word&#39; or &#39;segment&#39;)</span>
+<span class="sd">        granularity: Timestamp granularity ('word' or 'segment')</span>
 <span class="sd">        model: Transcription model</span>
 <span class="sd">        **kwargs: Additional parameters for transcribe()</span>
 
@@ -715,17 +879,17 @@
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; from aix.audio import transcribe_with_timestamps</span>
-<span class="sd">        &gt;&gt;&gt; result = transcribe_with_timestamps(&quot;lecture.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; result = transcribe_with_timestamps("lecture.mp3")  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; for segment in result.segments:  # doctest: +SKIP</span>
-<span class="sd">        ...     start = segment[&#39;start&#39;]</span>
-<span class="sd">        ...     end = segment[&#39;end&#39;]</span>
-<span class="sd">        ...     text = segment[&#39;text&#39;]</span>
-<span class="sd">        ...     print(f&quot;[{start:.2f}-{end:.2f}] {text}&quot;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        ...     start = segment['start']</span>
+<span class="sd">        ...     end = segment['end']</span>
+<span class="sd">        ...     text = segment['text']</span>
+<span class="sd">        ...     print(f"[{start:.2f}-{end:.2f}] {text}")</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">transcribe</span><span class="p">(</span>
         <span class="n">audio</span><span class="p">,</span>
         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-        <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;verbose_json&quot;</span><span class="p">,</span>
+        <span class="n">response_format</span><span class="o">=</span><span class="s2">"verbose_json"</span><span class="p">,</span>
         <span class="n">timestamp_granularities</span><span class="o">=</span><span class="p">[</span><span class="n">granularity</span><span class="p">],</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span></div>
@@ -733,7 +897,7 @@
 
 
 <div class="viewcode-block" id="translate_audio">
-<a class="viewcode-back" href="../../module_docs/aix/audio.html#aix.translate_audio">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.audio.html#aix.translate_audio">[docs]</a>
 <span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcription_model</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">translate_audio</span><span class="p">(</span>
     <span class="n">audio</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span>
@@ -743,13 +907,13 @@
     <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate audio from any language to English.</span>
+<span class="w">    </span><span class="sd">"""Translate audio from any language to English.</span>
 
-<span class="sd">    Note: Currently uses Whisper&#39;s translation capability which translates to English.</span>
+<span class="sd">    Note: Currently uses Whisper's translation capability which translates to English.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        audio: Audio file path, file object, or bytes</span>
-<span class="sd">        model: Translation model (typically &#39;whisper-1&#39;)</span>
+<span class="sd">        model: Translation model (typically 'whisper-1')</span>
 <span class="sd">        prompt: Optional text to guide translation</span>
 <span class="sd">        **kwargs: Additional provider-specific parameters</span>
 
@@ -758,50 +922,50 @@
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; from aix.audio import translate_audio</span>
-<span class="sd">        &gt;&gt;&gt; english_text = translate_audio(&quot;spanish_audio.mp3&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; english_text = translate_audio("spanish_audio.mp3")  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; print(english_text)  # doctest: +SKIP</span>
-<span class="sd">        &#39;This is the English translation.&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        'This is the English translation.'</span>
+<span class="sd">    """</span>
     <span class="n">transcription</span> <span class="o">=</span> <span class="n">_transcription</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">transcription</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;LiteLLM is required for audio translation. &quot;</span>
-            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+            <span class="s2">"LiteLLM is required for audio translation. "</span>
+            <span class="s2">"Install it with: pip install litellm"</span>
         <span class="p">)</span>
 
     <span class="c1"># Handle different audio input types (same as transcribe)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
         <span class="n">audio_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">audio_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">audio_path</span><span class="o">.</span><span class="n">name</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
         <span class="n">audio_data</span> <span class="o">=</span> <span class="n">audio</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;audio.mp3&quot;</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">"audio.mp3"</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">audio_data</span> <span class="o">=</span> <span class="n">audio</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;audio.mp3&quot;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">,</span> <span class="s2">"audio.mp3"</span><span class="p">)</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">_resolve_model</span><span class="p">(</span><span class="n">model</span> <span class="ow">or</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">transcription_model</span><span class="p">)</span>
 
     <span class="c1"># Use translation endpoint</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
-        <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">audio_data</span><span class="p">),</span>
+        <span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s2">"file"</span><span class="p">:</span> <span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">audio_data</span><span class="p">),</span>
     <span class="p">}</span>
 
     <span class="k">if</span> <span class="n">prompt</span><span class="p">:</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;prompt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prompt</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"prompt"</span><span class="p">]</span> <span class="o">=</span> <span class="n">prompt</span>
 
     <span class="c1"># Resolve and inject the API key (explicit arg &gt; env/.env &gt; config store).</span>
     <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"api_key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
 
     <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Note: LiteLLM may have a separate translation function</span>
-    <span class="c1"># For now, we use transcription with task=&#39;translate&#39;</span>
+    <span class="c1"># For now, we use transcription with task='translate'</span>
     <span class="c1"># This depends on provider support</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">translation</span> <span class="k">as</span> <span class="n">_litellm_translation</span>
@@ -809,41 +973,405 @@
         <span class="n">response</span> <span class="o">=</span> <span class="n">_litellm_translation</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
         <span class="c1"># Fallback: some models support translation via transcription</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;task&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;translate&quot;</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"task"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"translate"</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">transcription</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">response</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">))</span></div>
 
 </pre></div>
-
-           </div>
-          </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+        </article>
       </div>
-    </section>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
   </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+</div><script src="../../_static/documentation_options.js?v=3b2cf976"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
 
-</body>
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    </body>
 </html>

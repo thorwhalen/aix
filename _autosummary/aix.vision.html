@@ -1,0 +1,716 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="alternate" type="text/markdown" href="aix.vision.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+<link rel="alternate" type="text/markdown" href="aix.vision.html.md">
+<link rel="describedby" href="llms.txt"><link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="prev" title="aix.video" href="aix.video.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>aix.vision - aix</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  --color-brand-primary: #2b559f;
+  --color-brand-content: #2b559f;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">aix</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">aix</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../api.html">API reference</a><input aria-label="Toggle navigation of API reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="aix.html">aix</a><input aria-label="Toggle navigation of aix" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="aix.config.html">aix.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="aix.ai_models.html">aix.ai_models</a><input aria-label="Toggle navigation of aix.ai_models" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="aix.ai_models.base.html">aix.ai_models.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aix.ai_models.manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aix.ai_models.sources.html">aix.ai_models.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="aix.audio.html">aix.audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.batches.html">aix.batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.credentials.html">aix.credentials</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="aix.gen_ai.html">aix.gen_ai</a><input aria-label="Toggle navigation of aix.gen_ai" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="aix.gen_ai.google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aix.gen_ai.openai_genai.html">aix.gen_ai.openai_genai</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="aix.image.html">aix.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.misc.html">aix.misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.models.html">aix.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.prompts.html">aix.prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.util.html">aix.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.video.html">aix.video</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">aix.vision</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/_autosummary/aix.vision.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="module-aix.vision">
+<span id="aix-vision"></span><h1>aix.vision<a class="headerlink" href="#module-aix.vision" title="Link to this heading">¶</a></h1>
+<p>Image-to-text (vision) interface for AIX.</p>
+<p>The cross-modal counterpart to <a class="reference internal" href="aix.image.html#module-aix.image" title="aix.image"><code class="xref py py-mod docutils literal notranslate"><span class="pre">aix.image</span></code></a> (which is text→image): given an
+image, produce text — a caption, an answer to a question about it, or a
+structured judgement. Like the rest of AIX it is a thin, provider-neutral facade
+over LiteLLM’s multimodal <code class="docutils literal notranslate"><span class="pre">completion</span></code> (the same backend <code class="docutils literal notranslate"><span class="pre">chat</span></code> uses), so the
+same call routes to any vision-capable provider (OpenAI, Anthropic, Gemini,
+OpenRouter, …) by model id alone.</p>
+<p><a class="reference internal" href="#aix.vision.describe_image" title="aix.vision.describe_image"><code class="xref py py-func docutils literal notranslate"><span class="pre">describe_image()</span></code></a> is the primitive: image (URL / local path / bytes / PIL
+image / <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI) + a prompt → text. <a class="reference internal" href="#aix.vision.to_image_content" title="aix.vision.to_image_content"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_image_content()</span></code></a> exposes the
+multimodal content block builder so callers can assemble richer messages (e.g.
+multiple images in one turn) and pass them straight to <a class="reference internal" href="aix.html#aix.chat" title="aix.chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.chat()</span></code></a>.</p>
+<p class="rubric">Examples</p>
+<p>Caption an image (any vision-capable model):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.vision</span><span class="w"> </span><span class="kn">import</span> <span class="n">describe_image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">describe_image</span><span class="p">(</span><span class="s2">"https://example.com/cat.jpg"</span><span class="p">)</span>
+<span class="go">'A grey tabby cat sitting on a windowsill in afternoon light.'</span>
+</pre></div>
+</div>
+<p>Ask a specific question:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">describe_image</span><span class="p">(</span><span class="s2">"photo.png"</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s2">"What colour is the car?"</span><span class="p">)</span>
+<span class="go">'The car is red.'</span>
+</pre></div>
+</div>
+<p>Build a multi-image message yourself and hand it to <code class="docutils literal notranslate"><span class="pre">chat</span></code>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">chat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.vision</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_image_content</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"text"</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">:</span> <span class="s2">"Which is brighter?"</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="n">to_image_content</span><span class="p">(</span><span class="s2">"a.jpg"</span><span class="p">),</span> <span class="n">to_image_content</span><span class="p">(</span><span class="s2">"b.jpg"</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">]}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chat</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-4o"</span><span class="p">)</span>
+<span class="go">'The second image is brighter.'</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#aix.vision.compare_images" title="aix.vision.compare_images"><code class="xref py py-func docutils literal notranslate"><span class="pre">compare_images()</span></code></a> builds on these primitives: it puts a <em>candidate</em> image
+beside one or more <em>reference</em> images and asks a vision model, via a structured
+JSON path, for an explainable per-aspect likeness verdict — the “explain the
+drift” half of a reference supervisor (face / costume / setting / lighting /
+props matched?). The numeric identity-cosine gate lives elsewhere (lookbook);
+this layer is the explainable checklist on top of it.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.vision</span><span class="w"> </span><span class="kn">import</span> <span class="n">compare_images</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">verdict</span> <span class="o">=</span> <span class="n">compare_images</span><span class="p">(</span><span class="s2">"gen.png"</span><span class="p">,</span> <span class="s2">"locked_ref.png"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">verdict</span><span class="o">.</span><span class="n">match</span><span class="p">,</span> <span class="n">verdict</span><span class="p">[</span><span class="s2">"identity"</span><span class="p">]</span><span class="o">.</span><span class="n">match</span>
+<span class="go">(True, True)</span>
+</pre></div>
+</div>
+<p class="rubric">Module Attributes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.vision.DFLT_VISION_MODEL" title="aix.vision.DFLT_VISION_MODEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DFLT_VISION_MODEL</span></code></a></p></td>
+<td><p>Shipped-default vision model, kept for reference.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#aix.vision.DFLT_VISION_PROMPT" title="aix.vision.DFLT_VISION_PROMPT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DFLT_VISION_PROMPT</span></code></a></p></td>
+<td><p>Default instruction when the caller doesn't supply one.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.vision.DFLT_COMPARE_RUBRIC" title="aix.vision.DFLT_COMPARE_RUBRIC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DFLT_COMPARE_RUBRIC</span></code></a></p></td>
+<td><p>Default rubric for <a class="reference internal" href="#aix.vision.compare_images" title="aix.vision.compare_images"><code class="xref py py-func docutils literal notranslate"><span class="pre">compare_images()</span></code></a> — a generic likeness checklist.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#aix.vision.DFLT_FILM_RUBRIC" title="aix.vision.DFLT_FILM_RUBRIC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DFLT_FILM_RUBRIC</span></code></a></p></td>
+<td><p>the locked face, the architecture/set, the lighting, and the props.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.vision.describe_image" title="aix.vision.describe_image"><code class="xref py py-obj docutils literal notranslate"><span class="pre">describe_image</span></code></a>(image, *[, prompt, model, ...])</p></td>
+<td><p>Describe (or answer a question about) <code class="docutils literal notranslate"><span class="pre">image</span></code> and return the text.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#aix.vision.to_image_content" title="aix.vision.to_image_content"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_image_content</span></code></a>(image, *[, detail])</p></td>
+<td><p>Build a multimodal <code class="docutils literal notranslate"><span class="pre">image_url</span></code> content block for <code class="docutils literal notranslate"><span class="pre">image</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.vision.compare_images" title="aix.vision.compare_images"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_images</span></code></a>(candidate, reference, *[, ...])</p></td>
+<td><p>Compare a <code class="docutils literal notranslate"><span class="pre">candidate</span></code> image to <code class="docutils literal notranslate"><span class="pre">reference</span></code> image(s) on a rubric.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.vision.RubricVerdict" title="aix.vision.RubricVerdict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RubricVerdict</span></code></a>(aspect, match, confidence[, note])</p></td>
+<td><p>A vision model's verdict on a single rubric aspect.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#aix.vision.ImageComparison" title="aix.vision.ImageComparison"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImageComparison</span></code></a>(match, confidence, explanation)</p></td>
+<td><p>Structured result of comparing a candidate image to reference(s).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="aix.vision.DFLT_COMPARE_RUBRIC">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">DFLT_COMPARE_RUBRIC</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('identity',</span> <span class="pre">'costume',</span> <span class="pre">'setting',</span> <span class="pre">'lighting',</span> <span class="pre">'props')</span></span><a class="headerlink" href="#aix.vision.DFLT_COMPARE_RUBRIC" title="Link to this definition">¶</a></dt>
+<dd><p>Default rubric for <a class="reference internal" href="#aix.vision.compare_images" title="aix.vision.compare_images"><code class="xref py py-func docutils literal notranslate"><span class="pre">compare_images()</span></code></a> — a generic likeness checklist.
+Each entry is one aspect the vision model judges independently.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="aix.vision.DFLT_FILM_RUBRIC">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">DFLT_FILM_RUBRIC</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('face_identity',</span> <span class="pre">'costume',</span> <span class="pre">'setting_architecture',</span> <span class="pre">'lighting',</span> <span class="pre">'props',</span> <span class="pre">'skin_realism')</span></span><a class="headerlink" href="#aix.vision.DFLT_FILM_RUBRIC" title="Link to this definition">¶</a></dt>
+<dd><p>the
+locked face, the architecture/set, the lighting, and the props. Pass it as
+<code class="docutils literal notranslate"><span class="pre">rubric=</span></code> when comparing a generated frame against a locked reference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Filmmaking-oriented rubric (Noel’s reference-supervisor checklist)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="aix.vision.DFLT_VISION_MODEL">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">DFLT_VISION_MODEL</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'gpt-4o-mini'</span></span><a class="headerlink" href="#aix.vision.DFLT_VISION_MODEL" title="Link to this definition">¶</a></dt>
+<dd><p>Shipped-default vision model, kept for reference. The <em>active</em> default is
+resolved from <code class="docutils literal notranslate"><span class="pre">aix.config</span></code> at call time (see <a class="reference internal" href="aix.config.html#aix.config.VisionConfig" title="aix.config.VisionConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">aix.config.VisionConfig</span></code></a>).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="aix.vision.DFLT_VISION_PROMPT">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">DFLT_VISION_PROMPT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Describe</span> <span class="pre">this</span> <span class="pre">image</span> <span class="pre">in</span> <span class="pre">detail.'</span></span><a class="headerlink" href="#aix.vision.DFLT_VISION_PROMPT" title="Link to this definition">¶</a></dt>
+<dd><p>Default instruction when the caller doesn’t supply one.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.vision.ImageComparison">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">ImageComparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explanation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/vision.html#ImageComparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.vision.ImageComparison" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Structured result of comparing a candidate image to reference(s).</p>
+<p>Behaves like an ordered, read-only mapping of <code class="docutils literal notranslate"><span class="pre">aspect</span> <span class="pre">-&gt;</span> <span class="pre">RubricVerdict</span></code>
+(<code class="docutils literal notranslate"><span class="pre">comparison[&quot;identity&quot;]</span></code>, <code class="docutils literal notranslate"><span class="pre">in</span></code>, iteration, <code class="docutils literal notranslate"><span class="pre">len</span></code>) so per-aspect
+lookups read naturally, while also carrying the overall verdict.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.vision.ImageComparison.match">
+<span class="sig-name descname"><span class="pre">match</span></span><a class="headerlink" href="#aix.vision.ImageComparison.match" title="Link to this definition">¶</a></dt>
+<dd><p>Overall pass/fail across the whole rubric.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.vision.ImageComparison.confidence">
+<span class="sig-name descname"><span class="pre">confidence</span></span><a class="headerlink" href="#aix.vision.ImageComparison.confidence" title="Link to this definition">¶</a></dt>
+<dd><p>Overall confidence in <code class="docutils literal notranslate"><span class="pre">[0.0,</span> <span class="pre">1.0]</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.vision.ImageComparison.explanation">
+<span class="sig-name descname"><span class="pre">explanation</span></span><a class="headerlink" href="#aix.vision.ImageComparison.explanation" title="Link to this definition">¶</a></dt>
+<dd><p>A short overall summary of the comparison.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.vision.ImageComparison.aspects">
+<span class="sig-name descname"><span class="pre">aspects</span></span><a class="headerlink" href="#aix.vision.ImageComparison.aspects" title="Link to this definition">¶</a></dt>
+<dd><p>The per-aspect verdicts, one <a class="reference internal" href="#aix.vision.RubricVerdict" title="aix.vision.RubricVerdict"><code class="xref py py-class docutils literal notranslate"><span class="pre">RubricVerdict</span></code></a> per
+rubric item, in rubric order.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.vision.ImageComparison.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#aix.vision.ImageComparison.model" title="Link to this definition">¶</a></dt>
+<dd><p>The vision model id that produced the verdict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aix.vision.ImageComparison.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aspect</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/vision.html#ImageComparison.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.vision.ImageComparison.get" title="Link to this definition">¶</a></dt>
+<dd><p>Return the verdict for <code class="docutils literal notranslate"><span class="pre">aspect</span></code>, or <code class="docutils literal notranslate"><span class="pre">default</span></code> if absent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#aix.vision.RubricVerdict" title="aix.vision.RubricVerdict"><code class="xref py py-class docutils literal notranslate"><span class="pre">RubricVerdict</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.vision.RubricVerdict">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">RubricVerdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aspect</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">note</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/vision.html#RubricVerdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.vision.RubricVerdict" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A vision model’s verdict on a single rubric aspect.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.vision.RubricVerdict.aspect">
+<span class="sig-name descname"><span class="pre">aspect</span></span><a class="headerlink" href="#aix.vision.RubricVerdict.aspect" title="Link to this definition">¶</a></dt>
+<dd><p>The rubric item this verdict is about (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;identity&quot;</span></code>).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.vision.RubricVerdict.match">
+<span class="sig-name descname"><span class="pre">match</span></span><a class="headerlink" href="#aix.vision.RubricVerdict.match" title="Link to this definition">¶</a></dt>
+<dd><p>Whether the candidate matches the reference for this aspect.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.vision.RubricVerdict.confidence">
+<span class="sig-name descname"><span class="pre">confidence</span></span><a class="headerlink" href="#aix.vision.RubricVerdict.confidence" title="Link to this definition">¶</a></dt>
+<dd><p>The model’s self-reported confidence in <code class="docutils literal notranslate"><span class="pre">[0.0,</span> <span class="pre">1.0]</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.vision.RubricVerdict.note">
+<span class="sig-name descname"><span class="pre">note</span></span><a class="headerlink" href="#aix.vision.RubricVerdict.note" title="Link to this definition">¶</a></dt>
+<dd><p>A short free-text explanation of the verdict.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.vision.compare_images">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">compare_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rubric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('identity',</span> <span class="pre">'costume',</span> <span class="pre">'setting',</span> <span class="pre">'lighting',</span> <span class="pre">'props')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instruction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'You</span> <span class="pre">are</span> <span class="pre">a</span> <span class="pre">strict</span> <span class="pre">visual</span> <span class="pre">continuity</span> <span class="pre">supervisor.</span> <span class="pre">The</span> <span class="pre">FIRST</span> <span class="pre">image</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">CANDIDATE;</span> <span class="pre">the</span> <span class="pre">remaining</span> <span class="pre">image(s)</span> <span class="pre">are</span> <span class="pre">the</span> <span class="pre">locked</span> <span class="pre">REFERENCE</span> <span class="pre">the</span> <span class="pre">candidate</span> <span class="pre">must</span> <span class="pre">match.</span> <span class="pre">Judge</span> <span class="pre">each</span> <span class="pre">rubric</span> <span class="pre">aspect</span> <span class="pre">INDEPENDENTLY</span> <span class="pre">(do</span> <span class="pre">not</span> <span class="pre">let</span> <span class="pre">one</span> <span class="pre">aspect</span> <span class="pre">color</span> <span class="pre">another).</span> <span class="pre">For</span> <span class="pre">each</span> <span class="pre">aspect</span> <span class="pre">decide</span> <span class="pre">whether</span> <span class="pre">the</span> <span class="pre">candidate</span> <span class="pre">matches</span> <span class="pre">the</span> <span class="pre">reference,</span> <span class="pre">give</span> <span class="pre">a</span> <span class="pre">confidence</span> <span class="pre">in</span> <span class="pre">[0.0,</span> <span class="pre">1.0],</span> <span class="pre">and</span> <span class="pre">a</span> <span class="pre">short</span> <span class="pre">note</span> <span class="pre">explaining</span> <span class="pre">what</span> <span class="pre">matches</span> <span class="pre">or</span> <span class="pre">drifts.</span> <span class="pre">Then</span> <span class="pre">give</span> <span class="pre">an</span> <span class="pre">overall</span> <span class="pre">match</span> <span class="pre">(true</span> <span class="pre">only</span> <span class="pre">if</span> <span class="pre">every</span> <span class="pre">important</span> <span class="pre">aspect</span> <span class="pre">matches),</span> <span class="pre">an</span> <span class="pre">overall</span> <span class="pre">confidence,</span> <span class="pre">and</span> <span class="pre">a</span> <span class="pre">one-sentence</span> <span class="pre">explanation.'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/vision.html#compare_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.vision.compare_images" title="Link to this definition">¶</a></dt>
+<dd><p>Compare a <code class="docutils literal notranslate"><span class="pre">candidate</span></code> image to <code class="docutils literal notranslate"><span class="pre">reference</span></code> image(s) on a rubric.</p>
+<p>The explainable half of a reference supervisor: a vision model returns a
+per-aspect pass/fail checklist (does the face match? the costume? the set?
+the lighting? the props?) plus an overall verdict — the explainable layer
+over a cheap numeric identity-cosine gate (which lives elsewhere, e.g.
+lookbook). Built on <a class="reference internal" href="#aix.vision.to_image_content" title="aix.vision.to_image_content"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_image_content()</span></code></a> (multi-image content block)
+and the same multimodal <code class="docutils literal notranslate"><span class="pre">completion</span></code> path as <a class="reference internal" href="#aix.vision.describe_image" title="aix.vision.describe_image"><code class="xref py py-func docutils literal notranslate"><span class="pre">describe_image()</span></code></a>,
+asked via a JSON contract for a structured answer.</p>
+<p>The comparison is <em>pointwise</em> (each aspect judged on its own), not a ranked
+pairwise comparison, to avoid position bias.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>candidate</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – The image under review (URL / path / bytes / PIL image /
+<code class="docutils literal notranslate"><span class="pre">data:</span></code> URI — anything <a class="reference internal" href="#aix.vision.to_image_content" title="aix.vision.to_image_content"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_image_content()</span></code></a> accepts).</p></li>
+<li><p><strong>reference</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</span>) – The locked reference — a single image <em>or</em> a sequence of
+images (a locked set) in the same flexible formats. An empty
+sequence is an error.</p></li>
+<li><p><strong>rubric</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – The aspects to evaluate, one verdict per item. Defaults to
+<a class="reference internal" href="#aix.vision.DFLT_COMPARE_RUBRIC" title="aix.vision.DFLT_COMPARE_RUBRIC"><code class="xref py py-data docutils literal notranslate"><span class="pre">DFLT_COMPARE_RUBRIC</span></code></a>; pass <a class="reference internal" href="#aix.vision.DFLT_FILM_RUBRIC" title="aix.vision.DFLT_FILM_RUBRIC"><code class="xref py py-data docutils literal notranslate"><span class="pre">DFLT_FILM_RUBRIC</span></code></a> (or any
+custom sequence) to override — e.g. <code class="docutils literal notranslate"><span class="pre">(&quot;face&quot;,</span> <span class="pre">&quot;architecture&quot;,</span>
+<span class="pre">&quot;props&quot;,</span> <span class="pre">&quot;lighting&quot;)</span></code>. Must be non-empty.</p></li>
+<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Vision-capable model id or alias. <code class="docutils literal notranslate"><span class="pre">None</span></code> → the configured
+default (<a class="reference internal" href="aix.config.html#aix.config.VisionConfig" title="aix.config.VisionConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">aix.config.VisionConfig</span></code></a>).</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Explicit API key; <code class="docutils literal notranslate"><span class="pre">None</span></code> resolves it for the model’s
+provider from the environment / <code class="docutils literal notranslate"><span class="pre">.env</span></code> / config store.</p></li>
+<li><p><strong>max_tokens</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Cap on generated tokens (<code class="docutils literal notranslate"><span class="pre">None</span></code> → provider default).</p></li>
+<li><p><strong>temperature</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Sampling temperature (default <code class="docutils literal notranslate"><span class="pre">0.0</span></code> for a stable,
+reproducible verdict; <code class="docutils literal notranslate"><span class="pre">None</span></code> → provider default).</p></li>
+<li><p><strong>detail</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Image detail hint (<code class="docutils literal notranslate"><span class="pre">&quot;low&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;high&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>),
+applied to every image block.</p></li>
+<li><p><strong>instruction</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The system-style framing prepended to the rubric. Has a
+sensible default; override to retune the supervisor’s strictness.</p></li>
+<li><p><strong>**kwargs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Extra provider-specific params forwarded to LiteLLM.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#aix.vision.ImageComparison" title="aix.vision.ImageComparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageComparison</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An <a class="reference internal" href="#aix.vision.ImageComparison" title="aix.vision.ImageComparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImageComparison</span></code></a> — overall <code class="docutils literal notranslate"><span class="pre">match</span></code> / <code class="docutils literal notranslate"><span class="pre">confidence</span></code> /
+<code class="docutils literal notranslate"><span class="pre">explanation</span></code> plus an ordered, mapping-like collection of
+<a class="reference internal" href="#aix.vision.RubricVerdict" title="aix.vision.RubricVerdict"><code class="xref py py-class docutils literal notranslate"><span class="pre">RubricVerdict</span></code></a> (one per rubric aspect, keyed by aspect).</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ImportError" title="(in Python v3.14)"><strong>ImportError</strong></a> – If LiteLLM is not installed.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">rubric</span></code> is empty or <code class="docutils literal notranslate"><span class="pre">reference</span></code> is an empty
+    sequence, or if the model’s reply can’t be parsed as the expected
+    JSON verdict.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Default rubric, single reference:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compare_images</span><span class="p">(</span><span class="s2">"gen.png"</span><span class="p">,</span> <span class="s2">"ref.png"</span><span class="p">)</span>
+<span class="go">ImageComparison(match=True, confidence=0.9, ...)</span>
+</pre></div>
+</div>
+<p>Filmmaking rubric, a locked reference <em>set</em>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix.vision</span><span class="w"> </span><span class="kn">import</span> <span class="n">DFLT_FILM_RUBRIC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compare_images</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">candidate</span><span class="o">=</span><span class="s2">"frame_042.png"</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">reference</span><span class="o">=</span><span class="p">[</span><span class="s2">"ref_front.png"</span><span class="p">,</span> <span class="s2">"ref_side.png"</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">rubric</span><span class="o">=</span><span class="n">DFLT_FILM_RUBRIC</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)[</span><span class="s2">"face_identity"</span><span class="p">]</span><span class="o">.</span><span class="n">match</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.vision.describe_image">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">describe_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Describe</span> <span class="pre">this</span> <span class="pre">image</span> <span class="pre">in</span> <span class="pre">detail.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/vision.html#describe_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.vision.describe_image" title="Link to this definition">¶</a></dt>
+<dd><p>Describe (or answer a question about) <code class="docutils literal notranslate"><span class="pre">image</span></code> and return the text.</p>
+<p>The image→text primitive. <code class="docutils literal notranslate"><span class="pre">image</span></code> accepts a URL, a local path, raw bytes,
+a PIL image, or a <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI (see <a class="reference internal" href="#aix.vision.to_image_content" title="aix.vision.to_image_content"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_image_content()</span></code></a>). <code class="docutils literal notranslate"><span class="pre">prompt</span></code> is
+the instruction (default: a generic “describe this image”); pass a question
+for VQA or a rubric for a judgement. Everything past <code class="docutils literal notranslate"><span class="pre">image</span></code> is keyword.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – The image (URL / path / bytes / PIL image / <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI).</p></li>
+<li><p><strong>prompt</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The text instruction accompanying the image.</p></li>
+<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Vision-capable model id (e.g. <code class="docutils literal notranslate"><span class="pre">gpt-4o</span></code>, <code class="docutils literal notranslate"><span class="pre">claude-sonnet-4-6</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gemini/gemini-1.5-pro</span></code>) or an alias. <code class="docutils literal notranslate"><span class="pre">None</span></code> → the configured
+default (<a class="reference internal" href="aix.config.html#aix.config.VisionConfig" title="aix.config.VisionConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">aix.config.VisionConfig</span></code></a>).</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Explicit API key; <code class="docutils literal notranslate"><span class="pre">None</span></code> resolves it from the environment /
+<code class="docutils literal notranslate"><span class="pre">.env</span></code> / config store for the model’s provider.</p></li>
+<li><p><strong>max_tokens</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Cap on generated tokens (<code class="docutils literal notranslate"><span class="pre">None</span></code> → provider default).</p></li>
+<li><p><strong>temperature</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Sampling temperature (<code class="docutils literal notranslate"><span class="pre">None</span></code> → provider default).</p></li>
+<li><p><strong>detail</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Image detail hint (<code class="docutils literal notranslate"><span class="pre">&quot;low&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;high&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>).</p></li>
+<li><p><strong>**kwargs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Extra provider-specific params forwarded to LiteLLM.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The model’s text response.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ImportError" title="(in Python v3.14)"><strong>ImportError</strong></a> – If LiteLLM is not installed.</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">describe_image</span><span class="p">(</span><span class="s2">"cat.jpg"</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="s2">"Caption it."</span><span class="p">)</span>
+<span class="go">'A cat on a sofa.'</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.vision.to_image_content">
+<span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">to_image_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/vision.html#to_image_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.vision.to_image_content" title="Link to this definition">¶</a></dt>
+<dd><p>Build a multimodal <code class="docutils literal notranslate"><span class="pre">image_url</span></code> content block for <code class="docutils literal notranslate"><span class="pre">image</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">image</span></code> may be:</p>
+<ul class="simple">
+<li><p>an <code class="docutils literal notranslate"><span class="pre">http(s)://</span></code> URL or a <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI — passed through verbatim;</p></li>
+<li><p>a local file path (<code class="docutils literal notranslate"><span class="pre">str</span></code> or <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) — read and inlined
+as a base64 <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI with a guessed MIME type;</p></li>
+<li><p>raw <code class="docutils literal notranslate"><span class="pre">bytes</span></code> — base64-inlined (MIME sniffed from magic bytes, else JPEG);</p></li>
+<li><p>a PIL <code class="docutils literal notranslate"><span class="pre">Image</span></code> — encoded to PNG and inlined.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">detail</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;low&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;high&quot;</span></code> | <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>) is forwarded when set; the
+block is the OpenAI/LiteLLM multimodal shape understood across providers.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">to_image_content</span><span class="p">(</span><span class="s2">"https://x/y.jpg"</span><span class="p">)</span>
+<span class="go">{'type': 'image_url', 'image_url': {'url': 'https://x/y.jpg'}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_image_content</span><span class="p">(</span><span class="s2">"data:image/png;base64,AAAA"</span><span class="p">)[</span><span class="s2">"image_url"</span><span class="p">][</span><span class="s2">"url"</span><span class="p">][:</span><span class="mi">10</span><span class="p">]</span>
+<span class="go">'data:image'</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="aix.video.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">aix.video</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">aix.vision</a><ul>
+<li><a class="reference internal" href="#aix.vision.DFLT_COMPARE_RUBRIC"><code class="docutils literal notranslate"><span class="pre">DFLT_COMPARE_RUBRIC</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.DFLT_FILM_RUBRIC"><code class="docutils literal notranslate"><span class="pre">DFLT_FILM_RUBRIC</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.DFLT_VISION_MODEL"><code class="docutils literal notranslate"><span class="pre">DFLT_VISION_MODEL</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.DFLT_VISION_PROMPT"><code class="docutils literal notranslate"><span class="pre">DFLT_VISION_PROMPT</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.ImageComparison"><code class="docutils literal notranslate"><span class="pre">ImageComparison</span></code></a><ul>
+<li><a class="reference internal" href="#aix.vision.ImageComparison.match"><code class="docutils literal notranslate"><span class="pre">ImageComparison.match</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.ImageComparison.confidence"><code class="docutils literal notranslate"><span class="pre">ImageComparison.confidence</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.ImageComparison.explanation"><code class="docutils literal notranslate"><span class="pre">ImageComparison.explanation</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.ImageComparison.aspects"><code class="docutils literal notranslate"><span class="pre">ImageComparison.aspects</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.ImageComparison.model"><code class="docutils literal notranslate"><span class="pre">ImageComparison.model</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.ImageComparison.get"><code class="docutils literal notranslate"><span class="pre">ImageComparison.get()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aix.vision.RubricVerdict"><code class="docutils literal notranslate"><span class="pre">RubricVerdict</span></code></a><ul>
+<li><a class="reference internal" href="#aix.vision.RubricVerdict.aspect"><code class="docutils literal notranslate"><span class="pre">RubricVerdict.aspect</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.RubricVerdict.match"><code class="docutils literal notranslate"><span class="pre">RubricVerdict.match</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.RubricVerdict.confidence"><code class="docutils literal notranslate"><span class="pre">RubricVerdict.confidence</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.RubricVerdict.note"><code class="docutils literal notranslate"><span class="pre">RubricVerdict.note</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aix.vision.compare_images"><code class="docutils literal notranslate"><span class="pre">compare_images()</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.describe_image"><code class="docutils literal notranslate"><span class="pre">describe_image()</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.to_image_content"><code class="docutils literal notranslate"><span class="pre">to_image_content()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=3b2cf976"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fd10adb8"></script>
+    </body>
+</html>

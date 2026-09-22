@@ -1,0 +1,30 @@
+aix.config
+==========
+
+.. automodule:: aix.config
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      load_config
+      get_config
+      set_config
+      configure
+      using
+      config_file_path
+      resolve_model
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ChatConfig
+      EmbeddingConfig
+      ImageConfig
+      AudioConfig
+      VideoConfig
+      VisionConfig
+      AixConfig
+   

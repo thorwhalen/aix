@@ -1,0 +1,18 @@
+aix.ai\_models.manager
+======================
+
+.. automodule:: aix.ai_models.manager
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_manager
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ModelManager
+   

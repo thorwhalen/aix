@@ -1,4 +1,0 @@
-aix.gen_ai.google_genai
-=======================
-.. automodule:: aix.gen_ai.google_genai
-   :members:

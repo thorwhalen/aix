@@ -1,0 +1,26 @@
+aix.video
+=========
+
+.. automodule:: aix.video
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      animate_image
+      estimate_cost
+      extend_video
+      generate_video
+      generate_video_pika
+      generate_video_runway
+      generate_video_stable_diffusion
+      get_available_providers
+      interpolate_frames
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GeneratedVideo
+   

@@ -1,0 +1,19 @@
+aix.ai\_models.sources
+======================
+
+.. automodule:: aix.ai_models.sources
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DSPyConnector
+      LangChainConnector
+      OllamaConnector
+      OllamaSource
+      OpenAIConnector
+      OpenRouterConnector
+      OpenRouterSource
+      ProviderAPISource
+   

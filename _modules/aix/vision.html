@@ -1,108 +1,272 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+<link rel="alternate" type="text/markdown" href="vision.html.md">
+<link rel="describedby" href="../../llms.txt" type="text/markdown"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>aix.vision - aix</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
 
 
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aix.vision &mdash; aix 0.0.38 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
-
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  --color-brand-primary: #2b559f;
+  --color-brand-content: #2b559f;
   
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=423071ad"></script>
-      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-</head>
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
 
-          
-          
-          <a href="../../index.html" class="icon icon-home">
-            aix
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix.html">aix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/_litellm.html">aix._litellm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models.html">aix.ai_models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/base.html">aix.ai_models.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/examples.html">aix.ai_models.examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/manager.html">aix.ai_models.manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/ai_models/sources.html">aix.ai_models.sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/audio.html">aix.audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/batches.html">aix.batches</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/chat.html">aix.chat</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/config.html">aix.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/credentials.html">aix.credentials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/embeddings.html">aix.embeddings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai.html">aix.gen_ai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/google_genai.html">aix.gen_ai.google_genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/gen_ai/openai_genai.html">aix.gen_ai.openai_genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/image.html">aix.image</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/misc.html">aix.misc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/models.html">aix.models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/prompts.html">aix.prompts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/stores.html">aix.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/util.html">aix.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/video.html">aix.video</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/aix/vision.html">aix.vision</a></li>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">aix</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">aix</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api.html">API reference</a><input aria-label="Toggle navigation of API reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../_autosummary/aix.html">aix</a><input aria-label="Toggle navigation of aix" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.config.html">aix.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../_autosummary/aix.ai_models.html">aix.ai_models</a><input aria-label="Toggle navigation of aix.ai_models" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.ai_models.base.html">aix.ai_models.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.ai_models.manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.ai_models.sources.html">aix.ai_models.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.audio.html">aix.audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.batches.html">aix.batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.credentials.html">aix.credentials</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../_autosummary/aix.gen_ai.html">aix.gen_ai</a><input aria-label="Toggle navigation of aix.gen_ai" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.gen_ai.google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../_autosummary/aix.gen_ai.openai_genai.html">aix.gen_ai.openai_genai</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.image.html">aix.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.misc.html">aix.misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.models.html">aix.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.prompts.html">aix.prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.util.html">aix.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.video.html">aix.video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.vision.html">aix.vision</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">aix</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">aix.vision</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <h1>Source code for aix.vision</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Image-to-text (vision) interface for AIX.</span>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for aix.vision</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Image-to-text (vision) interface for AIX.</span>
 
 <span class="sd">The cross-modal counterpart to :mod:`aix.image` (which is text→image): given an</span>
 <span class="sd">image, produce text — a caption, an answer to a question about it, or a</span>
 <span class="sd">structured judgement. Like the rest of AIX it is a thin, provider-neutral facade</span>
-<span class="sd">over LiteLLM&#39;s multimodal ``completion`` (the same backend ``chat`` uses), so the</span>
+<span class="sd">over LiteLLM's multimodal ``completion`` (the same backend ``chat`` uses), so the</span>
 <span class="sd">same call routes to any vision-capable provider (OpenAI, Anthropic, Gemini,</span>
 <span class="sd">OpenRouter, …) by model id alone.</span>
 
@@ -115,37 +279,37 @@
 <span class="sd">    Caption an image (any vision-capable model):</span>
 
 <span class="sd">    &gt;&gt;&gt; from aix.vision import describe_image</span>
-<span class="sd">    &gt;&gt;&gt; describe_image(&quot;https://example.com/cat.jpg&quot;)  # doctest: +SKIP</span>
-<span class="sd">    &#39;A grey tabby cat sitting on a windowsill in afternoon light.&#39;</span>
+<span class="sd">    &gt;&gt;&gt; describe_image("https://example.com/cat.jpg")  # doctest: +SKIP</span>
+<span class="sd">    'A grey tabby cat sitting on a windowsill in afternoon light.'</span>
 
 <span class="sd">    Ask a specific question:</span>
 
-<span class="sd">    &gt;&gt;&gt; describe_image(&quot;photo.png&quot;, prompt=&quot;What colour is the car?&quot;)  # doctest: +SKIP</span>
-<span class="sd">    &#39;The car is red.&#39;</span>
+<span class="sd">    &gt;&gt;&gt; describe_image("photo.png", prompt="What colour is the car?")  # doctest: +SKIP</span>
+<span class="sd">    'The car is red.'</span>
 
 <span class="sd">    Build a multi-image message yourself and hand it to ``chat``:</span>
 
 <span class="sd">    &gt;&gt;&gt; from aix import chat</span>
 <span class="sd">    &gt;&gt;&gt; from aix.vision import to_image_content</span>
-<span class="sd">    &gt;&gt;&gt; msg = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: [          # doctest: +SKIP</span>
-<span class="sd">    ...     {&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;Which is brighter?&quot;},</span>
-<span class="sd">    ...     to_image_content(&quot;a.jpg&quot;), to_image_content(&quot;b.jpg&quot;),</span>
+<span class="sd">    &gt;&gt;&gt; msg = [{"role": "user", "content": [          # doctest: +SKIP</span>
+<span class="sd">    ...     {"type": "text", "text": "Which is brighter?"},</span>
+<span class="sd">    ...     to_image_content("a.jpg"), to_image_content("b.jpg"),</span>
 <span class="sd">    ... ]}]</span>
-<span class="sd">    &gt;&gt;&gt; chat(msg, model=&quot;gpt-4o&quot;)  # doctest: +SKIP</span>
-<span class="sd">    &#39;The second image is brighter.&#39;</span>
+<span class="sd">    &gt;&gt;&gt; chat(msg, model="gpt-4o")  # doctest: +SKIP</span>
+<span class="sd">    'The second image is brighter.'</span>
 
 <span class="sd">:func:`compare_images` builds on these primitives: it puts a *candidate* image</span>
 <span class="sd">beside one or more *reference* images and asks a vision model, via a structured</span>
-<span class="sd">JSON path, for an explainable per-aspect likeness verdict — the &quot;explain the</span>
-<span class="sd">drift&quot; half of a reference supervisor (face / costume / setting / lighting /</span>
+<span class="sd">JSON path, for an explainable per-aspect likeness verdict — the "explain the</span>
+<span class="sd">drift" half of a reference supervisor (face / costume / setting / lighting /</span>
 <span class="sd">props matched?). The numeric identity-cosine gate lives elsewhere (lookbook);</span>
 <span class="sd">this layer is the explainable checklist on top of it.</span>
 
 <span class="sd">    &gt;&gt;&gt; from aix.vision import compare_images</span>
-<span class="sd">    &gt;&gt;&gt; verdict = compare_images(&quot;gen.png&quot;, &quot;locked_ref.png&quot;)  # doctest: +SKIP</span>
-<span class="sd">    &gt;&gt;&gt; verdict.match, verdict[&quot;identity&quot;].match  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; verdict = compare_images("gen.png", "locked_ref.png")  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; verdict.match, verdict["identity"].match  # doctest: +SKIP</span>
 <span class="sd">    (True, True)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -169,78 +333,78 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix._litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">UNRESOLVED</span> <span class="k">as</span> <span class="n">_UNRESOLVED</span><span class="p">,</span> <span class="n">litellm_attr</span> <span class="k">as</span> <span class="n">_litellm_attr</span>
 
 <span class="c1"># LiteLLM is a soft dependency, imported privately (mirrors aix.chat) *and*</span>
-<span class="c1"># deferred: importing it fetches litellm&#39;s model-cost map over HTTPS, so</span>
+<span class="c1"># deferred: importing it fetches litellm's model-cost map over HTTPS, so</span>
 <span class="c1"># `import aix` must not do it. See aix/_litellm.py for the rationale.</span>
 <span class="n">_litellm_completion</span> <span class="o">=</span> <span class="n">_UNRESOLVED</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_completion</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve litellm&#39;s ``completion``, importing litellm on first use.</span>
+<span class="w">    </span><span class="sd">"""Resolve litellm's ``completion``, importing litellm on first use.</span>
 
 <span class="sd">    Returns ``None`` when litellm is unavailable, which call sites turn into an</span>
 <span class="sd">    :class:`ImportError` carrying an install hint.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_litellm_completion</span>
     <span class="k">if</span> <span class="n">_litellm_completion</span> <span class="ow">is</span> <span class="n">_UNRESOLVED</span><span class="p">:</span>
-        <span class="n">_litellm_completion</span> <span class="o">=</span> <span class="n">_litellm_attr</span><span class="p">(</span><span class="s2">&quot;completion&quot;</span><span class="p">)</span>
+        <span class="n">_litellm_completion</span> <span class="o">=</span> <span class="n">_litellm_attr</span><span class="p">(</span><span class="s2">"completion"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_litellm_completion</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;describe_image&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;to_image_content&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;compare_images&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;RubricVerdict&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ImageComparison&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;DFLT_VISION_MODEL&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;DFLT_VISION_PROMPT&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;DFLT_COMPARE_RUBRIC&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;DFLT_FILM_RUBRIC&quot;</span><span class="p">,</span>
+    <span class="s2">"describe_image"</span><span class="p">,</span>
+    <span class="s2">"to_image_content"</span><span class="p">,</span>
+    <span class="s2">"compare_images"</span><span class="p">,</span>
+    <span class="s2">"RubricVerdict"</span><span class="p">,</span>
+    <span class="s2">"ImageComparison"</span><span class="p">,</span>
+    <span class="s2">"DFLT_VISION_MODEL"</span><span class="p">,</span>
+    <span class="s2">"DFLT_VISION_PROMPT"</span><span class="p">,</span>
+    <span class="s2">"DFLT_COMPARE_RUBRIC"</span><span class="p">,</span>
+    <span class="s2">"DFLT_FILM_RUBRIC"</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="c1">#: Shipped-default vision model, kept for reference. The *active* default is</span>
 <span class="c1">#: resolved from ``aix.config`` at call time (see :class:`aix.config.VisionConfig`).</span>
 <span class="n">DFLT_VISION_MODEL</span> <span class="o">=</span> <span class="n">_VisionConfig</span><span class="p">()</span><span class="o">.</span><span class="n">model</span>
 
-<span class="c1">#: Default instruction when the caller doesn&#39;t supply one.</span>
-<span class="n">DFLT_VISION_PROMPT</span> <span class="o">=</span> <span class="s2">&quot;Describe this image in detail.&quot;</span>
+<span class="c1">#: Default instruction when the caller doesn't supply one.</span>
+<span class="n">DFLT_VISION_PROMPT</span> <span class="o">=</span> <span class="s2">"Describe this image in detail."</span>
 
 <span class="c1">#: Default rubric for :func:`compare_images` — a generic likeness checklist.</span>
 <span class="c1">#: Each entry is one aspect the vision model judges independently.</span>
-<span class="n">DFLT_COMPARE_RUBRIC</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;identity&quot;</span><span class="p">,</span> <span class="s2">&quot;costume&quot;</span><span class="p">,</span> <span class="s2">&quot;setting&quot;</span><span class="p">,</span> <span class="s2">&quot;lighting&quot;</span><span class="p">,</span> <span class="s2">&quot;props&quot;</span><span class="p">)</span>
+<span class="n">DFLT_COMPARE_RUBRIC</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"identity"</span><span class="p">,</span> <span class="s2">"costume"</span><span class="p">,</span> <span class="s2">"setting"</span><span class="p">,</span> <span class="s2">"lighting"</span><span class="p">,</span> <span class="s2">"props"</span><span class="p">)</span>
 
-<span class="c1">#: Filmmaking-oriented rubric (Noel&#39;s reference-supervisor checklist): the</span>
+<span class="c1">#: Filmmaking-oriented rubric (Noel's reference-supervisor checklist): the</span>
 <span class="c1">#: locked face, the architecture/set, the lighting, and the props. Pass it as</span>
 <span class="c1">#: ``rubric=`` when comparing a generated frame against a locked reference.</span>
 <span class="n">DFLT_FILM_RUBRIC</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;face_identity&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;costume&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;setting_architecture&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;lighting&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;props&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;skin_realism&quot;</span><span class="p">,</span>
+    <span class="s2">"face_identity"</span><span class="p">,</span>
+    <span class="s2">"costume"</span><span class="p">,</span>
+    <span class="s2">"setting_architecture"</span><span class="p">,</span>
+    <span class="s2">"lighting"</span><span class="p">,</span>
+    <span class="s2">"props"</span><span class="p">,</span>
+    <span class="s2">"skin_realism"</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1">#: Default JPEG when raw bytes can&#39;t be sniffed (most stock images are JPEG).</span>
-<span class="n">_DFLT_IMAGE_MIME</span> <span class="o">=</span> <span class="s2">&quot;image/jpeg&quot;</span>
+<span class="c1">#: Default JPEG when raw bytes can't be sniffed (most stock images are JPEG).</span>
+<span class="n">_DFLT_IMAGE_MIME</span> <span class="o">=</span> <span class="s2">"image/jpeg"</span>
 
 <span class="c1">#: Magic-number prefixes for sniffing a MIME type from raw bytes.</span>
 <span class="n">_MAGIC_MIME</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x89</span><span class="s2">PNG</span><span class="se">\r\n\x1a\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;image/png&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xff\xd8\xff</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;image/jpeg&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="sa">b</span><span class="s2">&quot;GIF87a&quot;</span><span class="p">,</span> <span class="s2">&quot;image/gif&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="sa">b</span><span class="s2">&quot;GIF89a&quot;</span><span class="p">,</span> <span class="s2">&quot;image/gif&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="sa">b</span><span class="s2">&quot;RIFF&quot;</span><span class="p">,</span> <span class="s2">&quot;image/webp&quot;</span><span class="p">),</span>  <span class="c1"># RIFF....WEBP; prefix is enough to distinguish here</span>
-    <span class="p">(</span><span class="sa">b</span><span class="s2">&quot;BM&quot;</span><span class="p">,</span> <span class="s2">&quot;image/bmp&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="sa">b</span><span class="s2">"</span><span class="se">\x89</span><span class="s2">PNG</span><span class="se">\r\n\x1a\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"image/png"</span><span class="p">),</span>
+    <span class="p">(</span><span class="sa">b</span><span class="s2">"</span><span class="se">\xff\xd8\xff</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"image/jpeg"</span><span class="p">),</span>
+    <span class="p">(</span><span class="sa">b</span><span class="s2">"GIF87a"</span><span class="p">,</span> <span class="s2">"image/gif"</span><span class="p">),</span>
+    <span class="p">(</span><span class="sa">b</span><span class="s2">"GIF89a"</span><span class="p">,</span> <span class="s2">"image/gif"</span><span class="p">),</span>
+    <span class="p">(</span><span class="sa">b</span><span class="s2">"RIFF"</span><span class="p">,</span> <span class="s2">"image/webp"</span><span class="p">),</span>  <span class="c1"># RIFF....WEBP; prefix is enough to distinguish here</span>
+    <span class="p">(</span><span class="sa">b</span><span class="s2">"BM"</span><span class="p">,</span> <span class="s2">"image/bmp"</span><span class="p">),</span>
 <span class="p">)</span>
 
 
 <div class="viewcode-block" id="to_image_content">
-<a class="viewcode-back" href="../../module_docs/aix/vision.html#aix.to_image_content">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.vision.html#aix.to_image_content">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">to_image_content</span><span class="p">(</span>
-    <span class="n">image</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path, bytes, Any]&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">detail</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">image</span><span class="p">:</span> <span class="s2">"Union[str, Path, bytes, Any]"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">detail</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a multimodal ``image_url`` content block for ``image``.</span>
+<span class="w">    </span><span class="sd">"""Build a multimodal ``image_url`` content block for ``image``.</span>
 
 <span class="sd">    ``image`` may be:</span>
 
@@ -250,41 +414,41 @@
 <span class="sd">    - raw ``bytes`` — base64-inlined (MIME sniffed from magic bytes, else JPEG);</span>
 <span class="sd">    - a PIL ``Image`` — encoded to PNG and inlined.</span>
 
-<span class="sd">    ``detail`` (``&quot;low&quot;`` | ``&quot;high&quot;`` | ``&quot;auto&quot;``) is forwarded when set; the</span>
+<span class="sd">    ``detail`` (``"low"`` | ``"high"`` | ``"auto"``) is forwarded when set; the</span>
 <span class="sd">    block is the OpenAI/LiteLLM multimodal shape understood across providers.</span>
 
-<span class="sd">    &gt;&gt;&gt; to_image_content(&quot;https://x/y.jpg&quot;)</span>
-<span class="sd">    {&#39;type&#39;: &#39;image_url&#39;, &#39;image_url&#39;: {&#39;url&#39;: &#39;https://x/y.jpg&#39;}}</span>
-<span class="sd">    &gt;&gt;&gt; to_image_content(&quot;data:image/png;base64,AAAA&quot;)[&quot;image_url&quot;][&quot;url&quot;][:10]</span>
-<span class="sd">    &#39;data:image&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; to_image_content("https://x/y.jpg")</span>
+<span class="sd">    {'type': 'image_url', 'image_url': {'url': 'https://x/y.jpg'}}</span>
+<span class="sd">    &gt;&gt;&gt; to_image_content("data:image/png;base64,AAAA")["image_url"]["url"][:10]</span>
+<span class="sd">    'data:image'</span>
+<span class="sd">    """</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">_to_image_url</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-    <span class="n">image_url</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span>
+    <span class="n">image_url</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"url"</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span>
     <span class="k">if</span> <span class="n">detail</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">image_url</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detail</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image_url&quot;</span><span class="p">,</span> <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="n">image_url</span><span class="p">}</span></div>
+        <span class="n">image_url</span><span class="p">[</span><span class="s2">"detail"</span><span class="p">]</span> <span class="o">=</span> <span class="n">detail</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"image_url"</span><span class="p">,</span> <span class="s2">"image_url"</span><span class="p">:</span> <span class="n">image_url</span><span class="p">}</span></div>
 
 
 
 <div class="viewcode-block" id="describe_image">
-<a class="viewcode-back" href="../../module_docs/aix/vision.html#aix.describe_image">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.vision.html#aix.describe_image">[docs]</a>
 <span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">vision</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">describe_image</span><span class="p">(</span>
-    <span class="n">image</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path, bytes, Any]&quot;</span><span class="p">,</span>
+    <span class="n">image</span><span class="p">:</span> <span class="s2">"Union[str, Path, bytes, Any]"</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_VISION_PROMPT</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">api_key</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">max_tokens</span><span class="p">:</span> <span class="s2">&quot;int | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">temperature</span><span class="p">:</span> <span class="s2">&quot;float | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">detail</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="s2">"int | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="s2">"float | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">detail</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Describe (or answer a question about) ``image`` and return the text.</span>
+<span class="w">    </span><span class="sd">"""Describe (or answer a question about) ``image`` and return the text.</span>
 
 <span class="sd">    The image→text primitive. ``image`` accepts a URL, a local path, raw bytes,</span>
 <span class="sd">    a PIL image, or a ``data:`` URI (see :func:`to_image_content`). ``prompt`` is</span>
-<span class="sd">    the instruction (default: a generic &quot;describe this image&quot;); pass a question</span>
+<span class="sd">    the instruction (default: a generic "describe this image"); pass a question</span>
 <span class="sd">    for VQA or a rubric for a judgement. Everything past ``image`` is keyword.</span>
 
 <span class="sd">    Args:</span>
@@ -294,26 +458,26 @@
 <span class="sd">            ``gemini/gemini-1.5-pro``) or an alias. ``None`` → the configured</span>
 <span class="sd">            default (:class:`aix.config.VisionConfig`).</span>
 <span class="sd">        api_key: Explicit API key; ``None`` resolves it from the environment /</span>
-<span class="sd">            ``.env`` / config store for the model&#39;s provider.</span>
+<span class="sd">            ``.env`` / config store for the model's provider.</span>
 <span class="sd">        max_tokens: Cap on generated tokens (``None`` → provider default).</span>
 <span class="sd">        temperature: Sampling temperature (``None`` → provider default).</span>
-<span class="sd">        detail: Image detail hint (``&quot;low&quot;`` | ``&quot;high&quot;`` | ``&quot;auto&quot;``).</span>
+<span class="sd">        detail: Image detail hint (``"low"`` | ``"high"`` | ``"auto"``).</span>
 <span class="sd">        **kwargs: Extra provider-specific params forwarded to LiteLLM.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The model&#39;s text response.</span>
+<span class="sd">        The model's text response.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ImportError: If LiteLLM is not installed.</span>
 
-<span class="sd">    &gt;&gt;&gt; describe_image(&quot;cat.jpg&quot;, prompt=&quot;Caption it.&quot;)  # doctest: +SKIP</span>
-<span class="sd">    &#39;A cat on a sofa.&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; describe_image("cat.jpg", prompt="Caption it.")  # doctest: +SKIP</span>
+<span class="sd">    'A cat on a sofa.'</span>
+<span class="sd">    """</span>
     <span class="n">completion</span> <span class="o">=</span> <span class="n">_completion</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">completion</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;LiteLLM is required for vision functionality. &quot;</span>
-            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+            <span class="s2">"LiteLLM is required for vision functionality. "</span>
+            <span class="s2">"Install it with: pip install litellm"</span>
         <span class="p">)</span>
 
     <span class="n">cfg</span> <span class="o">=</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">vision</span>
@@ -321,23 +485,23 @@
 
     <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">},</span>
+            <span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
+            <span class="s2">"content"</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"text"</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">},</span>
                 <span class="n">to_image_content</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">),</span>
             <span class="p">],</span>
         <span class="p">}</span>
     <span class="p">]</span>
 
-    <span class="n">litellm_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span> <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="n">messages</span><span class="p">}</span>
+    <span class="n">litellm_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span> <span class="s2">"messages"</span><span class="p">:</span> <span class="n">messages</span><span class="p">}</span>
     <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">&quot;max_tokens&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_tokens</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"max_tokens"</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_tokens</span>
     <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"temperature"</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
 
     <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"api_key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
 
     <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -350,33 +514,33 @@
 
 
 <div class="viewcode-block" id="RubricVerdict">
-<a class="viewcode-back" href="../../module_docs/aix/vision.html#aix.RubricVerdict">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.vision.html#aix.RubricVerdict">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">RubricVerdict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A vision model&#39;s verdict on a single rubric aspect.</span>
+<span class="w">    </span><span class="sd">"""A vision model's verdict on a single rubric aspect.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        aspect: The rubric item this verdict is about (e.g. ``&quot;identity&quot;``).</span>
+<span class="sd">        aspect: The rubric item this verdict is about (e.g. ``"identity"``).</span>
 <span class="sd">        match: Whether the candidate matches the reference for this aspect.</span>
-<span class="sd">        confidence: The model&#39;s self-reported confidence in ``[0.0, 1.0]``.</span>
+<span class="sd">        confidence: The model's self-reported confidence in ``[0.0, 1.0]``.</span>
 <span class="sd">        note: A short free-text explanation of the verdict.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">aspect</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">match</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+    <span class="n">note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span></div>
 
 
 
 <div class="viewcode-block" id="ImageComparison">
-<a class="viewcode-back" href="../../module_docs/aix/vision.html#aix.ImageComparison">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.vision.html#aix.ImageComparison">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ImageComparison</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structured result of comparing a candidate image to reference(s).</span>
+<span class="w">    </span><span class="sd">"""Structured result of comparing a candidate image to reference(s).</span>
 
 <span class="sd">    Behaves like an ordered, read-only mapping of ``aspect -&gt; RubricVerdict``</span>
-<span class="sd">    (``comparison[&quot;identity&quot;]``, ``in``, iteration, ``len``) so per-aspect</span>
+<span class="sd">    (``comparison["identity"]``, ``in``, iteration, ``len``) so per-aspect</span>
 <span class="sd">    lookups read naturally, while also carrying the overall verdict.</span>
 
 <span class="sd">    Attributes:</span>
@@ -386,15 +550,15 @@
 <span class="sd">        aspects: The per-aspect verdicts, one :class:`RubricVerdict` per</span>
 <span class="sd">            rubric item, in rubric order.</span>
 <span class="sd">        model: The vision model id that produced the verdict.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">match</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">explanation</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">aspects</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">RubricVerdict</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
-    <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">model</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_by_aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;dict[str, RubricVerdict]&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_by_aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"dict[str, RubricVerdict]"</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">verdict</span><span class="o">.</span><span class="n">aspect</span><span class="p">:</span> <span class="n">verdict</span> <span class="k">for</span> <span class="n">verdict</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspect</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RubricVerdict</span><span class="p">:</span>
@@ -410,11 +574,11 @@
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ImageComparison.get">
-<a class="viewcode-back" href="../../module_docs/aix/vision.html#aix.ImageComparison.get">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.vision.html#aix.ImageComparison.get">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">aspect</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="s2">&quot;RubricVerdict | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RubricVerdict | None&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the verdict for ``aspect``, or ``default`` if absent.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">aspect</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="s2">"RubricVerdict | None"</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"RubricVerdict | None"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the verdict for ``aspect``, or ``default`` if absent."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_aspect</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">aspect</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span></div>
 </div>
 
@@ -423,34 +587,34 @@
 <span class="c1">#: Instruction prefix for the comparison prompt. Kept here (not inlined) so the</span>
 <span class="c1">#: phrasing is a single, tunable source of truth.</span>
 <span class="n">_COMPARE_INSTRUCTION</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;You are a strict visual continuity supervisor. The FIRST image is the &quot;</span>
-    <span class="s2">&quot;CANDIDATE; the remaining image(s) are the locked REFERENCE the candidate &quot;</span>
-    <span class="s2">&quot;must match. Judge each rubric aspect INDEPENDENTLY (do not let one aspect &quot;</span>
-    <span class="s2">&quot;color another). For each aspect decide whether the candidate matches the &quot;</span>
-    <span class="s2">&quot;reference, give a confidence in [0.0, 1.0], and a short note explaining &quot;</span>
-    <span class="s2">&quot;what matches or drifts. Then give an overall match (true only if every &quot;</span>
-    <span class="s2">&quot;important aspect matches), an overall confidence, and a one-sentence &quot;</span>
-    <span class="s2">&quot;explanation.&quot;</span>
+    <span class="s2">"You are a strict visual continuity supervisor. The FIRST image is the "</span>
+    <span class="s2">"CANDIDATE; the remaining image(s) are the locked REFERENCE the candidate "</span>
+    <span class="s2">"must match. Judge each rubric aspect INDEPENDENTLY (do not let one aspect "</span>
+    <span class="s2">"color another). For each aspect decide whether the candidate matches the "</span>
+    <span class="s2">"reference, give a confidence in [0.0, 1.0], and a short note explaining "</span>
+    <span class="s2">"what matches or drifts. Then give an overall match (true only if every "</span>
+    <span class="s2">"important aspect matches), an overall confidence, and a one-sentence "</span>
+    <span class="s2">"explanation."</span>
 <span class="p">)</span>
 
 
 <div class="viewcode-block" id="compare_images">
-<a class="viewcode-back" href="../../module_docs/aix/vision.html#aix.compare_images">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.vision.html#aix.compare_images">[docs]</a>
 <span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">vision</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">compare_images</span><span class="p">(</span>
-    <span class="n">candidate</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path, bytes, Any]&quot;</span><span class="p">,</span>
-    <span class="n">reference</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path, bytes, Any, Sequence[Any]]&quot;</span><span class="p">,</span>
+    <span class="n">candidate</span><span class="p">:</span> <span class="s2">"Union[str, Path, bytes, Any]"</span><span class="p">,</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="s2">"Union[str, Path, bytes, Any, Sequence[Any]]"</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">rubric</span><span class="p">:</span> <span class="s2">&quot;Sequence[str]&quot;</span> <span class="o">=</span> <span class="n">DFLT_COMPARE_RUBRIC</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">api_key</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">max_tokens</span><span class="p">:</span> <span class="s2">&quot;int | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">temperature</span><span class="p">:</span> <span class="s2">&quot;float | None&quot;</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">detail</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rubric</span><span class="p">:</span> <span class="s2">"Sequence[str]"</span> <span class="o">=</span> <span class="n">DFLT_COMPARE_RUBRIC</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="s2">"int | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="s2">"float | None"</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">detail</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">instruction</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_COMPARE_INSTRUCTION</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageComparison</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare a ``candidate`` image to ``reference`` image(s) on a rubric.</span>
+<span class="w">    </span><span class="sd">"""Compare a ``candidate`` image to ``reference`` image(s) on a rubric.</span>
 
 <span class="sd">    The explainable half of a reference supervisor: a vision model returns a</span>
 <span class="sd">    per-aspect pass/fail checklist (does the face match? the costume? the set?</span>
@@ -471,19 +635,19 @@
 <span class="sd">            sequence is an error.</span>
 <span class="sd">        rubric: The aspects to evaluate, one verdict per item. Defaults to</span>
 <span class="sd">            :data:`DFLT_COMPARE_RUBRIC`; pass :data:`DFLT_FILM_RUBRIC` (or any</span>
-<span class="sd">            custom sequence) to override — e.g. ``(&quot;face&quot;, &quot;architecture&quot;,</span>
-<span class="sd">            &quot;props&quot;, &quot;lighting&quot;)``. Must be non-empty.</span>
+<span class="sd">            custom sequence) to override — e.g. ``("face", "architecture",</span>
+<span class="sd">            "props", "lighting")``. Must be non-empty.</span>
 <span class="sd">        model: Vision-capable model id or alias. ``None`` → the configured</span>
 <span class="sd">            default (:class:`aix.config.VisionConfig`).</span>
-<span class="sd">        api_key: Explicit API key; ``None`` resolves it for the model&#39;s</span>
+<span class="sd">        api_key: Explicit API key; ``None`` resolves it for the model's</span>
 <span class="sd">            provider from the environment / ``.env`` / config store.</span>
 <span class="sd">        max_tokens: Cap on generated tokens (``None`` → provider default).</span>
 <span class="sd">        temperature: Sampling temperature (default ``0.0`` for a stable,</span>
 <span class="sd">            reproducible verdict; ``None`` → provider default).</span>
-<span class="sd">        detail: Image detail hint (``&quot;low&quot;`` | ``&quot;high&quot;`` | ``&quot;auto&quot;``),</span>
+<span class="sd">        detail: Image detail hint (``"low"`` | ``"high"`` | ``"auto"``),</span>
 <span class="sd">            applied to every image block.</span>
 <span class="sd">        instruction: The system-style framing prepended to the rubric. Has a</span>
-<span class="sd">            sensible default; override to retune the supervisor&#39;s strictness.</span>
+<span class="sd">            sensible default; override to retune the supervisor's strictness.</span>
 <span class="sd">        **kwargs: Extra provider-specific params forwarded to LiteLLM.</span>
 
 <span class="sd">    Returns:</span>
@@ -494,63 +658,63 @@
 <span class="sd">    Raises:</span>
 <span class="sd">        ImportError: If LiteLLM is not installed.</span>
 <span class="sd">        ValueError: If ``rubric`` is empty or ``reference`` is an empty</span>
-<span class="sd">            sequence, or if the model&#39;s reply can&#39;t be parsed as the expected</span>
+<span class="sd">            sequence, or if the model's reply can't be parsed as the expected</span>
 <span class="sd">            JSON verdict.</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        Default rubric, single reference:</span>
 
-<span class="sd">        &gt;&gt;&gt; compare_images(&quot;gen.png&quot;, &quot;ref.png&quot;)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; compare_images("gen.png", "ref.png")  # doctest: +SKIP</span>
 <span class="sd">        ImageComparison(match=True, confidence=0.9, ...)</span>
 
 <span class="sd">        Filmmaking rubric, a locked reference *set*:</span>
 
 <span class="sd">        &gt;&gt;&gt; from aix.vision import DFLT_FILM_RUBRIC</span>
 <span class="sd">        &gt;&gt;&gt; compare_images(  # doctest: +SKIP</span>
-<span class="sd">        ...     candidate=&quot;frame_042.png&quot;,</span>
-<span class="sd">        ...     reference=[&quot;ref_front.png&quot;, &quot;ref_side.png&quot;],</span>
+<span class="sd">        ...     candidate="frame_042.png",</span>
+<span class="sd">        ...     reference=["ref_front.png", "ref_side.png"],</span>
 <span class="sd">        ...     rubric=DFLT_FILM_RUBRIC,</span>
-<span class="sd">        ... )[&quot;face_identity&quot;].match</span>
+<span class="sd">        ... )["face_identity"].match</span>
 <span class="sd">        True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Validate arguments before checking the optional dependency, so a bad call</span>
     <span class="c1"># (empty rubric / empty reference set) is reported the same way regardless of</span>
     <span class="c1"># whether LiteLLM happens to be installed.</span>
     <span class="n">rubric</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">rubric</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">rubric</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`rubric` must contain at least one aspect to evaluate.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"`rubric` must contain at least one aspect to evaluate."</span><span class="p">)</span>
 
     <span class="n">references</span> <span class="o">=</span> <span class="n">_as_image_sequence</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">references</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;`reference` must be at least one image (got an empty sequence).&quot;</span>
+            <span class="s2">"`reference` must be at least one image (got an empty sequence)."</span>
         <span class="p">)</span>
 
     <span class="n">completion</span> <span class="o">=</span> <span class="n">_completion</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">completion</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">&quot;LiteLLM is required for vision functionality. &quot;</span>
-            <span class="s2">&quot;Install it with: pip install litellm&quot;</span>
+            <span class="s2">"LiteLLM is required for vision functionality. "</span>
+            <span class="s2">"Install it with: pip install litellm"</span>
         <span class="p">)</span>
 
     <span class="n">cfg</span> <span class="o">=</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">vision</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">_resolve_model</span><span class="p">(</span><span class="n">model</span> <span class="ow">or</span> <span class="n">cfg</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 
-    <span class="n">text_block</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">_compare_prompt</span><span class="p">(</span><span class="n">instruction</span><span class="p">,</span> <span class="n">rubric</span><span class="p">)}</span>
+    <span class="n">text_block</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"text"</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">:</span> <span class="n">_compare_prompt</span><span class="p">(</span><span class="n">instruction</span><span class="p">,</span> <span class="n">rubric</span><span class="p">)}</span>
     <span class="n">image_blocks</span> <span class="o">=</span> <span class="p">[</span><span class="n">to_image_content</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span>
         <span class="n">to_image_content</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">references</span>
     <span class="p">]</span>
-    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">text_block</span><span class="p">,</span> <span class="o">*</span><span class="n">image_blocks</span><span class="p">]}]</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="p">[</span><span class="n">text_block</span><span class="p">,</span> <span class="o">*</span><span class="n">image_blocks</span><span class="p">]}]</span>
 
-    <span class="n">litellm_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span> <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="n">messages</span><span class="p">}</span>
+    <span class="n">litellm_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span> <span class="s2">"messages"</span><span class="p">:</span> <span class="n">messages</span><span class="p">}</span>
     <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">&quot;max_tokens&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_tokens</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"max_tokens"</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_tokens</span>
     <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"temperature"</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
 
     <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"api_key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
 
     <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -563,17 +727,17 @@
 <span class="c1"># --- internals --------------------------------------------------------------</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_as_image_sequence</span><span class="p">(</span><span class="n">reference</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[Any]&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalise ``reference`` to a list of image inputs.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_image_sequence</span><span class="p">(</span><span class="n">reference</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"list[Any]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Normalise ``reference`` to a list of image inputs.</span>
 
 <span class="sd">    A single image (URL str / path / bytes / PIL image / ``data:`` URI) becomes</span>
 <span class="sd">    a one-element list; a non-string, non-bytes sequence is taken as a locked</span>
 <span class="sd">    set and returned as a list. ``str`` and ``bytes`` are *atomic* images here,</span>
 <span class="sd">    never iterated character/byte-wise.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">reference</span><span class="p">]</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="s2">&quot;save&quot;</span><span class="p">):</span>  <span class="c1"># a PIL image is iterable-ish; treat as atomic</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="s2">"save"</span><span class="p">):</span>  <span class="c1"># a PIL image is iterable-ish; treat as atomic</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">reference</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
@@ -584,29 +748,29 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">reference</span><span class="p">]</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_compare_prompt</span><span class="p">(</span><span class="n">instruction</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rubric</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the JSON-contract prompt asking for a per-aspect verdict.&quot;&quot;&quot;</span>
-    <span class="n">aspect_list</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rubric</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_compare_prompt</span><span class="p">(</span><span class="n">instruction</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rubric</span><span class="p">:</span> <span class="s2">"tuple[str, ...]"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Build the JSON-contract prompt asking for a per-aspect verdict."""</span>
+    <span class="n">aspect_list</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rubric</span><span class="p">)</span>
     <span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;match&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean — overall match across the whole rubric&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="s2">&quot;number in [0.0, 1.0] — overall confidence&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;explanation&quot;</span><span class="p">:</span> <span class="s2">&quot;string — one-sentence overall summary&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;aspects&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"match"</span><span class="p">:</span> <span class="s2">"boolean — overall match across the whole rubric"</span><span class="p">,</span>
+        <span class="s2">"confidence"</span><span class="p">:</span> <span class="s2">"number in [0.0, 1.0] — overall confidence"</span><span class="p">,</span>
+        <span class="s2">"explanation"</span><span class="p">:</span> <span class="s2">"string — one-sentence overall summary"</span><span class="p">,</span>
+        <span class="s2">"aspects"</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
-                <span class="s2">&quot;aspect&quot;</span><span class="p">:</span> <span class="s2">&quot;string — one of the rubric aspects, verbatim&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;match&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="s2">&quot;number in [0.0, 1.0]&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="s2">&quot;string — short explanation&quot;</span><span class="p">,</span>
+                <span class="s2">"aspect"</span><span class="p">:</span> <span class="s2">"string — one of the rubric aspects, verbatim"</span><span class="p">,</span>
+                <span class="s2">"match"</span><span class="p">:</span> <span class="s2">"boolean"</span><span class="p">,</span>
+                <span class="s2">"confidence"</span><span class="p">:</span> <span class="s2">"number in [0.0, 1.0]"</span><span class="p">,</span>
+                <span class="s2">"note"</span><span class="p">:</span> <span class="s2">"string — short explanation"</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">],</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">instruction</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;Rubric aspects to evaluate (one verdict each, use these exact names): &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">aspect_list</span><span class="si">}</span><span class="s2">.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;Respond with ONLY valid JSON of this shape (no prose, no code fence):</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s1">&#39;Include exactly one entry in &quot;aspects&quot; for each rubric aspect above.&#39;</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">instruction</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"Rubric aspects to evaluate (one verdict each, use these exact names): "</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">aspect_list</span><span class="si">}</span><span class="s2">.</span><span class="se">\n\n</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"Respond with ONLY valid JSON of this shape (no prose, no code fence):</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s1">'Include exactly one entry in "aspects" for each rubric aspect above.'</span>
     <span class="p">)</span>
 
 
@@ -614,7 +778,7 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">value</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"true"</span><span class="p">,</span> <span class="s2">"yes"</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">,</span> <span class="s2">"match"</span><span class="p">,</span> <span class="s2">"pass"</span><span class="p">}</span>
     <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 
@@ -627,32 +791,32 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_parse_comparison</span><span class="p">(</span>
-    <span class="n">raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rubric</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...]&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">&quot;str | None&quot;</span>
+    <span class="n">raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rubric</span><span class="p">:</span> <span class="s2">"tuple[str, ...]"</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="s2">"str | None"</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageComparison</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the model&#39;s JSON reply into an :class:`ImageComparison`.</span>
+<span class="w">    </span><span class="sd">"""Parse the model's JSON reply into an :class:`ImageComparison`.</span>
 
 <span class="sd">    Tolerant of a markdown code fence around the JSON; raises ``ValueError`` if</span>
 <span class="sd">    no JSON object can be recovered. Missing aspects are filled with a</span>
 <span class="sd">    low-confidence non-match so the result always covers the full rubric.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">_loads_lenient</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Expected a JSON object verdict from the model, got: </span><span class="si">{</span><span class="n">raw</span><span class="p">[:</span><span class="mi">120</span><span class="p">]</span><span class="si">!r}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Expected a JSON object verdict from the model, got: </span><span class="si">{</span><span class="n">raw</span><span class="p">[:</span><span class="mi">120</span><span class="p">]</span><span class="si">!r}</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="n">by_aspect</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RubricVerdict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aspects&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"aspects"</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">continue</span>
-        <span class="n">aspect</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aspect&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">aspect</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"aspect"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">aspect</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="n">by_aspect</span><span class="p">[</span><span class="n">aspect</span><span class="p">]</span> <span class="o">=</span> <span class="n">RubricVerdict</span><span class="p">(</span>
             <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span>
-            <span class="n">match</span><span class="o">=</span><span class="n">_coerce_bool</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">)),</span>
-            <span class="n">confidence</span><span class="o">=</span><span class="n">_coerce_confidence</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;confidence&quot;</span><span class="p">)),</span>
-            <span class="n">note</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;note&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+            <span class="n">match</span><span class="o">=</span><span class="n">_coerce_bool</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"match"</span><span class="p">)),</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">_coerce_confidence</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"confidence"</span><span class="p">)),</span>
+            <span class="n">note</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"note"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)),</span>
         <span class="p">)</span>
 
     <span class="c1"># Emit one verdict per requested rubric aspect, in rubric order, filling any</span>
@@ -664,36 +828,36 @@
                 <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span>
                 <span class="n">match</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">confidence</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;No verdict returned for this aspect.&quot;</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">"No verdict returned for this aspect."</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">rubric</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">ImageComparison</span><span class="p">(</span>
-        <span class="n">match</span><span class="o">=</span><span class="n">_coerce_bool</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;match&quot;</span><span class="p">)),</span>
-        <span class="n">confidence</span><span class="o">=</span><span class="n">_coerce_confidence</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;confidence&quot;</span><span class="p">)),</span>
-        <span class="n">explanation</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;explanation&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+        <span class="n">match</span><span class="o">=</span><span class="n">_coerce_bool</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"match"</span><span class="p">)),</span>
+        <span class="n">confidence</span><span class="o">=</span><span class="n">_coerce_confidence</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"confidence"</span><span class="p">)),</span>
+        <span class="n">explanation</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"explanation"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)),</span>
         <span class="n">aspects</span><span class="o">=</span><span class="n">ordered</span><span class="p">,</span>
         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
     <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_loads_lenient</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse JSON, tolerating a surrounding ```/```json code fence or prose.</span>
+<span class="w">    </span><span class="sd">"""Parse JSON, tolerating a surrounding ```/```json code fence or prose.</span>
 
 <span class="sd">    Tries a direct parse, then a fence strip, then the first ``{...}`` span.</span>
 <span class="sd">    Raises ``ValueError`` if nothing parses.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">stripped</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">stripped</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;```&quot;</span><span class="p">):</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">stripped</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">inner</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">inner</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"```"</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">stripped</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">inner</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">inner</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"json"</span><span class="p">):</span>
             <span class="n">inner</span> <span class="o">=</span> <span class="n">inner</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner</span><span class="p">)</span>
-    <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">stripped</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">),</span> <span class="n">stripped</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span>
+    <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">stripped</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"{"</span><span class="p">),</span> <span class="n">stripped</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">"}"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">start</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">end</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">end</span> <span class="o">&gt;</span> <span class="n">start</span><span class="p">:</span>
         <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stripped</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
 
@@ -703,30 +867,30 @@
         <span class="k">except</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
             <span class="k">continue</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Could not parse a JSON verdict from the model reply: </span><span class="si">{</span><span class="n">text</span><span class="p">[:</span><span class="mi">120</span><span class="p">]</span><span class="si">!r}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"Could not parse a JSON verdict from the model reply: </span><span class="si">{</span><span class="n">text</span><span class="p">[:</span><span class="mi">120</span><span class="p">]</span><span class="si">!r}</span><span class="s2">"</span>
     <span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_to_image_url</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="s2">&quot;Union[str, Path, bytes, Any]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve ``image`` to a URL or base64 ``data:`` URI for a content block.&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_image_url</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="s2">"Union[str, Path, bytes, Any]"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Resolve ``image`` to a URL or base64 ``data:`` URI for a content block."""</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">_data_uri</span><span class="p">(</span><span class="o">*</span><span class="n">_read_path</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">_data_uri</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">_sniff_mime</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;data:&quot;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">"http://"</span><span class="p">,</span> <span class="s2">"https://"</span><span class="p">,</span> <span class="s2">"data:"</span><span class="p">)):</span>
             <span class="k">return</span> <span class="n">image</span>
         <span class="k">return</span> <span class="n">_data_uri</span><span class="p">(</span><span class="o">*</span><span class="n">_read_path</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">image</span><span class="p">)))</span>
     <span class="c1"># Treat anything else as a PIL image (duck-typed: has .save).</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;save&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">_data_uri</span><span class="p">(</span><span class="n">_pil_to_png_bytes</span><span class="p">(</span><span class="n">image</span><span class="p">),</span> <span class="s2">&quot;image/png&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">"save"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_data_uri</span><span class="p">(</span><span class="n">_pil_to_png_bytes</span><span class="p">(</span><span class="n">image</span><span class="p">),</span> <span class="s2">"image/png"</span><span class="p">)</span>
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Unsupported image type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">image</span><span class="p">)</span><span class="si">!r}</span><span class="s2">; pass a URL, path, bytes, &quot;</span>
-        <span class="s2">&quot;PIL image, or data: URI.&quot;</span>
+        <span class="sa">f</span><span class="s2">"Unsupported image type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">image</span><span class="p">)</span><span class="si">!r}</span><span class="s2">; pass a URL, path, bytes, "</span>
+        <span class="s2">"PIL image, or data: URI."</span>
     <span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_read_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;tuple[bytes, str]&quot;</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"tuple[bytes, str]"</span><span class="p">:</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
     <span class="n">mime</span> <span class="o">=</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_type</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">_sniff_mime</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">mime</span>
@@ -740,51 +904,415 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_data_uri</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">mime</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="n">b64</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;data:</span><span class="si">{</span><span class="n">mime</span><span class="si">}</span><span class="s2">;base64,</span><span class="si">{</span><span class="n">b64</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">b64</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"ascii"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"data:</span><span class="si">{</span><span class="n">mime</span><span class="si">}</span><span class="s2">;base64,</span><span class="si">{</span><span class="n">b64</span><span class="si">}</span><span class="s2">"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_pil_to_png_bytes</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
 
     <span class="n">buffer</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
-    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;PNG&quot;</span><span class="p">)</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"PNG"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">buffer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_extract_text</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pull text out of a LiteLLM response (mirrors aix.chat).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Pull text out of a LiteLLM response (mirrors aix.chat)."""</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span> <span class="ow">or</span> <span class="s2">""</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>  <span class="c1"># pragma: no cover - defensive</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </pre></div>
-
-           </div>
-          </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+        </article>
       </div>
-    </section>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
   </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+</div><script src="../../_static/documentation_options.js?v=3b2cf976"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
 
-</body>
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    </body>
 </html>

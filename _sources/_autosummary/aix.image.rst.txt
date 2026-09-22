@@ -1,0 +1,21 @@
+aix.image
+=========
+
+.. automodule:: aix.image
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      create_variation
+      edit_image
+      generate_image
+      generate_images
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GeneratedImage
+   

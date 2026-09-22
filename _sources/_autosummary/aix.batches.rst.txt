@@ -1,0 +1,21 @@
+aix.batches
+===========
+
+.. automodule:: aix.batches
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      batch_chat
+      batch_embeddings
+      batch_process
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      BatchError
+      BatchProcessor
+   

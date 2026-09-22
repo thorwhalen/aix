@@ -1,0 +1,6 @@
+aix.gen\_ai.openai\_genai
+=========================
+
+.. automodule:: aix.gen_ai.openai_genai
+
+   

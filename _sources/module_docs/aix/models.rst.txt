@@ -1,4 +1,0 @@
-aix.models
-==========
-.. automodule:: aix.models
-   :members:

@@ -1,4 +1,0 @@
-aix.audio
-=========
-.. automodule:: aix.audio
-   :members:

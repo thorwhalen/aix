@@ -1,4 +1,0 @@
-aix.gen_ai
-==========
-.. automodule:: aix.gen_ai
-   :members:

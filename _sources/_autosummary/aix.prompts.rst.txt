@@ -1,0 +1,28 @@
+aix.prompts
+===========
+
+.. automodule:: aix.prompts
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      constrained_answer
+      prompt_func
+      prompt_to_json
+      prompt_to_text
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CommonFuncs
+      PromptFuncs
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      ConstraintViolation
+   

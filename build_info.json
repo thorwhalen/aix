@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-09-22T13:00:51Z",
+  "package": {
+    "name": "aix",
+    "version": "0.0.39",
+    "display_name": "aix",
+    "source": "pyproject.toml"
+  },
+  "git": {
+    "available": true,
+    "commit": "9fa374f8fec3b7bd21fb9e83fe69ff44c696e7e3",
+    "short_commit": "9fa374f",
+    "branch": "master",
+    "tags": [],
+    "dirty": false,
+    "remote_url": "https://github.com/thorwhalen/aix",
+    "commit_url": "https://github.com/thorwhalen/aix/commit/9fa374f8fec3b7bd21fb9e83fe69ff44c696e7e3",
+    "error": null
+  },
+  "ci": {
+    "provider": "github",
+    "repository": "thorwhalen/aix",
+    "sha": "9fa374f8fec3b7bd21fb9e83fe69ff44c696e7e3",
+    "sha_in_history": true,
+    "ref": "refs/heads/master",
+    "ref_name": "master",
+    "run_id": "35730473566",
+    "run_url": "https://github.com/thorwhalen/aix/actions/runs/35730473566",
+    "server_url": "https://github.com"
+  },
+  "tools": {
+    "epythet": "0.2.12",
+    "sphinx": "9.1.0",
+    "docutils": "0.22.4",
+    "python": "3.12.14"
+  },
+  "config": {
+    "theme": "auto",
+    "html_theme": "furo",
+    "accent": "#2b559f",
+    "mode": "auto",
+    "api_generator": "autosummary",
+    "ignore": [
+      "tests/",
+      "scrap/",
+      "examples/"
+    ],
+    "agent_outputs": true,
+    "aggregates": [
+      "md"
+    ],
+    "ai_artifacts": true,
+    "provenance": true,
+    "docs_dir": "docsrc"
+  },
+  "site": {
+    "modules_documented": 20,
+    "objects_documented": 297
+  },
+  "pypi": {
+    "checked": true,
+    "latest": "0.0.40",
+    "relation": "behind",
+    "error": null
+  },
+  "reproduce": "git clone https://github.com/thorwhalen/aix && cd aix\ngit checkout 9fa374f8fec3b7bd21fb9e83fe69ff44c696e7e3\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "warnings": [],
+  "alignment": {
+    "aligned": false,
+    "notes": [
+      "The documented version (0.0.39) is behind the latest release on PyPI (0.0.40): `pip install aix` gives newer code than these docs describe."
+    ]
+  }
+}

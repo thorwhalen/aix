@@ -1,4 +1,0 @@
-aix.embeddings
-==============
-.. automodule:: aix.embeddings
-   :members:

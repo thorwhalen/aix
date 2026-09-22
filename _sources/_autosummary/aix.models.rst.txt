@@ -1,0 +1,6 @@
+aix.models
+==========
+
+.. currentmodule:: aix
+
+.. autodata:: models

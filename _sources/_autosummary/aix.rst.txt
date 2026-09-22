@@ -1,0 +1,97 @@
+﻿aix
+===
+
+.. automodule:: aix
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_config
+      set_config
+      configure
+      using
+      load_config
+      resolve_model
+      resolve_api_key
+      check_requirements
+      check_keys
+      chat
+      ask
+      chat_with_history
+      embeddings
+      embed
+      cosine_similarity
+      find_most_similar
+      prompt_func
+      prompt_to_text
+      prompt_to_json
+      constrained_answer
+      discover_available_models
+      get_model_info
+      find_models
+      batch_chat
+      batch_embeddings
+      batch_process
+      generate_image
+      generate_images
+      edit_image
+      create_variation
+      text_to_speech
+      transcribe
+      transcribe_with_timestamps
+      translate_audio
+      generate_video
+      animate_image_to_video
+      extend_video
+      get_video_providers
+      describe_image
+      to_image_content
+      compare_images
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      AixConfig
+      ChatSession
+      EmbeddingCache
+      PromptFuncs
+      ModelStore
+      BatchProcessor
+      BatchError
+      GeneratedImage
+      GeneratedAudio
+      TranscriptionResult
+      GeneratedVideo
+      RubricVerdict
+      ImageComparison
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      MissingCredentialError
+      ConstraintViolation
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   config
+   ai_models
+   audio
+   batches
+   credentials
+   gen_ai
+   image
+   misc
+   models
+   prompts
+   stores
+   util
+   video
+   vision

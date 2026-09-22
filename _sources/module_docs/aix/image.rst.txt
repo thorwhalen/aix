@@ -1,4 +1,0 @@
-aix.image
-=========
-.. automodule:: aix.image
-   :members:

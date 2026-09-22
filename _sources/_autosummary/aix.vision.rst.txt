@@ -1,0 +1,30 @@
+aix.vision
+==========
+
+.. automodule:: aix.vision
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DFLT_VISION_MODEL
+      DFLT_VISION_PROMPT
+      DFLT_COMPARE_RUBRIC
+      DFLT_FILM_RUBRIC
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      describe_image
+      to_image_content
+      compare_images
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      RubricVerdict
+      ImageComparison
+   

@@ -1,0 +1,14 @@
+aix.stores
+==========
+
+.. automodule:: aix.stores
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      add_extension_based_decoder
+      extension_based_decode_to_text
+      get_extension
+   

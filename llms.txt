@@ -1,0 +1,38 @@
+# aix
+
+> Artificial Intelligence eXtensions
+
+
+## Pages
+
+- [AIX: Artificial Intelligence eXtensions](index.html.md): A clean, pythonic facade for common AI operations that abstracts away provider-specific details and ...
+- [API reference](api.html.md): | &#96;aix&#96;   | AIX: Artificial Intelligence eXtensions   |
+- [aix](_autosummary/aix.html.md): AIX: Artificial Intelligence eXtensions
+- [aix.config](_autosummary/aix.config.html.md): Central configuration for AIX (single source of truth for defaults).
+- [aix.ai_models](_autosummary/aix.ai_models.html.md): AI Model Management Module.
+- [aix.ai_models.base](_autosummary/aix.ai_models.base.html.md): Core types for AI model management.
+- [aix.ai_models.manager](_autosummary/aix.ai_models.manager.html.md): Unified model management interface.
+- [aix.ai_models.sources](_autosummary/aix.ai_models.sources.html.md): Concrete implementations of model sources and connectors.
+- [aix.audio](_autosummary/aix.audio.html.md): Audio operations interface for AIX.
+- [aix.batches](_autosummary/aix.batches.html.md): Batch processing interface for AIX.
+- [aix.credentials](_autosummary/aix.credentials.html.md): Unified, discoverable API-key / secret resolution for AIX.
+- [aix.gen_ai](_autosummary/aix.gen_ai.html.md): Generative AI modules.
+- [aix.gen_ai.google_genai](_autosummary/aix.gen_ai.google_genai.html.md): Google GenAI API functionality.
+- [aix.gen_ai.openai_genai](_autosummary/aix.gen_ai.openai_genai.html.md): OpenAI GenAI API functionality.
+- [aix.image](_autosummary/aix.image.html.md): Image generation interface for AIX.
+- [aix.misc](_autosummary/aix.misc.html.md): Misc AIX functions.
+- [aix.models](_autosummary/aix.models.html.md): User-friendly interface for model discovery and selection.
+- [aix.prompts](_autosummary/aix.prompts.html.md): Prompt-based function creation for AIX.
+- [aix.stores](_autosummary/aix.stores.html.md): Storage layers for AIX.
+- [aix.util](_autosummary/aix.util.html.md): Utils for AIX.
+- [aix.video](_autosummary/aix.video.html.md): Video generation interface for AIX.
+- [aix.vision](_autosummary/aix.vision.html.md): Image-to-text (vision) interface for AIX.
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-09-22 13:00 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+
+## Optional
+
+- [aix.md](aix.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

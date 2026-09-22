@@ -1,4 +1,0 @@
-aix._litellm
-============
-.. automodule:: aix._litellm
-   :members:

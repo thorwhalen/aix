@@ -1,4 +1,0 @@
-aix.ai_models.sources
-=====================
-.. automodule:: aix.ai_models.sources
-   :members:
