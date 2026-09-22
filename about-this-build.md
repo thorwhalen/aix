@@ -2,18 +2,18 @@
 
 # About this build
 
-This documentation was built on **2026-09-22 14:32 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/f08a45707ae9eb9fed3fbeff5383d5365bf4053d"><code>f08a457</code></a> on branch <code>master</code>, for **aix 0.0.41** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-09-22 15:02 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/3840e312c0e554616d473678a2ed8ac7b03e96fc"><code>3840e31</code></a> on branch <code>master</code>, for **aix 0.0.42** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.0.41) is behind the latest release on PyPI (0.0.42): `pip install aix` gives newer code than these docs describe.
+- The documented version (0.0.42) is behind the latest release on PyPI (0.0.43): `pip install aix` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/f08a45707ae9eb9fed3fbeff5383d5365bf4053d"><code>f08a45707ae9eb9fed3fbeff5383d5365bf4053d</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/3840e312c0e554616d473678a2ed8ac7b03e96fc"><code>3840e312c0e554616d473678a2ed8ac7b03e96fc</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -24,9 +24,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/35740820903">35740820903</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/35744280418">35744280418</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>f08a45707ae9eb9fed3fbeff5383d5365bf4053d</code> (in the history of the built commit) |
+| Event commit | <code>3840e312c0e554616d473678a2ed8ac7b03e96fc</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -51,13 +51,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.42/">0.0.42</a>, newer than the documented version (0.0.41).
+Latest release: <a href="https://pypi.org/project/aix/0.0.43/">0.0.43</a>, newer than the documented version (0.0.42).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout f08a45707ae9eb9fed3fbeff5383d5365bf4053d
+git checkout 3840e312c0e554616d473678a2ed8ac7b03e96fc
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

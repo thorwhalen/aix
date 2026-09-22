@@ -1050,6 +1050,56 @@
     <span class="k">return</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">answer</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_coerce_to_expected_type</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Strictly coerce an answer to the type its constraint implies.</span>
+
+<span class="sd">    Raises ``ValueError`` (or ``TypeError``) when the answer does not denote a</span>
+<span class="sd">    value of that type -- never truncates, never guesses a boolean.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _coerce_to_expected_type("4", int), _coerce_to_expected_type("no", bool)</span>
+<span class="sd">        (4, False)</span>
+<span class="sd">        &gt;&gt;&gt; _coerce_to_expected_type("4.5", int)</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">            ...</span>
+<span class="sd">        ValueError: Answer '4.5' cannot be converted to int</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_coerce_to_bool</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span>
+        <span class="n">expected_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">int</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">answer</span>
+    <span class="n">coerce</span> <span class="o">=</span> <span class="n">_coerce_to_int</span> <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="nb">int</span> <span class="k">else</span> <span class="n">expected_type</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">coerce</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Answer </span><span class="si">{</span><span class="n">answer</span><span class="si">!r}</span><span class="s2"> cannot be converted to </span><span class="si">{</span><span class="n">expected_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+
+<span class="n">_NO_OPTION</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_exact_option</span><span class="p">(</span><span class="n">answer</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return the option equal to ``answer`` *and of the same type*, if any.</span>
+
+<span class="sd">    The type check keeps ``2.0`` from matching ``2`` and ``True`` from matching</span>
+<span class="sd">    ``1``: those still go through coercion, which returns the canonical int.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; _exact_option("unsure", [1, 2, "unsure"])</span>
+<span class="sd">        'unsure'</span>
+<span class="sd">        &gt;&gt;&gt; _exact_option(True, [0, 1]) is _NO_OPTION</span>
+<span class="sd">        True</span>
+<span class="sd">    """</span>
+    <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">option</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span> <span class="ow">and</span> <span class="n">option</span> <span class="o">==</span> <span class="n">answer</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">option</span>
+    <span class="k">return</span> <span class="n">_NO_OPTION</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_constrained_answer</span><span class="p">(</span>
     <span class="n">answer</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">valid_answers</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="nb">type</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
@@ -1076,24 +1126,23 @@
 <span class="sd">            ...</span>
 <span class="sd">        aix.prompts.ConstraintViolation: Answer 9.0 is outside the range [1, 5]</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">answer</span> <span class="o">=</span> <span class="n">_coerce_to_bool</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># An answer that already *is* one of the options is valid as-is. Coercing</span>
+        <span class="c1"># it first to the type of the *first* option would reject a legitimate</span>
+        <span class="c1"># member of a mixed list, e.g. "unsure" in [1, 2, "unsure"].</span>
+        <span class="n">exact</span> <span class="o">=</span> <span class="n">_exact_option</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">valid_answers</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">exact</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_NO_OPTION</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">exact</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">_coerce_to_expected_type</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># A mixed options list is typed by its first item, so an answer that</span>
+        <span class="c1"># doesn't coerce to that type may still name another option (up to case</span>
+        <span class="c1"># and whitespace); the membership check below decides.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">ConstraintViolation</span><span class="p">(</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span> <span class="n">valid_answers</span><span class="o">=</span><span class="n">valid_answers</span>
-            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
-    <span class="k">elif</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
-        <span class="n">expected_type</span> <span class="ow">is</span> <span class="nb">int</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">answer</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">)</span>
-    <span class="p">):</span>
-        <span class="n">coerce</span> <span class="o">=</span> <span class="n">_coerce_to_int</span> <span class="k">if</span> <span class="n">expected_type</span> <span class="ow">is</span> <span class="nb">int</span> <span class="k">else</span> <span class="n">expected_type</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">answer</span> <span class="o">=</span> <span class="n">coerce</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ConstraintViolation</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"Answer </span><span class="si">{</span><span class="n">answer</span><span class="si">!r}</span><span class="s2"> cannot be converted to </span><span class="si">{</span><span class="n">expected_type</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-                <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="p">,</span>
-                <span class="n">valid_answers</span><span class="o">=</span><span class="n">valid_answers</span><span class="p">,</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_answers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -1427,7 +1476,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=baf1d94c"></script>
+</div><script src="../../_static/documentation_options.js?v=9a4043a7"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
