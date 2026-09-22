@@ -514,3 +514,49 @@ class TestConstrainedAnswerEnforcement:
         mock_chat.return_value = "not json at all"
         with pytest.raises(ValueError, match="Failed to parse constrained answer"):
             constrained_answer("q", ["cats", "dogs"])
+
+
+class TestConstrainedAnswerCoercion:
+    """Coercion must neither accept a wrong answer nor reject a right one."""
+
+    @staticmethod
+    def _ask(mock_chat, answer, valid_answers, **kwargs):
+        from aix.prompts import constrained_answer
+
+        mock_chat.return_value = json.dumps({"answer": answer})
+        return constrained_answer("q", valid_answers, **kwargs)
+
+    @pytest.mark.parametrize("valid_answers", [[1, 2, 3], int])
+    @patch("aix.prompts.chat")
+    def test_non_integral_answer_is_not_truncated(self, mock_chat, valid_answers):
+        """`int(2.7) == 2` must not let 2.7 pass as the valid option 2."""
+        from aix.prompts import ConstraintViolation
+
+        with pytest.raises(ConstraintViolation):
+            self._ask(mock_chat, 2.7, valid_answers)
+
+    @pytest.mark.parametrize("answer", ["2", "2.0", 2.0, " 2 "])
+    @patch("aix.prompts.chat")
+    def test_integral_spellings_are_accepted(self, mock_chat, answer):
+        result = self._ask(mock_chat, answer, [1, 2, 3])
+        assert result == 2 and type(result) is int
+
+    @patch("aix.prompts.chat")
+    def test_bool_answer_to_int_options_comes_back_as_int(self, mock_chat):
+        result = self._ask(mock_chat, True, [0, 1])
+        assert result == 1 and type(result) is int
+
+    @pytest.mark.parametrize("answer", ["Interpreted", " interpreted ", "INTERPRETED"])
+    @patch("aix.prompts.chat")
+    def test_str_option_matched_ignoring_case_and_space(self, mock_chat, answer):
+        """Returns the canonical option, not the model's spelling of it."""
+        assert self._ask(mock_chat, answer, ["compiled", "interpreted"]) == (
+            "interpreted"
+        )
+
+    @patch("aix.prompts.chat")
+    def test_ambiguous_case_insensitive_match_still_violates(self, mock_chat):
+        from aix.prompts import ConstraintViolation
+
+        with pytest.raises(ConstraintViolation):
+            self._ask(mock_chat, "Yes", ["yes", "YES"])

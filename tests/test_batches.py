@@ -143,3 +143,13 @@ class TestBatchErrorType:
 
         assert aix.BatchError is BatchError
         assert "BatchError" in aix.__all__
+
+
+@pytest.mark.parametrize("func", ["batch_chat", "batch_process"])
+def test_bad_on_error_raises_at_call_not_at_iteration(func):
+    """A typo in `on_error` surfaces at the call site, before any iteration."""
+    args = (["a"],) if func == "batch_chat" else (["a"], str)
+    with pytest.raises(ValueError, match="on_error"):
+        {"batch_chat": batch_chat, "batch_process": batch_process}[func](
+            *args, on_error="ignore"
+        )
