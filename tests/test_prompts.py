@@ -361,3 +361,156 @@ class TestCommonFuncs:
         from aix.prompts import common_funcs
 
         assert "sentiment" in common_funcs
+
+
+class TestConstrainedAnswerEnforcement:
+    """Tests that constrained_answer actually enforces its constraints."""
+
+    @patch("aix.prompts.chat")
+    def test_out_of_set_answer_raises(self, mock_chat):
+        """An answer outside valid_answers is a violation, not a result."""
+        from aix.prompts import constrained_answer, ConstraintViolation
+
+        mock_chat.return_value = '{"answer": "neither"}'
+
+        with pytest.raises(ConstraintViolation) as excinfo:
+            constrained_answer("q", ["compiled", "interpreted", "both"])
+
+        assert excinfo.value.answer == "neither"
+        assert excinfo.value.valid_answers == ["compiled", "interpreted", "both"]
+
+    @patch("aix.prompts.chat")
+    def test_out_of_range_answer_raises(self, mock_chat):
+        """An answer outside the (min, max) range is a violation."""
+        from aix.prompts import constrained_answer, ConstraintViolation
+
+        mock_chat.return_value = '{"answer": 9.0}'
+
+        with pytest.raises(ConstraintViolation):
+            constrained_answer("rate 1-5", (1, 5))
+
+    @patch("aix.prompts.chat")
+    def test_uncoercible_answer_raises(self, mock_chat):
+        """A value that cannot be coerced to the declared type is a violation."""
+        from aix.prompts import constrained_answer, ConstraintViolation
+
+        mock_chat.return_value = '{"answer": "not-an-int"}'
+
+        with pytest.raises(ConstraintViolation):
+            constrained_answer("how many?", int)
+
+    @patch("aix.prompts.chat")
+    def test_falsy_string_is_not_true(self, mock_chat):
+        """`bool('false')` is True; the constraint check must not fall for it."""
+        from aix.prompts import constrained_answer
+
+        mock_chat.return_value = '{"answer": "false"}'
+
+        assert constrained_answer("is it?", bool) is False
+
+    @patch("aix.prompts.chat")
+    def test_uncoercible_bool_raises(self, mock_chat):
+        """A string that is neither truthy nor falsy is a violation."""
+        from aix.prompts import constrained_answer, ConstraintViolation
+
+        mock_chat.return_value = '{"answer": "maybe"}'
+
+        with pytest.raises(ConstraintViolation):
+            constrained_answer("is it?", bool)
+
+    @patch("aix.prompts.chat")
+    def test_on_violation_return_preserves_legacy(self, mock_chat):
+        """`on_violation='return'` restores the pre-enforcement behaviour."""
+        from aix.prompts import constrained_answer
+
+        mock_chat.return_value = '{"answer": "neither"}'
+        assert (
+            constrained_answer(
+                "q", ["compiled", "interpreted", "both"], on_violation="return"
+            )
+            == "neither"
+        )
+
+        mock_chat.return_value = '{"answer": 9.0}'
+        assert constrained_answer("rate 1-5", (1, 5), on_violation="return") == 9.0
+
+        mock_chat.return_value = '{"answer": "not-an-int"}'
+        assert (
+            constrained_answer("how many?", int, on_violation="return") == "not-an-int"
+        )
+
+    @patch("aix.prompts.chat")
+    def test_valid_answer_unchanged(self, mock_chat):
+        """The happy path returns exactly what it always returned."""
+        from aix.prompts import constrained_answer
+
+        mock_chat.return_value = '{"answer": "compiled"}'
+        answer = constrained_answer("q", ["compiled", "interpreted", "both"])
+        assert answer == "compiled"
+        assert type(answer) is str
+
+        mock_chat.return_value = '{"answer": 3}'
+        answer = constrained_answer("rate 1-5", (1, 5))
+        assert answer == 3.0
+        assert type(answer) is float
+
+        mock_chat.return_value = '{"answer": "4"}'
+        answer = constrained_answer("how many wheels?", int)
+        assert answer == 4
+        assert type(answer) is int
+
+    @patch("aix.prompts.chat")
+    def test_n_greater_than_one_still_a_list(self, mock_chat):
+        """n > 1 keeps returning a list of answers."""
+        from aix.prompts import constrained_answer
+
+        mock_chat.return_value = '{"answer": "cats"}'
+        answers = constrained_answer("cats or dogs?", ["cats", "dogs"], n=3)
+        assert answers == ["cats", "cats", "cats"]
+
+    @patch("aix.prompts.chat")
+    def test_n_greater_than_one_forwards_new_kwargs(self, mock_chat):
+        """The n>1 fan-out must not silently drop on_violation."""
+        from aix.prompts import constrained_answer
+
+        mock_chat.return_value = '{"answer": "neither"}'
+        answers = constrained_answer("q", ["cats", "dogs"], n=2, on_violation="return")
+        assert answers == ["neither", "neither"]
+
+    @patch("aix.prompts.chat")
+    def test_max_retries_reasks_then_succeeds(self, mock_chat):
+        """A violation is re-asked up to max_retries times before raising."""
+        from aix.prompts import constrained_answer
+
+        mock_chat.side_effect = ['{"answer": "neither"}', '{"answer": "cats"}']
+        assert constrained_answer("q", ["cats", "dogs"], max_retries=1) == "cats"
+        assert mock_chat.call_count == 2
+
+    @patch("aix.prompts.chat")
+    def test_max_retries_exhausted_raises(self, mock_chat):
+        """When every retry violates, the last violation is raised."""
+        from aix.prompts import constrained_answer, ConstraintViolation
+
+        mock_chat.return_value = '{"answer": "neither"}'
+        with pytest.raises(ConstraintViolation):
+            constrained_answer("q", ["cats", "dogs"], max_retries=2)
+        assert mock_chat.call_count == 3
+
+    @patch("aix.prompts.chat")
+    def test_default_makes_no_extra_calls(self, mock_chat):
+        """max_retries defaults to 0 - no caller's API bill changes."""
+        from aix.prompts import constrained_answer, ConstraintViolation
+
+        mock_chat.return_value = '{"answer": "neither"}'
+        with pytest.raises(ConstraintViolation):
+            constrained_answer("q", ["cats", "dogs"])
+        assert mock_chat.call_count == 1
+
+    @patch("aix.prompts.chat")
+    def test_unparseable_response_still_raises_value_error(self, mock_chat):
+        """The pre-existing JSON-parse failure mode is unchanged."""
+        from aix.prompts import constrained_answer
+
+        mock_chat.return_value = "not json at all"
+        with pytest.raises(ValueError, match="Failed to parse constrained answer"):
+            constrained_answer("q", ["cats", "dogs"])

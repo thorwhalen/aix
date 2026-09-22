@@ -10,6 +10,8 @@ published to PyPI). Entries are commit subjects and PR titles, verbatim.
 
 ### Fixed
 
+- fix: `constrained_answer` now validates the answer against `valid_answers` ([#40](https://github.com/thorwhalen/aix/issues/40))
+- fix: `batch_chat`/`batch_process` report failures as `BatchError`, not a bare `"ERROR: ..."` string ([#45](https://github.com/thorwhalen/aix/issues/45))
 - fix: resolve litellm on first call, not at import — `import aix` no longer reaches the network ([#38](https://github.com/thorwhalen/aix/issues/38))
 
 ## [0.0.34] - 2026-06-17
