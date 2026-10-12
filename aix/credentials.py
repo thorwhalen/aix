@@ -44,6 +44,7 @@ Security:
 """
 
 import os
+import threading
 from collections.abc import Iterable
 from functools import wraps
 from typing import Callable, Optional, Union
@@ -167,6 +168,11 @@ def infer_provider(model_or_provider: Optional[str]) -> Optional[str]:
 # --------------------------------------------------------------------------- #
 
 _dotenv_loaded = False
+# Serialises the one-time load: without it, a second thread (``sample`` and
+# ``constrained_answer(n=...)`` call from a pool) sees the flag set before the
+# first thread has finished loading, finds no key, and raises
+# MissingCredentialError for a key that is in the .env.
+_dotenv_lock = threading.Lock()
 
 
 def _maybe_load_dotenv() -> None:
@@ -179,14 +185,19 @@ def _maybe_load_dotenv() -> None:
     global _dotenv_loaded
     if _dotenv_loaded:
         return
-    _dotenv_loaded = True  # mark first so a missing dotenv is not retried
-    try:
-        from dotenv import load_dotenv, find_dotenv
+    with _dotenv_lock:
+        if _dotenv_loaded:
+            return
+        try:
+            from dotenv import load_dotenv, find_dotenv
 
-        load_dotenv(find_dotenv(usecwd=True), override=False)
-    except Exception:
-        # dotenv absent or no .env found -- degrade to export-only discovery.
-        pass
+            load_dotenv(find_dotenv(usecwd=True), override=False)
+        except Exception:
+            # dotenv absent or no .env found -- degrade to export-only discovery.
+            pass
+        # Set only once the load is done (and even if it failed, so a missing
+        # dotenv is not retried on every call).
+        _dotenv_loaded = True
 
 
 def _lookup_store(name: str) -> Optional[str]:

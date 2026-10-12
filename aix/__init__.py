@@ -77,7 +77,7 @@ from aix.chat import (
     chat_with_history,
     ChatSession,
 )
-from aix.sampling import sample, Sample, Samples
+from aix.sampling import sample, Sample, Samples, SamplingError
 from aix.embeddings import (
     embeddings,
     embed,
@@ -175,6 +175,7 @@ __all__ = [
     "sample",
     "Sample",
     "Samples",
+    "SamplingError",
     "chat_with_history",
     "ChatSession",
     # Embeddings

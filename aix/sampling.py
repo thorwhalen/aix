@@ -19,6 +19,7 @@ independently and the batch is marked ``"mixed"``.
 ('provider_n', 52)
 """
 
+import hashlib
 import numbers
 from collections.abc import Callable, Iterable
 from concurrent.futures import ThreadPoolExecutor
@@ -28,18 +29,49 @@ from typing import Any, Literal, Optional, TypeVar, Union
 from aix.capabilities import supports
 from aix.chat import Completion, Usage, complete
 from aix.config import get_config as _get_config
+from aix.credentials import check_requirements as _check_requirements
 
-__all__ = ["sample", "Sample", "Samples", "concurrent_map"]
+__all__ = [
+    "sample",
+    "Sample",
+    "Samples",
+    "SamplingError",
+    "concurrent_map",
+    "check_positive_int",
+]
 
 T = TypeVar("T")
 R = TypeVar("R")
 
 Strategy = Literal["auto", "provider", "independent"]
 _STRATEGIES = ("auto", "provider", "independent")
+OnError = Literal["raise", "record"]
+_ON_ERROR = ("raise", "record")
 
 PROVIDER_N = "provider_n"
 INDEPENDENT = "independent"
 MIXED = "mixed"
+
+# Request parameters ``sample`` owns; accepting them through ``**kwargs`` would
+# silently change what is being sampled.
+_RESERVED_KWARGS = frozenset({"messages", "stream"})
+# Derived seeds stay in the non-negative int32 range every provider accepts.
+_SEED_MASK = 0x7FFFFFFF
+
+
+def check_positive_int(name: str, value: Any) -> int:
+    """``int(value)`` if it is a positive integer (not a bool), else ``ValueError``.
+
+    >>> check_positive_int("n", 3)
+    3
+    >>> check_positive_int("n", 0)
+    Traceback (most recent call last):
+    ...
+    ValueError: n must be a positive integer, got 0
+    """
+    if isinstance(value, bool) or not isinstance(value, numbers.Integral) or value < 1:
+        raise ValueError(f"{name} must be a positive integer, got {value!r}")
+    return int(value)
 
 
 def concurrent_map(
@@ -47,7 +79,9 @@ def concurrent_map(
 ) -> list[R]:
     """``[func(x) for x in items]``, run on up to ``concurrency`` threads, in order.
 
-    The first exception (in item order) propagates, as it would serially.
+    Fails fast like the serial loop would: once a call raises, calls not yet
+    started are cancelled (those already running finish), and the first
+    exception in item order propagates.
 
     >>> concurrent_map(lambda x: x * x, range(5), concurrency=3)
     [0, 1, 4, 9, 16]
@@ -55,8 +89,28 @@ def concurrent_map(
     items = list(items)
     if concurrency <= 1 or len(items) <= 1:
         return [func(x) for x in items]
-    with ThreadPoolExecutor(max_workers=min(concurrency, len(items))) as pool:
-        return list(pool.map(func, items))
+    pool = ThreadPoolExecutor(max_workers=min(concurrency, len(items)))
+    try:
+        futures = [pool.submit(func, x) for x in items]
+        return [f.result() for f in futures]
+    finally:
+        # On success every future is done; on failure, drop the queued ones.
+        pool.shutdown(wait=True, cancel_futures=True)
+
+
+def _derived_seed(seed: int, index: int) -> int:
+    """A per-request seed from ``(seed, index)``, decorrelated across base seeds.
+
+    ``seed + index`` would make ``sample(seed=0)`` and ``sample(seed=1)`` share
+    all but one request seed; hashing keeps replicate runs independent.
+
+    >>> _derived_seed(0, 1) != _derived_seed(1, 0)
+    True
+    >>> _derived_seed(42, 3) == _derived_seed(42, 3)
+    True
+    """
+    digest = hashlib.blake2b(f"{seed}:{index}".encode(), digest_size=4).digest()
+    return int.from_bytes(digest, "big") & _SEED_MASK
 
 
 @dataclass(frozen=True)
@@ -64,9 +118,9 @@ class Sample:
     """One drawn answer.
 
     Attributes:
-        text: The raw text of this choice.
+        text: The raw text of this choice (``""`` if its request failed).
         payload: ``parse(text)`` when a ``parse`` function was given, else ``text``;
-            ``None`` if parsing failed (see ``error``).
+            ``None`` if the request or the parsing failed (see ``error``).
         finish_reason: Why this choice stopped. ``"length"`` = truncated,
             ``"content_filter"`` = refused/filtered; check it before treating the
             payload as a judgement.
@@ -75,7 +129,8 @@ class Sample:
             cannot be split per choice; see :attr:`Samples.usage`).
         strategy: How this sample was drawn: ``"provider_n"`` or ``"independent"``.
         seed: The seed sent with its request, if any.
-        error: The exception ``parse`` raised on this text, if it did.
+        error: The exception this sample's request raised (with
+            ``on_error="record"``) or that ``parse`` raised on its text.
     """
 
     text: str
@@ -88,18 +143,24 @@ class Sample:
 
     @property
     def ok(self) -> bool:
-        """``True`` when the text was parsed (or no parsing was asked for)."""
+        """``True`` when the request succeeded and the text parsed (if asked)."""
         return self.error is None
 
 
 class Samples(list):
     """The list of :class:`Sample` returned by :func:`sample`, plus batch facts.
 
+    It is a plain ``list`` otherwise: slicing or concatenating gives a ``list``
+    without the batch attributes, which describe the whole draw only.
+
     Attributes:
         strategy: ``"provider_n"``, ``"independent"`` or ``"mixed"`` (provider
             ``n`` topped up with independent calls).
-        usage: Total tokens over every request made, or ``None`` if no request
-            reported usage.
+        usage: Total tokens over every request that reported usage, or ``None``
+            if none did. Compare ``n_requests`` with ``n_usage_reports`` to see
+            whether it is complete.
+        n_requests: How many requests were made.
+        n_usage_reports: How many of them reported usage.
     """
 
     def __init__(
@@ -108,10 +169,14 @@ class Samples(list):
         *,
         strategy: str,
         usage: Optional[Usage] = None,
+        n_requests: int = 0,
+        n_usage_reports: int = 0,
     ):
         super().__init__(samples)
         self.strategy = strategy
         self.usage = usage
+        self.n_requests = n_requests
+        self.n_usage_reports = n_usage_reports
 
     @property
     def texts(self) -> tuple[str, ...]:
@@ -121,17 +186,29 @@ class Samples(list):
     def payloads(self) -> tuple[Any, ...]:
         return tuple(s.payload for s in self)
 
+    @property
+    def errors(self) -> tuple[Exception, ...]:
+        """Every recorded error (request or parse), in sample order."""
+        return tuple(s.error for s in self if s.error is not None)
+
     def __repr__(self) -> str:
         return (
             f"Samples({list.__repr__(self)}, strategy={self.strategy!r}, "
-            f"usage={self.usage!r})"
+            f"usage={self.usage!r}, n_requests={self.n_requests})"
         )
 
 
-def _check_positive_int(name: str, value: Any) -> int:
-    if isinstance(value, bool) or not isinstance(value, numbers.Integral) or value < 1:
-        raise ValueError(f"{name} must be a positive integer, got {value!r}")
-    return int(value)
+class SamplingError(Exception):
+    """A request inside :func:`sample` failed (with ``on_error="raise"``).
+
+    Raised after every launched request has finished, so the work already paid
+    for is not lost: ``samples`` holds the full batch, failed requests included
+    (as samples whose ``error`` is set). The first failure is ``__cause__``.
+    """
+
+    def __init__(self, message: str, *, samples: Samples):
+        super().__init__(message)
+        self.samples = samples
 
 
 def _parsed(text: str, parse: Optional[Callable[[str], Any]]):
@@ -144,6 +221,14 @@ def _parsed(text: str, parse: Optional[Callable[[str], Any]]):
         return None, e
 
 
+def _is_unsupported_param_error(error: Exception) -> bool:
+    """Whether the provider refused a request parameter (LiteLLM's error type).
+
+    Matched by name: aix must not import litellm just to name its exceptions.
+    """
+    return any(cls.__name__ == "UnsupportedParamsError" for cls in type(error).__mro__)
+
+
 def sample(
     prompt: Union[str, Iterable[dict]],
     *,
@@ -154,6 +239,7 @@ def sample(
     model: str = None,
     strategy: Strategy = "auto",
     parse: Callable[[str], Any] = None,
+    on_error: OnError = "raise",
     api_key: str = None,
     **kwargs,
 ) -> Samples:
@@ -164,61 +250,101 @@ def sample(
         n: How many samples to draw.
         temperature: Sampling temperature (``None`` = configured default). At
             ``0`` the samples mostly coincide, which is rarely what you want here.
-        seed: Base seed. A provider-side ``n`` request sends it as is; the
-            ``j``-th independent request sends ``seed + j`` (plus one if a
-            provider request came first) so independent samples are not forced
-            to be identical. Support is provider-dependent.
+        seed: Base seed. A provider-side ``n`` request sends it as is; each
+            independent request sends a seed derived from ``(seed, index)`` so
+            independent samples are not forced identical and runs with different
+            base seeds do not overlap. Support is provider-dependent.
         concurrency: Max simultaneous independent requests (``None`` = config
             ``chat.sample_concurrency``).
         model: Model id or alias (``None`` = configured default).
-        strategy: ``"auto"`` (provider ``n`` when supported, else independent),
+        strategy: ``"auto"`` (provider ``n`` when supported, else independent;
+            also falls back to independent if the provider refuses ``n``),
             ``"provider"`` (force one ``n`` request) or ``"independent"``.
+            ``n=1`` is always a single plain request, recorded ``"independent"``.
         parse: Optional ``text -> payload`` (e.g. ``json.loads``). A failure is
             recorded on that sample (``payload=None``, ``error=...``), not raised.
+        on_error: When a request fails: ``"raise"`` (default) raises
+            :class:`SamplingError` once the launched requests finish, carrying
+            the partial batch; ``"record"`` returns the batch with the failure on
+            that sample's ``error``.
         api_key: Explicit API key, as for :func:`aix.chat`.
         **kwargs: Passed to every request (e.g. ``max_tokens``, ``response_format``).
 
     Returns:
-        :class:`Samples` -- a list of :class:`Sample` with ``.strategy`` and
-        ``.usage`` (the batch total).
+        :class:`Samples` -- a list of :class:`Sample` with batch ``.strategy``,
+        ``.usage``, ``.n_requests``.
 
     Raises:
-        ValueError: For a non-positive ``n`` / ``concurrency`` or an unknown
-            ``strategy``. Request errors propagate.
+        ValueError: For a non-positive ``n`` / ``concurrency``, an unknown
+            ``strategy`` / ``on_error``, or a reserved kwarg (``messages``, ``stream``).
+        SamplingError: A request failed and ``on_error="raise"``.
     """
-    n = _check_positive_int("n", n)
+    n = check_positive_int("n", n)
     if concurrency is None:
         concurrency = _get_config().chat.sample_concurrency
-    concurrency = _check_positive_int("concurrency", concurrency)
+    concurrency = check_positive_int("concurrency", concurrency)
     if strategy not in _STRATEGIES:
         raise ValueError(f"strategy must be one of {_STRATEGIES}, got {strategy!r}")
+    if on_error not in _ON_ERROR:
+        raise ValueError(f"on_error must be one of {_ON_ERROR}, got {on_error!r}")
+    reserved = _RESERVED_KWARGS.intersection(kwargs)
+    if reserved:
+        raise ValueError(
+            f"sample() does not accept {sorted(reserved)}: pass the conversation "
+            "as `prompt`; sampling does not stream."
+        )
+
+    # Preflight credentials once, here, so a missing key raises itself instead
+    # of n copies of it surfacing from the pool as a SamplingError.
+    _check_requirements(model or _get_config().chat.model, api_key=api_key)
 
     call_kwargs = dict(model=model, temperature=temperature, api_key=api_key, **kwargs)
 
-    use_provider_n = strategy == "provider" or (
-        strategy == "auto" and n > 1 and supports(model, "n")
-    )
-
     samples: list[Sample] = []
     usages: list[Usage] = []
+    n_requests = 0
+
+    use_provider_n = n > 1 and (
+        strategy == "provider" or (strategy == "auto" and supports(model, "n"))
+    )
     if use_provider_n:
-        batch = complete(prompt, n=n, seed=seed, **call_kwargs)
-        for text, reason in list(zip(batch.texts, batch.finish_reasons))[:n]:
-            payload, error = _parsed(text, parse)
-            samples.append(Sample(text, payload, reason, None, PROVIDER_N, seed, error))
-        if batch.usage is not None:
-            usages.append(batch.usage)
+        try:
+            batch = complete(prompt, n=n, seed=seed, **call_kwargs)
+        except Exception as e:
+            if strategy != "auto" or not _is_unsupported_param_error(e):
+                raise
+            use_provider_n = False  # supports() was wrong for this model
+        else:
+            n_requests += 1
+            for text, reason in list(zip(batch.texts, batch.finish_reasons))[:n]:
+                payload, error = _parsed(text, parse)
+                samples.append(
+                    Sample(text, payload, reason, None, PROVIDER_N, seed, error)
+                )
+            if batch.usage is not None:
+                usages.append(batch.usage)
 
-    missing = n - len(samples)
-    offset = 1 if use_provider_n else 0
-    seeds = [None if seed is None else seed + offset + j for j in range(missing)]
+    n_from_provider = len(samples)
+    seeds = [
+        None if seed is None else _derived_seed(seed, j)
+        for j in range(n_from_provider, n)
+    ]
 
-    def draw_one(one_seed: Optional[int]) -> Completion:
-        return complete(prompt, n=1, seed=one_seed, **call_kwargs)
+    def draw_one(one_seed: Optional[int]) -> Union[Completion, Exception]:
+        try:
+            return complete(prompt, n=1, seed=one_seed, **call_kwargs)
+        except Exception as e:  # collected, so finished work is not discarded
+            return e
 
+    first_error, n_failed = None, 0
     for one_seed, c in zip(
         seeds, concurrent_map(draw_one, seeds, concurrency=concurrency)
     ):
+        n_requests += 1
+        if isinstance(c, Exception):
+            first_error, n_failed = first_error or c, n_failed + 1
+            samples.append(Sample("", None, None, None, INDEPENDENT, one_seed, c))
+            continue
         payload, error = _parsed(c.text, parse)
         samples.append(
             Sample(
@@ -231,9 +357,18 @@ def sample(
     if not use_provider_n:
         recorded = INDEPENDENT
     else:
-        recorded = MIXED if missing else PROVIDER_N
-    return Samples(
+        recorded = MIXED if n_from_provider < n else PROVIDER_N
+    result = Samples(
         samples,
         strategy=recorded,
         usage=sum(usages, Usage()) if usages else None,
+        n_requests=n_requests,
+        n_usage_reports=len(usages),
     )
+    if first_error is not None and on_error == "raise":
+        raise SamplingError(
+            f"{n_failed} of {n_requests} sampling request(s) failed; "
+            "the partial batch is on .samples",
+            samples=result,
+        ) from first_error
+    return result

@@ -12,7 +12,14 @@ import pytest
 import aix
 import aix.capabilities
 from aix.chat import Usage
-from aix.sampling import Sample, Samples, concurrent_map, sample
+from aix.sampling import (
+    Sample,
+    Samples,
+    SamplingError,
+    _derived_seed,
+    concurrent_map,
+    sample,
+)
 from aix.capabilities import supports, supported_params
 
 _aix_chat = sys.modules["aix.chat"]
@@ -120,13 +127,12 @@ class TestSample:
         assert out.strategy == "independent"
         assert fake_completion.call_count == 4
         assert all("n" not in call.kwargs for call in fake_completion.call_args_list)
-        assert sorted(c.kwargs["seed"] for c in fake_completion.call_args_list) == [
-            10,
-            11,
-            12,
-            13,
-        ]
-        assert [s.seed for s in out] == [10, 11, 12, 13]
+        expected = [_derived_seed(10, j) for j in range(4)]
+        assert sorted(
+            c.kwargs["seed"] for c in fake_completion.call_args_list
+        ) == sorted(expected)
+        assert [s.seed for s in out] == expected
+        assert len(set(expected)) == 4
         assert all(s.usage == Usage(2, 3, 5) for s in out)
         assert out.usage == Usage(8, 12, 20)
 
@@ -145,8 +151,9 @@ class TestSample:
         out = sample("q", n=3, seed=0)
         assert out.strategy == "mixed" and len(out) == 3
         assert [s.strategy for s in out] == ["provider_n", "independent", "independent"]
-        assert [s.seed for s in out] == [0, 1, 2]
+        assert [s.seed for s in out] == [0, _derived_seed(0, 1), _derived_seed(0, 2)]
         assert out.usage == Usage(6, 9, 15)
+        assert (out.n_requests, out.n_usage_reports) == (3, 3)
 
     def test_forced_strategies(self, fake_completion, params_support):
         params_support["params"] = None
@@ -195,7 +202,15 @@ class TestSample:
 
     @pytest.mark.parametrize(
         "kwargs",
-        [dict(n=0), dict(n=2, concurrency=0), dict(n=2, strategy="nope"), dict(n=True)],
+        [
+            dict(n=0),
+            dict(n=2, concurrency=0),
+            dict(n=2, strategy="nope"),
+            dict(n=True),
+            dict(n=2, on_error="ignore"),
+            dict(n=2, messages=[{"role": "user", "content": "other"}]),
+            dict(n=2, stream=True),
+        ],
     )
     def test_bad_args(self, fake_completion, kwargs):
         with pytest.raises(ValueError):
@@ -221,6 +236,130 @@ class TestSample:
 
     def test_exports(self):
         assert aix.sample is sample and aix.Sample is Sample and aix.Samples is Samples
+        assert aix.SamplingError is SamplingError
+
+    def test_seeds_do_not_overlap_across_base_seeds(self):
+        run0 = {_derived_seed(0, j) for j in range(5)}
+        run1 = {_derived_seed(1, j) for j in range(5)}
+        assert not run0 & run1
+
+    def test_n1_forced_provider_is_a_plain_request(
+        self, fake_completion, params_support
+    ):
+        params_support["params"] = ["n"]
+        fake_completion.side_effect = _provider_side_effect
+        out = sample("q", n=1, strategy="provider")
+        assert out.strategy == "independent"
+        assert "n" not in fake_completion.call_args.kwargs
+
+    def test_auto_falls_back_when_provider_refuses_n(
+        self, fake_completion, params_support
+    ):
+        class UnsupportedParamsError(Exception):  # litellm's name, matched by name
+            pass
+
+        params_support["params"] = ["n"]
+
+        def refuse_n(**kw):
+            if kw.get("n", 1) > 1:
+                raise UnsupportedParamsError("n not supported")
+            return _response(["x"], usage=_usage())
+
+        fake_completion.side_effect = refuse_n
+        out = sample("q", n=3)
+        assert out.strategy == "independent" and len(out) == 3
+        assert out.n_requests == 3  # the refused request is not counted
+        with pytest.raises(UnsupportedParamsError):
+            sample("q", n=3, strategy="provider")
+
+    def test_auto_does_not_swallow_other_errors(self, fake_completion, params_support):
+        params_support["params"] = ["n"]
+        fake_completion.side_effect = RuntimeError("rate limited")
+        with pytest.raises(RuntimeError):
+            sample("q", n=3)
+
+    def _one_failure(self, fake_completion, params_support):
+        params_support["params"] = None
+        calls = {"k": 0}
+        lock = threading.Lock()
+
+        def flaky(**kw):
+            with lock:
+                calls["k"] += 1
+                k = calls["k"]
+            if k == 2:
+                raise RuntimeError("boom")
+            return _response(["x"], usage=_usage())
+
+        fake_completion.side_effect = flaky
+
+    def test_request_failure_raises_with_partial_batch(
+        self, fake_completion, params_support
+    ):
+        self._one_failure(fake_completion, params_support)
+        with pytest.raises(SamplingError) as info:
+            sample("q", n=4, concurrency=2)
+        partial = info.value.samples
+        assert len(partial) == 4 and partial.n_requests == 4
+        assert len(partial.errors) == 1
+        assert isinstance(info.value.__cause__, RuntimeError)
+        assert partial.usage == Usage(6, 9, 15)  # the 3 paid-for successes kept
+
+    def test_request_failure_recorded(self, fake_completion, params_support):
+        self._one_failure(fake_completion, params_support)
+        out = sample("q", n=4, on_error="record")
+        failed = [s for s in out if not s.ok]
+        assert len(failed) == 1 and failed[0].payload is None and failed[0].text == ""
+
+    def test_missing_key_raises_itself_once(self, monkeypatch, fake_completion):
+        from aix.credentials import (
+            MissingCredentialError,
+            PROVIDER_ENV_VARS,
+            provider_env_vars,
+        )
+
+        for provider in PROVIDER_ENV_VARS:
+            for env_name in provider_env_vars(provider):
+                monkeypatch.delenv(env_name, raising=False)
+        monkeypatch.setattr("aix.credentials._lookup_store", lambda name: None)
+        monkeypatch.setattr("aix.credentials._dotenv_loaded", True)
+        with pytest.raises(MissingCredentialError):
+            sample("q", n=3, model="anthropic/claude-x", strategy="independent")
+        fake_completion.assert_not_called()
+
+
+class TestDotenvLoadIsThreadSafe:
+    def test_concurrent_first_load_waits_for_the_load(self, monkeypatch):
+        """A thread must not see the 'loaded' flag before the .env is loaded."""
+        import aix.credentials as creds
+
+        dotenv = pytest.importorskip("dotenv")
+        monkeypatch.setattr(creds, "_dotenv_loaded", False)
+        monkeypatch.delenv("AIX_TEST_DOTENV_KEY", raising=False)
+        started = threading.Event()
+
+        def slow_load(*args, **kwargs):
+            started.set()
+            time.sleep(0.2)
+            monkeypatch.setenv("AIX_TEST_DOTENV_KEY", "loaded")
+            return True
+
+        monkeypatch.setattr(dotenv, "load_dotenv", slow_load)
+        monkeypatch.setattr(dotenv, "find_dotenv", lambda **kw: "")
+        seen = {}
+
+        def second():
+            started.wait(5)
+            creds._maybe_load_dotenv()
+            import os
+
+            seen["value"] = os.environ.get("AIX_TEST_DOTENV_KEY")
+
+        t = threading.Thread(target=second)
+        t.start()
+        creds._maybe_load_dotenv()
+        t.join(5)
+        assert seen["value"] == "loaded"
 
 
 class TestConstrainedAnswerConcurrent:
@@ -234,6 +373,17 @@ class TestConstrainedAnswerConcurrent:
         fake_completion.side_effect = blocking
         out = aix.constrained_answer("q", ["yes", "no"], n=3, concurrency=3)
         assert out == ["yes", "yes", "yes"]
+
+    def test_fail_fast_does_not_start_queued_calls(self, fake_completion):
+        fake_completion.return_value = _response(['{"answer": "maybe"}'])
+        with pytest.raises(aix.ConstraintViolation):
+            aix.constrained_answer("q", ["yes", "no"], n=20, concurrency=2)
+        assert fake_completion.call_count < 20
+
+    @pytest.mark.parametrize("bad", [0, -1, "5"])
+    def test_bad_concurrency(self, fake_completion, bad):
+        with pytest.raises(ValueError):
+            aix.constrained_answer("q", ["yes", "no"], n=2, concurrency=bad)
 
 
 def test_end_to_end_through_litellm_mock_response():

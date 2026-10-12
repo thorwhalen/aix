@@ -38,7 +38,7 @@ from inspect import signature, Parameter
 
 # Import from aix.chat
 from aix.chat import chat, DFLT_CHAT_MODEL
-from aix.sampling import concurrent_map
+from aix.sampling import concurrent_map, check_positive_int
 from aix.config import get_config as _get_config, resolve_model as _resolve_model
 
 
@@ -968,7 +968,9 @@ def constrained_answer(
             response_format alone. Default is False to match oa behavior.
         n: Number of times to call the LLM (default: 1). The ``n`` calls are
             independent and run concurrently (see ``concurrency``); each is
-            validated (and retried) on its own. For raw samples with finish
+            validated (and retried) on its own. On the first failure no new
+            call is started, but calls already in flight finish (and are
+            billed) before the error propagates. For raw samples with finish
             reasons and usage, use :func:`aix.sample`.
         on_violation: What to do when the model's answer does not satisfy
             `valid_answers`. `'raise'` (default) raises `ConstraintViolation`.
@@ -1062,6 +1064,7 @@ def constrained_answer(
         )
         if concurrency is None:
             concurrency = _get_config().chat.sample_concurrency
+        concurrency = check_positive_int("concurrency", concurrency)
         return concurrent_map(lambda _: f(), range(n), concurrency=concurrency)
 
     # Determine the expected type for type conversion

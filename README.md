@@ -270,8 +270,11 @@ s = sample("Is a tomato a fruit? Reply as JSON {\"answer\": bool}", n=5,
 s.strategy                    # 'provider_n', 'independent' or 'mixed'
 s.payloads                    # parsed answers (None where parsing failed)
 [x.finish_reason for x in s]  # 'content_filter' means refused, 'length' means truncated
-s.usage                       # total tokens across every request made
+s.usage                       # total tokens across every request that reported usage
+s.n_requests                  # how many requests were made
 ```
+
+A failed request does not discard the work already paid for. By default `sample()` raises `SamplingError` once the launched requests finish, and the partial batch is on its `.samples`. With `on_error="record"`, the failure is stored on that sample's `.error` instead. A `seed` is sent as-is with a provider-side `n` request; each independent request gets a seed derived from `(seed, index)`.
 
 `constrained_answer(..., n=k)` now runs its `k` calls concurrently too (`concurrency=`, default from config `chat.sample_concurrency`).
 
