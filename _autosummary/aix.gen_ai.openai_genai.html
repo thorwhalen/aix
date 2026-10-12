@@ -275,7 +275,12 @@
         <article role="main" id="furo-main-content">
           <section id="module-aix.gen_ai.openai_genai">
 <span id="aix-gen-ai-openai-genai"></span><h1>aix.gen_ai.openai_genai<a class="headerlink" href="#module-aix.gen_ai.openai_genai" title="Link to this heading">¶</a></h1>
-<p>OpenAI GenAI API functionality.</p>
+<p>OpenAI GenAI API functionality (legacy backend, via the optional <code class="docutils literal notranslate"><span class="pre">oa</span></code> package).</p>
+<p><code class="docutils literal notranslate"><span class="pre">oa</span></code> is imported on the first call, never at <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">aix</span></code> time: importing
+<code class="docutils literal notranslate"><span class="pre">oa</span></code> resolves an OpenAI API key as a side effect – raising when none is
+configured, and <em>prompting for one on stdin</em> in an interactive session – so an
+eager import made <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">aix</span></code> crash or block for anyone who has <code class="docutils literal notranslate"><span class="pre">oa</span></code>
+installed but no key set (<a class="reference external" href="https://github.com/thorwhalen/aix/issues/54">https://github.com/thorwhalen/aix/issues/54</a>).</p>
 </section>
 
         </article>
@@ -323,7 +328,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=52d298fc"></script>
+</div><script src="../_static/documentation_options.js?v=fb92ec9a"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

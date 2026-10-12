@@ -5,17 +5,19 @@ orphan: true
 
 # About this build
 
-This documentation was built on **2026-10-12 16:49 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/ea7d0d1aec8750ae722b088bedba60b878ab9850"><code>ea7d0d1</code></a> on branch <code>master</code>, for **aix 0.0.46** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-12 17:01 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/20cf60785b9fc22a0ddbcb498ab951b995ca1704"><code>20cf607</code></a> on branch <code>master</code>, for **aix 0.0.47** (from <code>pyproject.toml</code>).
 
-:::{note}
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+:::{warning}
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.47) is behind the latest release on PyPI (0.0.48): `pip install aix` gives newer code than these docs describe.
 :::
 
 ## Source
 
 | | |
 |---|---|
-| Commit | <a href="https://github.com/thorwhalen/aix/commit/ea7d0d1aec8750ae722b088bedba60b878ab9850"><code>ea7d0d1aec8750ae722b088bedba60b878ab9850</code></a> |
+| Commit | <a href="https://github.com/thorwhalen/aix/commit/20cf60785b9fc22a0ddbcb498ab951b995ca1704"><code>20cf60785b9fc22a0ddbcb498ab951b995ca1704</code></a> |
 | Branch | <code>master</code> |
 | Tags at this commit | none |
 | Working tree | clean |
@@ -26,9 +28,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 | | |
 |---|---|
 | Repository | <code>thorwhalen/aix</code> |
-| Run | <a href="https://github.com/thorwhalen/aix/actions/runs/38279804197">38279804197</a> |
+| Run | <a href="https://github.com/thorwhalen/aix/actions/runs/38281144134">38281144134</a> |
 | Ref | <code>refs/heads/master</code> |
-| Event commit | <code>ea7d0d1aec8750ae722b088bedba60b878ab9850</code> (in the history of the built commit) |
+| Event commit | <code>20cf60785b9fc22a0ddbcb498ab951b995ca1704</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -53,13 +55,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.46/">0.0.46</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/aix/0.0.48/">0.0.48</a>, newer than the documented version (0.0.47).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout ea7d0d1aec8750ae722b088bedba60b878ab9850
+git checkout 20cf60785b9fc22a0ddbcb498ab951b995ca1704
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

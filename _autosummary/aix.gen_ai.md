@@ -18,6 +18,6 @@ Return the chat function for the specified model.
 
 ### Modules
 
-| [`google_genai`](aix.gen_ai.google_genai.md#module-aix.gen_ai.google_genai)   | Google GenAI API functionality.   |
-|------------------------------------------------------------------------------------------------|-----------------------------------|
-| [`openai_genai`](aix.gen_ai.openai_genai.md#module-aix.gen_ai.openai_genai)   | OpenAI GenAI API functionality.   |
+| [`google_genai`](aix.gen_ai.google_genai.md#module-aix.gen_ai.google_genai)   | Google GenAI API functionality.                                                 |
+|------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [`openai_genai`](aix.gen_ai.openai_genai.md#module-aix.gen_ai.openai_genai)   | OpenAI GenAI API functionality (legacy backend, via the optional `oa` package). |

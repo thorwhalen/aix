@@ -1,4 +1,4 @@
-> built 2026-10-12 16:49 UTC from ea7d0d1 (master) · aix 0.0.46. Details: build_info.json
+> built 2026-10-12 17:01 UTC from 20cf607 (master) · aix 0.0.47. Details: build_info.json
 
 # index.html.md
 
@@ -295,10 +295,14 @@ A failed request does not discard the work already paid for. By default `sample(
 ```python
 from aix import supports, complete
 
-supports("gpt-4o-mini", "seed")              # True  -- LiteLLM forwards seed (best-effort)
-supports("anthropic/claude-sonnet-4", "seed")  # False -- seed would be dropped or rejected
-supports("gpt-4o-mini", "n")                 # provider-side n (what sample() prefers)
-supports("gpt-4o-mini", "response_schema")   # strict/schema structured output (response_schema=)
+supports("gpt-4o-mini", "seed")  # True  -- LiteLLM forwards seed (best-effort)
+supports(
+    "anthropic/claude-sonnet-4", "seed"
+)  # False -- seed would be dropped or rejected
+supports("gpt-4o-mini", "n")  # provider-side n (what sample() prefers)
+supports(
+    "gpt-4o-mini", "response_schema"
+)  # strict/schema structured output (response_schema=)
 
 a = complete("...", seed=7, temperature=0)
 b = complete("...", seed=7, temperature=0)
@@ -3110,16 +3114,22 @@ Return the chat function for the specified model.
 
 ### Modules
 
-| [`google_genai`](_autosummary/aix.gen_ai.google_genai.html.md#module-aix.gen_ai.google_genai)   | Google GenAI API functionality.   |
-|------------------------------------------------------------------------------------------------|-----------------------------------|
-| [`openai_genai`](_autosummary/aix.gen_ai.openai_genai.html.md#module-aix.gen_ai.openai_genai)   | OpenAI GenAI API functionality.   |
+| [`google_genai`](_autosummary/aix.gen_ai.google_genai.html.md#module-aix.gen_ai.google_genai)   | Google GenAI API functionality.                                                 |
+|------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [`openai_genai`](_autosummary/aix.gen_ai.openai_genai.html.md#module-aix.gen_ai.openai_genai)   | OpenAI GenAI API functionality (legacy backend, via the optional `oa` package). |
 
 
 # _autosummary/aix.gen_ai.openai_genai.html.md
 
 # aix.gen_ai.openai_genai
 
-OpenAI GenAI API functionality.
+OpenAI GenAI API functionality (legacy backend, via the optional `oa` package).
+
+`oa` is imported on the first call, never at `import aix` time: importing
+`oa` resolves an OpenAI API key as a side effect – raising when none is
+configured, and *prompting for one on stdin* in an interactive session – so an
+eager import made `import aix` crash or block for anyone who has `oa`
+installed but no key set ([https://github.com/thorwhalen/aix/issues/54](https://github.com/thorwhalen/aix/issues/54)).
 
 
 # _autosummary/aix.html.md
@@ -7680,16 +7690,18 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.
 
 # About this build
 
-This documentation was built on **2026-10-12 16:49 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/ea7d0d1aec8750ae722b088bedba60b878ab9850"><code>ea7d0d1</code></a> on branch <code>master</code>, for **aix 0.0.46** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-12 17:01 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/20cf60785b9fc22a0ddbcb498ab951b995ca1704"><code>20cf607</code></a> on branch <code>master</code>, for **aix 0.0.47** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.47) is behind the latest release on PyPI (0.0.48): `pip install aix` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/ea7d0d1aec8750ae722b088bedba60b878ab9850"><code>ea7d0d1aec8750ae722b088bedba60b878ab9850</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/20cf60785b9fc22a0ddbcb498ab951b995ca1704"><code>20cf60785b9fc22a0ddbcb498ab951b995ca1704</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -7700,9 +7712,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38279804197">38279804197</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38281144134">38281144134</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>ea7d0d1aec8750ae722b088bedba60b878ab9850</code> (in the history of the built commit) |
+| Event commit | <code>20cf60785b9fc22a0ddbcb498ab951b995ca1704</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -7727,13 +7739,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.46/">0.0.46</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/aix/0.0.48/">0.0.48</a>, newer than the documented version (0.0.47).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout ea7d0d1aec8750ae722b088bedba60b878ab9850
+git checkout 20cf60785b9fc22a0ddbcb498ab951b995ca1704
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

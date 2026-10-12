@@ -291,10 +291,14 @@ A failed request does not discard the work already paid for. By default `sample(
 ```python
 from aix import supports, complete
 
-supports("gpt-4o-mini", "seed")              # True  -- LiteLLM forwards seed (best-effort)
-supports("anthropic/claude-sonnet-4", "seed")  # False -- seed would be dropped or rejected
-supports("gpt-4o-mini", "n")                 # provider-side n (what sample() prefers)
-supports("gpt-4o-mini", "response_schema")   # strict/schema structured output (response_schema=)
+supports("gpt-4o-mini", "seed")  # True  -- LiteLLM forwards seed (best-effort)
+supports(
+    "anthropic/claude-sonnet-4", "seed"
+)  # False -- seed would be dropped or rejected
+supports("gpt-4o-mini", "n")  # provider-side n (what sample() prefers)
+supports(
+    "gpt-4o-mini", "response_schema"
+)  # strict/schema structured output (response_schema=)
 
 a = complete("...", seed=7, temperature=0)
 b = complete("...", seed=7, temperature=0)

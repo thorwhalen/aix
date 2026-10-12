@@ -17,7 +17,7 @@
 - [aix.credentials](aix.credentials.html.md): Unified, discoverable API-key / secret resolution for AIX.
 - [aix.gen_ai](aix.gen_ai.html.md): Generative AI modules.
 - [aix.gen_ai.google_genai](aix.gen_ai.google_genai.html.md): Google GenAI API functionality.
-- [aix.gen_ai.openai_genai](aix.gen_ai.openai_genai.html.md): OpenAI GenAI API functionality.
+- [aix.gen_ai.openai_genai](aix.gen_ai.openai_genai.html.md): OpenAI GenAI API functionality (legacy backend, via the optional &#96;oa&#96; package).
 - [aix.image](aix.image.html.md): Image generation interface for AIX.
 - [aix.misc](aix.misc.html.md): Misc AIX functions.
 - [aix.models](aix.models.html.md): User-friendly interface for model discovery and selection.
