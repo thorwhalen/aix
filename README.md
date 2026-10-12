@@ -247,12 +247,12 @@ response = session.send("And if I add 3 to that?")  # Remembers context
 from aix import complete, Usage
 
 c = complete("Name a color", n=3, temperature=1.0)
-c.texts           # ('Blue', 'Green', 'Red')     -- all n choices
+c.texts  # ('Blue', 'Green', 'Red')     -- all n choices
 c.finish_reasons  # ('stop', 'stop', 'stop')     -- 'length' means truncated by max_tokens
-c.usage           # Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17, cached_prompt_tokens=0, ...)
-c.model           # the model id the provider reports having served
-c.text            # first choice, i.e. what chat() would return
-c.raw             # the untouched LiteLLM response
+c.usage  # Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17, cached_prompt_tokens=0, ...)
+c.model  # the model id the provider reports having served
+c.text  # first choice, i.e. what chat() would return
+c.raw  # the untouched LiteLLM response
 
 # Usage values add up, for cost reporting. usage is None when a provider reports none.
 cs = [complete(q) for q in questions]
