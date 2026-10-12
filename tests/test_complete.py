@@ -47,6 +47,42 @@ class TestUsage:
         resp = {"usage": {"prompt_tokens": "3", "completion_tokens": True}}
         assert Usage.from_response(resp) is None
 
+    def test_breakdowns_openai_shape(self):
+        resp = {
+            "usage": {
+                "prompt_tokens": 10,
+                "completion_tokens": 5,
+                "total_tokens": 15,
+                "prompt_tokens_details": {"cached_tokens": 8},
+                "completion_tokens_details": {"reasoning_tokens": 4},
+            }
+        }
+        u = Usage.from_response(resp)
+        assert (u.cached_prompt_tokens, u.reasoning_tokens) == (8, 4)
+
+    def test_breakdowns_anthropic_shape(self):
+        resp = {
+            "usage": {
+                "prompt_tokens": 10,
+                "completion_tokens": 5,
+                "cache_read_input_tokens": 6,
+                "cache_creation_input_tokens": 3,
+            }
+        }
+        u = Usage.from_response(resp)
+        assert (u.cached_prompt_tokens, u.cache_creation_tokens) == (6, 3)
+
+    def test_integral_float_counts_accepted(self):
+        resp = {"usage": {"prompt_tokens": 3.0, "completion_tokens": 4.0}}
+        assert Usage.from_response(resp).total_tokens == 7
+
+    def test_add_zero_both_sides_and_empty_sum(self):
+        u = Usage(1, 1, 2)
+        assert u + 0 == u and 0 + u == u
+        assert sum([], Usage()) == Usage()
+        with pytest.raises(TypeError):
+            u + 1
+
     def test_usages_sum(self):
         assert sum([Usage(1, 2, 3), Usage(10, 20, 30)]) == Usage(11, 22, 33)
         assert Usage(1, 1, 2) + Usage(1, 1, 2) == Usage(2, 2, 4)
@@ -70,6 +106,10 @@ class TestCompletionFromResponse:
     def test_none_content_is_empty_string(self):
         c = Completion.from_response(_fake_response([None]))
         assert c.texts == ("",)
+
+    def test_list_of_parts_content_joined(self):
+        parts = [{"type": "text", "text": "a"}, {"type": "image_url"}, {"text": "b"}]
+        assert Completion.from_response(_fake_response([parts])).texts == ("ab",)
 
     def test_no_choices(self):
         c = Completion.from_response(
@@ -155,6 +195,28 @@ class TestComplete:
         with pytest.raises(ValueError, match="positive integer"):
             complete("hi", n=bad_n)
         fake_completion.assert_not_called()
+
+    def test_bad_n_reported_before_missing_credentials(self, monkeypatch):
+        from aix.credentials import PROVIDER_ENV_VARS, provider_env_vars
+
+        for provider in PROVIDER_ENV_VARS:
+            for env_name in provider_env_vars(provider):
+                monkeypatch.delenv(env_name, raising=False)
+        monkeypatch.setattr("aix.credentials._lookup_store", lambda name: None)
+        monkeypatch.setattr("aix.credentials._dotenv_loaded", True)
+        with pytest.raises(ValueError, match="positive integer"):
+            complete("hi", model="anthropic/claude-x", n=0)
+
+    def test_numpy_style_integral_n_accepted(self, fake_completion):
+        import numbers
+
+        class Int64(int):  # stands in for np.int64 (an Integral, not a bool)
+            pass
+
+        assert isinstance(Int64(2), numbers.Integral)
+        fake_completion.return_value = _fake_response(["x", "y"])
+        complete("hi", n=Int64(2))
+        assert type(fake_completion.call_args.kwargs["n"]) is int
 
     def test_rejects_stream(self, fake_completion):
         with pytest.raises(ValueError, match="does not stream"):

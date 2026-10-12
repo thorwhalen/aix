@@ -244,17 +244,19 @@ response = session.send("And if I add 3 to that?")  # Remembers context
 `chat()` returns only the first choice's text. When you need the rest of the response (every one of `n` choices, token usage, why each choice stopped, the model that actually served the call), use `complete()`, which takes the same arguments and returns a `Completion`:
 
 ```python
-from aix import complete
+from aix import complete, Usage
 
 c = complete("Name a color", n=3, temperature=1.0)
 c.texts           # ('Blue', 'Green', 'Red')     -- all n choices
 c.finish_reasons  # ('stop', 'stop', 'stop')     -- 'length' means truncated by max_tokens
-c.usage           # Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17)
+c.usage           # Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17, cached_prompt_tokens=0, ...)
 c.model           # the model id the provider reports having served
 c.text            # first choice, i.e. what chat() would return
 c.raw             # the untouched LiteLLM response
 
-sum(complete(q).usage for q in questions)  # Usage values add up, for cost reporting
+# Usage values add up, for cost reporting. usage is None when a provider reports none.
+cs = [complete(q) for q in questions]
+total = sum((c.usage for c in cs if c.usage), Usage())
 ```
 
 ### 2. Embeddings

@@ -39,7 +39,9 @@ Examples:
 """
 
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass, field
+import numbers
+from functools import wraps
+from dataclasses import dataclass, field, fields as dataclass_fields
 from typing import Union, Any, Optional
 
 from aix.config import (
@@ -164,9 +166,13 @@ def _field(obj: Any, name: str) -> Any:
 
 
 def _as_int(value: Any) -> Optional[int]:
-    """``value`` if it is a real integer count, else ``None`` (never coerces)."""
-    if isinstance(value, int) and not isinstance(value, bool):
-        return value
+    """``value`` as an integer count if it is one (``7`` or ``7.0``), else ``None``."""
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, numbers.Integral):
+        return int(value)
+    if isinstance(value, float) and value.is_integer():
+        return int(value)
     return None
 
 
@@ -175,66 +181,122 @@ def _as_str(value: Any) -> Optional[str]:
     return value if isinstance(value, str) else None
 
 
+def _content_text(content: Any) -> str:
+    """The text of a message ``content``: a string, or the text parts of a list.
+
+    Multimodal / structured providers return content as a list of parts
+    (``[{"type": "text", "text": "..."}, ...]``); their text parts are joined.
+    Anything else (``None`` for a pure tool call) is ``""``.
+    """
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = (_as_str(_field(part, "text")) for part in content)
+        return "".join(p for p in parts if p)
+    return ""
+
+
+def _nested(obj: Any, path: str) -> Any:
+    """Follow a dotted ``path`` of :func:`_field` reads, ``None`` if any is absent."""
+    for name in path.split("."):
+        if obj is None:
+            return None
+        obj = _field(obj, name)
+    return obj
+
+
+# Usage field -> where LiteLLM puts it, first match wins. LiteLLM normalizes most
+# providers to the OpenAI shape (``*_tokens_details``); the bare Anthropic names
+# are the fallback for responses it passes through unnormalized.
+_USAGE_SOURCES = {
+    "prompt_tokens": ("prompt_tokens",),
+    "completion_tokens": ("completion_tokens",),
+    "total_tokens": ("total_tokens",),
+    "cached_prompt_tokens": (
+        "prompt_tokens_details.cached_tokens",
+        "cache_read_input_tokens",
+    ),
+    "cache_creation_tokens": (
+        "prompt_tokens_details.cache_creation_tokens",
+        "cache_creation_input_tokens",
+    ),
+    "reasoning_tokens": ("completion_tokens_details.reasoning_tokens",),
+}
+
+
 @dataclass(frozen=True)
 class Usage:
     """Token counts billed for one call (or summed over several).
 
-    Counts a provider did not report are ``0``. Usages add, so the cost of a
-    batch of calls is ``sum(c.usage for c in completions)``.
+    ``prompt_tokens`` / ``completion_tokens`` / ``total_tokens`` are the headline
+    counts. The breakdowns -- prompt tokens served from the provider's cache
+    (``cached_prompt_tokens``), written to it (``cache_creation_tokens``), and
+    hidden reasoning tokens inside ``completion_tokens`` (``reasoning_tokens``)
+    -- are priced differently by most providers, so cost reporting needs them.
+    Counts a provider did not report are ``0``.
+
+    Usages add, and ``sum`` works when you give it a ``Usage()`` start (so an
+    empty batch is a zero ``Usage``, not the integer ``0``):
 
     >>> Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15)
-    Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15)
-    >>> sum([Usage(1, 2, 3), Usage(10, 20, 30)])
-    Usage(prompt_tokens=11, completion_tokens=22, total_tokens=33)
+    Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15, cached_prompt_tokens=0, cache_creation_tokens=0, reasoning_tokens=0)
+    >>> sum([Usage(1, 2, 3), Usage(10, 20, 30)], Usage()).total_tokens
+    33
+    >>> sum([], Usage()) == Usage()
+    True
     """
 
     prompt_tokens: int = 0
     completion_tokens: int = 0
     total_tokens: int = 0
+    cached_prompt_tokens: int = 0
+    cache_creation_tokens: int = 0
+    reasoning_tokens: int = 0
 
-    def __add__(self, other: "Usage") -> "Usage":
+    def __add__(self, other: Any) -> "Usage":
+        if isinstance(other, int) and not isinstance(other, bool) and other == 0:
+            return self  # so ``sum(usages)`` (which starts at 0) works too
         if not isinstance(other, Usage):
             return NotImplemented
         return Usage(
-            prompt_tokens=self.prompt_tokens + other.prompt_tokens,
-            completion_tokens=self.completion_tokens + other.completion_tokens,
-            total_tokens=self.total_tokens + other.total_tokens,
+            **{
+                f.name: getattr(self, f.name) + getattr(other, f.name)
+                for f in dataclass_fields(Usage)
+            }
         )
 
-    def __radd__(self, other: Any) -> "Usage":
-        # Lets the builtin ``sum`` start from its integer 0.
-        if other == 0:
-            return self
-        return self.__add__(other)
+    __radd__ = __add__
 
     @classmethod
     def from_response(cls, response: Any) -> Optional["Usage"]:
         """Read the ``usage`` block of a LiteLLM response; ``None`` if absent.
 
-        >>> Usage.from_response({"usage": {"prompt_tokens": 3, "completion_tokens": 4}})
-        Usage(prompt_tokens=3, completion_tokens=4, total_tokens=7)
+        >>> u = Usage.from_response({"usage": {"prompt_tokens": 3, "completion_tokens": 4}})
+        >>> u.prompt_tokens, u.completion_tokens, u.total_tokens
+        (3, 4, 7)
         >>> Usage.from_response({}) is None
         True
         """
         usage = _field(response, "usage")
         if usage is None:
             return None
-        counts = {
-            name: _as_int(_field(usage, name))
-            for name in ("prompt_tokens", "completion_tokens", "total_tokens")
-        }
+
+        def first_count(paths):
+            for path in paths:
+                count = _as_int(_nested(usage, path))
+                if count is not None:
+                    return count
+            return None
+
+        counts = {name: first_count(paths) for name, paths in _USAGE_SOURCES.items()}
         if all(v is None for v in counts.values()):
             return None
-        prompt, completion = (
-            counts["prompt_tokens"] or 0,
-            counts["completion_tokens"] or 0,
-        )
-        total = counts["total_tokens"]
-        return cls(
-            prompt_tokens=prompt,
-            completion_tokens=completion,
-            total_tokens=total if total is not None else prompt + completion,
-        )
+        counts = {name: count or 0 for name, count in counts.items()}
+        if not counts["total_tokens"]:
+            counts["total_tokens"] = (
+                counts["prompt_tokens"] + counts["completion_tokens"]
+            )
+        return cls(**counts)
 
 
 @dataclass(frozen=True)
@@ -244,13 +306,15 @@ class Completion:
     Attributes:
         texts: The text of every choice, in order (``n`` of them when ``n`` was
             requested). A choice with no text content (e.g. a pure tool call)
-            is ``""``, as in :func:`chat`.
+            is ``""``; list-of-parts content is reduced to its joined text parts.
+            Tool calls themselves are not surfaced here -- read them from ``raw``.
         finish_reasons: Why each choice stopped (``"stop"``, ``"length"``,
             ``"content_filter"``, ``"tool_calls"``...), aligned with ``texts``;
             ``None`` where the provider did not say. ``"length"`` means the
             text was truncated by ``max_tokens``.
         usage: Tokens billed for the whole call (all choices together), or
-            ``None`` if the provider did not report usage.
+            ``None`` if the provider did not report usage (so filter before
+            summing: ``sum((c.usage for c in cs if c.usage), Usage())``).
         model: The model id the provider reports having served the call, which
             can differ from the one requested (aliases, dated snapshots).
         raw: The untouched LiteLLM response, for anything not surfaced here.
@@ -268,7 +332,7 @@ class Completion:
 
     @property
     def text(self) -> str:
-        """The first choice's text -- what :func:`chat` would have returned."""
+        """The first choice's text (``""`` if there are no choices)."""
         return self.texts[0] if self.texts else ""
 
     @property
@@ -286,7 +350,7 @@ class Completion:
         texts, reasons = [], []
         for choice in choices:
             message = _field(choice, "message")
-            texts.append(_as_str(_field(message, "content")) or "")
+            texts.append(_content_text(_field(message, "content")))
             reasons.append(_as_str(_field(choice, "finish_reason")))
         return cls(
             texts=tuple(texts),
@@ -426,6 +490,28 @@ def chat(
         return _extract_text_from_response(response)
 
 
+def _validate_complete_args(func):
+    """Reject bad :func:`complete` arguments before the credential preflight.
+
+    Kept outside :func:`complete` (and outermost in its decorator stack) so a
+    caller error such as ``n=0`` surfaces as itself, not as a missing API key.
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        n = kwargs.get("n", 1)
+        if not isinstance(n, numbers.Integral) or isinstance(n, bool) or n < 1:
+            raise ValueError(f"n must be a positive integer, got {n!r}")
+        if kwargs.get("stream"):
+            raise ValueError(
+                "complete() does not stream; use chat(..., stream=True) for streaming."
+            )
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+@_validate_complete_args
 @_requires_credentials(lambda: _get_config().chat.model)
 def complete(
     prompt: Union[str, Iterable[dict]],
@@ -476,13 +562,7 @@ def complete(
         >>> complete("Write an essay", max_tokens=5).finish_reason  # doctest: +SKIP
         'length'
     """
-    if isinstance(n, bool) or not isinstance(n, int) or n < 1:
-        raise ValueError(f"n must be a positive integer, got {n!r}")
-    if kwargs.get("stream"):
-        raise ValueError(
-            "complete() does not stream; use chat(..., stream=True) for streaming."
-        )
-
+    n = int(n)  # already validated (see _validate_complete_args); np ints too
     completion = _require_completion()
     litellm_kwargs = _completion_kwargs(
         prompt,
