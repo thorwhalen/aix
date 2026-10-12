@@ -53,7 +53,7 @@ from __future__ import annotations
 import base64
 import json
 import mimetypes
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace as _replace_dataclass
 from pathlib import Path
 from typing import Any, Sequence, Union
 
@@ -62,12 +62,10 @@ from aix.config import (
     resolve_model as _resolve_model,
     VisionConfig as _VisionConfig,
 )
-from aix.credentials import (
-    resolve_api_key as _resolve_api_key,
-    requires_credentials as _requires_credentials,
-)
+from aix.credentials import requires_credentials as _requires_credentials
 
 from aix._litellm import UNRESOLVED as _UNRESOLVED, litellm_attr as _litellm_attr
+from aix.chat import Usage as _Usage, request_kwargs as _request_kwargs
 
 # LiteLLM is a soft dependency, imported privately (mirrors aix.chat) *and*
 # deferred: importing it fetches litellm's model-cost map over HTTPS, so
@@ -204,6 +202,15 @@ def describe_image(
 
     >>> describe_image("cat.jpg", prompt="Caption it.")  # doctest: +SKIP
     'A cat on a sofa.'
+
+    For usage, several samples (``n``) or validated structured output, send the
+    same image content through :func:`aix.complete` (or :func:`aix.sample`):
+
+    >>> from aix import complete  # doctest: +SKIP
+    >>> c = complete([{"role": "user", "content": [  # doctest: +SKIP
+    ...     {"type": "text", "text": "Caption it."}, to_image_content("cat.jpg")]}],
+    ...     model="gpt-4o-mini", n=3)
+    >>> c.texts, c.usage  # doctest: +SKIP
     """
     completion = _completion()
     if completion is None:
@@ -225,16 +232,13 @@ def describe_image(
         }
     ]
 
-    litellm_kwargs: dict[str, Any] = {"model": model, "messages": messages}
-    if max_tokens is not None:
-        litellm_kwargs["max_tokens"] = max_tokens
-    if temperature is not None:
-        litellm_kwargs["temperature"] = temperature
-
-    resolved_key = _resolve_api_key(model, api_key=api_key)
-    if resolved_key is not None:
-        litellm_kwargs["api_key"] = resolved_key
-
+    litellm_kwargs = _request_kwargs(
+        messages,
+        model=model,
+        api_key=api_key,
+        max_tokens=max_tokens,
+        temperature=temperature,
+    )
     litellm_kwargs.update(kwargs)
 
     response = completion(**litellm_kwargs)
@@ -276,6 +280,8 @@ class ImageComparison:
         aspects: The per-aspect verdicts, one :class:`RubricVerdict` per
             rubric item, in rubric order.
         model: The vision model id that produced the verdict.
+        usage: Tokens billed for the comparison request (see
+            :class:`aix.Usage`), or ``None`` if the provider did not report it.
     """
 
     match: bool
@@ -283,6 +289,7 @@ class ImageComparison:
     explanation: str
     aspects: tuple[RubricVerdict, ...] = field(default_factory=tuple)
     model: "str | None" = None
+    usage: "_Usage | None" = field(default=None, compare=False)
 
     def _by_aspect(self) -> "dict[str, RubricVerdict]":
         return {verdict.aspect: verdict for verdict in self.aspects}
@@ -426,21 +433,21 @@ def compare_images(
     ]
     messages = [{"role": "user", "content": [text_block, *image_blocks]}]
 
-    litellm_kwargs: dict[str, Any] = {"model": model, "messages": messages}
-    if max_tokens is not None:
-        litellm_kwargs["max_tokens"] = max_tokens
-    if temperature is not None:
-        litellm_kwargs["temperature"] = temperature
-
-    resolved_key = _resolve_api_key(model, api_key=api_key)
-    if resolved_key is not None:
-        litellm_kwargs["api_key"] = resolved_key
-
+    litellm_kwargs = _request_kwargs(
+        messages,
+        model=model,
+        api_key=api_key,
+        max_tokens=max_tokens,
+        temperature=temperature,
+    )
     litellm_kwargs.update(kwargs)
 
     response = completion(**litellm_kwargs)
     raw = _extract_text(response)
-    return _parse_comparison(raw, rubric=rubric, model=model)
+    return _replace_dataclass(
+        _parse_comparison(raw, rubric=rubric, model=model),
+        usage=_Usage.from_response(response),
+    )
 
 
 # --- internals --------------------------------------------------------------
