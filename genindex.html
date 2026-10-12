@@ -209,6 +209,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.audio.html">aix.audio</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.batches.html">aix.batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.capabilities.html">aix.capabilities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.credentials.html">aix.credentials</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="_autosummary/aix.gen_ai.html">aix.gen_ai</a><input aria-label="Toggle navigation of aix.gen_ai" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="_autosummary/aix.gen_ai.google_genai.html">aix.gen_ai.google_genai</a></li>
@@ -219,6 +220,7 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.misc.html">aix.misc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.models.html">aix.models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.prompts.html">aix.prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.sampling.html">aix.sampling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.stores.html">aix.stores</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.util.html">aix.util</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.video.html">aix.video</a></li>
@@ -333,6 +335,13 @@
 </li>
         </ul></li>
         <li>
+    aix.capabilities
+
+        <ul>
+          <li><a href="_autosummary/aix.capabilities.html#module-aix.capabilities">module</a>
+</li>
+        </ul></li>
+        <li>
     aix.config
 
         <ul>
@@ -388,6 +397,13 @@
 
         <ul>
           <li><a href="_autosummary/aix.prompts.html#module-aix.prompts">module</a>
+</li>
+        </ul></li>
+        <li>
+    aix.sampling
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#module-aix.sampling">module</a>
 </li>
         </ul></li>
         <li>
@@ -542,6 +558,8 @@
           <li><a href="_autosummary/aix.credentials.html#aix.credentials.check_keys">(in module aix.credentials)</a>
 </li>
         </ul></li>
+        <li><a href="_autosummary/aix.sampling.html#aix.sampling.check_positive_int">check_positive_int() (in module aix.sampling)</a>
+</li>
         <li><a href="_autosummary/aix.html#aix.check_requirements">check_requirements() (in module aix)</a>
 
         <ul>
@@ -570,6 +588,10 @@
 </li>
         <li><a href="_autosummary/aix.html#aix.Completion">Completion (class in aix)</a>
 </li>
+        <li><a href="_autosummary/aix.sampling.html#aix.sampling.concurrent_map">concurrent_map() (in module aix.sampling)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="_autosummary/aix.html#aix.ImageComparison.confidence">confidence (aix.ImageComparison attribute)</a>
 
         <ul>
@@ -580,8 +602,6 @@
           <li><a href="_autosummary/aix.vision.html#aix.vision.RubricVerdict.confidence">(aix.vision.RubricVerdict attribute)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="_autosummary/aix.config.html#aix.config.config_file_path">config_file_path() (in module aix.config)</a>
 </li>
         <li><a href="_autosummary/aix.html#aix.configure">configure() (in module aix)</a>
@@ -722,8 +742,20 @@
 </li>
         <li><a href="_autosummary/aix.html#aix.embeddings">embeddings() (in module aix)</a>
 </li>
+        <li><a href="_autosummary/aix.html#aix.Sample.error">error (aix.Sample attribute)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Sample.error">(aix.sampling.Sample attribute)</a>
+</li>
+        </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="_autosummary/aix.html#aix.Samples.errors">errors (aix.Samples property)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Samples.errors">(aix.sampling.Samples property)</a>
+</li>
+        </ul></li>
         <li><a href="_autosummary/aix.video.html#aix.video.estimate_cost">estimate_cost() (in module aix.video)</a>
 </li>
         <li><a href="_autosummary/aix.html#aix.BatchError.exception">exception (aix.BatchError attribute)</a>
@@ -767,7 +799,13 @@
         <li><a href="_autosummary/aix.html#aix.find_most_similar">find_most_similar() (in module aix)</a>
 </li>
         <li><a href="_autosummary/aix.html#aix.Completion.finish_reason">finish_reason (aix.Completion property)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.html#aix.Sample.finish_reason">(aix.Sample attribute)</a>
 </li>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Sample.finish_reason">(aix.sampling.Sample attribute)</a>
+</li>
+        </ul></li>
         <li><a href="_autosummary/aix.html#aix.Completion.finish_reasons">finish_reasons (aix.Completion attribute)</a>
 </li>
         <li><a href="_autosummary/aix.ai_models.base.html#aix.ai_models.base.Connector.format_metadata">format_metadata() (aix.ai_models.base.Connector method)</a>
@@ -1046,10 +1084,10 @@
           <li><a href="_autosummary/aix.ai_models.base.html#aix.ai_models.base.ModelSource">(class in aix.ai_models.base)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="_autosummary/aix.html#aix.ModelStore">ModelStore (class in aix)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     module
 
@@ -1068,6 +1106,8 @@
 </li>
           <li><a href="_autosummary/aix.batches.html#module-aix.batches">aix.batches</a>
 </li>
+          <li><a href="_autosummary/aix.capabilities.html#module-aix.capabilities">aix.capabilities</a>
+</li>
           <li><a href="_autosummary/aix.config.html#module-aix.config">aix.config</a>
 </li>
           <li><a href="_autosummary/aix.credentials.html#module-aix.credentials">aix.credentials</a>
@@ -1083,6 +1123,8 @@
           <li><a href="_autosummary/aix.misc.html#module-aix.misc">aix.misc</a>
 </li>
           <li><a href="_autosummary/aix.prompts.html#module-aix.prompts">aix.prompts</a>
+</li>
+          <li><a href="_autosummary/aix.sampling.html#module-aix.sampling">aix.sampling</a>
 </li>
           <li><a href="_autosummary/aix.stores.html#module-aix.stores">aix.stores</a>
 </li>
@@ -1101,6 +1143,18 @@
   <h2>N</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="_autosummary/aix.html#aix.Samples.n_requests">n_requests (aix.Samples attribute)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Samples.n_requests">(aix.sampling.Samples attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="_autosummary/aix.html#aix.Samples.n_usage_reports">n_usage_reports (aix.Samples attribute)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Samples.n_usage_reports">(aix.sampling.Samples attribute)</a>
+</li>
+        </ul></li>
         <li><a href="_autosummary/aix.ai_models.base.html#aix.ai_models.base.Connector.name">name (aix.ai_models.base.Connector property)</a>
 
         <ul>
@@ -1143,6 +1197,12 @@
   <h2>O</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="_autosummary/aix.html#aix.Sample.ok">ok (aix.Sample property)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Sample.ok">(aix.sampling.Sample property)</a>
+</li>
+        </ul></li>
         <li><a href="_autosummary/aix.ai_models.html#aix.ai_models.OllamaConnector">OllamaConnector (class in aix.ai_models)</a>
 
         <ul>
@@ -1155,14 +1215,14 @@
           <li><a href="_autosummary/aix.ai_models.sources.html#aix.ai_models.sources.OllamaSource">(class in aix.ai_models.sources)</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="_autosummary/aix.ai_models.html#aix.ai_models.OpenAIConnector">OpenAIConnector (class in aix.ai_models)</a>
 
         <ul>
           <li><a href="_autosummary/aix.ai_models.sources.html#aix.ai_models.sources.OpenAIConnector">(class in aix.ai_models.sources)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="_autosummary/aix.ai_models.html#aix.ai_models.OpenRouterConnector">OpenRouterConnector (class in aix.ai_models)</a>
 
         <ul>
@@ -1183,6 +1243,12 @@
   <h2>P</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="_autosummary/aix.html#aix.Sample.payload">payload (aix.Sample attribute)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Sample.payload">(aix.sampling.Sample attribute)</a>
+</li>
+        </ul></li>
         <li><a href="_autosummary/aix.audio.html#aix.audio.GeneratedAudio.play">play() (aix.audio.GeneratedAudio method)</a>
 
         <ul>
@@ -1289,6 +1355,26 @@
   <h2>S</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="_autosummary/aix.html#aix.Sample">Sample (class in aix)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Sample">(class in aix.sampling)</a>
+</li>
+        </ul></li>
+        <li><a href="_autosummary/aix.html#aix.sample">sample() (in module aix)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.sample">(in module aix.sampling)</a>
+</li>
+        </ul></li>
+        <li><a href="_autosummary/aix.html#aix.Samples">Samples (class in aix)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Samples">(class in aix.sampling)</a>
+</li>
+        </ul></li>
+        <li><a href="_autosummary/aix.html#aix.SamplingError">SamplingError</a>, <a href="_autosummary/aix.sampling.html#aix.sampling.SamplingError">[1]</a>
+</li>
         <li><a href="_autosummary/aix.audio.html#aix.audio.GeneratedAudio.save">save() (aix.audio.GeneratedAudio method)</a>
 
         <ul>
@@ -1313,6 +1399,12 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="_autosummary/aix.html#aix.ModelStore.search">search() (aix.ModelStore method)</a>
 </li>
+        <li><a href="_autosummary/aix.html#aix.Sample.seed">seed (aix.Sample attribute)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Sample.seed">(aix.sampling.Sample attribute)</a>
+</li>
+        </ul></li>
         <li><a href="_autosummary/aix.html#aix.ChatSession.send">send() (aix.ChatSession method)</a>
 </li>
         <li><a href="_autosummary/aix.html#aix.set_config">set_config() (in module aix)</a>
@@ -1333,6 +1425,20 @@
           <li><a href="_autosummary/aix.image.html#aix.image.GeneratedImage.show">(aix.image.GeneratedImage method)</a>
 </li>
         </ul></li>
+        <li><a href="_autosummary/aix.html#aix.Sample.strategy">strategy (aix.Sample attribute)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.html#aix.Samples.strategy">(aix.Samples attribute)</a>
+</li>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Sample.strategy">(aix.sampling.Sample attribute)</a>
+</li>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Samples.strategy">(aix.sampling.Samples attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="_autosummary/aix.capabilities.html#aix.capabilities.supported_params">supported_params() (in module aix.capabilities)</a>
+</li>
+        <li><a href="_autosummary/aix.capabilities.html#aix.capabilities.supports">supports() (in module aix.capabilities)</a>
+</li>
     </ul></td>
   </tr></table>
 </section>
@@ -1342,7 +1448,13 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="_autosummary/aix.html#aix.Completion.text">text (aix.Completion property)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.html#aix.Sample.text">(aix.Sample attribute)</a>
 </li>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Sample.text">(aix.sampling.Sample attribute)</a>
+</li>
+        </ul></li>
         <li><a href="_autosummary/aix.html#aix.text_to_speech">text_to_speech() (in module aix)</a>
 
         <ul>
@@ -1398,11 +1510,21 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="_autosummary/aix.html#aix.Completion.usage">usage (aix.Completion attribute)</a>
+
+        <ul>
+          <li><a href="_autosummary/aix.html#aix.Sample.usage">(aix.Sample attribute)</a>
 </li>
-        <li><a href="_autosummary/aix.html#aix.Usage">Usage (class in aix)</a>
+          <li><a href="_autosummary/aix.html#aix.Samples.usage">(aix.Samples attribute)</a>
 </li>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Sample.usage">(aix.sampling.Sample attribute)</a>
+</li>
+          <li><a href="_autosummary/aix.sampling.html#aix.sampling.Samples.usage">(aix.sampling.Samples attribute)</a>
+</li>
+        </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="_autosummary/aix.html#aix.Usage">Usage (class in aix)</a>
+</li>
         <li><a href="_autosummary/aix.html#aix.using">using() (in module aix)</a>
 
         <ul>
@@ -1475,7 +1597,7 @@
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=330037c1"></script>
+</div><script src="_static/documentation_options.js?v=db237671"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>

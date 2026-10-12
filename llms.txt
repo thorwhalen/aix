@@ -15,6 +15,7 @@
 - [aix.ai_models.sources](_autosummary/aix.ai_models.sources.html.md): Concrete implementations of model sources and connectors.
 - [aix.audio](_autosummary/aix.audio.html.md): Audio operations interface for AIX.
 - [aix.batches](_autosummary/aix.batches.html.md): Batch processing interface for AIX.
+- [aix.capabilities](_autosummary/aix.capabilities.html.md): What a model supports, asked before calling it.
 - [aix.credentials](_autosummary/aix.credentials.html.md): Unified, discoverable API-key / secret resolution for AIX.
 - [aix.gen_ai](_autosummary/aix.gen_ai.html.md): Generative AI modules.
 - [aix.gen_ai.google_genai](_autosummary/aix.gen_ai.google_genai.html.md): Google GenAI API functionality.
@@ -23,12 +24,13 @@
 - [aix.misc](_autosummary/aix.misc.html.md): Misc AIX functions.
 - [aix.models](_autosummary/aix.models.html.md): User-friendly interface for model discovery and selection.
 - [aix.prompts](_autosummary/aix.prompts.html.md): Prompt-based function creation for AIX.
+- [aix.sampling](_autosummary/aix.sampling.html.md): Repeated sampling: &#96;n&#96; answers to one prompt, drawn as fast as the provider allows.
 - [aix.stores](_autosummary/aix.stores.html.md): Storage layers for AIX.
 - [aix.util](_autosummary/aix.util.html.md): Utils for AIX.
 - [aix.video](_autosummary/aix.video.html.md): Video generation interface for AIX.
 - [aix.vision](_autosummary/aix.vision.html.md): Image-to-text (vision) interface for AIX.
 - [For AI agents](ai-agents.html.md): &#96;aix&#96; ships artifacts for coding agents alongside its code. This page lists
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-12 15:52 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-12 16:14 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
 
 ## Optional
 

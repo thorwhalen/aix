@@ -7,7 +7,7 @@
 <link rel="alternate" type="text/markdown" href="aix.prompts.html.md">
 <link rel="describedby" href="../llms.txt" type="text/markdown">
 <link rel="alternate" type="text/markdown" href="aix.prompts.html.md">
-<link rel="describedby" href="llms.txt"><link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="aix.stores" href="aix.stores.html"><link rel="prev" title="aix.models" href="aix.models.html">
+<link rel="describedby" href="llms.txt"><link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="aix.sampling" href="aix.sampling.html"><link rel="prev" title="aix.models" href="aix.models.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>aix.prompts - aix</title>
@@ -213,6 +213,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="aix.audio.html">aix.audio</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.batches.html">aix.batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.capabilities.html">aix.capabilities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.credentials.html">aix.credentials</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="aix.gen_ai.html">aix.gen_ai</a><input aria-label="Toggle navigation of aix.gen_ai" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="aix.gen_ai.google_genai.html">aix.gen_ai.google_genai</a></li>
@@ -223,6 +224,7 @@
 <li class="toctree-l3"><a class="reference internal" href="aix.misc.html">aix.misc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.models.html">aix.models</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">aix.prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.sampling.html">aix.sampling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.stores.html">aix.stores</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.util.html">aix.util</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.video.html">aix.video</a></li>
@@ -439,7 +441,7 @@ attribute-based access.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.prompts.constrained_answer">
-<span class="sig-prename descclassname"><span class="pre">aix.prompts.</span></span><span class="sig-name descname"><span class="pre">constrained_answer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_answers</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enhance_prompt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_violation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/prompts.html#constrained_answer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.prompts.constrained_answer" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">aix.prompts.</span></span><span class="sig-name descname"><span class="pre">constrained_answer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_answers</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enhance_prompt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_violation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concurrency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/prompts.html#constrained_answer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.prompts.constrained_answer" title="Link to this definition">¶</a></dt>
 <dd><p>Get an answer from the LLM constrained to a set of valid answers or types.</p>
 <p>Uses JSON mode to ensure the LLM returns a valid response based on constraints.
 More flexible than the oa version - works with any model that supports JSON mode
@@ -468,7 +470,12 @@ Lower values (e.g., 0.0) give more deterministic results.</p></li>
 <li><p><strong>enhance_prompt</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If True, adds explicit instructions to the prompt about
 JSON formatting and constraints. If False (default), relies on
 response_format alone. Default is False to match oa behavior.</p></li>
-<li><p><strong>n</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of times to call the LLM (default: 1)</p></li>
+<li><p><strong>n</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of times to call the LLM (default: 1). The <code class="docutils literal notranslate"><span class="pre">n</span></code> calls are
+independent and run concurrently (see <code class="docutils literal notranslate"><span class="pre">concurrency</span></code>); each is
+validated (and retried) on its own. On the first failure no new
+call is started, but calls already in flight finish (and are
+billed) before the error propagates. For raw samples with finish
+reasons and usage, use <a class="reference internal" href="aix.html#aix.sample" title="aix.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.sample()</span></code></a>.</p></li>
 <li><p><strong>on_violation</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'raise'</span></code>, <code class="docutils literal notranslate"><span class="pre">'return'</span></code>]</span>) – What to do when the model’s answer does not satisfy
 <code class="code docutils literal notranslate"><span class="pre">valid_answers</span></code>. <code class="code docutils literal notranslate"><span class="pre">'raise'</span></code> (default) raises <code class="code docutils literal notranslate"><span class="pre">ConstraintViolation</span></code>.
 <code class="code docutils literal notranslate"><span class="pre">'return'</span></code> returns the model’s value unchecked – the behaviour of
@@ -476,6 +483,8 @@ this function before enforcement existed, kept as an escape hatch.</p></li>
 <li><p><strong>max_retries</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – How many times to re-ask the model after a violation
 before giving up (default: 0, i.e. ask exactly once). Ignored when
 <code class="code docutils literal notranslate"><span class="pre">on_violation='return'</span></code>, which never detects a violation.</p></li>
+<li><p><strong>concurrency</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Max simultaneous calls when <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> (default: config
+<code class="docutils literal notranslate"><span class="pre">chat.sample_concurrency</span></code>).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -704,12 +713,12 @@ identity). Defaults to <code class="docutils literal notranslate"><span class="p
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="aix.stores.html">
+          <a class="next-page" href="aix.sampling.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">aix.stores</div>
+                <div class="title">aix.sampling</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -777,7 +786,7 @@ identity). Defaults to <code class="docutils literal notranslate"><span class="p
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=330037c1"></script>
+</div><script src="../_static/documentation_options.js?v=db237671"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -83,14 +83,14 @@ best = "anthropic/claude-sonnet-4"
 
 ### Classes
 
-| [`ChatConfig`](#aix.config.ChatConfig)([model, temperature, max_tokens])     | Defaults for `chat` / `ask` / `prompt_func`.                       |
-|---------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| [`EmbeddingConfig`](#aix.config.EmbeddingConfig)([model, batch_size])             | Defaults for `embeddings` / `embed`.                               |
-| [`ImageConfig`](#aix.config.ImageConfig)([model, size, quality, num_images])  | Defaults for `generate_image` / `generate_images`.                 |
-| [`AudioConfig`](#aix.config.AudioConfig)([tts_model, tts_voice, ...])         | Defaults for `text_to_speech` / `transcribe` / `translate_audio`.  |
-| [`VideoConfig`](#aix.config.VideoConfig)([provider])                          | Defaults for `generate_video` (provider-dependent).                |
-| [`VisionConfig`](#aix.config.VisionConfig)([model])                            | Defaults for `describe_image` (image→text).                        |
-| [`AixConfig`](#aix.config.AixConfig)([chat, embeddings, image, audio, ...]) | Top-level AIX configuration (single source of truth for defaults). |
+| [`ChatConfig`](#aix.config.ChatConfig)([model, temperature, max_tokens, ...])   | Defaults for `chat` / `ask` / `complete` / `sample` / `prompt_func`.   |
+|------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| [`EmbeddingConfig`](#aix.config.EmbeddingConfig)([model, batch_size])                | Defaults for `embeddings` / `embed`.                                   |
+| [`ImageConfig`](#aix.config.ImageConfig)([model, size, quality, num_images])     | Defaults for `generate_image` / `generate_images`.                     |
+| [`AudioConfig`](#aix.config.AudioConfig)([tts_model, tts_voice, ...])            | Defaults for `text_to_speech` / `transcribe` / `translate_audio`.      |
+| [`VideoConfig`](#aix.config.VideoConfig)([provider])                             | Defaults for `generate_video` (provider-dependent).                    |
+| [`VisionConfig`](#aix.config.VisionConfig)([model])                               | Defaults for `describe_image` (image→text).                            |
+| [`AixConfig`](#aix.config.AixConfig)([chat, embeddings, image, audio, ...])    | Top-level AIX configuration (single source of truth for defaults).     |
 
 ### *class* aix.config.AixConfig(chat=<factory>, embeddings=<factory>, image=<factory>, audio=<factory>, video=<factory>, vision=<factory>, aliases=<factory>)
 
@@ -104,11 +104,11 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `text_to_speech` / `transcribe` / `translate_audio`.
 
-### *class* aix.config.ChatConfig(model='gpt-4.1-mini', temperature=1.0, max_tokens=None)
+### *class* aix.config.ChatConfig(model='gpt-4.1-mini', temperature=1.0, max_tokens=None, sample_concurrency=5)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-Defaults for `chat` / `ask` / `prompt_func`.
+Defaults for `chat` / `ask` / `complete` / `sample` / `prompt_func`.
 
 ### *class* aix.config.EmbeddingConfig(model='text-embedding-3-small', batch_size=512)
 

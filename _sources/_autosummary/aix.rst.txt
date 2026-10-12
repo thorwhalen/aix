@@ -20,6 +20,7 @@
       chat
       complete
       ask
+      sample
       chat_with_history
       embeddings
       embed
@@ -58,6 +59,8 @@
       AixConfig
       Completion
       Usage
+      Sample
+      Samples
       ChatSession
       EmbeddingCache
       PromptFuncs
@@ -76,6 +79,7 @@
    .. autosummary::
    
       MissingCredentialError
+      SamplingError
       ConstraintViolation
    
 .. rubric:: Modules
@@ -88,12 +92,14 @@
    ai_models
    audio
    batches
+   capabilities
    credentials
    gen_ai
    image
    misc
    models
    prompts
+   sampling
    stores
    util
    video

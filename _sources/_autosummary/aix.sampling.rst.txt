@@ -1,0 +1,27 @@
+aix.sampling
+============
+
+.. automodule:: aix.sampling
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      sample
+      concurrent_map
+      check_positive_int
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Sample
+      Samples
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      SamplingError
+   

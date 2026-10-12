@@ -213,6 +213,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.audio.html">aix.audio</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.batches.html">aix.batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.capabilities.html">aix.capabilities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.credentials.html">aix.credentials</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="_autosummary/aix.gen_ai.html">aix.gen_ai</a><input aria-label="Toggle navigation of aix.gen_ai" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="_autosummary/aix.gen_ai.google_genai.html">aix.gen_ai.google_genai</a></li>
@@ -223,6 +224,7 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.misc.html">aix.misc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.models.html">aix.models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.prompts.html">aix.prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.sampling.html">aix.sampling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.stores.html">aix.stores</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.util.html">aix.util</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.video.html">aix.video</a></li>
@@ -546,18 +548,33 @@ store lives in your user app-config folder — never in the repo.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">complete</span><span class="p">,</span> <span class="n">Usage</span>
 
 <span class="n">c</span> <span class="o">=</span> <span class="n">complete</span><span class="p">(</span><span class="s2">"Name a color"</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="n">c</span><span class="o">.</span><span class="n">texts</span>           <span class="c1"># ('Blue', 'Green', 'Red')     -- all n choices</span>
+<span class="n">c</span><span class="o">.</span><span class="n">texts</span>  <span class="c1"># ('Blue', 'Green', 'Red')     -- all n choices</span>
 <span class="n">c</span><span class="o">.</span><span class="n">finish_reasons</span>  <span class="c1"># ('stop', 'stop', 'stop')     -- 'length' means truncated by max_tokens</span>
-<span class="n">c</span><span class="o">.</span><span class="n">usage</span>           <span class="c1"># Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17, cached_prompt_tokens=0, ...)</span>
-<span class="n">c</span><span class="o">.</span><span class="n">model</span>           <span class="c1"># the model id the provider reports having served</span>
-<span class="n">c</span><span class="o">.</span><span class="n">text</span>            <span class="c1"># first choice, i.e. what chat() would return</span>
-<span class="n">c</span><span class="o">.</span><span class="n">raw</span>             <span class="c1"># the untouched LiteLLM response</span>
+<span class="n">c</span><span class="o">.</span><span class="n">usage</span>  <span class="c1"># Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17, cached_prompt_tokens=0, ...)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">model</span>  <span class="c1"># the model id the provider reports having served</span>
+<span class="n">c</span><span class="o">.</span><span class="n">text</span>  <span class="c1"># first choice, i.e. what chat() would return</span>
+<span class="n">c</span><span class="o">.</span><span class="n">raw</span>  <span class="c1"># the untouched LiteLLM response</span>
 
 <span class="c1"># Usage values add up, for cost reporting. usage is None when a provider reports none.</span>
 <span class="n">cs</span> <span class="o">=</span> <span class="p">[</span><span class="n">complete</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">questions</span><span class="p">]</span>
 <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">c</span><span class="o">.</span><span class="n">usage</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cs</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">usage</span><span class="p">),</span> <span class="n">Usage</span><span class="p">())</span>
 </pre></div>
 </div>
+<p>To ask the same question several times (agreement, stability, majority vote), use <code class="docutils literal notranslate"><span class="pre">sample()</span></code>. It sends one request with provider-side <code class="docutils literal notranslate"><span class="pre">n</span></code> when LiteLLM reports that the model supports it, and otherwise makes <code class="docutils literal notranslate"><span class="pre">n</span></code> independent requests concurrently. It records which path it took, because the two are not the same statistical object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">sample</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="s2">"Is a tomato a fruit? Reply as JSON {</span><span class="se">\"</span><span class="s2">answer</span><span class="se">\"</span><span class="s2">: bool}"</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+           <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">parse</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">strategy</span>                    <span class="c1"># 'provider_n', 'independent' or 'mixed'</span>
+<span class="n">s</span><span class="o">.</span><span class="n">payloads</span>                    <span class="c1"># parsed answers (None where parsing failed)</span>
+<span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">finish_reason</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>  <span class="c1"># 'content_filter' means refused, 'length' means truncated</span>
+<span class="n">s</span><span class="o">.</span><span class="n">usage</span>                       <span class="c1"># total tokens across every request that reported usage</span>
+<span class="n">s</span><span class="o">.</span><span class="n">n_requests</span>                  <span class="c1"># how many requests were made</span>
+</pre></div>
+</div>
+<p>A failed request does not discard the work already paid for. By default <code class="docutils literal notranslate"><span class="pre">sample()</span></code> raises <code class="docutils literal notranslate"><span class="pre">SamplingError</span></code> once the launched requests finish, and the partial batch is on its <code class="docutils literal notranslate"><span class="pre">.samples</span></code>. With <code class="docutils literal notranslate"><span class="pre">on_error=&quot;record&quot;</span></code>, the failure is stored on that sample’s <code class="docutils literal notranslate"><span class="pre">.error</span></code> instead. A <code class="docutils literal notranslate"><span class="pre">seed</span></code> is sent as-is with a provider-side <code class="docutils literal notranslate"><span class="pre">n</span></code> request; each independent request gets a seed derived from <code class="docutils literal notranslate"><span class="pre">(seed,</span> <span class="pre">index)</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">constrained_answer(...,</span> <span class="pre">n=k)</span></code> now runs its <code class="docutils literal notranslate"><span class="pre">k</span></code> calls concurrently too (<code class="docutils literal notranslate"><span class="pre">concurrency=</span></code>, default from config <code class="docutils literal notranslate"><span class="pre">chat.sample_concurrency</span></code>).</p>
 </section>
 <section id="embeddings">
 <h3>2. Embeddings<a class="headerlink" href="#embeddings" title="Link to this heading">¶</a></h3>
@@ -1029,7 +1046,7 @@ resolving — pass those provider-prefixed (<code class="docutils literal notran
 </section>
 </section>
 
-<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-12 15:52 UTC from <a href="https://github.com/thorwhalen/aix/commit/5adb1a19e6c45996f41da2e0d788a43522df925a">5adb1a1</a> (master) · aix 0.0.43 · <a href="about-this-build.html">about this build</a></p>
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-12 16:14 UTC from <a href="https://github.com/thorwhalen/aix/commit/f4944bdb99785d2745f84268b82775df0cdc43ce">f4944bd</a> (master) · aix 0.0.44 · <a href="about-this-build.html">about this build</a></p>
         </article>
       </div>
       <footer>
@@ -1140,7 +1157,7 @@ resolving — pass those provider-prefixed (<code class="docutils literal notran
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=330037c1"></script>
+</div><script src="_static/documentation_options.js?v=db237671"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>

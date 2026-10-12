@@ -46,6 +46,7 @@ Main Features:
 
 > - chat(): Simple chat interface across providers
 > - complete(): The whole response (all n choices, usage, finish reasons)
+> - sample(): n answers to one prompt, concurrently or via provider-side n
 > - embeddings(): Vector embeddings for text
 > - prompt_func(): Create functions from prompt templates
 > - models: Model discovery and selection
@@ -78,6 +79,7 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 | [`chat`](#aix.chat)(prompt, \*[, model, temperature, ...])        | Send a chat prompt and get a response.                                                                               |
 | [`complete`](#aix.complete)(prompt, \*[, model, temperature, ...])    | Send a chat prompt and get the whole response back as a [`Completion`](#aix.Completion). |
 | [`ask`](#aix.ask)(question[, model])                             | Ask a single question and get an answer.                                                                             |
+| [`sample`](#aix.sample)(prompt, \*, n[, temperature, seed, ...])    | Draw `n` answers to `prompt`, each with its finish reason and usage.                                                 |
 | [`chat_with_history`](#aix.chat_with_history)([system_prompt, model])          | Create a stateful chat session that maintains conversation history.                                                  |
 | [`embeddings`](#aix.embeddings)(segments, \*[, model, api_key])         | Generate embeddings for multiple text segments.                                                                      |
 | [`embed`](#aix.embed)(text, \*[, model])                           | Generate embedding for a single text.                                                                                |
@@ -111,28 +113,31 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 
 ### Classes
 
-| [`AixConfig`](#aix.AixConfig)([chat, embeddings, image, audio, ...])   | Top-level AIX configuration (single source of truth for defaults).   |
-|-----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
-| [`Completion`](#aix.Completion)(texts[, finish_reasons, usage, ...])    | Everything a chat completion returned, not just the first text.      |
-| [`Usage`](#aix.Usage)([prompt_tokens, completion_tokens, ...])     | Token counts billed for one call (or summed over several).           |
-| [`ChatSession`](#aix.ChatSession)([system_prompt, model])                | Stateful chat session that maintains conversation history.           |
-| [`EmbeddingCache`](#aix.EmbeddingCache)([model])                            | Cache for embeddings to avoid redundant API calls.                   |
-| [`PromptFuncs`](#aix.PromptFuncs)([model])                               | Collection of prompt-based functions.                                |
-| [`ModelStore`](#aix.ModelStore)([storage_path, auto_discover])          | User-friendly interface for model discovery and selection.           |
-| [`BatchProcessor`](#aix.BatchProcessor)(\*[, batch_size, max_workers, ...]) | Stateful batch processor for managing long-running operations.       |
-| [`BatchError`](#aix.BatchError)(exception, \*[, index, message])        | A batch result slot standing in for an item that raised.             |
-| [`GeneratedImage`](#aix.GeneratedImage)([url, b64_json, model, ...])        | Wrapper for generated images.                                        |
-| [`GeneratedAudio`](#aix.GeneratedAudio)(data[, model, text, voice, ...])    | Wrapper for generated audio.                                         |
-| [`TranscriptionResult`](#aix.TranscriptionResult)(text[, language, ...])         | Result of audio transcription.                                       |
-| [`GeneratedVideo`](#aix.GeneratedVideo)([url, data, model, prompt, ...])    | Wrapper for generated videos.                                        |
-| [`RubricVerdict`](#aix.RubricVerdict)(aspect, match, confidence[, note])   | A vision model's verdict on a single rubric aspect.                  |
-| [`ImageComparison`](#aix.ImageComparison)(match, confidence, explanation)    | Structured result of comparing a candidate image to reference(s).    |
+| [`AixConfig`](#aix.AixConfig)([chat, embeddings, image, audio, ...])   | Top-level AIX configuration (single source of truth for defaults).                                                                                           |
+|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`Completion`](#aix.Completion)(texts[, finish_reasons, usage, ...])    | Everything a chat completion returned, not just the first text.                                                                                              |
+| [`Usage`](#aix.Usage)([prompt_tokens, completion_tokens, ...])     | Token counts billed for one call (or summed over several).                                                                                                   |
+| [`Sample`](#aix.Sample)(text, payload[, finish_reason, ...])        | One drawn answer.                                                                                                                                            |
+| [`Samples`](#aix.Samples)([samples, usage, n_requests, ...])         | The list of [`Sample`](#aix.Sample) returned by [`sample()`](#aix.sample), plus batch facts. |
+| [`ChatSession`](#aix.ChatSession)([system_prompt, model])                | Stateful chat session that maintains conversation history.                                                                                                   |
+| [`EmbeddingCache`](#aix.EmbeddingCache)([model])                            | Cache for embeddings to avoid redundant API calls.                                                                                                           |
+| [`PromptFuncs`](#aix.PromptFuncs)([model])                               | Collection of prompt-based functions.                                                                                                                        |
+| [`ModelStore`](#aix.ModelStore)([storage_path, auto_discover])          | User-friendly interface for model discovery and selection.                                                                                                   |
+| [`BatchProcessor`](#aix.BatchProcessor)(\*[, batch_size, max_workers, ...]) | Stateful batch processor for managing long-running operations.                                                                                               |
+| [`BatchError`](#aix.BatchError)(exception, \*[, index, message])        | A batch result slot standing in for an item that raised.                                                                                                     |
+| [`GeneratedImage`](#aix.GeneratedImage)([url, b64_json, model, ...])        | Wrapper for generated images.                                                                                                                                |
+| [`GeneratedAudio`](#aix.GeneratedAudio)(data[, model, text, voice, ...])    | Wrapper for generated audio.                                                                                                                                 |
+| [`TranscriptionResult`](#aix.TranscriptionResult)(text[, language, ...])         | Result of audio transcription.                                                                                                                               |
+| [`GeneratedVideo`](#aix.GeneratedVideo)([url, data, model, prompt, ...])    | Wrapper for generated videos.                                                                                                                                |
+| [`RubricVerdict`](#aix.RubricVerdict)(aspect, match, confidence[, note])   | A vision model's verdict on a single rubric aspect.                                                                                                          |
+| [`ImageComparison`](#aix.ImageComparison)(match, confidence, explanation)    | Structured result of comparing a candidate image to reference(s).                                                                                            |
 
 ### Exceptions
 
-| [`MissingCredentialError`](#aix.MissingCredentialError)(model_or_provider, \*)   | Raised when a required API key cannot be resolved.                   |
-|--------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
-| [`ConstraintViolation`](#aix.ConstraintViolation)(message, \*[, answer, ...]) | Raised when an LLM answer does not satisfy the requested constraint. |
+| [`MissingCredentialError`](#aix.MissingCredentialError)(model_or_provider, \*)   | Raised when a required API key cannot be resolved.                                                           |
+|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| [`SamplingError`](#aix.SamplingError)(message, \*[, samples])           | A request inside [`sample()`](#aix.sample) failed (with `on_error="raise"`). |
+| [`ConstraintViolation`](#aix.ConstraintViolation)(message, \*[, answer, ...]) | Raised when an LLM answer does not satisfy the requested constraint.                                         |
 
 ### *class* aix.AixConfig(chat=<factory>, embeddings=<factory>, image=<factory>, audio=<factory>, video=<factory>, vision=<factory>, aliases=<factory>)
 
@@ -903,6 +908,94 @@ The model’s self-reported confidence in `[0.0, 1.0]`.
 
 A short free-text explanation of the verdict.
 
+### *class* aix.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+One drawn answer.
+
+#### text
+
+The raw text of this choice (`""` if its request failed).
+
+#### payload
+
+`parse(text)` when a `parse` function was given, else `text`;
+`None` if the request or the parsing failed (see `error`).
+
+#### finish_reason
+
+Why this choice stopped. `"length"` = truncated,
+`"content_filter"` = refused/filtered; check it before treating the
+payload as a judgement.
+
+#### usage
+
+Tokens for the request that produced *only this* sample, or
+`None` when it shared a provider-side `n` request (whose usage
+cannot be split per choice; see [`Samples.usage`](#aix.Samples.usage)).
+
+#### strategy
+
+How this sample was drawn: `"provider_n"` or `"independent"`.
+
+#### seed
+
+The seed sent with its request, if any.
+
+#### error
+
+The exception this sample’s request raised (with
+`on_error="record"`) or that `parse` raised on its text.
+
+#### *property* ok *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
+
+`True` when the request succeeded and the text parsed (if asked).
+
+### *class* aix.Samples(samples=(), , strategy, usage=None, n_requests=0, n_usage_reports=0)
+
+Bases: [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
+
+The list of [`Sample`](#aix.Sample) returned by [`sample()`](#aix.sample), plus batch facts.
+
+It is a plain `list` otherwise: slicing or concatenating gives a `list`
+without the batch attributes, which describe the whole draw only.
+
+#### strategy
+
+`"provider_n"`, `"independent"` or `"mixed"` (provider
+`n` topped up with independent calls).
+
+#### usage
+
+Total tokens over every request that reported usage, or `None`
+if none did. Compare `n_requests` with `n_usage_reports` to see
+whether it is complete.
+
+#### n_requests
+
+How many requests were made.
+
+#### n_usage_reports
+
+How many of them reported usage.
+
+#### *property* errors *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[Exception](https://docs.python.org/3/builtins/exceptions.html#Exception), ...]*
+
+Every recorded error (request or parse), in sample order.
+
+### *exception* aix.SamplingError(message, , samples=None)
+
+Bases: [`Exception`](https://docs.python.org/3/builtins/exceptions.html#Exception)
+
+A request inside [`sample()`](#aix.sample) failed (with `on_error="raise"`).
+
+No request is launched after the first failure, and the ones already in
+flight are awaited, so the work already paid for is not lost: `samples`
+holds every request that was made, failed ones included (as samples whose
+`error` is set) – possibly fewer than `n`. The first failure is
+`__cause__`.
+
 ### *class* aix.TranscriptionResult(text, language=None, duration=None, segments=None, model=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
@@ -1452,7 +1545,7 @@ Apply runtime overrides to the active config and return it.
 0.2
 ```
 
-### aix.constrained_answer(prompt, valid_answers, , model=None, temperature=None, enhance_prompt=False, n=1, on_violation='raise', max_retries=0)
+### aix.constrained_answer(prompt, valid_answers, , model=None, temperature=None, enhance_prompt=False, n=1, on_violation='raise', max_retries=0, concurrency=None)
 
 Get an answer from the LLM constrained to a set of valid answers or types.
 
@@ -1482,7 +1575,12 @@ as a convenient tool to do response statistics and validation (via n>1).
   * **enhance_prompt** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, adds explicit instructions to the prompt about
     JSON formatting and constraints. If False (default), relies on
     response_format alone. Default is False to match oa behavior.
-  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of times to call the LLM (default: 1)
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of times to call the LLM (default: 1). The `n` calls are
+    independent and run concurrently (see `concurrency`); each is
+    validated (and retried) on its own. On the first failure no new
+    call is started, but calls already in flight finish (and are
+    billed) before the error propagates. For raw samples with finish
+    reasons and usage, use [`aix.sample()`](#aix.sample).
   * **on_violation** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'raise'`, `'return'`]) – What to do when the model’s answer does not satisfy
     `valid_answers`. `'raise'` (default) raises `ConstraintViolation`.
     `'return'` returns the model’s value unchecked – the behaviour of
@@ -1490,6 +1588,8 @@ as a convenient tool to do response statistics and validation (via n>1).
   * **max_retries** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many times to re-ask the model after a violation
     before giving up (default: 0, i.e. ask exactly once). Ignored when
     `on_violation='return'`, which never detects a violation.
+  * **concurrency** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max simultaneous calls when `n > 1` (default: config
+    `chat.sample_concurrency`).
 * **Returns:**
   One of the valid answers, respecting the type constraint.
   If n > 1, returns a list of answers.
@@ -2250,6 +2350,44 @@ True
 * **Return type:**
   [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
+### aix.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, on_error='raise', api_key=None, \*\*kwargs)
+
+Draw `n` answers to `prompt`, each with its finish reason and usage.
+
+* **Parameters:**
+  * **prompt** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string or a list of message dicts, as for [`aix.chat()`](#aix.chat).
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many samples to draw.
+  * **temperature** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sampling temperature (`None` = configured default). At
+    `0` the samples mostly coincide, which is rarely what you want here.
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Base seed. A provider-side `n` request sends it as is; each
+    independent request sends a seed derived from `(seed, index)` so
+    independent samples are not forced identical and runs with different
+    base seeds do not overlap. Support is provider-dependent.
+  * **concurrency** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max simultaneous independent requests (`None` = config
+    `chat.sample_concurrency`).
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model id or alias (`None` = configured default).
+  * **strategy** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'auto'`, `'provider'`, `'independent'`]) – `"auto"` (provider `n` when supported, else independent;
+    also falls back to independent if the provider refuses `n`),
+    `"provider"` (force one `n` request) or `"independent"`.
+    `n=1` is always a single plain request, recorded `"independent"`.
+  * **parse** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional `text -> payload` (e.g. `json.loads`). A failure is
+    recorded on that sample (`payload=None`, `error=...`), not raised.
+  * **on_error** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'raise'`, `'record'`]) – When a request fails: `"raise"` (default) raises
+    [`SamplingError`](#aix.SamplingError) once the launched requests finish, carrying
+    the partial batch; `"record"` returns the batch with the failure on
+    that sample’s `error`.
+  * **api_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Explicit API key, as for [`aix.chat()`](#aix.chat).
+  * **\*\*kwargs** – Passed to every request (e.g. `max_tokens`, `response_format`).
+* **Return type:**
+  [`Samples`](aix.sampling.html.md#aix.sampling.Samples)
+* **Returns:**
+  [`Samples`](#aix.Samples) – a list of [`Sample`](#aix.Sample) with batch `.strategy`,
+  `.usage`, `.n_requests`.
+* **Raises:**
+  * [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – For a non-positive `n` / `concurrency`, an unknown
+        `strategy` / `on_error`, or a reserved kwarg (`messages`, `stream`).
+  * [**SamplingError**](#aix.SamplingError) – A request failed and `on_error="raise"`.
+
 ### aix.set_config(config)
 
 Replace the active config wholesale. Returns the new active config.
@@ -2445,18 +2583,20 @@ Context manager applying scoped overrides, restored on exit.
 
 ### Modules
 
-| [`config`](aix.config.html.md#module-aix.config)           | Central configuration for AIX (single source of truth for defaults).   |
-|-------------------------------------------------------------------------------------|------------------------------------------------------------------------|
-| [`ai_models`](aix.ai_models.html.md#module-aix.ai_models)     | AI Model Management Module.                                            |
-| [`audio`](aix.audio.html.md#module-aix.audio)             | Audio operations interface for AIX.                                    |
-| [`batches`](aix.batches.html.md#module-aix.batches)         | Batch processing interface for AIX.                                    |
-| [`credentials`](aix.credentials.html.md#module-aix.credentials) | Unified, discoverable API-key / secret resolution for AIX.             |
-| [`gen_ai`](aix.gen_ai.html.md#module-aix.gen_ai)           | Generative AI modules.                                                 |
-| [`image`](aix.image.html.md#module-aix.image)             | Image generation interface for AIX.                                    |
-| [`misc`](aix.misc.html.md#module-aix.misc)               | Misc AIX functions.                                                    |
-| [`models`](aix.models.html.md#aix.models)                  | User-friendly interface for model discovery and selection.             |
-| [`prompts`](aix.prompts.html.md#module-aix.prompts)         | Prompt-based function creation for AIX.                                |
-| [`stores`](aix.stores.html.md#module-aix.stores)           | Storage layers for AIX.                                                |
-| [`util`](aix.util.html.md#module-aix.util)               | Utils for AIX.                                                         |
-| [`video`](aix.video.html.md#module-aix.video)             | Video generation interface for AIX.                                    |
-| [`vision`](aix.vision.html.md#module-aix.vision)           | Image-to-text (vision) interface for AIX.                              |
+| [`config`](aix.config.html.md#module-aix.config)             | Central configuration for AIX (single source of truth for defaults).                |
+|---------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| [`ai_models`](aix.ai_models.html.md#module-aix.ai_models)       | AI Model Management Module.                                                         |
+| [`audio`](aix.audio.html.md#module-aix.audio)               | Audio operations interface for AIX.                                                 |
+| [`batches`](aix.batches.html.md#module-aix.batches)           | Batch processing interface for AIX.                                                 |
+| [`capabilities`](aix.capabilities.html.md#module-aix.capabilities) | What a model supports, asked before calling it.                                     |
+| [`credentials`](aix.credentials.html.md#module-aix.credentials)   | Unified, discoverable API-key / secret resolution for AIX.                          |
+| [`gen_ai`](aix.gen_ai.html.md#module-aix.gen_ai)             | Generative AI modules.                                                              |
+| [`image`](aix.image.html.md#module-aix.image)               | Image generation interface for AIX.                                                 |
+| [`misc`](aix.misc.html.md#module-aix.misc)                 | Misc AIX functions.                                                                 |
+| [`models`](aix.models.html.md#aix.models)                    | User-friendly interface for model discovery and selection.                          |
+| [`prompts`](aix.prompts.html.md#module-aix.prompts)           | Prompt-based function creation for AIX.                                             |
+| [`sampling`](aix.sampling.html.md#module-aix.sampling)         | Repeated sampling: `n` answers to one prompt, drawn as fast as the provider allows. |
+| [`stores`](aix.stores.html.md#module-aix.stores)             | Storage layers for AIX.                                                             |
+| [`util`](aix.util.html.md#module-aix.util)                 | Utils for AIX.                                                                      |
+| [`video`](aix.video.html.md#module-aix.video)               | Video generation interface for AIX.                                                 |
+| [`vision`](aix.vision.html.md#module-aix.vision)             | Image-to-text (vision) interface for AIX.                                           |

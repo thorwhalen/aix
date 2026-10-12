@@ -138,7 +138,7 @@ Add a function to the collection.
 
 Get all function names.
 
-### aix.prompts.constrained_answer(prompt, valid_answers, , model=None, temperature=None, enhance_prompt=False, n=1, on_violation='raise', max_retries=0)
+### aix.prompts.constrained_answer(prompt, valid_answers, , model=None, temperature=None, enhance_prompt=False, n=1, on_violation='raise', max_retries=0, concurrency=None)
 
 Get an answer from the LLM constrained to a set of valid answers or types.
 
@@ -168,7 +168,12 @@ as a convenient tool to do response statistics and validation (via n>1).
   * **enhance_prompt** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, adds explicit instructions to the prompt about
     JSON formatting and constraints. If False (default), relies on
     response_format alone. Default is False to match oa behavior.
-  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of times to call the LLM (default: 1)
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of times to call the LLM (default: 1). The `n` calls are
+    independent and run concurrently (see `concurrency`); each is
+    validated (and retried) on its own. On the first failure no new
+    call is started, but calls already in flight finish (and are
+    billed) before the error propagates. For raw samples with finish
+    reasons and usage, use [`aix.sample()`](aix.md#aix.sample).
   * **on_violation** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'raise'`, `'return'`]) – What to do when the model’s answer does not satisfy
     `valid_answers`. `'raise'` (default) raises `ConstraintViolation`.
     `'return'` returns the model’s value unchecked – the behaviour of
@@ -176,6 +181,8 @@ as a convenient tool to do response statistics and validation (via n>1).
   * **max_retries** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many times to re-ask the model after a violation
     before giving up (default: 0, i.e. ask exactly once). Ignored when
     `on_violation='return'`, which never detects a violation.
+  * **concurrency** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max simultaneous calls when `n > 1` (default: config
+    `chat.sample_concurrency`).
 * **Returns:**
   One of the valid answers, respecting the type constraint.
   If n > 1, returns a list of answers.

@@ -1,4 +1,4 @@
-> built 2026-10-12 15:52 UTC from 5adb1a1 (master) · aix 0.0.43. Details: build_info.json
+> built 2026-10-12 16:14 UTC from f4944bd (master) · aix 0.0.44. Details: build_info.json
 
 # index.html.md
 
@@ -253,17 +253,36 @@ response = session.send("And if I add 3 to that?")  # Remembers context
 from aix import complete, Usage
 
 c = complete("Name a color", n=3, temperature=1.0)
-c.texts           # ('Blue', 'Green', 'Red')     -- all n choices
+c.texts  # ('Blue', 'Green', 'Red')     -- all n choices
 c.finish_reasons  # ('stop', 'stop', 'stop')     -- 'length' means truncated by max_tokens
-c.usage           # Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17, cached_prompt_tokens=0, ...)
-c.model           # the model id the provider reports having served
-c.text            # first choice, i.e. what chat() would return
-c.raw             # the untouched LiteLLM response
+c.usage  # Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17, cached_prompt_tokens=0, ...)
+c.model  # the model id the provider reports having served
+c.text  # first choice, i.e. what chat() would return
+c.raw  # the untouched LiteLLM response
 
 # Usage values add up, for cost reporting. usage is None when a provider reports none.
 cs = [complete(q) for q in questions]
 total = sum((c.usage for c in cs if c.usage), Usage())
 ```
+
+To ask the same question several times (agreement, stability, majority vote), use `sample()`. It sends one request with provider-side `n` when LiteLLM reports that the model supports it, and otherwise makes `n` independent requests concurrently. It records which path it took, because the two are not the same statistical object:
+
+```python
+import json
+from aix import sample
+
+s = sample("Is a tomato a fruit? Reply as JSON {\"answer\": bool}", n=5,
+           temperature=1.0, parse=json.loads)
+s.strategy                    # 'provider_n', 'independent' or 'mixed'
+s.payloads                    # parsed answers (None where parsing failed)
+[x.finish_reason for x in s]  # 'content_filter' means refused, 'length' means truncated
+s.usage                       # total tokens across every request that reported usage
+s.n_requests                  # how many requests were made
+```
+
+A failed request does not discard the work already paid for. By default `sample()` raises `SamplingError` once the launched requests finish, and the partial batch is on its `.samples`. With `on_error="record"`, the failure is stored on that sample’s `.error` instead. A `seed` is sent as-is with a provider-side `n` request; each independent request gets a seed derived from `(seed, index)`.
+
+`constrained_answer(..., n=k)` now runs its `k` calls concurrently too (`concurrency=`, default from config `chat.sample_concurrency`).
 
 ### 2. Embeddings
 
@@ -2443,6 +2462,57 @@ any operation, not just chat or embeddings.
 ```
 
 
+# _autosummary/aix.capabilities.html.md
+
+# aix.capabilities
+
+What a model supports, asked before calling it.
+
+Providers differ in which OpenAI-style parameters they honour (`n`, `seed`,
+`response_format`…). LiteLLM knows, per model, through
+`get_supported_openai_params`; this module puts a small, total (never
+raising) question in front of it, so callers can *choose* a degraded path
+rather than discover one silently.
+
+```pycon
+>>> supports("gpt-4o-mini", "n")
+True
+>>> supports("anthropic/claude-sonnet-4-20250514", "n")
+False
+```
+
+### Functions
+
+| [`supports`](_autosummary/aix.capabilities.html.md#aix.capabilities.supports)(model, param)    | Whether `model` is known to accept the request parameter `param`.   |
+|----------------------------------------------------------------------------|---------------------------------------------------------------------|
+| [`supported_params`](_autosummary/aix.capabilities.html.md#aix.capabilities.supported_params)([model]) | The OpenAI-style parameters LiteLLM says `model` accepts.           |
+
+### aix.capabilities.supported_params(model=None)
+
+The OpenAI-style parameters LiteLLM says `model` accepts.
+
+`None` when that is unknown (LiteLLM cannot place the model, or is not
+installed) – which is not the same as “supports nothing”.
+
+* **Parameters:**
+  **model** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Model id or alias; `None` means the configured chat default.
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`frozenset`](https://docs.python.org/3/builtins/stdtypes.html#frozenset)]
+
+### aix.capabilities.supports(model, param)
+
+Whether `model` is known to accept the request parameter `param`.
+
+Conservative: `False` when support is unknown, so a caller that branches
+on it takes the path that works everywhere.
+
+* **Parameters:**
+  * **model** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Model id or alias; `None` means the configured chat default.
+  * **param** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – An OpenAI-style request parameter name (`"n"`, `"seed"`…).
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+
 # _autosummary/aix.config.html.md
 
 # aix.config
@@ -2530,14 +2600,14 @@ best = "anthropic/claude-sonnet-4"
 
 ### Classes
 
-| [`ChatConfig`](_autosummary/aix.config.html.md#aix.config.ChatConfig)([model, temperature, max_tokens])     | Defaults for `chat` / `ask` / `prompt_func`.                       |
-|---------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| [`EmbeddingConfig`](_autosummary/aix.config.html.md#aix.config.EmbeddingConfig)([model, batch_size])             | Defaults for `embeddings` / `embed`.                               |
-| [`ImageConfig`](_autosummary/aix.config.html.md#aix.config.ImageConfig)([model, size, quality, num_images])  | Defaults for `generate_image` / `generate_images`.                 |
-| [`AudioConfig`](_autosummary/aix.config.html.md#aix.config.AudioConfig)([tts_model, tts_voice, ...])         | Defaults for `text_to_speech` / `transcribe` / `translate_audio`.  |
-| [`VideoConfig`](_autosummary/aix.config.html.md#aix.config.VideoConfig)([provider])                          | Defaults for `generate_video` (provider-dependent).                |
-| [`VisionConfig`](_autosummary/aix.config.html.md#aix.config.VisionConfig)([model])                            | Defaults for `describe_image` (image→text).                        |
-| [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)([chat, embeddings, image, audio, ...]) | Top-level AIX configuration (single source of truth for defaults). |
+| [`ChatConfig`](_autosummary/aix.config.html.md#aix.config.ChatConfig)([model, temperature, max_tokens, ...])   | Defaults for `chat` / `ask` / `complete` / `sample` / `prompt_func`.   |
+|------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| [`EmbeddingConfig`](_autosummary/aix.config.html.md#aix.config.EmbeddingConfig)([model, batch_size])                | Defaults for `embeddings` / `embed`.                                   |
+| [`ImageConfig`](_autosummary/aix.config.html.md#aix.config.ImageConfig)([model, size, quality, num_images])     | Defaults for `generate_image` / `generate_images`.                     |
+| [`AudioConfig`](_autosummary/aix.config.html.md#aix.config.AudioConfig)([tts_model, tts_voice, ...])            | Defaults for `text_to_speech` / `transcribe` / `translate_audio`.      |
+| [`VideoConfig`](_autosummary/aix.config.html.md#aix.config.VideoConfig)([provider])                             | Defaults for `generate_video` (provider-dependent).                    |
+| [`VisionConfig`](_autosummary/aix.config.html.md#aix.config.VisionConfig)([model])                               | Defaults for `describe_image` (image→text).                            |
+| [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)([chat, embeddings, image, audio, ...])    | Top-level AIX configuration (single source of truth for defaults).     |
 
 ### *class* aix.config.AixConfig(chat=<factory>, embeddings=<factory>, image=<factory>, audio=<factory>, video=<factory>, vision=<factory>, aliases=<factory>)
 
@@ -2551,11 +2621,11 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `text_to_speech` / `transcribe` / `translate_audio`.
 
-### *class* aix.config.ChatConfig(model='gpt-4.1-mini', temperature=1.0, max_tokens=None)
+### *class* aix.config.ChatConfig(model='gpt-4.1-mini', temperature=1.0, max_tokens=None, sample_concurrency=5)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-Defaults for `chat` / `ask` / `prompt_func`.
+Defaults for `chat` / `ask` / `complete` / `sample` / `prompt_func`.
 
 ### *class* aix.config.EmbeddingConfig(model='text-embedding-3-small', batch_size=512)
 
@@ -2998,6 +3068,7 @@ Main Features:
 
 > - chat(): Simple chat interface across providers
 > - complete(): The whole response (all n choices, usage, finish reasons)
+> - sample(): n answers to one prompt, concurrently or via provider-side n
 > - embeddings(): Vector embeddings for text
 > - prompt_func(): Create functions from prompt templates
 > - models: Model discovery and selection
@@ -3030,6 +3101,7 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 | [`chat`](_autosummary/aix.html.md#aix.chat)(prompt, \*[, model, temperature, ...])        | Send a chat prompt and get a response.                                                                               |
 | [`complete`](_autosummary/aix.html.md#aix.complete)(prompt, \*[, model, temperature, ...])    | Send a chat prompt and get the whole response back as a [`Completion`](_autosummary/aix.html.md#aix.Completion). |
 | [`ask`](_autosummary/aix.html.md#aix.ask)(question[, model])                             | Ask a single question and get an answer.                                                                             |
+| [`sample`](_autosummary/aix.html.md#aix.sample)(prompt, \*, n[, temperature, seed, ...])    | Draw `n` answers to `prompt`, each with its finish reason and usage.                                                 |
 | [`chat_with_history`](_autosummary/aix.html.md#aix.chat_with_history)([system_prompt, model])          | Create a stateful chat session that maintains conversation history.                                                  |
 | [`embeddings`](_autosummary/aix.html.md#aix.embeddings)(segments, \*[, model, api_key])         | Generate embeddings for multiple text segments.                                                                      |
 | [`embed`](_autosummary/aix.html.md#aix.embed)(text, \*[, model])                           | Generate embedding for a single text.                                                                                |
@@ -3063,28 +3135,31 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 
 ### Classes
 
-| [`AixConfig`](_autosummary/aix.html.md#aix.AixConfig)([chat, embeddings, image, audio, ...])   | Top-level AIX configuration (single source of truth for defaults).   |
-|-----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
-| [`Completion`](_autosummary/aix.html.md#aix.Completion)(texts[, finish_reasons, usage, ...])    | Everything a chat completion returned, not just the first text.      |
-| [`Usage`](_autosummary/aix.html.md#aix.Usage)([prompt_tokens, completion_tokens, ...])     | Token counts billed for one call (or summed over several).           |
-| [`ChatSession`](_autosummary/aix.html.md#aix.ChatSession)([system_prompt, model])                | Stateful chat session that maintains conversation history.           |
-| [`EmbeddingCache`](_autosummary/aix.html.md#aix.EmbeddingCache)([model])                            | Cache for embeddings to avoid redundant API calls.                   |
-| [`PromptFuncs`](_autosummary/aix.html.md#aix.PromptFuncs)([model])                               | Collection of prompt-based functions.                                |
-| [`ModelStore`](_autosummary/aix.html.md#aix.ModelStore)([storage_path, auto_discover])          | User-friendly interface for model discovery and selection.           |
-| [`BatchProcessor`](_autosummary/aix.html.md#aix.BatchProcessor)(\*[, batch_size, max_workers, ...]) | Stateful batch processor for managing long-running operations.       |
-| [`BatchError`](_autosummary/aix.html.md#aix.BatchError)(exception, \*[, index, message])        | A batch result slot standing in for an item that raised.             |
-| [`GeneratedImage`](_autosummary/aix.html.md#aix.GeneratedImage)([url, b64_json, model, ...])        | Wrapper for generated images.                                        |
-| [`GeneratedAudio`](_autosummary/aix.html.md#aix.GeneratedAudio)(data[, model, text, voice, ...])    | Wrapper for generated audio.                                         |
-| [`TranscriptionResult`](_autosummary/aix.html.md#aix.TranscriptionResult)(text[, language, ...])         | Result of audio transcription.                                       |
-| [`GeneratedVideo`](_autosummary/aix.html.md#aix.GeneratedVideo)([url, data, model, prompt, ...])    | Wrapper for generated videos.                                        |
-| [`RubricVerdict`](_autosummary/aix.html.md#aix.RubricVerdict)(aspect, match, confidence[, note])   | A vision model's verdict on a single rubric aspect.                  |
-| [`ImageComparison`](_autosummary/aix.html.md#aix.ImageComparison)(match, confidence, explanation)    | Structured result of comparing a candidate image to reference(s).    |
+| [`AixConfig`](_autosummary/aix.html.md#aix.AixConfig)([chat, embeddings, image, audio, ...])   | Top-level AIX configuration (single source of truth for defaults).                                                                                           |
+|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`Completion`](_autosummary/aix.html.md#aix.Completion)(texts[, finish_reasons, usage, ...])    | Everything a chat completion returned, not just the first text.                                                                                              |
+| [`Usage`](_autosummary/aix.html.md#aix.Usage)([prompt_tokens, completion_tokens, ...])     | Token counts billed for one call (or summed over several).                                                                                                   |
+| [`Sample`](_autosummary/aix.html.md#aix.Sample)(text, payload[, finish_reason, ...])        | One drawn answer.                                                                                                                                            |
+| [`Samples`](_autosummary/aix.html.md#aix.Samples)([samples, usage, n_requests, ...])         | The list of [`Sample`](_autosummary/aix.html.md#aix.Sample) returned by [`sample()`](_autosummary/aix.html.md#aix.sample), plus batch facts. |
+| [`ChatSession`](_autosummary/aix.html.md#aix.ChatSession)([system_prompt, model])                | Stateful chat session that maintains conversation history.                                                                                                   |
+| [`EmbeddingCache`](_autosummary/aix.html.md#aix.EmbeddingCache)([model])                            | Cache for embeddings to avoid redundant API calls.                                                                                                           |
+| [`PromptFuncs`](_autosummary/aix.html.md#aix.PromptFuncs)([model])                               | Collection of prompt-based functions.                                                                                                                        |
+| [`ModelStore`](_autosummary/aix.html.md#aix.ModelStore)([storage_path, auto_discover])          | User-friendly interface for model discovery and selection.                                                                                                   |
+| [`BatchProcessor`](_autosummary/aix.html.md#aix.BatchProcessor)(\*[, batch_size, max_workers, ...]) | Stateful batch processor for managing long-running operations.                                                                                               |
+| [`BatchError`](_autosummary/aix.html.md#aix.BatchError)(exception, \*[, index, message])        | A batch result slot standing in for an item that raised.                                                                                                     |
+| [`GeneratedImage`](_autosummary/aix.html.md#aix.GeneratedImage)([url, b64_json, model, ...])        | Wrapper for generated images.                                                                                                                                |
+| [`GeneratedAudio`](_autosummary/aix.html.md#aix.GeneratedAudio)(data[, model, text, voice, ...])    | Wrapper for generated audio.                                                                                                                                 |
+| [`TranscriptionResult`](_autosummary/aix.html.md#aix.TranscriptionResult)(text[, language, ...])         | Result of audio transcription.                                                                                                                               |
+| [`GeneratedVideo`](_autosummary/aix.html.md#aix.GeneratedVideo)([url, data, model, prompt, ...])    | Wrapper for generated videos.                                                                                                                                |
+| [`RubricVerdict`](_autosummary/aix.html.md#aix.RubricVerdict)(aspect, match, confidence[, note])   | A vision model's verdict on a single rubric aspect.                                                                                                          |
+| [`ImageComparison`](_autosummary/aix.html.md#aix.ImageComparison)(match, confidence, explanation)    | Structured result of comparing a candidate image to reference(s).                                                                                            |
 
 ### Exceptions
 
-| [`MissingCredentialError`](_autosummary/aix.html.md#aix.MissingCredentialError)(model_or_provider, \*)   | Raised when a required API key cannot be resolved.                   |
-|--------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
-| [`ConstraintViolation`](_autosummary/aix.html.md#aix.ConstraintViolation)(message, \*[, answer, ...]) | Raised when an LLM answer does not satisfy the requested constraint. |
+| [`MissingCredentialError`](_autosummary/aix.html.md#aix.MissingCredentialError)(model_or_provider, \*)   | Raised when a required API key cannot be resolved.                                                           |
+|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| [`SamplingError`](_autosummary/aix.html.md#aix.SamplingError)(message, \*[, samples])           | A request inside [`sample()`](_autosummary/aix.html.md#aix.sample) failed (with `on_error="raise"`). |
+| [`ConstraintViolation`](_autosummary/aix.html.md#aix.ConstraintViolation)(message, \*[, answer, ...]) | Raised when an LLM answer does not satisfy the requested constraint.                                         |
 
 ### *class* aix.AixConfig(chat=<factory>, embeddings=<factory>, image=<factory>, audio=<factory>, video=<factory>, vision=<factory>, aliases=<factory>)
 
@@ -3855,6 +3930,94 @@ The model’s self-reported confidence in `[0.0, 1.0]`.
 
 A short free-text explanation of the verdict.
 
+### *class* aix.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+One drawn answer.
+
+#### text
+
+The raw text of this choice (`""` if its request failed).
+
+#### payload
+
+`parse(text)` when a `parse` function was given, else `text`;
+`None` if the request or the parsing failed (see `error`).
+
+#### finish_reason
+
+Why this choice stopped. `"length"` = truncated,
+`"content_filter"` = refused/filtered; check it before treating the
+payload as a judgement.
+
+#### usage
+
+Tokens for the request that produced *only this* sample, or
+`None` when it shared a provider-side `n` request (whose usage
+cannot be split per choice; see [`Samples.usage`](_autosummary/aix.html.md#aix.Samples.usage)).
+
+#### strategy
+
+How this sample was drawn: `"provider_n"` or `"independent"`.
+
+#### seed
+
+The seed sent with its request, if any.
+
+#### error
+
+The exception this sample’s request raised (with
+`on_error="record"`) or that `parse` raised on its text.
+
+#### *property* ok *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
+
+`True` when the request succeeded and the text parsed (if asked).
+
+### *class* aix.Samples(samples=(), , strategy, usage=None, n_requests=0, n_usage_reports=0)
+
+Bases: [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
+
+The list of [`Sample`](_autosummary/aix.html.md#aix.Sample) returned by [`sample()`](_autosummary/aix.html.md#aix.sample), plus batch facts.
+
+It is a plain `list` otherwise: slicing or concatenating gives a `list`
+without the batch attributes, which describe the whole draw only.
+
+#### strategy
+
+`"provider_n"`, `"independent"` or `"mixed"` (provider
+`n` topped up with independent calls).
+
+#### usage
+
+Total tokens over every request that reported usage, or `None`
+if none did. Compare `n_requests` with `n_usage_reports` to see
+whether it is complete.
+
+#### n_requests
+
+How many requests were made.
+
+#### n_usage_reports
+
+How many of them reported usage.
+
+#### *property* errors *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[Exception](https://docs.python.org/3/builtins/exceptions.html#Exception), ...]*
+
+Every recorded error (request or parse), in sample order.
+
+### *exception* aix.SamplingError(message, , samples=None)
+
+Bases: [`Exception`](https://docs.python.org/3/builtins/exceptions.html#Exception)
+
+A request inside [`sample()`](_autosummary/aix.html.md#aix.sample) failed (with `on_error="raise"`).
+
+No request is launched after the first failure, and the ones already in
+flight are awaited, so the work already paid for is not lost: `samples`
+holds every request that was made, failed ones included (as samples whose
+`error` is set) – possibly fewer than `n`. The first failure is
+`__cause__`.
+
 ### *class* aix.TranscriptionResult(text, language=None, duration=None, segments=None, model=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
@@ -4404,7 +4567,7 @@ Apply runtime overrides to the active config and return it.
 0.2
 ```
 
-### aix.constrained_answer(prompt, valid_answers, , model=None, temperature=None, enhance_prompt=False, n=1, on_violation='raise', max_retries=0)
+### aix.constrained_answer(prompt, valid_answers, , model=None, temperature=None, enhance_prompt=False, n=1, on_violation='raise', max_retries=0, concurrency=None)
 
 Get an answer from the LLM constrained to a set of valid answers or types.
 
@@ -4434,7 +4597,12 @@ as a convenient tool to do response statistics and validation (via n>1).
   * **enhance_prompt** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, adds explicit instructions to the prompt about
     JSON formatting and constraints. If False (default), relies on
     response_format alone. Default is False to match oa behavior.
-  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of times to call the LLM (default: 1)
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of times to call the LLM (default: 1). The `n` calls are
+    independent and run concurrently (see `concurrency`); each is
+    validated (and retried) on its own. On the first failure no new
+    call is started, but calls already in flight finish (and are
+    billed) before the error propagates. For raw samples with finish
+    reasons and usage, use [`aix.sample()`](_autosummary/aix.html.md#aix.sample).
   * **on_violation** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'raise'`, `'return'`]) – What to do when the model’s answer does not satisfy
     `valid_answers`. `'raise'` (default) raises `ConstraintViolation`.
     `'return'` returns the model’s value unchecked – the behaviour of
@@ -4442,6 +4610,8 @@ as a convenient tool to do response statistics and validation (via n>1).
   * **max_retries** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many times to re-ask the model after a violation
     before giving up (default: 0, i.e. ask exactly once). Ignored when
     `on_violation='return'`, which never detects a violation.
+  * **concurrency** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max simultaneous calls when `n > 1` (default: config
+    `chat.sample_concurrency`).
 * **Returns:**
   One of the valid answers, respecting the type constraint.
   If n > 1, returns a list of answers.
@@ -5202,6 +5372,44 @@ True
 * **Return type:**
   [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
+### aix.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, on_error='raise', api_key=None, \*\*kwargs)
+
+Draw `n` answers to `prompt`, each with its finish reason and usage.
+
+* **Parameters:**
+  * **prompt** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string or a list of message dicts, as for [`aix.chat()`](_autosummary/aix.html.md#aix.chat).
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many samples to draw.
+  * **temperature** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sampling temperature (`None` = configured default). At
+    `0` the samples mostly coincide, which is rarely what you want here.
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Base seed. A provider-side `n` request sends it as is; each
+    independent request sends a seed derived from `(seed, index)` so
+    independent samples are not forced identical and runs with different
+    base seeds do not overlap. Support is provider-dependent.
+  * **concurrency** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max simultaneous independent requests (`None` = config
+    `chat.sample_concurrency`).
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model id or alias (`None` = configured default).
+  * **strategy** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'auto'`, `'provider'`, `'independent'`]) – `"auto"` (provider `n` when supported, else independent;
+    also falls back to independent if the provider refuses `n`),
+    `"provider"` (force one `n` request) or `"independent"`.
+    `n=1` is always a single plain request, recorded `"independent"`.
+  * **parse** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional `text -> payload` (e.g. `json.loads`). A failure is
+    recorded on that sample (`payload=None`, `error=...`), not raised.
+  * **on_error** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'raise'`, `'record'`]) – When a request fails: `"raise"` (default) raises
+    [`SamplingError`](_autosummary/aix.html.md#aix.SamplingError) once the launched requests finish, carrying
+    the partial batch; `"record"` returns the batch with the failure on
+    that sample’s `error`.
+  * **api_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Explicit API key, as for [`aix.chat()`](_autosummary/aix.html.md#aix.chat).
+  * **\*\*kwargs** – Passed to every request (e.g. `max_tokens`, `response_format`).
+* **Return type:**
+  [`Samples`](_autosummary/aix.sampling.html.md#aix.sampling.Samples)
+* **Returns:**
+  [`Samples`](_autosummary/aix.html.md#aix.Samples) – a list of [`Sample`](_autosummary/aix.html.md#aix.Sample) with batch `.strategy`,
+  `.usage`, `.n_requests`.
+* **Raises:**
+  * [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – For a non-positive `n` / `concurrency`, an unknown
+        `strategy` / `on_error`, or a reserved kwarg (`messages`, `stream`).
+  * [**SamplingError**](_autosummary/aix.html.md#aix.SamplingError) – A request failed and `on_error="raise"`.
+
 ### aix.set_config(config)
 
 Replace the active config wholesale. Returns the new active config.
@@ -5397,21 +5605,23 @@ Context manager applying scoped overrides, restored on exit.
 
 ### Modules
 
-| [`config`](_autosummary/aix.config.html.md#module-aix.config)           | Central configuration for AIX (single source of truth for defaults).   |
-|-------------------------------------------------------------------------------------|------------------------------------------------------------------------|
-| [`ai_models`](_autosummary/aix.ai_models.html.md#module-aix.ai_models)     | AI Model Management Module.                                            |
-| [`audio`](_autosummary/aix.audio.html.md#module-aix.audio)             | Audio operations interface for AIX.                                    |
-| [`batches`](_autosummary/aix.batches.html.md#module-aix.batches)         | Batch processing interface for AIX.                                    |
-| [`credentials`](_autosummary/aix.credentials.html.md#module-aix.credentials) | Unified, discoverable API-key / secret resolution for AIX.             |
-| [`gen_ai`](_autosummary/aix.gen_ai.html.md#module-aix.gen_ai)           | Generative AI modules.                                                 |
-| [`image`](_autosummary/aix.image.html.md#module-aix.image)             | Image generation interface for AIX.                                    |
-| [`misc`](_autosummary/aix.misc.html.md#module-aix.misc)               | Misc AIX functions.                                                    |
-| [`models`](_autosummary/aix.models.html.md#aix.models)                  | User-friendly interface for model discovery and selection.             |
-| [`prompts`](_autosummary/aix.prompts.html.md#module-aix.prompts)         | Prompt-based function creation for AIX.                                |
-| [`stores`](_autosummary/aix.stores.html.md#module-aix.stores)           | Storage layers for AIX.                                                |
-| [`util`](_autosummary/aix.util.html.md#module-aix.util)               | Utils for AIX.                                                         |
-| [`video`](_autosummary/aix.video.html.md#module-aix.video)             | Video generation interface for AIX.                                    |
-| [`vision`](_autosummary/aix.vision.html.md#module-aix.vision)           | Image-to-text (vision) interface for AIX.                              |
+| [`config`](_autosummary/aix.config.html.md#module-aix.config)             | Central configuration for AIX (single source of truth for defaults).                |
+|---------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| [`ai_models`](_autosummary/aix.ai_models.html.md#module-aix.ai_models)       | AI Model Management Module.                                                         |
+| [`audio`](_autosummary/aix.audio.html.md#module-aix.audio)               | Audio operations interface for AIX.                                                 |
+| [`batches`](_autosummary/aix.batches.html.md#module-aix.batches)           | Batch processing interface for AIX.                                                 |
+| [`capabilities`](_autosummary/aix.capabilities.html.md#module-aix.capabilities) | What a model supports, asked before calling it.                                     |
+| [`credentials`](_autosummary/aix.credentials.html.md#module-aix.credentials)   | Unified, discoverable API-key / secret resolution for AIX.                          |
+| [`gen_ai`](_autosummary/aix.gen_ai.html.md#module-aix.gen_ai)             | Generative AI modules.                                                              |
+| [`image`](_autosummary/aix.image.html.md#module-aix.image)               | Image generation interface for AIX.                                                 |
+| [`misc`](_autosummary/aix.misc.html.md#module-aix.misc)                 | Misc AIX functions.                                                                 |
+| [`models`](_autosummary/aix.models.html.md#aix.models)                    | User-friendly interface for model discovery and selection.                          |
+| [`prompts`](_autosummary/aix.prompts.html.md#module-aix.prompts)           | Prompt-based function creation for AIX.                                             |
+| [`sampling`](_autosummary/aix.sampling.html.md#module-aix.sampling)         | Repeated sampling: `n` answers to one prompt, drawn as fast as the provider allows. |
+| [`stores`](_autosummary/aix.stores.html.md#module-aix.stores)             | Storage layers for AIX.                                                             |
+| [`util`](_autosummary/aix.util.html.md#module-aix.util)                 | Utils for AIX.                                                                      |
+| [`video`](_autosummary/aix.video.html.md#module-aix.video)               | Video generation interface for AIX.                                                 |
+| [`vision`](_autosummary/aix.vision.html.md#module-aix.vision)             | Image-to-text (vision) interface for AIX.                                           |
 
 
 # _autosummary/aix.image.html.md
@@ -5870,7 +6080,7 @@ Add a function to the collection.
 
 Get all function names.
 
-### aix.prompts.constrained_answer(prompt, valid_answers, , model=None, temperature=None, enhance_prompt=False, n=1, on_violation='raise', max_retries=0)
+### aix.prompts.constrained_answer(prompt, valid_answers, , model=None, temperature=None, enhance_prompt=False, n=1, on_violation='raise', max_retries=0, concurrency=None)
 
 Get an answer from the LLM constrained to a set of valid answers or types.
 
@@ -5900,7 +6110,12 @@ as a convenient tool to do response statistics and validation (via n>1).
   * **enhance_prompt** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, adds explicit instructions to the prompt about
     JSON formatting and constraints. If False (default), relies on
     response_format alone. Default is False to match oa behavior.
-  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of times to call the LLM (default: 1)
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of times to call the LLM (default: 1). The `n` calls are
+    independent and run concurrently (see `concurrency`); each is
+    validated (and retried) on its own. On the first failure no new
+    call is started, but calls already in flight finish (and are
+    billed) before the error propagates. For raw samples with finish
+    reasons and usage, use [`aix.sample()`](_autosummary/aix.html.md#aix.sample).
   * **on_violation** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'raise'`, `'return'`]) – What to do when the model’s answer does not satisfy
     `valid_answers`. `'raise'` (default) raises `ConstraintViolation`.
     `'return'` returns the model’s value unchecked – the behaviour of
@@ -5908,6 +6123,8 @@ as a convenient tool to do response statistics and validation (via n>1).
   * **max_retries** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many times to re-ask the model after a violation
     before giving up (default: 0, i.e. ask exactly once). Ignored when
     `on_violation='return'`, which never detects a violation.
+  * **concurrency** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max simultaneous calls when `n > 1` (default: config
+    `chat.sample_concurrency`).
 * **Returns:**
   One of the valid answers, respecting the type constraint.
   If n > 1, returns a list of answers.
@@ -6118,6 +6335,209 @@ This is an explicit alias for prompt_func without output_schema.
 >>> isinstance(result, str)
 True
 ```
+
+
+# _autosummary/aix.sampling.html.md
+
+# aix.sampling
+
+Repeated sampling: `n` answers to one prompt, drawn as fast as the provider allows.
+
+Asking the same question several times is the basic variance-reduction (and
+stability-measurement) tool for LLM judgements. [`sample()`](_autosummary/aix.sampling.html.md#aix.sampling.sample) does it in one of
+two ways and **records which**, because they are not the same statistical object:
+
+* `"provider_n"` – one request with `n` choices (one prompt evaluation, `n`
+  decodes). Cheapest, and used when LiteLLM reports the model supports `n`.
+* `"independent"` – `n` separate requests, run concurrently. Works with every
+  provider; each sample also gets its own `usage`.
+
+If a provider silently returns fewer choices than asked, the shortfall is drawn
+independently and the batch is marked `"mixed"`.
+
+```pycon
+>>> answers = sample("Is a tomato a fruit? Answer yes or no.", n=5)
+>>> answers.texts
+('Yes', 'Yes', 'Yes', 'yes', 'Yes')
+>>> answers.strategy, answers.usage.total_tokens
+('provider_n', 52)
+```
+
+### Functions
+
+| [`sample`](_autosummary/aix.sampling.html.md#aix.sampling.sample)(prompt, \*, n[, temperature, seed, ...])   | Draw `n` answers to `prompt`, each with its finish reason and usage.      |
+|----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| [`concurrent_map`](_autosummary/aix.sampling.html.md#aix.sampling.concurrent_map)(func, items, \*, concurrency)      | `[func(x) for x in items]`, run on up to `concurrency` threads, in order. |
+| [`check_positive_int`](_autosummary/aix.sampling.html.md#aix.sampling.check_positive_int)(name, value)                   | `int(value)` if it is a positive integer (not a bool), else `ValueError`. |
+
+### Classes
+
+| [`Sample`](_autosummary/aix.sampling.html.md#aix.sampling.Sample)(text, payload[, finish_reason, ...])   | One drawn answer.                                                                                                                                            |
+|------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`Samples`](_autosummary/aix.sampling.html.md#aix.sampling.Samples)([samples, usage, n_requests, ...])    | The list of [`Sample`](_autosummary/aix.sampling.html.md#aix.sampling.Sample) returned by [`sample()`](_autosummary/aix.sampling.html.md#aix.sampling.sample), plus batch facts. |
+
+### Exceptions
+
+| [`SamplingError`](_autosummary/aix.sampling.html.md#aix.sampling.SamplingError)(message, \*[, samples])   | A request inside [`sample()`](_autosummary/aix.sampling.html.md#aix.sampling.sample) failed (with `on_error="raise"`).   |
+|------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|
+
+### *class* aix.sampling.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+One drawn answer.
+
+#### text
+
+The raw text of this choice (`""` if its request failed).
+
+#### payload
+
+`parse(text)` when a `parse` function was given, else `text`;
+`None` if the request or the parsing failed (see `error`).
+
+#### finish_reason
+
+Why this choice stopped. `"length"` = truncated,
+`"content_filter"` = refused/filtered; check it before treating the
+payload as a judgement.
+
+#### usage
+
+Tokens for the request that produced *only this* sample, or
+`None` when it shared a provider-side `n` request (whose usage
+cannot be split per choice; see [`Samples.usage`](_autosummary/aix.sampling.html.md#aix.sampling.Samples.usage)).
+
+#### strategy
+
+How this sample was drawn: `"provider_n"` or `"independent"`.
+
+#### seed
+
+The seed sent with its request, if any.
+
+#### error
+
+The exception this sample’s request raised (with
+`on_error="record"`) or that `parse` raised on its text.
+
+#### *property* ok *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
+
+`True` when the request succeeded and the text parsed (if asked).
+
+### *class* aix.sampling.Samples(samples=(), , strategy, usage=None, n_requests=0, n_usage_reports=0)
+
+Bases: [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
+
+The list of [`Sample`](_autosummary/aix.sampling.html.md#aix.sampling.Sample) returned by [`sample()`](_autosummary/aix.sampling.html.md#aix.sampling.sample), plus batch facts.
+
+It is a plain `list` otherwise: slicing or concatenating gives a `list`
+without the batch attributes, which describe the whole draw only.
+
+#### strategy
+
+`"provider_n"`, `"independent"` or `"mixed"` (provider
+`n` topped up with independent calls).
+
+#### usage
+
+Total tokens over every request that reported usage, or `None`
+if none did. Compare `n_requests` with `n_usage_reports` to see
+whether it is complete.
+
+#### n_requests
+
+How many requests were made.
+
+#### n_usage_reports
+
+How many of them reported usage.
+
+#### *property* errors *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[Exception](https://docs.python.org/3/builtins/exceptions.html#Exception), ...]*
+
+Every recorded error (request or parse), in sample order.
+
+### *exception* aix.sampling.SamplingError(message, , samples=None)
+
+Bases: [`Exception`](https://docs.python.org/3/builtins/exceptions.html#Exception)
+
+A request inside [`sample()`](_autosummary/aix.sampling.html.md#aix.sampling.sample) failed (with `on_error="raise"`).
+
+No request is launched after the first failure, and the ones already in
+flight are awaited, so the work already paid for is not lost: `samples`
+holds every request that was made, failed ones included (as samples whose
+`error` is set) – possibly fewer than `n`. The first failure is
+`__cause__`.
+
+### aix.sampling.check_positive_int(name, value)
+
+`int(value)` if it is a positive integer (not a bool), else `ValueError`.
+
+* **Return type:**
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
+
+```pycon
+>>> check_positive_int("n", 3)
+3
+>>> check_positive_int("n", 0)
+Traceback (most recent call last):
+...
+ValueError: n must be a positive integer, got 0
+```
+
+### aix.sampling.concurrent_map(func, items, , concurrency)
+
+`[func(x) for x in items]`, run on up to `concurrency` threads, in order.
+
+Fails fast like the serial loop would: once a call raises, calls not yet
+started are cancelled (those already running finish), and the first
+exception in item order propagates.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`R`)]
+
+```pycon
+>>> concurrent_map(lambda x: x * x, range(5), concurrency=3)
+[0, 1, 4, 9, 16]
+```
+
+### aix.sampling.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, on_error='raise', api_key=None, \*\*kwargs)
+
+Draw `n` answers to `prompt`, each with its finish reason and usage.
+
+* **Parameters:**
+  * **prompt** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string or a list of message dicts, as for [`aix.chat()`](_autosummary/aix.html.md#aix.chat).
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many samples to draw.
+  * **temperature** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sampling temperature (`None` = configured default). At
+    `0` the samples mostly coincide, which is rarely what you want here.
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Base seed. A provider-side `n` request sends it as is; each
+    independent request sends a seed derived from `(seed, index)` so
+    independent samples are not forced identical and runs with different
+    base seeds do not overlap. Support is provider-dependent.
+  * **concurrency** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max simultaneous independent requests (`None` = config
+    `chat.sample_concurrency`).
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model id or alias (`None` = configured default).
+  * **strategy** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'auto'`, `'provider'`, `'independent'`]) – `"auto"` (provider `n` when supported, else independent;
+    also falls back to independent if the provider refuses `n`),
+    `"provider"` (force one `n` request) or `"independent"`.
+    `n=1` is always a single plain request, recorded `"independent"`.
+  * **parse** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional `text -> payload` (e.g. `json.loads`). A failure is
+    recorded on that sample (`payload=None`, `error=...`), not raised.
+  * **on_error** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'raise'`, `'record'`]) – When a request fails: `"raise"` (default) raises
+    [`SamplingError`](_autosummary/aix.sampling.html.md#aix.sampling.SamplingError) once the launched requests finish, carrying
+    the partial batch; `"record"` returns the batch with the failure on
+    that sample’s `error`.
+  * **api_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Explicit API key, as for [`aix.chat()`](_autosummary/aix.html.md#aix.chat).
+  * **\*\*kwargs** – Passed to every request (e.g. `max_tokens`, `response_format`).
+* **Return type:**
+  [`Samples`](_autosummary/aix.sampling.html.md#aix.sampling.Samples)
+* **Returns:**
+  [`Samples`](_autosummary/aix.sampling.html.md#aix.sampling.Samples) – a list of [`Sample`](_autosummary/aix.sampling.html.md#aix.sampling.Sample) with batch `.strategy`,
+  `.usage`, `.n_requests`.
+* **Raises:**
+  * [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – For a non-positive `n` / `concurrency`, an unknown
+        `strategy` / `on_error`, or a reserved kwarg (`messages`, `stream`).
+  * [**SamplingError**](_autosummary/aix.sampling.html.md#aix.sampling.SamplingError) – A request failed and `on_error="raise"`.
 
 
 # _autosummary/aix.stores.html.md
@@ -6782,18 +7202,18 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.
 
 # About this build
 
-This documentation was built on **2026-10-12 15:52 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/5adb1a19e6c45996f41da2e0d788a43522df925a"><code>5adb1a1</code></a> on branch <code>master</code>, for **aix 0.0.43** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-12 16:14 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/f4944bdb99785d2745f84268b82775df0cdc43ce"><code>f4944bd</code></a> on branch <code>master</code>, for **aix 0.0.44** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.0.43) is behind the latest release on PyPI (0.0.44): `pip install aix` gives newer code than these docs describe.
+- The documented version (0.0.44) is behind the latest release on PyPI (0.0.45): `pip install aix` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/5adb1a19e6c45996f41da2e0d788a43522df925a"><code>5adb1a19e6c45996f41da2e0d788a43522df925a</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/f4944bdb99785d2745f84268b82775df0cdc43ce"><code>f4944bdb99785d2745f84268b82775df0cdc43ce</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -6804,9 +7224,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38273067938">38273067938</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38275687670">38275687670</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>5adb1a19e6c45996f41da2e0d788a43522df925a</code> (in the history of the built commit) |
+| Event commit | <code>f4944bdb99785d2745f84268b82775df0cdc43ce</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -6831,13 +7251,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.44/">0.0.44</a>, newer than the documented version (0.0.43).
+Latest release: <a href="https://pypi.org/project/aix/0.0.45/">0.0.45</a>, newer than the documented version (0.0.44).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout 5adb1a19e6c45996f41da2e0d788a43522df925a
+git checkout f4944bdb99785d2745f84268b82775df0cdc43ce
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

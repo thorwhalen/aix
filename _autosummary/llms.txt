@@ -13,6 +13,7 @@
 - [aix.ai_models.sources](aix.ai_models.sources.html.md): Concrete implementations of model sources and connectors.
 - [aix.audio](aix.audio.html.md): Audio operations interface for AIX.
 - [aix.batches](aix.batches.html.md): Batch processing interface for AIX.
+- [aix.capabilities](aix.capabilities.html.md): What a model supports, asked before calling it.
 - [aix.credentials](aix.credentials.html.md): Unified, discoverable API-key / secret resolution for AIX.
 - [aix.gen_ai](aix.gen_ai.html.md): Generative AI modules.
 - [aix.gen_ai.google_genai](aix.gen_ai.google_genai.html.md): Google GenAI API functionality.
@@ -21,6 +22,7 @@
 - [aix.misc](aix.misc.html.md): Misc AIX functions.
 - [aix.models](aix.models.html.md): User-friendly interface for model discovery and selection.
 - [aix.prompts](aix.prompts.html.md): Prompt-based function creation for AIX.
+- [aix.sampling](aix.sampling.html.md): Repeated sampling: &#96;n&#96; answers to one prompt, drawn as fast as the provider allows.
 - [aix.stores](aix.stores.html.md): Storage layers for AIX.
 - [aix.util](aix.util.html.md): Utils for AIX.
 - [aix.video](aix.video.html.md): Video generation interface for AIX.

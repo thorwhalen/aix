@@ -1,0 +1,637 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="alternate" type="text/markdown" href="aix.sampling.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+<link rel="alternate" type="text/markdown" href="aix.sampling.html.md">
+<link rel="describedby" href="llms.txt"><link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="aix.stores" href="aix.stores.html"><link rel="prev" title="aix.prompts" href="aix.prompts.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>aix.sampling - aix</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  --color-brand-primary: #2b559f;
+  --color-brand-content: #2b559f;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #87b7ff;
+  --color-brand-content: #87b7ff;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">aix</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">aix</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../api.html">API reference</a><input aria-label="Toggle navigation of API reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="aix.html">aix</a><input aria-label="Toggle navigation of aix" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="aix.config.html">aix.config</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="aix.ai_models.html">aix.ai_models</a><input aria-label="Toggle navigation of aix.ai_models" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="aix.ai_models.base.html">aix.ai_models.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aix.ai_models.manager.html">aix.ai_models.manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aix.ai_models.sources.html">aix.ai_models.sources</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="aix.audio.html">aix.audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.batches.html">aix.batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.capabilities.html">aix.capabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.credentials.html">aix.credentials</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="aix.gen_ai.html">aix.gen_ai</a><input aria-label="Toggle navigation of aix.gen_ai" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="aix.gen_ai.google_genai.html">aix.gen_ai.google_genai</a></li>
+<li class="toctree-l4"><a class="reference internal" href="aix.gen_ai.openai_genai.html">aix.gen_ai.openai_genai</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="aix.image.html">aix.image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.misc.html">aix.misc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.models.html">aix.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.prompts.html">aix.prompts</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">aix.sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.util.html">aix.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.video.html">aix.video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.vision.html">aix.vision</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-agents.html">For AI agents</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/_autosummary/aix.sampling.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="module-aix.sampling">
+<span id="aix-sampling"></span><h1>aix.sampling<a class="headerlink" href="#module-aix.sampling" title="Link to this heading">¶</a></h1>
+<p>Repeated sampling: <code class="docutils literal notranslate"><span class="pre">n</span></code> answers to one prompt, drawn as fast as the provider allows.</p>
+<p>Asking the same question several times is the basic variance-reduction (and
+stability-measurement) tool for LLM judgements. <a class="reference internal" href="#aix.sampling.sample" title="aix.sampling.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample()</span></code></a> does it in one of
+two ways and <strong>records which</strong>, because they are not the same statistical object:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;provider_n&quot;</span></code> – one request with <code class="docutils literal notranslate"><span class="pre">n</span></code> choices (one prompt evaluation, <code class="docutils literal notranslate"><span class="pre">n</span></code>
+decodes). Cheapest, and used when LiteLLM reports the model supports <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;independent&quot;</span></code> – <code class="docutils literal notranslate"><span class="pre">n</span></code> separate requests, run concurrently. Works with every
+provider; each sample also gets its own <code class="docutils literal notranslate"><span class="pre">usage</span></code>.</p></li>
+</ul>
+<p>If a provider silently returns fewer choices than asked, the shortfall is drawn
+independently and the batch is marked <code class="docutils literal notranslate"><span class="pre">&quot;mixed&quot;</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">answers</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="s2">"Is a tomato a fruit? Answer yes or no."</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">answers</span><span class="o">.</span><span class="n">texts</span>
+<span class="go">('Yes', 'Yes', 'Yes', 'yes', 'Yes')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">answers</span><span class="o">.</span><span class="n">strategy</span><span class="p">,</span> <span class="n">answers</span><span class="o">.</span><span class="n">usage</span><span class="o">.</span><span class="n">total_tokens</span>
+<span class="go">('provider_n', 52)</span>
+</pre></div>
+</div>
+<p class="rubric">Functions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.sampling.sample" title="aix.sampling.sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code></a>(prompt, *, n[, temperature, seed, ...])</p></td>
+<td><p>Draw <code class="docutils literal notranslate"><span class="pre">n</span></code> answers to <code class="docutils literal notranslate"><span class="pre">prompt</span></code>, each with its finish reason and usage.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#aix.sampling.concurrent_map" title="aix.sampling.concurrent_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concurrent_map</span></code></a>(func, items, *, concurrency)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[func(x)</span> <span class="pre">for</span> <span class="pre">x</span> <span class="pre">in</span> <span class="pre">items]</span></code>, run on up to <code class="docutils literal notranslate"><span class="pre">concurrency</span></code> threads, in order.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.sampling.check_positive_int" title="aix.sampling.check_positive_int"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_positive_int</span></code></a>(name, value)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int(value)</span></code> if it is a positive integer (not a bool), else <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.sampling.Sample" title="aix.sampling.Sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sample</span></code></a>(text, payload[, finish_reason, ...])</p></td>
+<td><p>One drawn answer.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#aix.sampling.Samples" title="aix.sampling.Samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Samples</span></code></a>([samples, usage, n_requests, ...])</p></td>
+<td><p>The list of <a class="reference internal" href="#aix.sampling.Sample" title="aix.sampling.Sample"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sample</span></code></a> returned by <a class="reference internal" href="#aix.sampling.sample" title="aix.sampling.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample()</span></code></a>, plus batch facts.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Exceptions</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.sampling.SamplingError" title="aix.sampling.SamplingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SamplingError</span></code></a>(message, *[, samples])</p></td>
+<td><p>A request inside <a class="reference internal" href="#aix.sampling.sample" title="aix.sampling.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample()</span></code></a> failed (with <code class="docutils literal notranslate"><span class="pre">on_error=&quot;raise&quot;</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.sampling.Sample">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.sampling.</span></span><span class="sig-name descname"><span class="pre">Sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish_reason</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'independent'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#Sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.sampling.Sample" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>One drawn answer.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Sample.text">
+<span class="sig-name descname"><span class="pre">text</span></span><a class="headerlink" href="#aix.sampling.Sample.text" title="Link to this definition">¶</a></dt>
+<dd><p>The raw text of this choice (<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> if its request failed).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Sample.payload">
+<span class="sig-name descname"><span class="pre">payload</span></span><a class="headerlink" href="#aix.sampling.Sample.payload" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">parse(text)</span></code> when a <code class="docutils literal notranslate"><span class="pre">parse</span></code> function was given, else <code class="docutils literal notranslate"><span class="pre">text</span></code>;
+<code class="docutils literal notranslate"><span class="pre">None</span></code> if the request or the parsing failed (see <code class="docutils literal notranslate"><span class="pre">error</span></code>).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Sample.finish_reason">
+<span class="sig-name descname"><span class="pre">finish_reason</span></span><a class="headerlink" href="#aix.sampling.Sample.finish_reason" title="Link to this definition">¶</a></dt>
+<dd><p>Why this choice stopped. <code class="docutils literal notranslate"><span class="pre">&quot;length&quot;</span></code> = truncated,
+<code class="docutils literal notranslate"><span class="pre">&quot;content_filter&quot;</span></code> = refused/filtered; check it before treating the
+payload as a judgement.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Sample.usage">
+<span class="sig-name descname"><span class="pre">usage</span></span><a class="headerlink" href="#aix.sampling.Sample.usage" title="Link to this definition">¶</a></dt>
+<dd><p>Tokens for the request that produced <em>only this</em> sample, or
+<code class="docutils literal notranslate"><span class="pre">None</span></code> when it shared a provider-side <code class="docutils literal notranslate"><span class="pre">n</span></code> request (whose usage
+cannot be split per choice; see <a class="reference internal" href="#aix.sampling.Samples.usage" title="aix.sampling.Samples.usage"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Samples.usage</span></code></a>).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Sample.strategy">
+<span class="sig-name descname"><span class="pre">strategy</span></span><a class="headerlink" href="#aix.sampling.Sample.strategy" title="Link to this definition">¶</a></dt>
+<dd><p>How this sample was drawn: <code class="docutils literal notranslate"><span class="pre">&quot;provider_n&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;independent&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Sample.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><a class="headerlink" href="#aix.sampling.Sample.seed" title="Link to this definition">¶</a></dt>
+<dd><p>The seed sent with its request, if any.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Sample.error">
+<span class="sig-name descname"><span class="pre">error</span></span><a class="headerlink" href="#aix.sampling.Sample.error" title="Link to this definition">¶</a></dt>
+<dd><p>The exception this sample’s request raised (with
+<code class="docutils literal notranslate"><span class="pre">on_error=&quot;record&quot;</span></code>) or that <code class="docutils literal notranslate"><span class="pre">parse</span></code> raised on its text.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="aix.sampling.Sample.ok">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ok</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span><a class="headerlink" href="#aix.sampling.Sample.ok" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> when the request succeeded and the text parsed (if asked).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aix.sampling.Samples">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.sampling.</span></span><span class="sig-name descname"><span class="pre">Samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_requests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_usage_reports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#Samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.sampling.Samples" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+<p>The list of <a class="reference internal" href="#aix.sampling.Sample" title="aix.sampling.Sample"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sample</span></code></a> returned by <a class="reference internal" href="#aix.sampling.sample" title="aix.sampling.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample()</span></code></a>, plus batch facts.</p>
+<p>It is a plain <code class="docutils literal notranslate"><span class="pre">list</span></code> otherwise: slicing or concatenating gives a <code class="docutils literal notranslate"><span class="pre">list</span></code>
+without the batch attributes, which describe the whole draw only.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Samples.strategy">
+<span class="sig-name descname"><span class="pre">strategy</span></span><a class="headerlink" href="#aix.sampling.Samples.strategy" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">&quot;provider_n&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;independent&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;mixed&quot;</span></code> (provider
+<code class="docutils literal notranslate"><span class="pre">n</span></code> topped up with independent calls).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Samples.usage">
+<span class="sig-name descname"><span class="pre">usage</span></span><a class="headerlink" href="#aix.sampling.Samples.usage" title="Link to this definition">¶</a></dt>
+<dd><p>Total tokens over every request that reported usage, or <code class="docutils literal notranslate"><span class="pre">None</span></code>
+if none did. Compare <code class="docutils literal notranslate"><span class="pre">n_requests</span></code> with <code class="docutils literal notranslate"><span class="pre">n_usage_reports</span></code> to see
+whether it is complete.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Samples.n_requests">
+<span class="sig-name descname"><span class="pre">n_requests</span></span><a class="headerlink" href="#aix.sampling.Samples.n_requests" title="Link to this definition">¶</a></dt>
+<dd><p>How many requests were made.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.sampling.Samples.n_usage_reports">
+<span class="sig-name descname"><span class="pre">n_usage_reports</span></span><a class="headerlink" href="#aix.sampling.Samples.n_usage_reports" title="Link to this definition">¶</a></dt>
+<dd><p>How many of them reported usage.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="aix.sampling.Samples.errors">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">errors</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.15)"><span class="pre">Exception</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#aix.sampling.Samples.errors" title="Link to this definition">¶</a></dt>
+<dd><p>Every recorded error (request or parse), in sample order.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="aix.sampling.SamplingError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.sampling.</span></span><span class="sig-name descname"><span class="pre">SamplingError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#SamplingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.sampling.SamplingError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>A request inside <a class="reference internal" href="#aix.sampling.sample" title="aix.sampling.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample()</span></code></a> failed (with <code class="docutils literal notranslate"><span class="pre">on_error=&quot;raise&quot;</span></code>).</p>
+<p>No request is launched after the first failure, and the ones already in
+flight are awaited, so the work already paid for is not lost: <code class="docutils literal notranslate"><span class="pre">samples</span></code>
+holds every request that was made, failed ones included (as samples whose
+<code class="docutils literal notranslate"><span class="pre">error</span></code> is set) – possibly fewer than <code class="docutils literal notranslate"><span class="pre">n</span></code>. The first failure is
+<code class="docutils literal notranslate"><span class="pre">__cause__</span></code>.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.sampling.check_positive_int">
+<span class="sig-prename descclassname"><span class="pre">aix.sampling.</span></span><span class="sig-name descname"><span class="pre">check_positive_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#check_positive_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.sampling.check_positive_int" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">int(value)</span></code> if it is a positive integer (not a bool), else <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">check_positive_int</span><span class="p">(</span><span class="s2">"n"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">check_positive_int</span><span class="p">(</span><span class="s2">"n"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">n must be a positive integer, got 0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.sampling.concurrent_map">
+<span class="sig-prename descclassname"><span class="pre">aix.sampling.</span></span><span class="sig-name descname"><span class="pre">concurrent_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">concurrency</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#concurrent_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.sampling.concurrent_map" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">[func(x)</span> <span class="pre">for</span> <span class="pre">x</span> <span class="pre">in</span> <span class="pre">items]</span></code>, run on up to <code class="docutils literal notranslate"><span class="pre">concurrency</span></code> threads, in order.</p>
+<p>Fails fast like the serial loop would: once a call raises, calls not yet
+started are cancelled (those already running finish), and the first
+exception in item order propagates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypeVar" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code></a>(<code class="docutils literal notranslate"><span class="pre">R</span></code>)]</span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">concurrent_map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">concurrency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">[0, 1, 4, 9, 16]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aix.sampling.sample">
+<span class="sig-prename descclassname"><span class="pre">aix.sampling.</span></span><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concurrency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.sampling.sample" title="Link to this definition">¶</a></dt>
+<dd><p>Draw <code class="docutils literal notranslate"><span class="pre">n</span></code> answers to <code class="docutils literal notranslate"><span class="pre">prompt</span></code>, each with its finish reason and usage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prompt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]]</span>) – A string or a list of message dicts, as for <a class="reference internal" href="aix.html#aix.chat" title="aix.chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.chat()</span></code></a>.</p></li>
+<li><p><strong>n</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – How many samples to draw.</p></li>
+<li><p><strong>temperature</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Sampling temperature (<code class="docutils literal notranslate"><span class="pre">None</span></code> = configured default). At
+<code class="docutils literal notranslate"><span class="pre">0</span></code> the samples mostly coincide, which is rarely what you want here.</p></li>
+<li><p><strong>seed</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Base seed. A provider-side <code class="docutils literal notranslate"><span class="pre">n</span></code> request sends it as is; each
+independent request sends a seed derived from <code class="docutils literal notranslate"><span class="pre">(seed,</span> <span class="pre">index)</span></code> so
+independent samples are not forced identical and runs with different
+base seeds do not overlap. Support is provider-dependent.</p></li>
+<li><p><strong>concurrency</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Max simultaneous independent requests (<code class="docutils literal notranslate"><span class="pre">None</span></code> = config
+<code class="docutils literal notranslate"><span class="pre">chat.sample_concurrency</span></code>).</p></li>
+<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Model id or alias (<code class="docutils literal notranslate"><span class="pre">None</span></code> = configured default).</p></li>
+<li><p><strong>strategy</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'auto'</span></code>, <code class="docutils literal notranslate"><span class="pre">'provider'</span></code>, <code class="docutils literal notranslate"><span class="pre">'independent'</span></code>]</span>) – <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> (provider <code class="docutils literal notranslate"><span class="pre">n</span></code> when supported, else independent;
+also falls back to independent if the provider refuses <code class="docutils literal notranslate"><span class="pre">n</span></code>),
+<code class="docutils literal notranslate"><span class="pre">&quot;provider&quot;</span></code> (force one <code class="docutils literal notranslate"><span class="pre">n</span></code> request) or <code class="docutils literal notranslate"><span class="pre">&quot;independent&quot;</span></code>.
+<code class="docutils literal notranslate"><span class="pre">n=1</span></code> is always a single plain request, recorded <code class="docutils literal notranslate"><span class="pre">&quot;independent&quot;</span></code>.</p></li>
+<li><p><strong>parse</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Optional <code class="docutils literal notranslate"><span class="pre">text</span> <span class="pre">-&gt;</span> <span class="pre">payload</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">json.loads</span></code>). A failure is
+recorded on that sample (<code class="docutils literal notranslate"><span class="pre">payload=None</span></code>, <code class="docutils literal notranslate"><span class="pre">error=...</span></code>), not raised.</p></li>
+<li><p><strong>on_error</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'raise'</span></code>, <code class="docutils literal notranslate"><span class="pre">'record'</span></code>]</span>) – When a request fails: <code class="docutils literal notranslate"><span class="pre">&quot;raise&quot;</span></code> (default) raises
+<a class="reference internal" href="#aix.sampling.SamplingError" title="aix.sampling.SamplingError"><code class="xref py py-class docutils literal notranslate"><span class="pre">SamplingError</span></code></a> once the launched requests finish, carrying
+the partial batch; <code class="docutils literal notranslate"><span class="pre">&quot;record&quot;</span></code> returns the batch with the failure on
+that sample’s <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p></li>
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Explicit API key, as for <a class="reference internal" href="aix.html#aix.chat" title="aix.chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.chat()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – Passed to every request (e.g. <code class="docutils literal notranslate"><span class="pre">max_tokens</span></code>, <code class="docutils literal notranslate"><span class="pre">response_format</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#aix.sampling.Samples" title="aix.sampling.Samples"><code class="xref py py-class docutils literal notranslate"><span class="pre">Samples</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#aix.sampling.Samples" title="aix.sampling.Samples"><code class="xref py py-class docutils literal notranslate"><span class="pre">Samples</span></code></a> – a list of <a class="reference internal" href="#aix.sampling.Sample" title="aix.sampling.Sample"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sample</span></code></a> with batch <code class="docutils literal notranslate"><span class="pre">.strategy</span></code>,
+<code class="docutils literal notranslate"><span class="pre">.usage</span></code>, <code class="docutils literal notranslate"><span class="pre">.n_requests</span></code>.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – For a non-positive <code class="docutils literal notranslate"><span class="pre">n</span></code> / <code class="docutils literal notranslate"><span class="pre">concurrency</span></code>, an unknown
+    <code class="docutils literal notranslate"><span class="pre">strategy</span></code> / <code class="docutils literal notranslate"><span class="pre">on_error</span></code>, or a reserved kwarg (<code class="docutils literal notranslate"><span class="pre">messages</span></code>, <code class="docutils literal notranslate"><span class="pre">stream</span></code>).</p></li>
+<li><p><a class="reference internal" href="#aix.sampling.SamplingError" title="aix.sampling.SamplingError"><strong>SamplingError</strong></a> – A request failed and <code class="docutils literal notranslate"><span class="pre">on_error=&quot;raise&quot;</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="aix.stores.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">aix.stores</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="aix.prompts.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">aix.prompts</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">aix.sampling</a><ul>
+<li><a class="reference internal" href="#aix.sampling.Sample"><code class="docutils literal notranslate"><span class="pre">Sample</span></code></a><ul>
+<li><a class="reference internal" href="#aix.sampling.Sample.text"><code class="docutils literal notranslate"><span class="pre">Sample.text</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Sample.payload"><code class="docutils literal notranslate"><span class="pre">Sample.payload</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Sample.finish_reason"><code class="docutils literal notranslate"><span class="pre">Sample.finish_reason</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Sample.usage"><code class="docutils literal notranslate"><span class="pre">Sample.usage</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Sample.strategy"><code class="docutils literal notranslate"><span class="pre">Sample.strategy</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Sample.seed"><code class="docutils literal notranslate"><span class="pre">Sample.seed</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Sample.error"><code class="docutils literal notranslate"><span class="pre">Sample.error</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Sample.ok"><code class="docutils literal notranslate"><span class="pre">Sample.ok</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aix.sampling.Samples"><code class="docutils literal notranslate"><span class="pre">Samples</span></code></a><ul>
+<li><a class="reference internal" href="#aix.sampling.Samples.strategy"><code class="docutils literal notranslate"><span class="pre">Samples.strategy</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Samples.usage"><code class="docutils literal notranslate"><span class="pre">Samples.usage</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Samples.n_requests"><code class="docutils literal notranslate"><span class="pre">Samples.n_requests</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Samples.n_usage_reports"><code class="docutils literal notranslate"><span class="pre">Samples.n_usage_reports</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.Samples.errors"><code class="docutils literal notranslate"><span class="pre">Samples.errors</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aix.sampling.SamplingError"><code class="docutils literal notranslate"><span class="pre">SamplingError</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.check_positive_int"><code class="docutils literal notranslate"><span class="pre">check_positive_int()</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.concurrent_map"><code class="docutils literal notranslate"><span class="pre">concurrent_map()</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.sample"><code class="docutils literal notranslate"><span class="pre">sample()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=db237671"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fd10adb8"></script>
+    </body>
+</html>

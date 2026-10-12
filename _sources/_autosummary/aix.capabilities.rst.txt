@@ -1,0 +1,13 @@
+aix.capabilities
+================
+
+.. automodule:: aix.capabilities
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      supports
+      supported_params
+   

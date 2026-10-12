@@ -213,6 +213,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="aix.audio.html">aix.audio</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.batches.html">aix.batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.capabilities.html">aix.capabilities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.credentials.html">aix.credentials</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="aix.gen_ai.html">aix.gen_ai</a><input aria-label="Toggle navigation of aix.gen_ai" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="aix.gen_ai.google_genai.html">aix.gen_ai.google_genai</a></li>
@@ -223,6 +224,7 @@
 <li class="toctree-l3"><a class="reference internal" href="aix.misc.html">aix.misc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.models.html">aix.models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.prompts.html">aix.prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aix.sampling.html">aix.sampling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.stores.html">aix.stores</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.util.html">aix.util</a></li>
 <li class="toctree-l3"><a class="reference internal" href="aix.video.html">aix.video</a></li>
@@ -365,8 +367,8 @@ and <a class="reference internal" href="#aix.config.using" title="aix.config.usi
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#aix.config.ChatConfig" title="aix.config.ChatConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChatConfig</span></code></a>([model, temperature, max_tokens])</p></td>
-<td><p>Defaults for <code class="docutils literal notranslate"><span class="pre">chat</span></code> / <code class="docutils literal notranslate"><span class="pre">ask</span></code> / <code class="docutils literal notranslate"><span class="pre">prompt_func</span></code>.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.config.ChatConfig" title="aix.config.ChatConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChatConfig</span></code></a>([model, temperature, max_tokens, ...])</p></td>
+<td><p>Defaults for <code class="docutils literal notranslate"><span class="pre">chat</span></code> / <code class="docutils literal notranslate"><span class="pre">ask</span></code> / <code class="docutils literal notranslate"><span class="pre">complete</span></code> / <code class="docutils literal notranslate"><span class="pre">sample</span></code> / <code class="docutils literal notranslate"><span class="pre">prompt_func</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#aix.config.EmbeddingConfig" title="aix.config.EmbeddingConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EmbeddingConfig</span></code></a>([model, batch_size])</p></td>
 <td><p>Defaults for <code class="docutils literal notranslate"><span class="pre">embeddings</span></code> / <code class="docutils literal notranslate"><span class="pre">embed</span></code>.</p></td>
@@ -409,9 +411,9 @@ and <a class="reference internal" href="#aix.config.using" title="aix.config.usi
 
 <dl class="py class">
 <dt class="sig sig-object py" id="aix.config.ChatConfig">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">ChatConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gpt-4.1-mini'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#ChatConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.ChatConfig" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">ChatConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gpt-4.1-mini'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_concurrency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#ChatConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.ChatConfig" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Defaults for <code class="docutils literal notranslate"><span class="pre">chat</span></code> / <code class="docutils literal notranslate"><span class="pre">ask</span></code> / <code class="docutils literal notranslate"><span class="pre">prompt_func</span></code>.</p>
+<p>Defaults for <code class="docutils literal notranslate"><span class="pre">chat</span></code> / <code class="docutils literal notranslate"><span class="pre">ask</span></code> / <code class="docutils literal notranslate"><span class="pre">complete</span></code> / <code class="docutils literal notranslate"><span class="pre">sample</span></code> / <code class="docutils literal notranslate"><span class="pre">prompt_func</span></code>.</p>
 <dl class="field-list simple">
 </dl>
 </dd></dl>
@@ -661,7 +663,7 @@ treated as a literal id, not an error. Inspect available aliases via
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=330037c1"></script>
+</div><script src="../_static/documentation_options.js?v=db237671"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
