@@ -27,6 +27,7 @@ Quick Start:
 
 Main Features:
     - chat(): Simple chat interface across providers
+    - complete(): The whole response (all n choices, usage, finish reasons)
     - embeddings(): Vector embeddings for text
     - prompt_func(): Create functions from prompt templates
     - models: Model discovery and selection
@@ -66,7 +67,15 @@ from aix.credentials import (
 )
 
 # Core interfaces (new clean API)
-from aix.chat import chat, ask, chat_with_history, ChatSession
+from aix.chat import (
+    chat,
+    complete,
+    Completion,
+    Usage,
+    ask,
+    chat_with_history,
+    ChatSession,
+)
 from aix.embeddings import (
     embeddings,
     embed,
@@ -157,6 +166,9 @@ __all__ = [
     "PROVIDER_ENV_VARS",
     # Core chat
     "chat",
+    "complete",
+    "Completion",
+    "Usage",
     "ask",
     "chat_with_history",
     "ChatSession",
