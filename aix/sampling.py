@@ -21,6 +21,7 @@ independently and the batch is marked ``"mixed"``.
 
 import hashlib
 import numbers
+import threading
 from collections.abc import Callable, Iterable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
@@ -101,14 +102,19 @@ def concurrent_map(
 def _derived_seed(seed: int, index: int) -> int:
     """A per-request seed from ``(seed, index)``, decorrelated across base seeds.
 
-    ``seed + index`` would make ``sample(seed=0)`` and ``sample(seed=1)`` share
-    all but one request seed; hashing keeps replicate runs independent.
+    Index 0 keeps the base seed, so ``sample(n=1, seed=s)`` reproduces
+    ``complete(seed=s)``. Later indices hash: ``seed + index`` would make
+    ``sample(seed=0)`` and ``sample(seed=1)`` share all but one request seed.
 
-    >>> _derived_seed(0, 1) != _derived_seed(1, 0)
+    >>> _derived_seed(42, 0)
+    42
+    >>> _derived_seed(0, 1) != _derived_seed(1, 1)
     True
     >>> _derived_seed(42, 3) == _derived_seed(42, 3)
     True
     """
+    if index == 0:
+        return seed
     digest = hashlib.blake2b(f"{seed}:{index}".encode(), digest_size=4).digest()
     return int.from_bytes(digest, "big") & _SEED_MASK
 
@@ -201,12 +207,16 @@ class Samples(list):
 class SamplingError(Exception):
     """A request inside :func:`sample` failed (with ``on_error="raise"``).
 
-    Raised after every launched request has finished, so the work already paid
-    for is not lost: ``samples`` holds the full batch, failed requests included
-    (as samples whose ``error`` is set). The first failure is ``__cause__``.
+    No request is launched after the first failure, and the ones already in
+    flight are awaited, so the work already paid for is not lost: ``samples``
+    holds every request that was made, failed ones included (as samples whose
+    ``error`` is set) -- possibly fewer than ``n``. The first failure is
+    ``__cause__``.
     """
 
-    def __init__(self, message: str, *, samples: Samples):
+    def __init__(self, message: str, *, samples: Optional[Samples] = None):
+        # ``samples`` has a default so the exception survives pickling
+        # (multiprocessing / joblib re-create it from ``args`` alone).
         super().__init__(message)
         self.samples = samples
 
@@ -330,16 +340,26 @@ def sample(
         for j in range(n_from_provider, n)
     ]
 
-    def draw_one(one_seed: Optional[int]) -> Union[Completion, Exception]:
+    # With on_error="raise", stop launching once a request has failed (the
+    # batch is lost anyway); requests already in flight still finish.
+    stop = threading.Event()
+
+    def draw_one(one_seed: Optional[int]) -> Union[Completion, Exception, None]:
+        if stop.is_set():
+            return None  # never launched
         try:
             return complete(prompt, n=1, seed=one_seed, **call_kwargs)
         except Exception as e:  # collected, so finished work is not discarded
+            if on_error == "raise":
+                stop.set()
             return e
 
     first_error, n_failed = None, 0
     for one_seed, c in zip(
         seeds, concurrent_map(draw_one, seeds, concurrency=concurrency)
     ):
+        if c is None:
+            continue
         n_requests += 1
         if isinstance(c, Exception):
             first_error, n_failed = first_error or c, n_failed + 1

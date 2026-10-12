@@ -242,6 +242,7 @@ class TestSample:
         run0 = {_derived_seed(0, j) for j in range(5)}
         run1 = {_derived_seed(1, j) for j in range(5)}
         assert not run0 & run1
+        assert _derived_seed(7, 0) == 7
 
     def test_n1_forced_provider_is_a_plain_request(
         self, fake_completion, params_support
@@ -300,10 +301,40 @@ class TestSample:
         with pytest.raises(SamplingError) as info:
             sample("q", n=4, concurrency=2)
         partial = info.value.samples
-        assert len(partial) == 4 and partial.n_requests == 4
+        # Requests stop launching after the failure; what was made is all kept.
+        assert len(partial) == partial.n_requests == fake_completion.call_count
+        assert 2 <= partial.n_requests <= 4
         assert len(partial.errors) == 1
         assert isinstance(info.value.__cause__, RuntimeError)
-        assert partial.usage == Usage(6, 9, 15)  # the 3 paid-for successes kept
+        assert partial.usage.total_tokens == 5 * (partial.n_requests - 1)
+
+    def test_raise_stops_launching_after_first_failure(
+        self, fake_completion, params_support
+    ):
+        params_support["params"] = None
+        fake_completion.side_effect = RuntimeError("invalid key")
+        with pytest.raises(SamplingError) as info:
+            sample("q", n=20, concurrency=2)
+        assert fake_completion.call_count <= 3  # 2 in flight (+1 race), not 20
+        assert info.value.samples.n_requests == fake_completion.call_count
+
+    def test_record_draws_everything(self, fake_completion, params_support):
+        params_support["params"] = None
+        fake_completion.side_effect = RuntimeError("invalid key")
+        out = sample("q", n=5, concurrency=2, on_error="record")
+        assert fake_completion.call_count == 5 and len(out.errors) == 5
+
+    def test_sampling_error_pickles(self):
+        import pickle
+
+        err = SamplingError("x", samples=Samples([], strategy="independent"))
+        assert str(pickle.loads(pickle.dumps(err))) == "x"
+
+    def test_n1_sends_base_seed(self, fake_completion, params_support):
+        params_support["params"] = None
+        fake_completion.return_value = _response(["x"])
+        sample("q", n=1, seed=42)
+        assert fake_completion.call_args.kwargs["seed"] == 42
 
     def test_request_failure_recorded(self, fake_completion, params_support):
         self._one_failure(fake_completion, params_support)
