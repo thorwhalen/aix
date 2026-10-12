@@ -368,22 +368,27 @@ from typing import Literal
 from pydantic import BaseModel
 from aix import complete, prompt_func
 
+
 class Span(BaseModel):
     start: int
     end: int
+
 
 class Judgement(BaseModel):
     value: Literal["yes", "no", "unsure"]
     confidence: float
     evidence: list[Span]
 
+
 judge = prompt_func("Does this text claim {claim}? {text}", response_schema=Judgement)
-judge(claim="...", text="...")       # -> Judgement(value='yes', confidence=0.8, evidence=[...])
+judge(
+    claim="...", text="..."
+)  # -> Judgement(value='yes', confidence=0.8, evidence=[...])
 
 c = complete("...", response_schema=Judgement)
-c.value          # the validated Judgement (raises SchemaValidationError if still invalid)
-c.schema_mode    # 'strict' | 'schema' | 'json_mode' -- how the provider enforced it
-c.repairs        # extra requests made to fix invalid replies (their tokens are in c.usage)
+c.value  # the validated Judgement (raises SchemaValidationError if still invalid)
+c.schema_mode  # 'strict' | 'schema' | 'json_mode' -- how the provider enforced it
+c.repairs  # extra requests made to fix invalid replies (their tokens are in c.usage)
 ```
 
 The provider enforces the schema as strongly as the model allows:
