@@ -174,6 +174,10 @@ class Samples(list):
         n_requests: How many requests were made (schema repair requests included).
         n_usage_reports: How many of them reported usage (a completion's repair
             requests are counted with it when it reported usage).
+        fallback_error: With ``strategy="auto"``: the error that made the
+            provider-side ``n`` request fall back to independent requests
+            (LiteLLM refusing ``n``, or the provider rejecting it with a 400),
+            else ``None``.
     """
 
     def __init__(
@@ -184,8 +188,10 @@ class Samples(list):
         usage: Optional[Usage] = None,
         n_requests: int = 0,
         n_usage_reports: int = 0,
+        fallback_error: Optional[Exception] = None,
     ):
         super().__init__(samples)
+        self.fallback_error = fallback_error
         self.strategy = strategy
         self.usage = usage
         self.n_requests = n_requests
@@ -257,12 +263,22 @@ def _payload(c: Completion, index: int, parse: Optional[Callable[[str], Any]]):
     return _parsed(c.texts[index] if index < len(c.texts) else "", parse)
 
 
-def _is_unsupported_param_error(error: Exception) -> bool:
-    """Whether the provider refused a request parameter (LiteLLM's error type).
+def _has_class_named(error: Exception, name: str) -> bool:
+    """Whether ``error`` is an instance of a class called ``name``.
 
     Matched by name: aix must not import litellm just to name its exceptions.
     """
-    return any(cls.__name__ == "UnsupportedParamsError" for cls in type(error).__mro__)
+    return any(cls.__name__ == name for cls in type(error).__mro__)
+
+
+def _is_unsupported_param_error(error: Exception) -> bool:
+    """LiteLLM refused a request parameter client-side, before sending it."""
+    return _has_class_named(error, "UnsupportedParamsError")
+
+
+def _is_bad_request_error(error: Exception) -> bool:
+    """The provider rejected the request (HTTP 400) -- possibly because of ``n``."""
+    return _has_class_named(error, "BadRequestError")
 
 
 def sample(
@@ -295,7 +311,10 @@ def sample(
             ``chat.sample_concurrency``).
         model: Model id or alias (``None`` = configured default).
         strategy: ``"auto"`` (provider ``n`` when supported, else independent;
-            also falls back to independent if the provider refuses ``n``),
+            also falls back to independent if LiteLLM or the provider refuses
+            ``n`` -- for a provider 400 the first independent request is sent
+            alone as a probe, and if it fails too the original 400 is raised;
+            see :attr:`Samples.fallback_error`),
             ``"provider"`` (force one ``n`` request) or ``"independent"``.
             ``n=1`` is always a single plain request, recorded ``"independent"``.
         response_schema: A JSON Schema dict or Pydantic model class, enforced and
@@ -356,13 +375,25 @@ def sample(
     use_provider_n = n > 1 and (
         strategy == "provider" or (strategy == "auto" and supports(model, "n"))
     )
+    # Why the provider-n request was abandoned for independent requests, if it was.
+    fallback_error: Optional[Exception] = None
+    # A 400 may or may not be about ``n``: the first independent request is
+    # then sent alone, as a probe, before the rest are launched.
+    probe_first = False
     if use_provider_n:
         try:
             batch = complete(prompt, n=n, seed=seed, **call_kwargs)
         except Exception as e:
-            if strategy != "auto" or not _is_unsupported_param_error(e):
+            if strategy != "auto":
                 raise
-            use_provider_n = False  # supports() was wrong for this model
+            if _is_unsupported_param_error(e):
+                pass  # LiteLLM knows n is unsupported: supports() was wrong
+            elif _is_bad_request_error(e):
+                probe_first = True  # the provider refused it server-side
+                n_requests += 1  # unlike a LiteLLM refusal, this one was sent
+            else:
+                raise
+            use_provider_n, fallback_error = False, e
         else:
             n_requests += 1 + batch.repairs
             for i, (text, reason) in enumerate(
@@ -407,9 +438,17 @@ def sample(
                 stop.set()
             return e
 
-    for one_seed, c in zip(
-        seeds, concurrent_map(draw_one, seeds, concurrency=concurrency)
-    ):
+    results: list = []
+    if probe_first and seeds:
+        try:
+            results.append(complete(prompt, n=1, seed=seeds[0], **call_kwargs))
+        except Exception:
+            # A plain request fails too: the 400 was not about n. Surface the
+            # provider's original rejection rather than a batch of copies.
+            raise fallback_error
+    results += concurrent_map(draw_one, seeds[len(results) :], concurrency=concurrency)
+
+    for one_seed, c in zip(seeds, results):
         if c is None:
             continue
         n_requests += 1 + (0 if isinstance(c, Exception) else c.repairs)
@@ -446,6 +485,7 @@ def sample(
         usage=sum(usages, Usage()) if usages else None,
         n_requests=n_requests,
         n_usage_reports=n_usage_reports,
+        fallback_error=fallback_error,
     )
     if first_error is not None and on_error == "raise":
         raise SamplingError(
