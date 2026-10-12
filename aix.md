@@ -1,4 +1,4 @@
-> built 2026-09-22 15:02 UTC from 3840e31 (master) · aix 0.0.42. Details: build_info.json
+> built 2026-10-12 15:52 UTC from 5adb1a1 (master) · aix 0.0.43. Details: build_info.json
 
 # index.html.md
 
@@ -245,6 +245,24 @@ from aix import chat_with_history
 session = chat_with_history("You are a helpful math tutor")
 response = session.send("What is 2+2?")
 response = session.send("And if I add 3 to that?")  # Remembers context
+```
+
+`chat()` returns only the first choice’s text. When you need the rest of the response (every one of `n` choices, token usage, why each choice stopped, the model that actually served the call), use `complete()`, which takes the same arguments and returns a `Completion`:
+
+```python
+from aix import complete, Usage
+
+c = complete("Name a color", n=3, temperature=1.0)
+c.texts           # ('Blue', 'Green', 'Red')     -- all n choices
+c.finish_reasons  # ('stop', 'stop', 'stop')     -- 'length' means truncated by max_tokens
+c.usage           # Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17, cached_prompt_tokens=0, ...)
+c.model           # the model id the provider reports having served
+c.text            # first choice, i.e. what chat() would return
+c.raw             # the untouched LiteLLM response
+
+# Usage values add up, for cost reporting. usage is None when a provider reports none.
+cs = [complete(q) for q in questions]
+total = sum((c.usage for c in cs if c.usage), Usage())
 ```
 
 ### 2. Embeddings
@@ -2979,6 +2997,7 @@ Quick Start:
 Main Features:
 
 > - chat(): Simple chat interface across providers
+> - complete(): The whole response (all n choices, usage, finish reasons)
 > - embeddings(): Vector embeddings for text
 > - prompt_func(): Create functions from prompt templates
 > - models: Model discovery and selection
@@ -2998,53 +3017,56 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 
 ### Functions
 
-| [`get_config`](_autosummary/aix.html.md#aix.get_config)()                                       | Return the current active [`AixConfig`](_autosummary/aix.html.md#aix.AixConfig).                            |
-|-----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
-| [`set_config`](_autosummary/aix.html.md#aix.set_config)(config)                                 | Replace the active config wholesale.                                                                             |
-| [`configure`](_autosummary/aix.html.md#aix.configure)(\*\*overrides)                           | Apply runtime overrides to the active config and return it.                                                      |
-| [`using`](_autosummary/aix.html.md#aix.using)(\*\*overrides)                               | Context manager applying scoped overrides, restored on exit.                                                     |
-| [`load_config`](_autosummary/aix.html.md#aix.load_config)([path, environ])                       | Resolve an [`AixConfig`](_autosummary/aix.html.md#aix.AixConfig) from shipped defaults, TOML file, and env. |
-| [`resolve_model`](_autosummary/aix.html.md#aix.resolve_model)(model, \*[, config])                 | Resolve a semantic alias (`"fast"`, `"best"`, ...) to a concrete model id.                                       |
-| [`resolve_api_key`](_autosummary/aix.html.md#aix.resolve_api_key)(model_or_provider, \*[, ...])      | Resolve an API key for `model_or_provider` through the documented layers.                                        |
-| [`check_requirements`](_autosummary/aix.html.md#aix.check_requirements)(model_or_provider, \*[, ...])   | Presence-only preflight: ensure a key for `model_or_provider` is resolvable.                                     |
-| [`check_keys`](_autosummary/aix.html.md#aix.check_keys)([providers])                            | Report, per provider, whether a usable API key is discoverable.                                                  |
-| [`chat`](_autosummary/aix.html.md#aix.chat)(prompt, \*[, model, temperature, ...])        | Send a chat prompt and get a response.                                                                           |
-| [`ask`](_autosummary/aix.html.md#aix.ask)(question[, model])                             | Ask a single question and get an answer.                                                                         |
-| [`chat_with_history`](_autosummary/aix.html.md#aix.chat_with_history)([system_prompt, model])          | Create a stateful chat session that maintains conversation history.                                              |
-| [`embeddings`](_autosummary/aix.html.md#aix.embeddings)(segments, \*[, model, api_key])         | Generate embeddings for multiple text segments.                                                                  |
-| [`embed`](_autosummary/aix.html.md#aix.embed)(text, \*[, model])                           | Generate embedding for a single text.                                                                            |
-| [`cosine_similarity`](_autosummary/aix.html.md#aix.cosine_similarity)(vec1, vec2)                      | Compute cosine similarity between two vectors.                                                                   |
-| [`find_most_similar`](_autosummary/aix.html.md#aix.find_most_similar)(query, candidates, \*[, ...])    | Find most similar texts to a query.                                                                              |
-| [`prompt_func`](_autosummary/aix.html.md#aix.prompt_func)(template, \*[, output_schema, ...])    | Create a callable function from a prompt template.                                                               |
-| [`prompt_to_text`](_autosummary/aix.html.md#aix.prompt_to_text)(template, \*\*kwargs)               | Create a function that returns text output.                                                                      |
-| [`prompt_to_json`](_autosummary/aix.html.md#aix.prompt_to_json)(template, schema, \*\*kwargs)       | Create a function that returns structured JSON output.                                                           |
-| [`constrained_answer`](_autosummary/aix.html.md#aix.constrained_answer)(prompt, valid_answers, \*)      | Get an answer from the LLM constrained to a set of valid answers or types.                                       |
-| [`discover_available_models`](_autosummary/aix.html.md#aix.discover_available_models)([source, verbose])       | Discover available models from a source.                                                                         |
-| [`get_model_info`](_autosummary/aix.html.md#aix.get_model_info)(model_id)                           | Get information about a specific model.                                                                          |
-| [`find_models`](_autosummary/aix.html.md#aix.find_models)(query)                                 | Search for models matching a query.                                                                              |
-| [`batch_chat`](_autosummary/aix.html.md#aix.batch_chat)(prompts, \*[, model, batch_size, ...])  | Process multiple chat prompts in batches.                                                                        |
-| [`batch_embeddings`](_autosummary/aix.html.md#aix.batch_embeddings)(segments, \*[, model, ...])       | Generate embeddings for multiple texts in batches.                                                               |
-| [`batch_process`](_autosummary/aix.html.md#aix.batch_process)(items, process_func, \*[, ...])      | Generic batch processing with parallel execution and retries.                                                    |
-| [`generate_image`](_autosummary/aix.html.md#aix.generate_image)(prompt, \*[, model, size, ...])     | Generate a single image from a text prompt.                                                                      |
-| [`generate_images`](_autosummary/aix.html.md#aix.generate_images)(prompt, \*[, n, model, size, ...]) | Generate multiple images from a text prompt.                                                                     |
-| [`edit_image`](_autosummary/aix.html.md#aix.edit_image)(image_path, prompt, \*[, ...])          | Edit an existing image based on a prompt.                                                                        |
-| [`create_variation`](_autosummary/aix.html.md#aix.create_variation)(image_path, \*[, model, ...])     | Create variations of an existing image.                                                                          |
-| [`text_to_speech`](_autosummary/aix.html.md#aix.text_to_speech)(text, \*[, model, voice, ...])      | Convert text to speech audio.                                                                                    |
-| [`transcribe`](_autosummary/aix.html.md#aix.transcribe)(audio, \*[, engine, model, ...])        | Transcribe audio to text.                                                                                        |
-| [`transcribe_with_timestamps`](_autosummary/aix.html.md#aix.transcribe_with_timestamps)(audio, \*[, ...])       | Transcribe audio with detailed timestamps.                                                                       |
-| [`translate_audio`](_autosummary/aix.html.md#aix.translate_audio)(audio, \*[, model, prompt, ...])   | Translate audio from any language to English.                                                                    |
-| [`generate_video`](_autosummary/aix.html.md#aix.generate_video)(prompt, \*[, model, duration, ...]) | Generate a video from a text prompt.                                                                             |
-| [`animate_image_to_video`](_autosummary/aix.html.md#aix.animate_image_to_video)(image_path[, prompt, ...])  | Animate a static image into a video.                                                                             |
-| [`extend_video`](_autosummary/aix.html.md#aix.extend_video)(video_path[, prompt, ...])            | Extend an existing video with additional generated content.                                                      |
-| [`get_video_providers`](_autosummary/aix.html.md#aix.get_video_providers)()                              | Get list of available video generation providers.                                                                |
-| [`describe_image`](_autosummary/aix.html.md#aix.describe_image)(image, \*[, prompt, model, ...])    | Describe (or answer a question about) `image` and return the text.                                               |
-| [`to_image_content`](_autosummary/aix.html.md#aix.to_image_content)(image, \*[, detail])              | Build a multimodal `image_url` content block for `image`.                                                        |
-| [`compare_images`](_autosummary/aix.html.md#aix.compare_images)(candidate, reference, \*[, ...])    | Compare a `candidate` image to `reference` image(s) on a rubric.                                                 |
+| [`get_config`](_autosummary/aix.html.md#aix.get_config)()                                       | Return the current active [`AixConfig`](_autosummary/aix.html.md#aix.AixConfig).                                |
+|-----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| [`set_config`](_autosummary/aix.html.md#aix.set_config)(config)                                 | Replace the active config wholesale.                                                                                 |
+| [`configure`](_autosummary/aix.html.md#aix.configure)(\*\*overrides)                           | Apply runtime overrides to the active config and return it.                                                          |
+| [`using`](_autosummary/aix.html.md#aix.using)(\*\*overrides)                               | Context manager applying scoped overrides, restored on exit.                                                         |
+| [`load_config`](_autosummary/aix.html.md#aix.load_config)([path, environ])                       | Resolve an [`AixConfig`](_autosummary/aix.html.md#aix.AixConfig) from shipped defaults, TOML file, and env.     |
+| [`resolve_model`](_autosummary/aix.html.md#aix.resolve_model)(model, \*[, config])                 | Resolve a semantic alias (`"fast"`, `"best"`, ...) to a concrete model id.                                           |
+| [`resolve_api_key`](_autosummary/aix.html.md#aix.resolve_api_key)(model_or_provider, \*[, ...])      | Resolve an API key for `model_or_provider` through the documented layers.                                            |
+| [`check_requirements`](_autosummary/aix.html.md#aix.check_requirements)(model_or_provider, \*[, ...])   | Presence-only preflight: ensure a key for `model_or_provider` is resolvable.                                         |
+| [`check_keys`](_autosummary/aix.html.md#aix.check_keys)([providers])                            | Report, per provider, whether a usable API key is discoverable.                                                      |
+| [`chat`](_autosummary/aix.html.md#aix.chat)(prompt, \*[, model, temperature, ...])        | Send a chat prompt and get a response.                                                                               |
+| [`complete`](_autosummary/aix.html.md#aix.complete)(prompt, \*[, model, temperature, ...])    | Send a chat prompt and get the whole response back as a [`Completion`](_autosummary/aix.html.md#aix.Completion). |
+| [`ask`](_autosummary/aix.html.md#aix.ask)(question[, model])                             | Ask a single question and get an answer.                                                                             |
+| [`chat_with_history`](_autosummary/aix.html.md#aix.chat_with_history)([system_prompt, model])          | Create a stateful chat session that maintains conversation history.                                                  |
+| [`embeddings`](_autosummary/aix.html.md#aix.embeddings)(segments, \*[, model, api_key])         | Generate embeddings for multiple text segments.                                                                      |
+| [`embed`](_autosummary/aix.html.md#aix.embed)(text, \*[, model])                           | Generate embedding for a single text.                                                                                |
+| [`cosine_similarity`](_autosummary/aix.html.md#aix.cosine_similarity)(vec1, vec2)                      | Compute cosine similarity between two vectors.                                                                       |
+| [`find_most_similar`](_autosummary/aix.html.md#aix.find_most_similar)(query, candidates, \*[, ...])    | Find most similar texts to a query.                                                                                  |
+| [`prompt_func`](_autosummary/aix.html.md#aix.prompt_func)(template, \*[, output_schema, ...])    | Create a callable function from a prompt template.                                                                   |
+| [`prompt_to_text`](_autosummary/aix.html.md#aix.prompt_to_text)(template, \*\*kwargs)               | Create a function that returns text output.                                                                          |
+| [`prompt_to_json`](_autosummary/aix.html.md#aix.prompt_to_json)(template, schema, \*\*kwargs)       | Create a function that returns structured JSON output.                                                               |
+| [`constrained_answer`](_autosummary/aix.html.md#aix.constrained_answer)(prompt, valid_answers, \*)      | Get an answer from the LLM constrained to a set of valid answers or types.                                           |
+| [`discover_available_models`](_autosummary/aix.html.md#aix.discover_available_models)([source, verbose])       | Discover available models from a source.                                                                             |
+| [`get_model_info`](_autosummary/aix.html.md#aix.get_model_info)(model_id)                           | Get information about a specific model.                                                                              |
+| [`find_models`](_autosummary/aix.html.md#aix.find_models)(query)                                 | Search for models matching a query.                                                                                  |
+| [`batch_chat`](_autosummary/aix.html.md#aix.batch_chat)(prompts, \*[, model, batch_size, ...])  | Process multiple chat prompts in batches.                                                                            |
+| [`batch_embeddings`](_autosummary/aix.html.md#aix.batch_embeddings)(segments, \*[, model, ...])       | Generate embeddings for multiple texts in batches.                                                                   |
+| [`batch_process`](_autosummary/aix.html.md#aix.batch_process)(items, process_func, \*[, ...])      | Generic batch processing with parallel execution and retries.                                                        |
+| [`generate_image`](_autosummary/aix.html.md#aix.generate_image)(prompt, \*[, model, size, ...])     | Generate a single image from a text prompt.                                                                          |
+| [`generate_images`](_autosummary/aix.html.md#aix.generate_images)(prompt, \*[, n, model, size, ...]) | Generate multiple images from a text prompt.                                                                         |
+| [`edit_image`](_autosummary/aix.html.md#aix.edit_image)(image_path, prompt, \*[, ...])          | Edit an existing image based on a prompt.                                                                            |
+| [`create_variation`](_autosummary/aix.html.md#aix.create_variation)(image_path, \*[, model, ...])     | Create variations of an existing image.                                                                              |
+| [`text_to_speech`](_autosummary/aix.html.md#aix.text_to_speech)(text, \*[, model, voice, ...])      | Convert text to speech audio.                                                                                        |
+| [`transcribe`](_autosummary/aix.html.md#aix.transcribe)(audio, \*[, engine, model, ...])        | Transcribe audio to text.                                                                                            |
+| [`transcribe_with_timestamps`](_autosummary/aix.html.md#aix.transcribe_with_timestamps)(audio, \*[, ...])       | Transcribe audio with detailed timestamps.                                                                           |
+| [`translate_audio`](_autosummary/aix.html.md#aix.translate_audio)(audio, \*[, model, prompt, ...])   | Translate audio from any language to English.                                                                        |
+| [`generate_video`](_autosummary/aix.html.md#aix.generate_video)(prompt, \*[, model, duration, ...]) | Generate a video from a text prompt.                                                                                 |
+| [`animate_image_to_video`](_autosummary/aix.html.md#aix.animate_image_to_video)(image_path[, prompt, ...])  | Animate a static image into a video.                                                                                 |
+| [`extend_video`](_autosummary/aix.html.md#aix.extend_video)(video_path[, prompt, ...])            | Extend an existing video with additional generated content.                                                          |
+| [`get_video_providers`](_autosummary/aix.html.md#aix.get_video_providers)()                              | Get list of available video generation providers.                                                                    |
+| [`describe_image`](_autosummary/aix.html.md#aix.describe_image)(image, \*[, prompt, model, ...])    | Describe (or answer a question about) `image` and return the text.                                                   |
+| [`to_image_content`](_autosummary/aix.html.md#aix.to_image_content)(image, \*[, detail])              | Build a multimodal `image_url` content block for `image`.                                                            |
+| [`compare_images`](_autosummary/aix.html.md#aix.compare_images)(candidate, reference, \*[, ...])    | Compare a `candidate` image to `reference` image(s) on a rubric.                                                     |
 
 ### Classes
 
 | [`AixConfig`](_autosummary/aix.html.md#aix.AixConfig)([chat, embeddings, image, audio, ...])   | Top-level AIX configuration (single source of truth for defaults).   |
 |-----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
+| [`Completion`](_autosummary/aix.html.md#aix.Completion)(texts[, finish_reasons, usage, ...])    | Everything a chat completion returned, not just the first text.      |
+| [`Usage`](_autosummary/aix.html.md#aix.Usage)([prompt_tokens, completion_tokens, ...])     | Token counts billed for one call (or summed over several).           |
 | [`ChatSession`](_autosummary/aix.html.md#aix.ChatSession)([system_prompt, model])                | Stateful chat session that maintains conversation history.           |
 | [`EmbeddingCache`](_autosummary/aix.html.md#aix.EmbeddingCache)([model])                            | Cache for embeddings to avoid redundant API calls.                   |
 | [`PromptFuncs`](_autosummary/aix.html.md#aix.PromptFuncs)([model])                               | Collection of prompt-based functions.                                |
@@ -3190,6 +3212,62 @@ Send a message and get a response.
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   Assistant’s response
+
+### *class* aix.Completion(texts, finish_reasons=(), usage=None, model=None, raw=None)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+Everything a chat completion returned, not just the first text.
+
+#### texts
+
+The text of every choice, in order (`n` of them when `n` was
+requested). A choice with no text content (e.g. a pure tool call)
+is `""`; list-of-parts content is reduced to its joined text parts.
+Tool calls themselves are not surfaced here – read them from `raw`.
+
+#### finish_reasons
+
+Why each choice stopped (`"stop"`, `"length"`,
+`"content_filter"`, `"tool_calls"`…), aligned with `texts`;
+`None` where the provider did not say. `"length"` means the
+text was truncated by `max_tokens`.
+
+#### usage
+
+Tokens billed for the whole call (all choices together), or
+`None` if the provider did not report usage (so filter before
+summing: `sum((c.usage for c in cs if c.usage), Usage())`).
+
+#### model
+
+The model id the provider reports having served the call, which
+can differ from the one requested (aliases, dated snapshots).
+
+#### raw
+
+The untouched LiteLLM response, for anything not surfaced here.
+
+```pycon
+>>> c = Completion(texts=("a", "b"), finish_reasons=("stop", "length"))
+>>> c.text, c.finish_reason
+('a', 'stop')
+```
+
+#### *property* finish_reason *: [str](https://docs.python.org/3/builtins/stdtypes.html#str) | [None](https://docs.python.org/3/builtins/constants.html#None)*
+
+The first choice’s finish reason.
+
+#### *classmethod* from_response(response)
+
+Build a [`Completion`](_autosummary/aix.html.md#aix.Completion) from a (non-streaming) LiteLLM response.
+
+* **Return type:**
+  [`Completion`](_autosummary/aix.html.md#aix.Completion)
+
+#### *property* text *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+
+The first choice’s text (`""` if there are no choices).
 
 ### *exception* aix.ConstraintViolation(message, , answer=None, valid_answers=None)
 
@@ -3793,6 +3871,46 @@ Contains the transcribed text and optional metadata like segments and timestamps
 'Hello world'
 ```
 
+### *class* aix.Usage(prompt_tokens=0, completion_tokens=0, total_tokens=0, cached_prompt_tokens=0, cache_creation_tokens=0, reasoning_tokens=0)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+Token counts billed for one call (or summed over several).
+
+`prompt_tokens` / `completion_tokens` / `total_tokens` are the headline
+counts. The breakdowns – prompt tokens served from the provider’s cache
+(`cached_prompt_tokens`), written to it (`cache_creation_tokens`), and
+hidden reasoning tokens inside `completion_tokens` (`reasoning_tokens`)
+– are priced differently by most providers, so cost reporting needs them.
+Counts a provider did not report are `0`.
+
+Usages add, and `sum` works when you give it a `Usage()` start (so an
+empty batch is a zero `Usage`, not the integer `0`):
+
+```pycon
+>>> Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15)
+Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15, cached_prompt_tokens=0, cache_creation_tokens=0, reasoning_tokens=0)
+>>> sum([Usage(1, 2, 3), Usage(10, 20, 30)], Usage()).total_tokens
+33
+>>> sum([], Usage()) == Usage()
+True
+```
+
+#### *classmethod* from_response(response)
+
+Read the `usage` block of a LiteLLM response; `None` if absent.
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Usage`](_autosummary/aix.html.md#aix.Usage)]
+
+```pycon
+>>> u = Usage.from_response({"usage": {"prompt_tokens": 3, "completion_tokens": 4}})
+>>> u.prompt_tokens, u.completion_tokens, u.total_tokens
+(3, 4, 7)
+>>> Usage.from_response({}) is None
+True
+```
+
 ### aix.animate_image_to_video(image_path, prompt=None, , model=None, duration=3.0, motion_strength=0.5, \*\*kwargs)
 
 Animate a static image into a video.
@@ -4223,6 +4341,48 @@ Filmmaking rubric, a locked reference *set*:
 ...     rubric=DFLT_FILM_RUBRIC,
 ... )["face_identity"].match
 True
+```
+
+### aix.complete(prompt, , model=None, temperature=None, max_tokens=None, n=1, seed=None, response_format=None, api_key=None, \*\*kwargs)
+
+Send a chat prompt and get the whole response back as a [`Completion`](_autosummary/aix.html.md#aix.Completion).
+
+The non-lossy sibling of [`chat()`](_autosummary/aix.html.md#aix.chat): same inputs and defaults, but instead
+of the first choice’s text it returns every choice (`texts`), why each one
+stopped (`finish_reasons`), the tokens billed (`usage`), the model that
+served the call, and the raw response.
+
+* **Parameters:**
+  * **prompt** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string (becomes a user message) or a list of message dicts.
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model identifier or alias. If None, uses the configured default.
+  * **temperature** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sampling temperature. If None, uses the configured default.
+  * **max_tokens** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Maximum tokens per choice. If None, uses the configured default.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many choices to ask the provider for in this one call. Only
+    sent when `n != 1`; providers without native `n` support reject
+    it (see LiteLLM’s `get_supported_openai_params`).
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Best-effort reproducibility seed. Only sent when given; support
+    and the strength of the guarantee are provider-dependent.
+  * **response_format** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Passed through to LiteLLM (e.g. `{"type": "json_object"}`).
+  * **api_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Explicit API key; otherwise resolved as for [`chat()`](_autosummary/aix.html.md#aix.chat).
+  * **\*\*kwargs** – Additional provider-specific parameters passed to LiteLLM.
+* **Return type:**
+  [`Completion`](_autosummary/aix.html.md#aix.Completion)
+* **Returns:**
+  A [`Completion`](_autosummary/aix.html.md#aix.Completion).
+* **Raises:**
+  * [**ImportError**](https://docs.python.org/3/builtins/exceptions.html#ImportError) – If LiteLLM is not installed.
+  * [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `n` is not a positive integer, or the prompt is invalid.
+
+### Examples
+
+```pycon
+>>> c = complete("Name a color", n=3)
+>>> c.texts, c.finish_reasons
+(('Blue', 'Green', 'Red'), ('stop', 'stop', 'stop'))
+>>> c.usage
+Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17)
+>>> complete("Write an essay", max_tokens=5).finish_reason
+'length'
 ```
 
 ### aix.configure(\*\*overrides)
@@ -6622,18 +6782,18 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.
 
 # About this build
 
-This documentation was built on **2026-09-22 15:02 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/3840e312c0e554616d473678a2ed8ac7b03e96fc"><code>3840e31</code></a> on branch <code>master</code>, for **aix 0.0.42** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-12 15:52 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/5adb1a19e6c45996f41da2e0d788a43522df925a"><code>5adb1a1</code></a> on branch <code>master</code>, for **aix 0.0.43** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.0.42) is behind the latest release on PyPI (0.0.43): `pip install aix` gives newer code than these docs describe.
+- The documented version (0.0.43) is behind the latest release on PyPI (0.0.44): `pip install aix` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/3840e312c0e554616d473678a2ed8ac7b03e96fc"><code>3840e312c0e554616d473678a2ed8ac7b03e96fc</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/5adb1a19e6c45996f41da2e0d788a43522df925a"><code>5adb1a19e6c45996f41da2e0d788a43522df925a</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -6644,9 +6804,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/35744280418">35744280418</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38273067938">38273067938</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>3840e312c0e554616d473678a2ed8ac7b03e96fc</code> (in the history of the built commit) |
+| Event commit | <code>5adb1a19e6c45996f41da2e0d788a43522df925a</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -6655,7 +6815,7 @@ The documentation and the package may be misaligned:
 | epythet  | 0.2.12  |
 | Sphinx   | 9.1.0   |
 | docutils | 0.22.4  |
-| Python   | 3.12.14 |
+| Python   | 3.12.15 |
 
 ## Configuration as resolved
 
@@ -6671,13 +6831,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.43/">0.0.43</a>, newer than the documented version (0.0.42).
+Latest release: <a href="https://pypi.org/project/aix/0.0.44/">0.0.44</a>, newer than the documented version (0.0.43).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout 3840e312c0e554616d473678a2ed8ac7b03e96fc
+git checkout 5adb1a19e6c45996f41da2e0d788a43522df925a
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

@@ -542,6 +542,22 @@ store lives in your user app-config folder — never in the repo.</p>
 <span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"And if I add 3 to that?"</span><span class="p">)</span>  <span class="c1"># Remembers context</span>
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">chat()</span></code> returns only the first choice’s text. When you need the rest of the response (every one of <code class="docutils literal notranslate"><span class="pre">n</span></code> choices, token usage, why each choice stopped, the model that actually served the call), use <code class="docutils literal notranslate"><span class="pre">complete()</span></code>, which takes the same arguments and returns a <code class="docutils literal notranslate"><span class="pre">Completion</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">complete</span><span class="p">,</span> <span class="n">Usage</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">complete</span><span class="p">(</span><span class="s2">"Name a color"</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">texts</span>           <span class="c1"># ('Blue', 'Green', 'Red')     -- all n choices</span>
+<span class="n">c</span><span class="o">.</span><span class="n">finish_reasons</span>  <span class="c1"># ('stop', 'stop', 'stop')     -- 'length' means truncated by max_tokens</span>
+<span class="n">c</span><span class="o">.</span><span class="n">usage</span>           <span class="c1"># Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17, cached_prompt_tokens=0, ...)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">model</span>           <span class="c1"># the model id the provider reports having served</span>
+<span class="n">c</span><span class="o">.</span><span class="n">text</span>            <span class="c1"># first choice, i.e. what chat() would return</span>
+<span class="n">c</span><span class="o">.</span><span class="n">raw</span>             <span class="c1"># the untouched LiteLLM response</span>
+
+<span class="c1"># Usage values add up, for cost reporting. usage is None when a provider reports none.</span>
+<span class="n">cs</span> <span class="o">=</span> <span class="p">[</span><span class="n">complete</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">questions</span><span class="p">]</span>
+<span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">c</span><span class="o">.</span><span class="n">usage</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cs</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">usage</span><span class="p">),</span> <span class="n">Usage</span><span class="p">())</span>
+</pre></div>
+</div>
 </section>
 <section id="embeddings">
 <h3>2. Embeddings<a class="headerlink" href="#embeddings" title="Link to this heading">¶</a></h3>
@@ -1013,7 +1029,7 @@ resolving — pass those provider-prefixed (<code class="docutils literal notran
 </section>
 </section>
 
-<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-09-22 15:02 UTC from <a href="https://github.com/thorwhalen/aix/commit/3840e312c0e554616d473678a2ed8ac7b03e96fc">3840e31</a> (master) · aix 0.0.42 · <a href="about-this-build.html">about this build</a></p>
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-12 15:52 UTC from <a href="https://github.com/thorwhalen/aix/commit/5adb1a19e6c45996f41da2e0d788a43522df925a">5adb1a1</a> (master) · aix 0.0.43 · <a href="about-this-build.html">about this build</a></p>
         </article>
       </div>
       <footer>
@@ -1124,7 +1140,7 @@ resolving — pass those provider-prefixed (<code class="docutils literal notran
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=9a4043a7"></script>
+</div><script src="_static/documentation_options.js?v=330037c1"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>

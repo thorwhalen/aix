@@ -291,10 +291,22 @@
 <span class="sd">    &gt;&gt;&gt; for chunk in chat("Count to 3", stream=True):  # doctest: +SKIP</span>
 <span class="sd">    ...     print(chunk, end='')</span>
 <span class="sd">    1, 2, 3</span>
+
+<span class="sd">    The whole response -- every choice, token usage, finish reasons, the model</span>
+<span class="sd">    that actually served the call -- via :func:`complete`:</span>
+
+<span class="sd">    &gt;&gt;&gt; c = complete("Name a color", n=3, temperature=1.0)  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; c.texts  # doctest: +SKIP</span>
+<span class="sd">    ('Blue', 'Green', 'Red')</span>
+<span class="sd">    &gt;&gt;&gt; c.usage.total_tokens, c.finish_reasons  # doctest: +SKIP</span>
+<span class="sd">    (41, ('stop', 'stop', 'stop'))</span>
 <span class="sd">"""</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numbers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">fields</span> <span class="k">as</span> <span class="n">dataclass_fields</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.config</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">get_config</span> <span class="k">as</span> <span class="n">_get_config</span><span class="p">,</span>
@@ -406,6 +418,273 @@
             <span class="k">continue</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_field</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Read ``name`` from a LiteLLM response part, attribute- or key-style.</span>
+
+<span class="sd">    LiteLLM returns pydantic-ish objects, but some providers and caches hand</span>
+<span class="sd">    back plain dicts; reading both keeps extraction provider-agnostic.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_int</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""``value`` as an integer count if it is one (``7`` or ``7.0``), else ``None``."""</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">is_integer</span><span class="p">():</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""``value`` if it is a string, else ``None``."""</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_content_text</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The text of a message ``content``: a string, or the text parts of a list.</span>
+
+<span class="sd">    Multimodal / structured providers return content as a list of parts</span>
+<span class="sd">    (``[{"type": "text", "text": "..."}, ...]``); their text parts are joined.</span>
+<span class="sd">    Anything else (``None`` for a pure tool call) is ``""``.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">content</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">(</span><span class="n">_as_str</span><span class="p">(</span><span class="n">_field</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">))</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">content</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span> <span class="k">if</span> <span class="n">p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_nested</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Follow a dotted ``path`` of :func:`_field` reads, ``None`` if any is absent."""</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">_field</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span>
+
+
+<span class="c1"># Usage field -&gt; where LiteLLM puts it, first match wins. LiteLLM normalizes most</span>
+<span class="c1"># providers to the OpenAI shape (``*_tokens_details``); the bare Anthropic names</span>
+<span class="c1"># are the fallback for responses it passes through unnormalized.</span>
+<span class="n">_USAGE_SOURCES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"prompt_tokens"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"prompt_tokens"</span><span class="p">,),</span>
+    <span class="s2">"completion_tokens"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"completion_tokens"</span><span class="p">,),</span>
+    <span class="s2">"total_tokens"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"total_tokens"</span><span class="p">,),</span>
+    <span class="s2">"cached_prompt_tokens"</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">"prompt_tokens_details.cached_tokens"</span><span class="p">,</span>
+        <span class="s2">"cache_read_input_tokens"</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">"cache_creation_tokens"</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">"prompt_tokens_details.cache_creation_tokens"</span><span class="p">,</span>
+        <span class="s2">"cache_creation_input_tokens"</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">"reasoning_tokens"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"completion_tokens_details.reasoning_tokens"</span><span class="p">,),</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="Usage">
+<a class="viewcode-back" href="../../_autosummary/aix.html#aix.Usage">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Usage</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Token counts billed for one call (or summed over several).</span>
+
+<span class="sd">    ``prompt_tokens`` / ``completion_tokens`` / ``total_tokens`` are the headline</span>
+<span class="sd">    counts. The breakdowns -- prompt tokens served from the provider's cache</span>
+<span class="sd">    (``cached_prompt_tokens``), written to it (``cache_creation_tokens``), and</span>
+<span class="sd">    hidden reasoning tokens inside ``completion_tokens`` (``reasoning_tokens``)</span>
+<span class="sd">    -- are priced differently by most providers, so cost reporting needs them.</span>
+<span class="sd">    Counts a provider did not report are ``0``.</span>
+
+<span class="sd">    Usages add, and ``sum`` works when you give it a ``Usage()`` start (so an</span>
+<span class="sd">    empty batch is a zero ``Usage``, not the integer ``0``):</span>
+
+<span class="sd">    &gt;&gt;&gt; Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15)</span>
+<span class="sd">    Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15, cached_prompt_tokens=0, cache_creation_tokens=0, reasoning_tokens=0)</span>
+<span class="sd">    &gt;&gt;&gt; sum([Usage(1, 2, 3), Usage(10, 20, 30)], Usage()).total_tokens</span>
+<span class="sd">    33</span>
+<span class="sd">    &gt;&gt;&gt; sum([], Usage()) == Usage()</span>
+<span class="sd">    True</span>
+<span class="sd">    """</span>
+
+    <span class="n">prompt_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">completion_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">cached_prompt_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">cache_creation_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">reasoning_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Usage"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">and</span> <span class="n">other</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>  <span class="c1"># so ``sum(usages)`` (which starts at 0) works too</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Usage</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">Usage</span><span class="p">(</span>
+            <span class="o">**</span><span class="p">{</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataclass_fields</span><span class="p">(</span><span class="n">Usage</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="fm">__radd__</span> <span class="o">=</span> <span class="fm">__add__</span>
+
+<div class="viewcode-block" id="Usage.from_response">
+<a class="viewcode-back" href="../../_autosummary/aix.html#aix.Usage.from_response">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_response</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">"Usage"</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Read the ``usage`` block of a LiteLLM response; ``None`` if absent.</span>
+
+<span class="sd">        &gt;&gt;&gt; u = Usage.from_response({"usage": {"prompt_tokens": 3, "completion_tokens": 4}})</span>
+<span class="sd">        &gt;&gt;&gt; u.prompt_tokens, u.completion_tokens, u.total_tokens</span>
+<span class="sd">        (3, 4, 7)</span>
+<span class="sd">        &gt;&gt;&gt; Usage.from_response({}) is None</span>
+<span class="sd">        True</span>
+<span class="sd">        """</span>
+        <span class="n">usage</span> <span class="o">=</span> <span class="n">_field</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"usage"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">usage</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">first_count</span><span class="p">(</span><span class="n">paths</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">_as_int</span><span class="p">(</span><span class="n">_nested</span><span class="p">(</span><span class="n">usage</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">count</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">counts</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">first_count</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">paths</span> <span class="ow">in</span> <span class="n">_USAGE_SOURCES</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">count</span> <span class="ow">or</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">counts</span><span class="p">[</span><span class="s2">"total_tokens"</span><span class="p">]:</span>
+            <span class="n">counts</span><span class="p">[</span><span class="s2">"total_tokens"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">counts</span><span class="p">[</span><span class="s2">"prompt_tokens"</span><span class="p">]</span> <span class="o">+</span> <span class="n">counts</span><span class="p">[</span><span class="s2">"completion_tokens"</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">counts</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Completion">
+<a class="viewcode-back" href="../../_autosummary/aix.html#aix.Completion">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Completion</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Everything a chat completion returned, not just the first text.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        texts: The text of every choice, in order (``n`` of them when ``n`` was</span>
+<span class="sd">            requested). A choice with no text content (e.g. a pure tool call)</span>
+<span class="sd">            is ``""``; list-of-parts content is reduced to its joined text parts.</span>
+<span class="sd">            Tool calls themselves are not surfaced here -- read them from ``raw``.</span>
+<span class="sd">        finish_reasons: Why each choice stopped (``"stop"``, ``"length"``,</span>
+<span class="sd">            ``"content_filter"``, ``"tool_calls"``...), aligned with ``texts``;</span>
+<span class="sd">            ``None`` where the provider did not say. ``"length"`` means the</span>
+<span class="sd">            text was truncated by ``max_tokens``.</span>
+<span class="sd">        usage: Tokens billed for the whole call (all choices together), or</span>
+<span class="sd">            ``None`` if the provider did not report usage (so filter before</span>
+<span class="sd">            summing: ``sum((c.usage for c in cs if c.usage), Usage())``).</span>
+<span class="sd">        model: The model id the provider reports having served the call, which</span>
+<span class="sd">            can differ from the one requested (aliases, dated snapshots).</span>
+<span class="sd">        raw: The untouched LiteLLM response, for anything not surfaced here.</span>
+
+<span class="sd">    &gt;&gt;&gt; c = Completion(texts=("a", "b"), finish_reasons=("stop", "length"))</span>
+<span class="sd">    &gt;&gt;&gt; c.text, c.finish_reason</span>
+<span class="sd">    ('a', 'stop')</span>
+<span class="sd">    """</span>
+
+    <span class="n">texts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+    <span class="n">finish_reasons</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">usage</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Usage</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">raw</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""The first choice's text (``""`` if there are no choices)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">texts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">texts</span> <span class="k">else</span> <span class="s2">""</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">finish_reason</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""The first choice's finish reason."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish_reasons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish_reasons</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
+
+<div class="viewcode-block" id="Completion.from_response">
+<a class="viewcode-back" href="../../_autosummary/aix.html#aix.Completion.from_response">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_response</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Completion"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Build a :class:`Completion` from a (non-streaming) LiteLLM response."""</span>
+        <span class="n">choices</span> <span class="o">=</span> <span class="n">_field</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"choices"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">texts</span><span class="p">,</span> <span class="n">reasons</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">_field</span><span class="p">(</span><span class="n">choice</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">)</span>
+            <span class="n">texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_content_text</span><span class="p">(</span><span class="n">_field</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">)))</span>
+            <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_as_str</span><span class="p">(</span><span class="n">_field</span><span class="p">(</span><span class="n">choice</span><span class="p">,</span> <span class="s2">"finish_reason"</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">texts</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">texts</span><span class="p">),</span>
+            <span class="n">finish_reasons</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">reasons</span><span class="p">),</span>
+            <span class="n">usage</span><span class="o">=</span><span class="n">Usage</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">response</span><span class="p">),</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">_as_str</span><span class="p">(</span><span class="n">_field</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">)),</span>
+            <span class="n">raw</span><span class="o">=</span><span class="n">response</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_require_completion</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Resolve litellm's ``completion`` or raise an install hint."""</span>
+    <span class="n">completion</span> <span class="o">=</span> <span class="n">_completion</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">completion</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">"LiteLLM is required for chat functionality. "</span>
+            <span class="s2">"Install it with: pip install litellm"</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">completion</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_completion_kwargs</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">dict</span><span class="p">]],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The LiteLLM ``completion`` kwargs shared by :func:`chat` and :func:`complete`.</span>
+
+<span class="sd">    Normalizes the prompt, fills defaults from the active config (explicit</span>
+<span class="sd">    arguments win), and injects the resolved API key.</span>
+<span class="sd">    """</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="n">_normalize_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">_resolve_model</span><span class="p">(</span><span class="n">model</span> <span class="ow">or</span> <span class="n">cfg</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">temperature</span> <span class="o">=</span> <span class="n">temperature</span> <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">cfg</span><span class="o">.</span><span class="n">temperature</span>
+    <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">max_tokens</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">max_tokens</span>
+
+    <span class="n">litellm_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s2">"messages"</span><span class="p">:</span> <span class="n">messages</span><span class="p">,</span>
+        <span class="s2">"temperature"</span><span class="p">:</span> <span class="n">temperature</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"max_tokens"</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_tokens</span>
+
+    <span class="c1"># Resolve and inject the API key (explicit arg &gt; env/.env &gt; config store).</span>
+    <span class="c1"># When None, fall back to LiteLLM's own implicit reading.</span>
+    <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"api_key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+    <span class="k">return</span> <span class="n">litellm_kwargs</span>
+
+
 <div class="viewcode-block" id="chat">
 <a class="viewcode-back" href="../../_autosummary/aix.html#aix.chat">[docs]</a>
 <span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
@@ -466,39 +745,15 @@
 <span class="sd">        &gt;&gt;&gt; chat(messages)  # doctest: +SKIP</span>
 <span class="sd">        '2+2 equals 4.'</span>
 <span class="sd">    """</span>
-    <span class="n">completion</span> <span class="o">=</span> <span class="n">_completion</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">completion</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-            <span class="s2">"LiteLLM is required for chat functionality. "</span>
-            <span class="s2">"Install it with: pip install litellm"</span>
-        <span class="p">)</span>
-
-    <span class="c1"># Normalize inputs</span>
-    <span class="n">messages</span> <span class="o">=</span> <span class="n">_normalize_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
-
-    <span class="c1"># Apply defaults from the active config (explicit args still win)</span>
-    <span class="n">cfg</span> <span class="o">=</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">_resolve_model</span><span class="p">(</span><span class="n">model</span> <span class="ow">or</span> <span class="n">cfg</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
-    <span class="n">temperature</span> <span class="o">=</span> <span class="n">temperature</span> <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">cfg</span><span class="o">.</span><span class="n">temperature</span>
-    <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">max_tokens</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">max_tokens</span>
-
-    <span class="c1"># Build LiteLLM parameters</span>
-    <span class="n">litellm_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
-        <span class="s2">"messages"</span><span class="p">:</span> <span class="n">messages</span><span class="p">,</span>
-        <span class="s2">"temperature"</span><span class="p">:</span> <span class="n">temperature</span><span class="p">,</span>
-        <span class="s2">"stream"</span><span class="p">:</span> <span class="n">stream</span><span class="p">,</span>
-    <span class="p">}</span>
-
-    <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"max_tokens"</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_tokens</span>
-
-    <span class="c1"># Resolve and inject the API key (explicit arg &gt; env/.env &gt; config store).</span>
-    <span class="c1"># When None, fall back to LiteLLM's own implicit reading.</span>
-    <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"api_key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
+    <span class="n">completion</span> <span class="o">=</span> <span class="n">_require_completion</span><span class="p">()</span>
+    <span class="n">litellm_kwargs</span> <span class="o">=</span> <span class="n">_completion_kwargs</span><span class="p">(</span>
+        <span class="n">prompt</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"stream"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stream</span>
 
     <span class="c1"># Add any additional provider-specific kwargs</span>
     <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
@@ -511,6 +766,101 @@
         <span class="k">return</span> <span class="n">_extract_text_from_stream</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_extract_text_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_complete_args</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Reject bad :func:`complete` arguments before the credential preflight.</span>
+
+<span class="sd">    Kept outside :func:`complete` (and outermost in its decorator stack) so a</span>
+<span class="sd">    caller error such as ``n=0`` surfaces as itself, not as a missing API key.</span>
+<span class="sd">    """</span>
+
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"n"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"n must be a positive integer, got </span><span class="si">{</span><span class="n">n</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"stream"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"complete() does not stream; use chat(..., stream=True) for streaming."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<div class="viewcode-block" id="complete">
+<a class="viewcode-back" href="../../_autosummary/aix.html#aix.complete">[docs]</a>
+<span class="nd">@_validate_complete_args</span>
+<span class="nd">@_requires_credentials</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">dict</span><span class="p">]],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Completion</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Send a chat prompt and get the whole response back as a :class:`Completion`.</span>
+
+<span class="sd">    The non-lossy sibling of :func:`chat`: same inputs and defaults, but instead</span>
+<span class="sd">    of the first choice's text it returns every choice (``texts``), why each one</span>
+<span class="sd">    stopped (``finish_reasons``), the tokens billed (``usage``), the model that</span>
+<span class="sd">    served the call, and the raw response.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: A string (becomes a user message) or a list of message dicts.</span>
+<span class="sd">        model: Model identifier or alias. If None, uses the configured default.</span>
+<span class="sd">        temperature: Sampling temperature. If None, uses the configured default.</span>
+<span class="sd">        max_tokens: Maximum tokens per choice. If None, uses the configured default.</span>
+<span class="sd">        n: How many choices to ask the provider for in this one call. Only</span>
+<span class="sd">            sent when ``n != 1``; providers without native ``n`` support reject</span>
+<span class="sd">            it (see LiteLLM's ``get_supported_openai_params``).</span>
+<span class="sd">        seed: Best-effort reproducibility seed. Only sent when given; support</span>
+<span class="sd">            and the strength of the guarantee are provider-dependent.</span>
+<span class="sd">        response_format: Passed through to LiteLLM (e.g. ``{"type": "json_object"}``).</span>
+<span class="sd">        api_key: Explicit API key; otherwise resolved as for :func:`chat`.</span>
+<span class="sd">        **kwargs: Additional provider-specific parameters passed to LiteLLM.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`Completion`.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If LiteLLM is not installed.</span>
+<span class="sd">        ValueError: If ``n`` is not a positive integer, or the prompt is invalid.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; c = complete("Name a color", n=3)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; c.texts, c.finish_reasons  # doctest: +SKIP</span>
+<span class="sd">        (('Blue', 'Green', 'Red'), ('stop', 'stop', 'stop'))</span>
+<span class="sd">        &gt;&gt;&gt; c.usage  # doctest: +SKIP</span>
+<span class="sd">        Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17)</span>
+<span class="sd">        &gt;&gt;&gt; complete("Write an essay", max_tokens=5).finish_reason  # doctest: +SKIP</span>
+<span class="sd">        'length'</span>
+<span class="sd">    """</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>  <span class="c1"># already validated (see _validate_complete_args); np ints too</span>
+    <span class="n">completion</span> <span class="o">=</span> <span class="n">_require_completion</span><span class="p">()</span>
+    <span class="n">litellm_kwargs</span> <span class="o">=</span> <span class="n">_completion_kwargs</span><span class="p">(</span>
+        <span class="n">prompt</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">optional</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"n"</span><span class="p">:</span> <span class="n">n</span> <span class="k">if</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">"seed"</span><span class="p">:</span> <span class="n">seed</span><span class="p">,</span>
+        <span class="s2">"response_format"</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">optional</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">})</span>
+    <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Completion</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">completion</span><span class="p">(</span><span class="o">**</span><span class="n">litellm_kwargs</span><span class="p">))</span></div>
 
 
 
@@ -666,7 +1016,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=9a4043a7"></script>
+</div><script src="../../_static/documentation_options.js?v=330037c1"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

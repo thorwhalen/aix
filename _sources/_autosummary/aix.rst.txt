@@ -18,6 +18,7 @@
       check_requirements
       check_keys
       chat
+      complete
       ask
       chat_with_history
       embeddings
@@ -55,6 +56,8 @@
    .. autosummary::
    
       AixConfig
+      Completion
+      Usage
       ChatSession
       EmbeddingCache
       PromptFuncs

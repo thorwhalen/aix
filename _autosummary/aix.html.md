@@ -45,6 +45,7 @@ Quick Start:
 Main Features:
 
 > - chat(): Simple chat interface across providers
+> - complete(): The whole response (all n choices, usage, finish reasons)
 > - embeddings(): Vector embeddings for text
 > - prompt_func(): Create functions from prompt templates
 > - models: Model discovery and selection
@@ -64,53 +65,56 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 
 ### Functions
 
-| [`get_config`](#aix.get_config)()                                       | Return the current active [`AixConfig`](#aix.AixConfig).                            |
-|-----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
-| [`set_config`](#aix.set_config)(config)                                 | Replace the active config wholesale.                                                                             |
-| [`configure`](#aix.configure)(\*\*overrides)                           | Apply runtime overrides to the active config and return it.                                                      |
-| [`using`](#aix.using)(\*\*overrides)                               | Context manager applying scoped overrides, restored on exit.                                                     |
-| [`load_config`](#aix.load_config)([path, environ])                       | Resolve an [`AixConfig`](#aix.AixConfig) from shipped defaults, TOML file, and env. |
-| [`resolve_model`](#aix.resolve_model)(model, \*[, config])                 | Resolve a semantic alias (`"fast"`, `"best"`, ...) to a concrete model id.                                       |
-| [`resolve_api_key`](#aix.resolve_api_key)(model_or_provider, \*[, ...])      | Resolve an API key for `model_or_provider` through the documented layers.                                        |
-| [`check_requirements`](#aix.check_requirements)(model_or_provider, \*[, ...])   | Presence-only preflight: ensure a key for `model_or_provider` is resolvable.                                     |
-| [`check_keys`](#aix.check_keys)([providers])                            | Report, per provider, whether a usable API key is discoverable.                                                  |
-| [`chat`](#aix.chat)(prompt, \*[, model, temperature, ...])        | Send a chat prompt and get a response.                                                                           |
-| [`ask`](#aix.ask)(question[, model])                             | Ask a single question and get an answer.                                                                         |
-| [`chat_with_history`](#aix.chat_with_history)([system_prompt, model])          | Create a stateful chat session that maintains conversation history.                                              |
-| [`embeddings`](#aix.embeddings)(segments, \*[, model, api_key])         | Generate embeddings for multiple text segments.                                                                  |
-| [`embed`](#aix.embed)(text, \*[, model])                           | Generate embedding for a single text.                                                                            |
-| [`cosine_similarity`](#aix.cosine_similarity)(vec1, vec2)                      | Compute cosine similarity between two vectors.                                                                   |
-| [`find_most_similar`](#aix.find_most_similar)(query, candidates, \*[, ...])    | Find most similar texts to a query.                                                                              |
-| [`prompt_func`](#aix.prompt_func)(template, \*[, output_schema, ...])    | Create a callable function from a prompt template.                                                               |
-| [`prompt_to_text`](#aix.prompt_to_text)(template, \*\*kwargs)               | Create a function that returns text output.                                                                      |
-| [`prompt_to_json`](#aix.prompt_to_json)(template, schema, \*\*kwargs)       | Create a function that returns structured JSON output.                                                           |
-| [`constrained_answer`](#aix.constrained_answer)(prompt, valid_answers, \*)      | Get an answer from the LLM constrained to a set of valid answers or types.                                       |
-| [`discover_available_models`](#aix.discover_available_models)([source, verbose])       | Discover available models from a source.                                                                         |
-| [`get_model_info`](#aix.get_model_info)(model_id)                           | Get information about a specific model.                                                                          |
-| [`find_models`](#aix.find_models)(query)                                 | Search for models matching a query.                                                                              |
-| [`batch_chat`](#aix.batch_chat)(prompts, \*[, model, batch_size, ...])  | Process multiple chat prompts in batches.                                                                        |
-| [`batch_embeddings`](#aix.batch_embeddings)(segments, \*[, model, ...])       | Generate embeddings for multiple texts in batches.                                                               |
-| [`batch_process`](#aix.batch_process)(items, process_func, \*[, ...])      | Generic batch processing with parallel execution and retries.                                                    |
-| [`generate_image`](#aix.generate_image)(prompt, \*[, model, size, ...])     | Generate a single image from a text prompt.                                                                      |
-| [`generate_images`](#aix.generate_images)(prompt, \*[, n, model, size, ...]) | Generate multiple images from a text prompt.                                                                     |
-| [`edit_image`](#aix.edit_image)(image_path, prompt, \*[, ...])          | Edit an existing image based on a prompt.                                                                        |
-| [`create_variation`](#aix.create_variation)(image_path, \*[, model, ...])     | Create variations of an existing image.                                                                          |
-| [`text_to_speech`](#aix.text_to_speech)(text, \*[, model, voice, ...])      | Convert text to speech audio.                                                                                    |
-| [`transcribe`](#aix.transcribe)(audio, \*[, engine, model, ...])        | Transcribe audio to text.                                                                                        |
-| [`transcribe_with_timestamps`](#aix.transcribe_with_timestamps)(audio, \*[, ...])       | Transcribe audio with detailed timestamps.                                                                       |
-| [`translate_audio`](#aix.translate_audio)(audio, \*[, model, prompt, ...])   | Translate audio from any language to English.                                                                    |
-| [`generate_video`](#aix.generate_video)(prompt, \*[, model, duration, ...]) | Generate a video from a text prompt.                                                                             |
-| [`animate_image_to_video`](#aix.animate_image_to_video)(image_path[, prompt, ...])  | Animate a static image into a video.                                                                             |
-| [`extend_video`](#aix.extend_video)(video_path[, prompt, ...])            | Extend an existing video with additional generated content.                                                      |
-| [`get_video_providers`](#aix.get_video_providers)()                              | Get list of available video generation providers.                                                                |
-| [`describe_image`](#aix.describe_image)(image, \*[, prompt, model, ...])    | Describe (or answer a question about) `image` and return the text.                                               |
-| [`to_image_content`](#aix.to_image_content)(image, \*[, detail])              | Build a multimodal `image_url` content block for `image`.                                                        |
-| [`compare_images`](#aix.compare_images)(candidate, reference, \*[, ...])    | Compare a `candidate` image to `reference` image(s) on a rubric.                                                 |
+| [`get_config`](#aix.get_config)()                                       | Return the current active [`AixConfig`](#aix.AixConfig).                                |
+|-----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| [`set_config`](#aix.set_config)(config)                                 | Replace the active config wholesale.                                                                                 |
+| [`configure`](#aix.configure)(\*\*overrides)                           | Apply runtime overrides to the active config and return it.                                                          |
+| [`using`](#aix.using)(\*\*overrides)                               | Context manager applying scoped overrides, restored on exit.                                                         |
+| [`load_config`](#aix.load_config)([path, environ])                       | Resolve an [`AixConfig`](#aix.AixConfig) from shipped defaults, TOML file, and env.     |
+| [`resolve_model`](#aix.resolve_model)(model, \*[, config])                 | Resolve a semantic alias (`"fast"`, `"best"`, ...) to a concrete model id.                                           |
+| [`resolve_api_key`](#aix.resolve_api_key)(model_or_provider, \*[, ...])      | Resolve an API key for `model_or_provider` through the documented layers.                                            |
+| [`check_requirements`](#aix.check_requirements)(model_or_provider, \*[, ...])   | Presence-only preflight: ensure a key for `model_or_provider` is resolvable.                                         |
+| [`check_keys`](#aix.check_keys)([providers])                            | Report, per provider, whether a usable API key is discoverable.                                                      |
+| [`chat`](#aix.chat)(prompt, \*[, model, temperature, ...])        | Send a chat prompt and get a response.                                                                               |
+| [`complete`](#aix.complete)(prompt, \*[, model, temperature, ...])    | Send a chat prompt and get the whole response back as a [`Completion`](#aix.Completion). |
+| [`ask`](#aix.ask)(question[, model])                             | Ask a single question and get an answer.                                                                             |
+| [`chat_with_history`](#aix.chat_with_history)([system_prompt, model])          | Create a stateful chat session that maintains conversation history.                                                  |
+| [`embeddings`](#aix.embeddings)(segments, \*[, model, api_key])         | Generate embeddings for multiple text segments.                                                                      |
+| [`embed`](#aix.embed)(text, \*[, model])                           | Generate embedding for a single text.                                                                                |
+| [`cosine_similarity`](#aix.cosine_similarity)(vec1, vec2)                      | Compute cosine similarity between two vectors.                                                                       |
+| [`find_most_similar`](#aix.find_most_similar)(query, candidates, \*[, ...])    | Find most similar texts to a query.                                                                                  |
+| [`prompt_func`](#aix.prompt_func)(template, \*[, output_schema, ...])    | Create a callable function from a prompt template.                                                                   |
+| [`prompt_to_text`](#aix.prompt_to_text)(template, \*\*kwargs)               | Create a function that returns text output.                                                                          |
+| [`prompt_to_json`](#aix.prompt_to_json)(template, schema, \*\*kwargs)       | Create a function that returns structured JSON output.                                                               |
+| [`constrained_answer`](#aix.constrained_answer)(prompt, valid_answers, \*)      | Get an answer from the LLM constrained to a set of valid answers or types.                                           |
+| [`discover_available_models`](#aix.discover_available_models)([source, verbose])       | Discover available models from a source.                                                                             |
+| [`get_model_info`](#aix.get_model_info)(model_id)                           | Get information about a specific model.                                                                              |
+| [`find_models`](#aix.find_models)(query)                                 | Search for models matching a query.                                                                                  |
+| [`batch_chat`](#aix.batch_chat)(prompts, \*[, model, batch_size, ...])  | Process multiple chat prompts in batches.                                                                            |
+| [`batch_embeddings`](#aix.batch_embeddings)(segments, \*[, model, ...])       | Generate embeddings for multiple texts in batches.                                                                   |
+| [`batch_process`](#aix.batch_process)(items, process_func, \*[, ...])      | Generic batch processing with parallel execution and retries.                                                        |
+| [`generate_image`](#aix.generate_image)(prompt, \*[, model, size, ...])     | Generate a single image from a text prompt.                                                                          |
+| [`generate_images`](#aix.generate_images)(prompt, \*[, n, model, size, ...]) | Generate multiple images from a text prompt.                                                                         |
+| [`edit_image`](#aix.edit_image)(image_path, prompt, \*[, ...])          | Edit an existing image based on a prompt.                                                                            |
+| [`create_variation`](#aix.create_variation)(image_path, \*[, model, ...])     | Create variations of an existing image.                                                                              |
+| [`text_to_speech`](#aix.text_to_speech)(text, \*[, model, voice, ...])      | Convert text to speech audio.                                                                                        |
+| [`transcribe`](#aix.transcribe)(audio, \*[, engine, model, ...])        | Transcribe audio to text.                                                                                            |
+| [`transcribe_with_timestamps`](#aix.transcribe_with_timestamps)(audio, \*[, ...])       | Transcribe audio with detailed timestamps.                                                                           |
+| [`translate_audio`](#aix.translate_audio)(audio, \*[, model, prompt, ...])   | Translate audio from any language to English.                                                                        |
+| [`generate_video`](#aix.generate_video)(prompt, \*[, model, duration, ...]) | Generate a video from a text prompt.                                                                                 |
+| [`animate_image_to_video`](#aix.animate_image_to_video)(image_path[, prompt, ...])  | Animate a static image into a video.                                                                                 |
+| [`extend_video`](#aix.extend_video)(video_path[, prompt, ...])            | Extend an existing video with additional generated content.                                                          |
+| [`get_video_providers`](#aix.get_video_providers)()                              | Get list of available video generation providers.                                                                    |
+| [`describe_image`](#aix.describe_image)(image, \*[, prompt, model, ...])    | Describe (or answer a question about) `image` and return the text.                                                   |
+| [`to_image_content`](#aix.to_image_content)(image, \*[, detail])              | Build a multimodal `image_url` content block for `image`.                                                            |
+| [`compare_images`](#aix.compare_images)(candidate, reference, \*[, ...])    | Compare a `candidate` image to `reference` image(s) on a rubric.                                                     |
 
 ### Classes
 
 | [`AixConfig`](#aix.AixConfig)([chat, embeddings, image, audio, ...])   | Top-level AIX configuration (single source of truth for defaults).   |
 |-----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
+| [`Completion`](#aix.Completion)(texts[, finish_reasons, usage, ...])    | Everything a chat completion returned, not just the first text.      |
+| [`Usage`](#aix.Usage)([prompt_tokens, completion_tokens, ...])     | Token counts billed for one call (or summed over several).           |
 | [`ChatSession`](#aix.ChatSession)([system_prompt, model])                | Stateful chat session that maintains conversation history.           |
 | [`EmbeddingCache`](#aix.EmbeddingCache)([model])                            | Cache for embeddings to avoid redundant API calls.                   |
 | [`PromptFuncs`](#aix.PromptFuncs)([model])                               | Collection of prompt-based functions.                                |
@@ -256,6 +260,62 @@ Send a message and get a response.
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   Assistant’s response
+
+### *class* aix.Completion(texts, finish_reasons=(), usage=None, model=None, raw=None)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+Everything a chat completion returned, not just the first text.
+
+#### texts
+
+The text of every choice, in order (`n` of them when `n` was
+requested). A choice with no text content (e.g. a pure tool call)
+is `""`; list-of-parts content is reduced to its joined text parts.
+Tool calls themselves are not surfaced here – read them from `raw`.
+
+#### finish_reasons
+
+Why each choice stopped (`"stop"`, `"length"`,
+`"content_filter"`, `"tool_calls"`…), aligned with `texts`;
+`None` where the provider did not say. `"length"` means the
+text was truncated by `max_tokens`.
+
+#### usage
+
+Tokens billed for the whole call (all choices together), or
+`None` if the provider did not report usage (so filter before
+summing: `sum((c.usage for c in cs if c.usage), Usage())`).
+
+#### model
+
+The model id the provider reports having served the call, which
+can differ from the one requested (aliases, dated snapshots).
+
+#### raw
+
+The untouched LiteLLM response, for anything not surfaced here.
+
+```pycon
+>>> c = Completion(texts=("a", "b"), finish_reasons=("stop", "length"))
+>>> c.text, c.finish_reason
+('a', 'stop')
+```
+
+#### *property* finish_reason *: [str](https://docs.python.org/3/builtins/stdtypes.html#str) | [None](https://docs.python.org/3/builtins/constants.html#None)*
+
+The first choice’s finish reason.
+
+#### *classmethod* from_response(response)
+
+Build a [`Completion`](#aix.Completion) from a (non-streaming) LiteLLM response.
+
+* **Return type:**
+  [`Completion`](#aix.Completion)
+
+#### *property* text *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+
+The first choice’s text (`""` if there are no choices).
 
 ### *exception* aix.ConstraintViolation(message, , answer=None, valid_answers=None)
 
@@ -859,6 +919,46 @@ Contains the transcribed text and optional metadata like segments and timestamps
 'Hello world'
 ```
 
+### *class* aix.Usage(prompt_tokens=0, completion_tokens=0, total_tokens=0, cached_prompt_tokens=0, cache_creation_tokens=0, reasoning_tokens=0)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+Token counts billed for one call (or summed over several).
+
+`prompt_tokens` / `completion_tokens` / `total_tokens` are the headline
+counts. The breakdowns – prompt tokens served from the provider’s cache
+(`cached_prompt_tokens`), written to it (`cache_creation_tokens`), and
+hidden reasoning tokens inside `completion_tokens` (`reasoning_tokens`)
+– are priced differently by most providers, so cost reporting needs them.
+Counts a provider did not report are `0`.
+
+Usages add, and `sum` works when you give it a `Usage()` start (so an
+empty batch is a zero `Usage`, not the integer `0`):
+
+```pycon
+>>> Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15)
+Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15, cached_prompt_tokens=0, cache_creation_tokens=0, reasoning_tokens=0)
+>>> sum([Usage(1, 2, 3), Usage(10, 20, 30)], Usage()).total_tokens
+33
+>>> sum([], Usage()) == Usage()
+True
+```
+
+#### *classmethod* from_response(response)
+
+Read the `usage` block of a LiteLLM response; `None` if absent.
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Usage`](#aix.Usage)]
+
+```pycon
+>>> u = Usage.from_response({"usage": {"prompt_tokens": 3, "completion_tokens": 4}})
+>>> u.prompt_tokens, u.completion_tokens, u.total_tokens
+(3, 4, 7)
+>>> Usage.from_response({}) is None
+True
+```
+
 ### aix.animate_image_to_video(image_path, prompt=None, , model=None, duration=3.0, motion_strength=0.5, \*\*kwargs)
 
 Animate a static image into a video.
@@ -1289,6 +1389,48 @@ Filmmaking rubric, a locked reference *set*:
 ...     rubric=DFLT_FILM_RUBRIC,
 ... )["face_identity"].match
 True
+```
+
+### aix.complete(prompt, , model=None, temperature=None, max_tokens=None, n=1, seed=None, response_format=None, api_key=None, \*\*kwargs)
+
+Send a chat prompt and get the whole response back as a [`Completion`](#aix.Completion).
+
+The non-lossy sibling of [`chat()`](#aix.chat): same inputs and defaults, but instead
+of the first choice’s text it returns every choice (`texts`), why each one
+stopped (`finish_reasons`), the tokens billed (`usage`), the model that
+served the call, and the raw response.
+
+* **Parameters:**
+  * **prompt** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string (becomes a user message) or a list of message dicts.
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model identifier or alias. If None, uses the configured default.
+  * **temperature** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sampling temperature. If None, uses the configured default.
+  * **max_tokens** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Maximum tokens per choice. If None, uses the configured default.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many choices to ask the provider for in this one call. Only
+    sent when `n != 1`; providers without native `n` support reject
+    it (see LiteLLM’s `get_supported_openai_params`).
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Best-effort reproducibility seed. Only sent when given; support
+    and the strength of the guarantee are provider-dependent.
+  * **response_format** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Passed through to LiteLLM (e.g. `{"type": "json_object"}`).
+  * **api_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Explicit API key; otherwise resolved as for [`chat()`](#aix.chat).
+  * **\*\*kwargs** – Additional provider-specific parameters passed to LiteLLM.
+* **Return type:**
+  [`Completion`](#aix.Completion)
+* **Returns:**
+  A [`Completion`](#aix.Completion).
+* **Raises:**
+  * [**ImportError**](https://docs.python.org/3/builtins/exceptions.html#ImportError) – If LiteLLM is not installed.
+  * [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `n` is not a positive integer, or the prompt is invalid.
+
+### Examples
+
+```pycon
+>>> c = complete("Name a color", n=3)
+>>> c.texts, c.finish_reasons
+(('Blue', 'Green', 'Red'), ('stop', 'stop', 'stop'))
+>>> c.usage
+Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17)
+>>> complete("Write an essay", max_tokens=5).finish_reason
+'length'
 ```
 
 ### aix.configure(\*\*overrides)
