@@ -40,7 +40,7 @@ independently and the batch is marked `"mixed"`.
 | [`SamplingError`](#aix.sampling.SamplingError)(message, \*[, samples])   | A request inside [`sample()`](#aix.sampling.sample) failed (with `on_error="raise"`).   |
 |------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|
 
-### *class* aix.sampling.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None)
+### *class* aix.sampling.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None, system_fingerprint=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -79,6 +79,13 @@ The seed sent with its request, if any.
 
 The exception this sample’s request raised (with
 `on_error="record"`) or that `parse` raised on its text.
+
+#### system_fingerprint
+
+The serving backend’s fingerprint for its request,
+when reported. Seeded samples are only comparable across equal
+fingerprints (see [`aix.supports()`](aix.md#aix.supports) for whether `seed` is
+honoured at all).
 
 #### *property* ok *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
 

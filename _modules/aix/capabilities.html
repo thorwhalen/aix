@@ -273,6 +273,20 @@
 <span class="sd">raising) question in front of it, so callers can *choose* a degraded path</span>
 <span class="sd">rather than discover one silently.</span>
 
+<span class="sd">Besides request parameter names, :func:`supports` answers a few *capabilities*</span>
+<span class="sd">that are not a single parameter (see :data:`CAPABILITIES`), e.g.</span>
+<span class="sd">``"response_schema"``: whether the model takes a JSON-Schema-constrained</span>
+<span class="sd">``response_format`` (what ``aix.complete(..., response_schema=...)`` uses for</span>
+<span class="sd">its ``"strict"`` / ``"schema"`` modes).</span>
+
+<span class="sd">Why ask about ``seed`` in particular: a run-to-run difference with a seed the</span>
+<span class="sd">provider *ignored* means nothing about model stability. ``supports(model,</span>
+<span class="sd">"seed") is False`` rules a seed out; ``True`` only says LiteLLM forwards it --</span>
+<span class="sd">seeded sampling is best-effort on every provider, and a router may drop it</span>
+<span class="sd">upstream (compare</span>
+<span class="sd">:attr:`aix.Completion.system_fingerprint` across runs: a change means the</span>
+<span class="sd">serving backend changed, which voids the comparison).</span>
+
 <span class="sd">&gt;&gt;&gt; supports("gpt-4o-mini", "n")  # doctest: +SKIP</span>
 <span class="sd">True</span>
 <span class="sd">&gt;&gt;&gt; supports("anthropic/claude-sonnet-4-20250514", "n")  # doctest: +SKIP</span>
@@ -284,7 +298,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix._litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">UNRESOLVED</span> <span class="k">as</span> <span class="n">_UNRESOLVED</span><span class="p">,</span> <span class="n">litellm_attr</span> <span class="k">as</span> <span class="n">_litellm_attr</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_config</span> <span class="k">as</span> <span class="n">_get_config</span><span class="p">,</span> <span class="n">resolve_model</span> <span class="k">as</span> <span class="n">_resolve_model</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"supports"</span><span class="p">,</span> <span class="s2">"supported_params"</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"supports"</span><span class="p">,</span> <span class="s2">"supported_params"</span><span class="p">,</span> <span class="s2">"CAPABILITIES"</span><span class="p">]</span>
 
 <span class="c1"># Deferred like every other litellm entry point (see aix/_litellm.py).</span>
 <span class="n">_litellm_get_supported_openai_params</span> <span class="o">=</span> <span class="n">_UNRESOLVED</span>
@@ -300,7 +314,7 @@
 
 
 <div class="viewcode-block" id="supported_params">
-<a class="viewcode-back" href="../../_autosummary/aix.capabilities.html#aix.capabilities.supported_params">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/aix.capabilities.html#aix.supported_params">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">supported_params</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">frozenset</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">"""The OpenAI-style parameters LiteLLM says ``model`` accepts.</span>
 
@@ -322,18 +336,49 @@
 
 
 
-<div class="viewcode-block" id="supports">
-<a class="viewcode-back" href="../../_autosummary/aix.capabilities.html#aix.capabilities.supports">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">supports</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Whether ``model`` is known to accept the request parameter ``param``.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_supports_response_schema</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">aix.structured</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_supports_response_schema</span>
 
-<span class="sd">    Conservative: ``False`` when support is unknown, so a caller that branches</span>
-<span class="sd">    on it takes the path that works everywhere.</span>
+    <span class="k">return</span> <span class="n">model_supports_response_schema</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+
+<span class="c1">#: Capabilities :func:`supports` answers that are not one request parameter,</span>
+<span class="c1">#: mapped to the ``model -&gt; bool`` check behind each.</span>
+<span class="n">CAPABILITIES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"response_schema"</span><span class="p">:</span> <span class="n">_supports_response_schema</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="supports">
+<a class="viewcode-back" href="../../_autosummary/aix.capabilities.html#aix.supports">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">supports</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether ``model`` is known to accept ``param`` -- i.e. whether LiteLLM</span>
+<span class="sd">    *forwards* it to the provider for this model.</span>
+
+<span class="sd">    Conservative: ``False`` when support is unknown (or for a non-string</span>
+<span class="sd">    ``param``), so a caller that branches on it takes the path that works</span>
+<span class="sd">    everywhere. ``True`` is not a guarantee that the parameter has an effect:</span>
+<span class="sd">    a router (OpenRouter...) can forward ``seed`` / ``n`` to an upstream model</span>
+<span class="sd">    that drops them, and a provider can deprecate or ignore a parameter</span>
+<span class="sd">    (seeding is best-effort everywhere; reasoning models may ignore it).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        model: Model id or alias; ``None`` means the configured chat default.</span>
-<span class="sd">        param: An OpenAI-style request parameter name (``"n"``, ``"seed"``...).</span>
+<span class="sd">        param: An OpenAI-style request parameter name (``"n"``, ``"seed"``,</span>
+<span class="sd">            ``"response_format"``...) or a capability in :data:`CAPABILITIES`</span>
+<span class="sd">            (``"response_schema"``).</span>
+
+<span class="sd">    &gt;&gt;&gt; supports("gpt-4o-mini", "seed")  # doctest: +SKIP</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; supports("gpt-4o-mini", "response_schema")  # doctest: +SKIP</span>
+<span class="sd">    True</span>
 <span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">CAPABILITIES</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">_resolve_model</span><span class="p">(</span><span class="n">model</span> <span class="ow">or</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">CAPABILITIES</span><span class="p">[</span><span class="n">param</span><span class="p">](</span><span class="n">model</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># total: a broken check means "not known to work"</span>
+            <span class="k">return</span> <span class="kc">False</span>
     <span class="n">params</span> <span class="o">=</span> <span class="n">supported_params</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span></div>
 
@@ -365,7 +410,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=72630217"></script>
+</div><script src="../../_static/documentation_options.js?v=52d298fc"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

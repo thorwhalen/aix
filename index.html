@@ -580,6 +580,23 @@ store lives in your user app-config folder — never in the repo.</p>
 </div>
 <p>A failed request does not discard the work already paid for. By default <code class="docutils literal notranslate"><span class="pre">sample()</span></code> raises <code class="docutils literal notranslate"><span class="pre">SamplingError</span></code> once the launched requests finish, and the partial batch is on its <code class="docutils literal notranslate"><span class="pre">.samples</span></code>. With <code class="docutils literal notranslate"><span class="pre">on_error=&quot;record&quot;</span></code>, the failure is stored on that sample’s <code class="docutils literal notranslate"><span class="pre">.error</span></code> instead. A <code class="docutils literal notranslate"><span class="pre">seed</span></code> is sent as-is with a provider-side <code class="docutils literal notranslate"><span class="pre">n</span></code> request; each independent request gets a seed derived from <code class="docutils literal notranslate"><span class="pre">(seed,</span> <span class="pre">index)</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">constrained_answer(...,</span> <span class="pre">n=k)</span></code> now runs its <code class="docutils literal notranslate"><span class="pre">k</span></code> calls concurrently too (<code class="docutils literal notranslate"><span class="pre">concurrency=</span></code>, default from config <code class="docutils literal notranslate"><span class="pre">chat.sample_concurrency</span></code>).</p>
+<section id="seeds-determinism-and-asking-before-calling">
+<h4>Seeds, determinism, and asking before calling<a class="headerlink" href="#seeds-determinism-and-asking-before-calling" title="Link to this heading">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">complete()</span></code> and <code class="docutils literal notranslate"><span class="pre">sample()</span></code> take a keyword-only <code class="docutils literal notranslate"><span class="pre">seed</span></code>. Its support is provider-dependent, and even where it is supported, determinism is best-effort. So before you read run-to-run variance as a property of the model, check two things:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">supports</span><span class="p">,</span> <span class="n">complete</span>
+
+<span class="n">supports</span><span class="p">(</span><span class="s2">"gpt-4o-mini"</span><span class="p">,</span> <span class="s2">"seed"</span><span class="p">)</span>              <span class="c1"># True  -- LiteLLM forwards seed (best-effort)</span>
+<span class="n">supports</span><span class="p">(</span><span class="s2">"anthropic/claude-sonnet-4"</span><span class="p">,</span> <span class="s2">"seed"</span><span class="p">)</span>  <span class="c1"># False -- seed would be dropped or rejected</span>
+<span class="n">supports</span><span class="p">(</span><span class="s2">"gpt-4o-mini"</span><span class="p">,</span> <span class="s2">"n"</span><span class="p">)</span>                 <span class="c1"># provider-side n (what sample() prefers)</span>
+<span class="n">supports</span><span class="p">(</span><span class="s2">"gpt-4o-mini"</span><span class="p">,</span> <span class="s2">"response_schema"</span><span class="p">)</span>   <span class="c1"># strict/schema structured output (response_schema=)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">complete</span><span class="p">(</span><span class="s2">"..."</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">complete</span><span class="p">(</span><span class="s2">"..."</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">system_fingerprint</span> <span class="o">==</span> <span class="n">b</span><span class="o">.</span><span class="n">system_fingerprint</span>  <span class="c1"># if this differs, the backend changed: the comparison is void</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">supports(model,</span> <span class="pre">param)</span></code> wraps LiteLLM’s <code class="docutils literal notranslate"><span class="pre">get_supported_openai_params</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;response_schema&quot;</span></code> is answered by <code class="docutils literal notranslate"><span class="pre">supports_response_schema</span></code>. It is conservative: <code class="docutils literal notranslate"><span class="pre">False</span></code> means “not known to work”, so if you branch on it you take the path that works everywhere. <code class="docutils literal notranslate"><span class="pre">True</span></code> only means LiteLLM forwards the parameter. A router such as OpenRouter can still drop <code class="docutils literal notranslate"><span class="pre">seed</span></code> or <code class="docutils literal notranslate"><span class="pre">n</span></code> upstream, and seeding is best-effort on every provider (reasoning models may ignore it). That is why the fingerprint check matters. Each <code class="docutils literal notranslate"><span class="pre">Sample</span></code> from <code class="docutils literal notranslate"><span class="pre">sample()</span></code> also carries its <code class="docutils literal notranslate"><span class="pre">system_fingerprint</span></code>.</p>
+</section>
 </section>
 <section id="embeddings">
 <h3>2. Embeddings<a class="headerlink" href="#embeddings" title="Link to this heading">¶</a></h3>
@@ -662,22 +679,27 @@ store lives in your user app-config folder — never in the repo.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">complete</span><span class="p">,</span> <span class="n">prompt_func</span>
 
+
 <span class="k">class</span><span class="w"> </span><span class="nc">Span</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">start</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">end</span><span class="p">:</span> <span class="nb">int</span>
+
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Judgement</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">value</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"yes"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"unsure"</span><span class="p">]</span>
     <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">evidence</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Span</span><span class="p">]</span>
 
+
 <span class="n">judge</span> <span class="o">=</span> <span class="n">prompt_func</span><span class="p">(</span><span class="s2">"Does this text claim </span><span class="si">{claim}</span><span class="s2">? </span><span class="si">{text}</span><span class="s2">"</span><span class="p">,</span> <span class="n">response_schema</span><span class="o">=</span><span class="n">Judgement</span><span class="p">)</span>
-<span class="n">judge</span><span class="p">(</span><span class="n">claim</span><span class="o">=</span><span class="s2">"..."</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"..."</span><span class="p">)</span>       <span class="c1"># -&gt; Judgement(value='yes', confidence=0.8, evidence=[...])</span>
+<span class="n">judge</span><span class="p">(</span>
+    <span class="n">claim</span><span class="o">=</span><span class="s2">"..."</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"..."</span>
+<span class="p">)</span>  <span class="c1"># -&gt; Judgement(value='yes', confidence=0.8, evidence=[...])</span>
 
 <span class="n">c</span> <span class="o">=</span> <span class="n">complete</span><span class="p">(</span><span class="s2">"..."</span><span class="p">,</span> <span class="n">response_schema</span><span class="o">=</span><span class="n">Judgement</span><span class="p">)</span>
-<span class="n">c</span><span class="o">.</span><span class="n">value</span>          <span class="c1"># the validated Judgement (raises SchemaValidationError if still invalid)</span>
-<span class="n">c</span><span class="o">.</span><span class="n">schema_mode</span>    <span class="c1"># 'strict' | 'schema' | 'json_mode' -- how the provider enforced it</span>
-<span class="n">c</span><span class="o">.</span><span class="n">repairs</span>        <span class="c1"># extra requests made to fix invalid replies (their tokens are in c.usage)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">value</span>  <span class="c1"># the validated Judgement (raises SchemaValidationError if still invalid)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">schema_mode</span>  <span class="c1"># 'strict' | 'schema' | 'json_mode' -- how the provider enforced it</span>
+<span class="n">c</span><span class="o">.</span><span class="n">repairs</span>  <span class="c1"># extra requests made to fix invalid replies (their tokens are in c.usage)</span>
 </pre></div>
 </div>
 <p>The provider enforces the schema as strongly as the model allows:</p>
@@ -1086,7 +1108,7 @@ resolving — pass those provider-prefixed (<code class="docutils literal notran
 </section>
 </section>
 
-<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-12 16:38 UTC from <a href="https://github.com/thorwhalen/aix/commit/5073ee397a7f3ae4af7b12902fe34900ba57ad8b">5073ee3</a> (master) · aix 0.0.45 · <a href="about-this-build.html">about this build</a></p>
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-12 16:49 UTC from <a href="https://github.com/thorwhalen/aix/commit/ea7d0d1aec8750ae722b088bedba60b878ab9850">ea7d0d1</a> (master) · aix 0.0.46 · <a href="about-this-build.html">about this build</a></p>
         </article>
       </div>
       <footer>
@@ -1141,7 +1163,10 @@ resolving — pass those provider-prefixed (<code class="docutils literal notran
 </ul>
 </li>
 <li><a class="reference internal" href="#core-features">Core Features</a><ul>
-<li><a class="reference internal" href="#chat-interface">1. Chat Interface</a></li>
+<li><a class="reference internal" href="#chat-interface">1. Chat Interface</a><ul>
+<li><a class="reference internal" href="#seeds-determinism-and-asking-before-calling">Seeds, determinism, and asking before calling</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#embeddings">2. Embeddings</a></li>
 <li><a class="reference internal" href="#prompt-based-functions">3. Prompt-Based Functions</a><ul>
 <li><a class="reference internal" href="#enforced-validated-structured-output">Enforced, validated structured output</a></li>
@@ -1200,7 +1225,7 @@ resolving — pass those provider-prefixed (<code class="docutils literal notran
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=72630217"></script>
+</div><script src="_static/documentation_options.js?v=52d298fc"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>

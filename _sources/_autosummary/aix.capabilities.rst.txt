@@ -4,6 +4,12 @@ aix.capabilities
 .. automodule:: aix.capabilities
 
    
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CAPABILITIES
+   
    .. rubric:: Functions
 
    .. autosummary::

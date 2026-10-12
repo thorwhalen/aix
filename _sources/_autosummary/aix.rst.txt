@@ -21,6 +21,8 @@
       complete
       ask
       sample
+      supports
+      supported_params
       chat_with_history
       embeddings
       embed

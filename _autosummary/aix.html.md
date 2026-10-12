@@ -47,6 +47,7 @@ Main Features:
 > - chat(): Simple chat interface across providers
 > - complete(): The whole response (all n choices, usage, finish reasons)
 > - sample(): n answers to one prompt, concurrently or via provider-side n
+> - supports(): ask whether a model honours a parameter (seed, n, response_schema…)
 > - embeddings(): Vector embeddings for text
 > - prompt_func(): Create functions from prompt templates
 > - models: Model discovery and selection
@@ -80,6 +81,8 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 | [`complete`](#aix.complete)(prompt, \*[, model, temperature, ...])    | Send a chat prompt and get the whole response back as a [`Completion`](#aix.Completion). |
 | [`ask`](#aix.ask)(question[, model])                             | Ask a single question and get an answer.                                                                             |
 | [`sample`](#aix.sample)(prompt, \*, n[, temperature, seed, ...])    | Draw `n` answers to `prompt`, each with its finish reason and usage.                                                 |
+| [`supports`](#aix.supports)(model, param)                             | Whether `model` is known to accept `param` -- i.e. whether LiteLLM *forwards* it to the provider for this model.     |
+| [`supported_params`](#aix.supported_params)([model])                          | The OpenAI-style parameters LiteLLM says `model` accepts.                                                            |
 | [`chat_with_history`](#aix.chat_with_history)([system_prompt, model])          | Create a stateful chat session that maintains conversation history.                                                  |
 | [`embeddings`](#aix.embeddings)(segments, \*[, model, api_key])         | Generate embeddings for multiple text segments.                                                                      |
 | [`embed`](#aix.embed)(text, \*[, model])                           | Generate embedding for a single text.                                                                                |
@@ -268,7 +271,7 @@ Send a message and get a response.
 * **Returns:**
   Assistant’s response
 
-### *class* aix.Completion(texts, finish_reasons=(), usage=None, model=None, raw=None, values=(), errors=(), schema_mode=None, repairs=0)
+### *class* aix.Completion(texts, finish_reasons=(), usage=None, model=None, raw=None, values=(), errors=(), schema_mode=None, repairs=0, system_fingerprint=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -302,6 +305,13 @@ can differ from the one requested (aliases, dated snapshots).
 #### raw
 
 The untouched LiteLLM response, for anything not surfaced here.
+
+#### system_fingerprint
+
+The provider’s identifier for the serving backend
+configuration, when it reports one (OpenAI does). Seeded outputs
+are only comparable across calls with the same fingerprint. A
+response replayed from a cache carries its *original* fingerprint.
 
 #### values
 
@@ -1013,7 +1023,7 @@ The model’s self-reported confidence in `[0.0, 1.0]`.
 
 A short free-text explanation of the verdict.
 
-### *class* aix.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None)
+### *class* aix.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None, system_fingerprint=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1052,6 +1062,13 @@ The seed sent with its request, if any.
 
 The exception this sample’s request raised (with
 `on_error="record"`) or that `parse` raised on its text.
+
+#### system_fingerprint
+
+The serving backend’s fingerprint for its request,
+when reported. Seeded samples are only comparable across equal
+fingerprints (see [`aix.supports()`](#aix.supports) for whether `seed` is
+honoured at all).
 
 #### *property* ok *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
 
@@ -1621,8 +1638,12 @@ served the call, and the raw response.
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many choices to ask the provider for in this one call. Only
     sent when `n != 1`; providers without native `n` support reject
     it (see LiteLLM’s `get_supported_openai_params`).
-  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Best-effort reproducibility seed. Only sent when given; support
-    and the strength of the guarantee are provider-dependent.
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Best-effort reproducibility seed. Only sent when given. Support is
+    provider-dependent (`aix.supports(model, "seed")`); where it is
+    unsupported LiteLLM either drops it or rejects the call, and where
+    it is supported determinism is still best-effort – compare
+    `system_fingerprint` across calls before reading a difference
+    as model instability.
   * **response_format** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Passed through to LiteLLM (e.g. `{"type": "json_object"}`).
     Mutually exclusive with `response_schema`.
   * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or a Pydantic model class. The
@@ -2548,6 +2569,45 @@ Replace the active config wholesale. Returns the new active config.
 
 * **Return type:**
   [`AixConfig`](aix.config.html.md#aix.config.AixConfig)
+
+### aix.supported_params(model=None)
+
+The OpenAI-style parameters LiteLLM says `model` accepts.
+
+`None` when that is unknown (LiteLLM cannot place the model, or is not
+installed) – which is not the same as “supports nothing”.
+
+* **Parameters:**
+  **model** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Model id or alias; `None` means the configured chat default.
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`frozenset`](https://docs.python.org/3/builtins/stdtypes.html#frozenset)]
+
+### aix.supports(model, param)
+
+Whether `model` is known to accept `param` – i.e. whether LiteLLM
+*forwards* it to the provider for this model.
+
+Conservative: `False` when support is unknown (or for a non-string
+`param`), so a caller that branches on it takes the path that works
+everywhere. `True` is not a guarantee that the parameter has an effect:
+a router (OpenRouter…) can forward `seed` / `n` to an upstream model
+that drops them, and a provider can deprecate or ignore a parameter
+(seeding is best-effort everywhere; reasoning models may ignore it).
+
+* **Parameters:**
+  * **model** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Model id or alias; `None` means the configured chat default.
+  * **param** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – An OpenAI-style request parameter name (`"n"`, `"seed"`,
+    `"response_format"`…) or a capability in `CAPABILITIES`
+    (`"response_schema"`).
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+```pycon
+>>> supports("gpt-4o-mini", "seed")
+True
+>>> supports("gpt-4o-mini", "response_schema")
+True
+```
 
 ### aix.text_to_speech(text, , model=None, voice=None, speed=None, response_format='mp3', api_key=None, \*\*kwargs)
 

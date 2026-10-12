@@ -284,6 +284,25 @@ A failed request does not discard the work already paid for. By default `sample(
 
 `constrained_answer(..., n=k)` now runs its `k` calls concurrently too (`concurrency=`, default from config `chat.sample_concurrency`).
 
+#### Seeds, determinism, and asking before calling
+
+`complete()` and `sample()` take a keyword-only `seed`. Its support is provider-dependent, and even where it is supported, determinism is best-effort. So before you read run-to-run variance as a property of the model, check two things:
+
+```python
+from aix import supports, complete
+
+supports("gpt-4o-mini", "seed")              # True  -- LiteLLM forwards seed (best-effort)
+supports("anthropic/claude-sonnet-4", "seed")  # False -- seed would be dropped or rejected
+supports("gpt-4o-mini", "n")                 # provider-side n (what sample() prefers)
+supports("gpt-4o-mini", "response_schema")   # strict/schema structured output (response_schema=)
+
+a = complete("...", seed=7, temperature=0)
+b = complete("...", seed=7, temperature=0)
+a.system_fingerprint == b.system_fingerprint  # if this differs, the backend changed: the comparison is void
+```
+
+`supports(model, param)` wraps LiteLLM’s `get_supported_openai_params`, and `"response_schema"` is answered by `supports_response_schema`. It is conservative: `False` means “not known to work”, so if you branch on it you take the path that works everywhere. `True` only means LiteLLM forwards the parameter. A router such as OpenRouter can still drop `seed` or `n` upstream, and seeding is best-effort on every provider (reasoning models may ignore it). That is why the fingerprint check matters. Each `Sample` from `sample()` also carries its `system_fingerprint`.
+
 ### 2. Embeddings
 
 Generate vector embeddings for semantic search and similarity:
@@ -370,22 +389,27 @@ from typing import Literal
 from pydantic import BaseModel
 from aix import complete, prompt_func
 
+
 class Span(BaseModel):
     start: int
     end: int
+
 
 class Judgement(BaseModel):
     value: Literal["yes", "no", "unsure"]
     confidence: float
     evidence: list[Span]
 
+
 judge = prompt_func("Does this text claim {claim}? {text}", response_schema=Judgement)
-judge(claim="...", text="...")       # -> Judgement(value='yes', confidence=0.8, evidence=[...])
+judge(
+    claim="...", text="..."
+)  # -> Judgement(value='yes', confidence=0.8, evidence=[...])
 
 c = complete("...", response_schema=Judgement)
-c.value          # the validated Judgement (raises SchemaValidationError if still invalid)
-c.schema_mode    # 'strict' | 'schema' | 'json_mode' -- how the provider enforced it
-c.repairs        # extra requests made to fix invalid replies (their tokens are in c.usage)
+c.value  # the validated Judgement (raises SchemaValidationError if still invalid)
+c.schema_mode  # 'strict' | 'schema' | 'json_mode' -- how the provider enforced it
+c.repairs  # extra requests made to fix invalid replies (their tokens are in c.usage)
 ```
 
 The provider enforces the schema as strongly as the model allows:

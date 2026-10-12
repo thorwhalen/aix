@@ -1,4 +1,4 @@
-> built 2026-10-12 16:38 UTC from 5073ee3 (master) · aix 0.0.45. Details: build_info.json
+> built 2026-10-12 16:49 UTC from ea7d0d1 (master) · aix 0.0.46. Details: build_info.json
 
 # index.html.md
 
@@ -288,6 +288,25 @@ A failed request does not discard the work already paid for. By default `sample(
 
 `constrained_answer(..., n=k)` now runs its `k` calls concurrently too (`concurrency=`, default from config `chat.sample_concurrency`).
 
+#### Seeds, determinism, and asking before calling
+
+`complete()` and `sample()` take a keyword-only `seed`. Its support is provider-dependent, and even where it is supported, determinism is best-effort. So before you read run-to-run variance as a property of the model, check two things:
+
+```python
+from aix import supports, complete
+
+supports("gpt-4o-mini", "seed")              # True  -- LiteLLM forwards seed (best-effort)
+supports("anthropic/claude-sonnet-4", "seed")  # False -- seed would be dropped or rejected
+supports("gpt-4o-mini", "n")                 # provider-side n (what sample() prefers)
+supports("gpt-4o-mini", "response_schema")   # strict/schema structured output (response_schema=)
+
+a = complete("...", seed=7, temperature=0)
+b = complete("...", seed=7, temperature=0)
+a.system_fingerprint == b.system_fingerprint  # if this differs, the backend changed: the comparison is void
+```
+
+`supports(model, param)` wraps LiteLLM’s `get_supported_openai_params`, and `"response_schema"` is answered by `supports_response_schema`. It is conservative: `False` means “not known to work”, so if you branch on it you take the path that works everywhere. `True` only means LiteLLM forwards the parameter. A router such as OpenRouter can still drop `seed` or `n` upstream, and seeding is best-effort on every provider (reasoning models may ignore it). That is why the fingerprint check matters. Each `Sample` from `sample()` also carries its `system_fingerprint`.
+
 ### 2. Embeddings
 
 Generate vector embeddings for semantic search and similarity:
@@ -374,22 +393,27 @@ from typing import Literal
 from pydantic import BaseModel
 from aix import complete, prompt_func
 
+
 class Span(BaseModel):
     start: int
     end: int
+
 
 class Judgement(BaseModel):
     value: Literal["yes", "no", "unsure"]
     confidence: float
     evidence: list[Span]
 
+
 judge = prompt_func("Does this text claim {claim}? {text}", response_schema=Judgement)
-judge(claim="...", text="...")       # -> Judgement(value='yes', confidence=0.8, evidence=[...])
+judge(
+    claim="...", text="..."
+)  # -> Judgement(value='yes', confidence=0.8, evidence=[...])
 
 c = complete("...", response_schema=Judgement)
-c.value          # the validated Judgement (raises SchemaValidationError if still invalid)
-c.schema_mode    # 'strict' | 'schema' | 'json_mode' -- how the provider enforced it
-c.repairs        # extra requests made to fix invalid replies (their tokens are in c.usage)
+c.value  # the validated Judgement (raises SchemaValidationError if still invalid)
+c.schema_mode  # 'strict' | 'schema' | 'json_mode' -- how the provider enforced it
+c.repairs  # extra requests made to fix invalid replies (their tokens are in c.usage)
 ```
 
 The provider enforces the schema as strongly as the model allows:
@@ -2516,6 +2540,20 @@ Providers differ in which OpenAI-style parameters they honour (`n`, `seed`,
 raising) question in front of it, so callers can *choose* a degraded path
 rather than discover one silently.
 
+Besides request parameter names, [`supports()`](_autosummary/aix.capabilities.html.md#aix.capabilities.supports) answers a few *capabilities*
+that are not a single parameter (see [`CAPABILITIES`](_autosummary/aix.capabilities.html.md#aix.capabilities.CAPABILITIES)), e.g.
+`"response_schema"`: whether the model takes a JSON-Schema-constrained
+`response_format` (what `aix.complete(..., response_schema=...)` uses for
+its `"strict"` / `"schema"` modes).
+
+Why ask about `seed` in particular: a run-to-run difference with a seed the
+provider *ignored* means nothing about model stability. `supports(model,
+"seed") is False` rules a seed out; `True` only says LiteLLM forwards it –
+seeded sampling is best-effort on every provider, and a router may drop it
+upstream (compare
+[`aix.Completion.system_fingerprint`](_autosummary/aix.html.md#aix.Completion.system_fingerprint) across runs: a change means the
+serving backend changed, which voids the comparison).
+
 ```pycon
 >>> supports("gpt-4o-mini", "n")
 True
@@ -2523,11 +2561,21 @@ True
 False
 ```
 
+### Module Attributes
+
+| [`CAPABILITIES`](_autosummary/aix.capabilities.html.md#aix.capabilities.CAPABILITIES)   | Capabilities [`supports()`](_autosummary/aix.capabilities.html.md#aix.capabilities.supports) answers that are not one request parameter, mapped to the `model -> bool` check behind each.   |
+|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
 ### Functions
 
-| [`supports`](_autosummary/aix.capabilities.html.md#aix.capabilities.supports)(model, param)    | Whether `model` is known to accept the request parameter `param`.   |
-|----------------------------------------------------------------------------|---------------------------------------------------------------------|
-| [`supported_params`](_autosummary/aix.capabilities.html.md#aix.capabilities.supported_params)([model]) | The OpenAI-style parameters LiteLLM says `model` accepts.           |
+| [`supports`](_autosummary/aix.capabilities.html.md#aix.capabilities.supports)(model, param)    | Whether `model` is known to accept `param` -- i.e. whether LiteLLM *forwards* it to the provider for this model.   |
+|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| [`supported_params`](_autosummary/aix.capabilities.html.md#aix.capabilities.supported_params)([model]) | The OpenAI-style parameters LiteLLM says `model` accepts.                                                          |
+
+### aix.capabilities.CAPABILITIES *= {'response_schema': <function \_supports_response_schema>}*
+
+Capabilities [`supports()`](_autosummary/aix.capabilities.html.md#aix.capabilities.supports) answers that are not one request parameter,
+mapped to the `model -> bool` check behind each.
 
 ### aix.capabilities.supported_params(model=None)
 
@@ -2543,16 +2591,30 @@ installed) – which is not the same as “supports nothing”.
 
 ### aix.capabilities.supports(model, param)
 
-Whether `model` is known to accept the request parameter `param`.
+Whether `model` is known to accept `param` – i.e. whether LiteLLM
+*forwards* it to the provider for this model.
 
-Conservative: `False` when support is unknown, so a caller that branches
-on it takes the path that works everywhere.
+Conservative: `False` when support is unknown (or for a non-string
+`param`), so a caller that branches on it takes the path that works
+everywhere. `True` is not a guarantee that the parameter has an effect:
+a router (OpenRouter…) can forward `seed` / `n` to an upstream model
+that drops them, and a provider can deprecate or ignore a parameter
+(seeding is best-effort everywhere; reasoning models may ignore it).
 
 * **Parameters:**
   * **model** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Model id or alias; `None` means the configured chat default.
-  * **param** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – An OpenAI-style request parameter name (`"n"`, `"seed"`…).
+  * **param** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – An OpenAI-style request parameter name (`"n"`, `"seed"`,
+    `"response_format"`…) or a capability in [`CAPABILITIES`](_autosummary/aix.capabilities.html.md#aix.capabilities.CAPABILITIES)
+    (`"response_schema"`).
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+```pycon
+>>> supports("gpt-4o-mini", "seed")
+True
+>>> supports("gpt-4o-mini", "response_schema")
+True
+```
 
 
 # _autosummary/aix.config.html.md
@@ -3111,6 +3173,7 @@ Main Features:
 > - chat(): Simple chat interface across providers
 > - complete(): The whole response (all n choices, usage, finish reasons)
 > - sample(): n answers to one prompt, concurrently or via provider-side n
+> - supports(): ask whether a model honours a parameter (seed, n, response_schema…)
 > - embeddings(): Vector embeddings for text
 > - prompt_func(): Create functions from prompt templates
 > - models: Model discovery and selection
@@ -3144,6 +3207,8 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 | [`complete`](_autosummary/aix.html.md#aix.complete)(prompt, \*[, model, temperature, ...])    | Send a chat prompt and get the whole response back as a [`Completion`](_autosummary/aix.html.md#aix.Completion). |
 | [`ask`](_autosummary/aix.html.md#aix.ask)(question[, model])                             | Ask a single question and get an answer.                                                                             |
 | [`sample`](_autosummary/aix.html.md#aix.sample)(prompt, \*, n[, temperature, seed, ...])    | Draw `n` answers to `prompt`, each with its finish reason and usage.                                                 |
+| [`supports`](_autosummary/aix.html.md#aix.supports)(model, param)                             | Whether `model` is known to accept `param` -- i.e. whether LiteLLM *forwards* it to the provider for this model.     |
+| [`supported_params`](_autosummary/aix.html.md#aix.supported_params)([model])                          | The OpenAI-style parameters LiteLLM says `model` accepts.                                                            |
 | [`chat_with_history`](_autosummary/aix.html.md#aix.chat_with_history)([system_prompt, model])          | Create a stateful chat session that maintains conversation history.                                                  |
 | [`embeddings`](_autosummary/aix.html.md#aix.embeddings)(segments, \*[, model, api_key])         | Generate embeddings for multiple text segments.                                                                      |
 | [`embed`](_autosummary/aix.html.md#aix.embed)(text, \*[, model])                           | Generate embedding for a single text.                                                                                |
@@ -3332,7 +3397,7 @@ Send a message and get a response.
 * **Returns:**
   Assistant’s response
 
-### *class* aix.Completion(texts, finish_reasons=(), usage=None, model=None, raw=None, values=(), errors=(), schema_mode=None, repairs=0)
+### *class* aix.Completion(texts, finish_reasons=(), usage=None, model=None, raw=None, values=(), errors=(), schema_mode=None, repairs=0, system_fingerprint=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3366,6 +3431,13 @@ can differ from the one requested (aliases, dated snapshots).
 #### raw
 
 The untouched LiteLLM response, for anything not surfaced here.
+
+#### system_fingerprint
+
+The provider’s identifier for the serving backend
+configuration, when it reports one (OpenAI does). Seeded outputs
+are only comparable across calls with the same fingerprint. A
+response replayed from a cache carries its *original* fingerprint.
 
 #### values
 
@@ -4077,7 +4149,7 @@ The model’s self-reported confidence in `[0.0, 1.0]`.
 
 A short free-text explanation of the verdict.
 
-### *class* aix.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None)
+### *class* aix.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None, system_fingerprint=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4116,6 +4188,13 @@ The seed sent with its request, if any.
 
 The exception this sample’s request raised (with
 `on_error="record"`) or that `parse` raised on its text.
+
+#### system_fingerprint
+
+The serving backend’s fingerprint for its request,
+when reported. Seeded samples are only comparable across equal
+fingerprints (see [`aix.supports()`](_autosummary/aix.html.md#aix.supports) for whether `seed` is
+honoured at all).
 
 #### *property* ok *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
 
@@ -4685,8 +4764,12 @@ served the call, and the raw response.
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many choices to ask the provider for in this one call. Only
     sent when `n != 1`; providers without native `n` support reject
     it (see LiteLLM’s `get_supported_openai_params`).
-  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Best-effort reproducibility seed. Only sent when given; support
-    and the strength of the guarantee are provider-dependent.
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Best-effort reproducibility seed. Only sent when given. Support is
+    provider-dependent (`aix.supports(model, "seed")`); where it is
+    unsupported LiteLLM either drops it or rejects the call, and where
+    it is supported determinism is still best-effort – compare
+    `system_fingerprint` across calls before reading a difference
+    as model instability.
   * **response_format** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Passed through to LiteLLM (e.g. `{"type": "json_object"}`).
     Mutually exclusive with `response_schema`.
   * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or a Pydantic model class. The
@@ -5612,6 +5695,45 @@ Replace the active config wholesale. Returns the new active config.
 
 * **Return type:**
   [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)
+
+### aix.supported_params(model=None)
+
+The OpenAI-style parameters LiteLLM says `model` accepts.
+
+`None` when that is unknown (LiteLLM cannot place the model, or is not
+installed) – which is not the same as “supports nothing”.
+
+* **Parameters:**
+  **model** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Model id or alias; `None` means the configured chat default.
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`frozenset`](https://docs.python.org/3/builtins/stdtypes.html#frozenset)]
+
+### aix.supports(model, param)
+
+Whether `model` is known to accept `param` – i.e. whether LiteLLM
+*forwards* it to the provider for this model.
+
+Conservative: `False` when support is unknown (or for a non-string
+`param`), so a caller that branches on it takes the path that works
+everywhere. `True` is not a guarantee that the parameter has an effect:
+a router (OpenRouter…) can forward `seed` / `n` to an upstream model
+that drops them, and a provider can deprecate or ignore a parameter
+(seeding is best-effort everywhere; reasoning models may ignore it).
+
+* **Parameters:**
+  * **model** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Model id or alias; `None` means the configured chat default.
+  * **param** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – An OpenAI-style request parameter name (`"n"`, `"seed"`,
+    `"response_format"`…) or a capability in `CAPABILITIES`
+    (`"response_schema"`).
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+```pycon
+>>> supports("gpt-4o-mini", "seed")
+True
+>>> supports("gpt-4o-mini", "response_schema")
+True
+```
 
 ### aix.text_to_speech(text, , model=None, voice=None, speed=None, response_format='mp3', api_key=None, \*\*kwargs)
 
@@ -6587,7 +6709,7 @@ independently and the batch is marked `"mixed"`.
 | [`SamplingError`](_autosummary/aix.sampling.html.md#aix.sampling.SamplingError)(message, \*[, samples])   | A request inside [`sample()`](_autosummary/aix.sampling.html.md#aix.sampling.sample) failed (with `on_error="raise"`).   |
 |------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|
 
-### *class* aix.sampling.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None)
+### *class* aix.sampling.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None, system_fingerprint=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -6626,6 +6748,13 @@ The seed sent with its request, if any.
 
 The exception this sample’s request raised (with
 `on_error="record"`) or that `parse` raised on its text.
+
+#### system_fingerprint
+
+The serving backend’s fingerprint for its request,
+when reported. Seeded samples are only comparable across equal
+fingerprints (see [`aix.supports()`](_autosummary/aix.html.md#aix.supports) for whether `seed` is
+honoured at all).
 
 #### *property* ok *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
 
@@ -7551,18 +7680,16 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.
 
 # About this build
 
-This documentation was built on **2026-10-12 16:38 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/5073ee397a7f3ae4af7b12902fe34900ba57ad8b"><code>5073ee3</code></a> on branch <code>master</code>, for **aix 0.0.45** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-12 16:49 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/ea7d0d1aec8750ae722b088bedba60b878ab9850"><code>ea7d0d1</code></a> on branch <code>master</code>, for **aix 0.0.46** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.0.45) is behind the latest release on PyPI (0.0.46): `pip install aix` gives newer code than these docs describe.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/5073ee397a7f3ae4af7b12902fe34900ba57ad8b"><code>5073ee397a7f3ae4af7b12902fe34900ba57ad8b</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/ea7d0d1aec8750ae722b088bedba60b878ab9850"><code>ea7d0d1aec8750ae722b088bedba60b878ab9850</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -7573,9 +7700,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38278547000">38278547000</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38279804197">38279804197</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>5073ee397a7f3ae4af7b12902fe34900ba57ad8b</code> (in the history of the built commit) |
+| Event commit | <code>ea7d0d1aec8750ae722b088bedba60b878ab9850</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -7600,13 +7727,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.46/">0.0.46</a>, newer than the documented version (0.0.45).
+Latest release: <a href="https://pypi.org/project/aix/0.0.46/">0.0.46</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout 5073ee397a7f3ae4af7b12902fe34900ba57ad8b
+git checkout ea7d0d1aec8750ae722b088bedba60b878ab9850
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

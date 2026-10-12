@@ -281,18 +281,40 @@
 <code class="docutils literal notranslate"><span class="pre">get_supported_openai_params</span></code>; this module puts a small, total (never
 raising) question in front of it, so callers can <em>choose</em> a degraded path
 rather than discover one silently.</p>
+<p>Besides request parameter names, <a class="reference internal" href="#aix.capabilities.supports" title="aix.capabilities.supports"><code class="xref py py-func docutils literal notranslate"><span class="pre">supports()</span></code></a> answers a few <em>capabilities</em>
+that are not a single parameter (see <a class="reference internal" href="#aix.capabilities.CAPABILITIES" title="aix.capabilities.CAPABILITIES"><code class="xref py py-data docutils literal notranslate"><span class="pre">CAPABILITIES</span></code></a>), e.g.
+<code class="docutils literal notranslate"><span class="pre">&quot;response_schema&quot;</span></code>: whether the model takes a JSON-Schema-constrained
+<code class="docutils literal notranslate"><span class="pre">response_format</span></code> (what <code class="docutils literal notranslate"><span class="pre">aix.complete(...,</span> <span class="pre">response_schema=...)</span></code> uses for
+its <code class="docutils literal notranslate"><span class="pre">&quot;strict&quot;</span></code> / <code class="docutils literal notranslate"><span class="pre">&quot;schema&quot;</span></code> modes).</p>
+<p>Why ask about <code class="docutils literal notranslate"><span class="pre">seed</span></code> in particular: a run-to-run difference with a seed the
+provider <em>ignored</em> means nothing about model stability. <code class="docutils literal notranslate"><span class="pre">supports(model,</span>
+<span class="pre">&quot;seed&quot;)</span> <span class="pre">is</span> <span class="pre">False</span></code> rules a seed out; <code class="docutils literal notranslate"><span class="pre">True</span></code> only says LiteLLM forwards it –
+seeded sampling is best-effort on every provider, and a router may drop it
+upstream (compare
+<a class="reference internal" href="aix.html#aix.Completion.system_fingerprint" title="aix.Completion.system_fingerprint"><code class="xref py py-attr docutils literal notranslate"><span class="pre">aix.Completion.system_fingerprint</span></code></a> across runs: a change means the
+serving backend changed, which voids the comparison).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">supports</span><span class="p">(</span><span class="s2">"gpt-4o-mini"</span><span class="p">,</span> <span class="s2">"n"</span><span class="p">)</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">supports</span><span class="p">(</span><span class="s2">"anthropic/claude-sonnet-4-20250514"</span><span class="p">,</span> <span class="s2">"n"</span><span class="p">)</span>
 <span class="go">False</span>
 </pre></div>
 </div>
+<p class="rubric">Module Attributes</p>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.capabilities.CAPABILITIES" title="aix.capabilities.CAPABILITIES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CAPABILITIES</span></code></a></p></td>
+<td><p>Capabilities <a class="reference internal" href="#aix.capabilities.supports" title="aix.capabilities.supports"><code class="xref py py-func docutils literal notranslate"><span class="pre">supports()</span></code></a> answers that are not one request parameter, mapped to the <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code> check behind each.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p class="rubric">Functions</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#aix.capabilities.supports" title="aix.capabilities.supports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">supports</span></code></a>(model, param)</p></td>
-<td><p>Whether <code class="docutils literal notranslate"><span class="pre">model</span></code> is known to accept the request parameter <code class="docutils literal notranslate"><span class="pre">param</span></code>.</p></td>
+<td><p>Whether <code class="docutils literal notranslate"><span class="pre">model</span></code> is known to accept <code class="docutils literal notranslate"><span class="pre">param</span></code> -- i.e. whether LiteLLM <em>forwards</em> it to the provider for this model.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#aix.capabilities.supported_params" title="aix.capabilities.supported_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">supported_params</span></code></a>([model])</p></td>
 <td><p>The OpenAI-style parameters LiteLLM says <code class="docutils literal notranslate"><span class="pre">model</span></code> accepts.</p></td>
@@ -300,6 +322,13 @@ rather than discover one silently.</p>
 </tbody>
 </table>
 </div>
+<dl class="py data">
+<dt class="sig sig-object py" id="aix.capabilities.CAPABILITIES">
+<span class="sig-prename descclassname"><span class="pre">aix.capabilities.</span></span><span class="sig-name descname"><span class="pre">CAPABILITIES</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'response_schema':</span> <span class="pre">&lt;function</span> <span class="pre">_supports_response_schema&gt;}</span></span><a class="headerlink" href="#aix.capabilities.CAPABILITIES" title="Link to this definition">¶</a></dt>
+<dd><p>Capabilities <a class="reference internal" href="#aix.capabilities.supports" title="aix.capabilities.supports"><code class="xref py py-func docutils literal notranslate"><span class="pre">supports()</span></code></a> answers that are not one request parameter,
+mapped to the <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code> check behind each.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.capabilities.supported_params">
 <span class="sig-prename descclassname"><span class="pre">aix.capabilities.</span></span><span class="sig-name descname"><span class="pre">supported_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/capabilities.html#supported_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.capabilities.supported_params" title="Link to this definition">¶</a></dt>
@@ -319,20 +348,33 @@ installed) – which is not the same as “supports nothing”.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="aix.capabilities.supports">
 <span class="sig-prename descclassname"><span class="pre">aix.capabilities.</span></span><span class="sig-name descname"><span class="pre">supports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/capabilities.html#supports"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.capabilities.supports" title="Link to this definition">¶</a></dt>
-<dd><p>Whether <code class="docutils literal notranslate"><span class="pre">model</span></code> is known to accept the request parameter <code class="docutils literal notranslate"><span class="pre">param</span></code>.</p>
-<p>Conservative: <code class="docutils literal notranslate"><span class="pre">False</span></code> when support is unknown, so a caller that branches
-on it takes the path that works everywhere.</p>
+<dd><p>Whether <code class="docutils literal notranslate"><span class="pre">model</span></code> is known to accept <code class="docutils literal notranslate"><span class="pre">param</span></code> – i.e. whether LiteLLM
+<em>forwards</em> it to the provider for this model.</p>
+<p>Conservative: <code class="docutils literal notranslate"><span class="pre">False</span></code> when support is unknown (or for a non-string
+<code class="docutils literal notranslate"><span class="pre">param</span></code>), so a caller that branches on it takes the path that works
+everywhere. <code class="docutils literal notranslate"><span class="pre">True</span></code> is not a guarantee that the parameter has an effect:
+a router (OpenRouter…) can forward <code class="docutils literal notranslate"><span class="pre">seed</span></code> / <code class="docutils literal notranslate"><span class="pre">n</span></code> to an upstream model
+that drops them, and a provider can deprecate or ignore a parameter
+(seeding is best-effort everywhere; reasoning models may ignore it).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Model id or alias; <code class="docutils literal notranslate"><span class="pre">None</span></code> means the configured chat default.</p></li>
-<li><p><strong>param</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – An OpenAI-style request parameter name (<code class="docutils literal notranslate"><span class="pre">&quot;n&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;seed&quot;</span></code>…).</p></li>
+<li><p><strong>param</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – An OpenAI-style request parameter name (<code class="docutils literal notranslate"><span class="pre">&quot;n&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;seed&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;response_format&quot;</span></code>…) or a capability in <a class="reference internal" href="#aix.capabilities.CAPABILITIES" title="aix.capabilities.CAPABILITIES"><code class="xref py py-data docutils literal notranslate"><span class="pre">CAPABILITIES</span></code></a>
+(<code class="docutils literal notranslate"><span class="pre">&quot;response_schema&quot;</span></code>).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
 </dd>
 </dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">supports</span><span class="p">(</span><span class="s2">"gpt-4o-mini"</span><span class="p">,</span> <span class="s2">"seed"</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">supports</span><span class="p">(</span><span class="s2">"gpt-4o-mini"</span><span class="p">,</span> <span class="s2">"response_schema"</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -389,6 +431,7 @@ on it takes the path that works everywhere.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">aix.capabilities</a><ul>
+<li><a class="reference internal" href="#aix.capabilities.CAPABILITIES"><code class="docutils literal notranslate"><span class="pre">CAPABILITIES</span></code></a></li>
 <li><a class="reference internal" href="#aix.capabilities.supported_params"><code class="docutils literal notranslate"><span class="pre">supported_params()</span></code></a></li>
 <li><a class="reference internal" href="#aix.capabilities.supports"><code class="docutils literal notranslate"><span class="pre">supports()</span></code></a></li>
 </ul>
@@ -402,7 +445,7 @@ on it takes the path that works everywhere.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=72630217"></script>
+</div><script src="../_static/documentation_options.js?v=52d298fc"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

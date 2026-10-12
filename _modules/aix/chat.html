@@ -609,6 +609,10 @@
 <span class="sd">        model: The model id the provider reports having served the call, which</span>
 <span class="sd">            can differ from the one requested (aliases, dated snapshots).</span>
 <span class="sd">        raw: The untouched LiteLLM response, for anything not surfaced here.</span>
+<span class="sd">        system_fingerprint: The provider's identifier for the serving backend</span>
+<span class="sd">            configuration, when it reports one (OpenAI does). Seeded outputs</span>
+<span class="sd">            are only comparable across calls with the same fingerprint. A</span>
+<span class="sd">            response replayed from a cache carries its *original* fingerprint.</span>
 <span class="sd">        values: With ``response_schema=``: each choice's validated value (a</span>
 <span class="sd">            Pydantic instance for a Pydantic schema), ``None`` where invalid.</span>
 <span class="sd">        errors: Aligned with ``values``: ``None``, or why that choice has no</span>
@@ -634,6 +638,7 @@
     <span class="n">errors</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="p">(),</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">schema_mode</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">repairs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">system_fingerprint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
@@ -680,6 +685,7 @@
             <span class="n">usage</span><span class="o">=</span><span class="n">Usage</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">response</span><span class="p">),</span>
             <span class="n">model</span><span class="o">=</span><span class="n">_as_str</span><span class="p">(</span><span class="n">_field</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">)),</span>
             <span class="n">raw</span><span class="o">=</span><span class="n">response</span><span class="p">,</span>
+            <span class="n">system_fingerprint</span><span class="o">=</span><span class="n">_as_str</span><span class="p">(</span><span class="n">_field</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"system_fingerprint"</span><span class="p">)),</span>
         <span class="p">)</span></div>
 </div>
 
@@ -891,8 +897,12 @@
 <span class="sd">        n: How many choices to ask the provider for in this one call. Only</span>
 <span class="sd">            sent when ``n != 1``; providers without native ``n`` support reject</span>
 <span class="sd">            it (see LiteLLM's ``get_supported_openai_params``).</span>
-<span class="sd">        seed: Best-effort reproducibility seed. Only sent when given; support</span>
-<span class="sd">            and the strength of the guarantee are provider-dependent.</span>
+<span class="sd">        seed: Best-effort reproducibility seed. Only sent when given. Support is</span>
+<span class="sd">            provider-dependent (``aix.supports(model, "seed")``); where it is</span>
+<span class="sd">            unsupported LiteLLM either drops it or rejects the call, and where</span>
+<span class="sd">            it is supported determinism is still best-effort -- compare</span>
+<span class="sd">            ``system_fingerprint`` across calls before reading a difference</span>
+<span class="sd">            as model instability.</span>
 <span class="sd">        response_format: Passed through to LiteLLM (e.g. ``{"type": "json_object"}``).</span>
 <span class="sd">            Mutually exclusive with ``response_schema``.</span>
 <span class="sd">        response_schema: A JSON Schema dict or a Pydantic model class. The</span>
@@ -1231,7 +1241,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=72630217"></script>
+</div><script src="../../_static/documentation_options.js?v=52d298fc"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

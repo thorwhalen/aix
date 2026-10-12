@@ -413,6 +413,10 @@
 <span class="sd">        seed: The seed sent with its request, if any.</span>
 <span class="sd">        error: The exception this sample's request raised (with</span>
 <span class="sd">            ``on_error="record"``) or that ``parse`` raised on its text.</span>
+<span class="sd">        system_fingerprint: The serving backend's fingerprint for its request,</span>
+<span class="sd">            when reported. Seeded samples are only comparable across equal</span>
+<span class="sd">            fingerprints (see :func:`aix.supports` for whether ``seed`` is</span>
+<span class="sd">            honoured at all).</span>
 <span class="sd">    """</span>
 
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
@@ -422,6 +426,7 @@
     <span class="n">strategy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">INDEPENDENT</span>
     <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">system_fingerprint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -651,7 +656,16 @@
                 <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">schema_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">_is_request_error</span><span class="p">(</span><span class="n">error</span><span class="p">):</span>
                     <span class="n">first_error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">=</span> <span class="n">first_error</span> <span class="ow">or</span> <span class="n">error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">Sample</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">reason</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">PROVIDER_N</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+                    <span class="n">Sample</span><span class="p">(</span>
+                        <span class="n">text</span><span class="p">,</span>
+                        <span class="n">payload</span><span class="p">,</span>
+                        <span class="n">reason</span><span class="p">,</span>
+                        <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">PROVIDER_N</span><span class="p">,</span>
+                        <span class="n">seed</span><span class="p">,</span>
+                        <span class="n">error</span><span class="p">,</span>
+                        <span class="n">system_fingerprint</span><span class="o">=</span><span class="n">batch</span><span class="o">.</span><span class="n">system_fingerprint</span><span class="p">,</span>
+                    <span class="p">)</span>
                 <span class="p">)</span>
             <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">usage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">usages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">usage</span><span class="p">)</span>
@@ -692,7 +706,14 @@
             <span class="n">first_error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">=</span> <span class="n">first_error</span> <span class="ow">or</span> <span class="n">error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">Sample</span><span class="p">(</span>
-                <span class="n">c</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">finish_reason</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">usage</span><span class="p">,</span> <span class="n">INDEPENDENT</span><span class="p">,</span> <span class="n">one_seed</span><span class="p">,</span> <span class="n">error</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                <span class="n">payload</span><span class="p">,</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">finish_reason</span><span class="p">,</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">usage</span><span class="p">,</span>
+                <span class="n">INDEPENDENT</span><span class="p">,</span>
+                <span class="n">one_seed</span><span class="p">,</span>
+                <span class="n">error</span><span class="p">,</span>
+                <span class="n">system_fingerprint</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">system_fingerprint</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">usage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -746,7 +767,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=72630217"></script>
+</div><script src="../../_static/documentation_options.js?v=52d298fc"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
