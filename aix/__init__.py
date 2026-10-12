@@ -29,6 +29,7 @@ Main Features:
     - chat(): Simple chat interface across providers
     - complete(): The whole response (all n choices, usage, finish reasons)
     - sample(): n answers to one prompt, concurrently or via provider-side n
+    - supports(): ask whether a model honours a parameter (seed, n, response_schema...)
     - embeddings(): Vector embeddings for text
     - prompt_func(): Create functions from prompt templates
     - models: Model discovery and selection
@@ -79,6 +80,7 @@ from aix.chat import (
 )
 from aix.sampling import sample, Sample, Samples, SamplingError
 from aix.structured import ResponseSchema, SchemaValidationError
+from aix.capabilities import supports, supported_params
 from aix.embeddings import (
     embeddings,
     embed,
@@ -179,6 +181,8 @@ __all__ = [
     "SamplingError",
     "ResponseSchema",
     "SchemaValidationError",
+    "supports",
+    "supported_params",
     "chat_with_history",
     "ChatSession",
     # Embeddings

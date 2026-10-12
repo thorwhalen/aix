@@ -138,6 +138,10 @@ class Sample:
         seed: The seed sent with its request, if any.
         error: The exception this sample's request raised (with
             ``on_error="record"``) or that ``parse`` raised on its text.
+        system_fingerprint: The serving backend's fingerprint for its request,
+            when reported. Seeded samples are only comparable across equal
+            fingerprints (see :func:`aix.supports` for whether ``seed`` is
+            honoured at all).
     """
 
     text: str
@@ -147,6 +151,7 @@ class Sample:
     strategy: str = INDEPENDENT
     seed: Optional[int] = None
     error: Optional[Exception] = field(default=None, compare=False)
+    system_fingerprint: Optional[str] = None
 
     @property
     def ok(self) -> bool:
@@ -367,7 +372,16 @@ def sample(
                 if batch.schema_mode is not None and _is_request_error(error):
                     first_error, n_failed = first_error or error, n_failed + 1
                 samples.append(
-                    Sample(text, payload, reason, None, PROVIDER_N, seed, error)
+                    Sample(
+                        text,
+                        payload,
+                        reason,
+                        None,
+                        PROVIDER_N,
+                        seed,
+                        error,
+                        system_fingerprint=batch.system_fingerprint,
+                    )
                 )
             if batch.usage is not None:
                 usages.append(batch.usage)
@@ -408,7 +422,14 @@ def sample(
             first_error, n_failed = first_error or error, n_failed + 1
         samples.append(
             Sample(
-                c.text, payload, c.finish_reason, c.usage, INDEPENDENT, one_seed, error
+                c.text,
+                payload,
+                c.finish_reason,
+                c.usage,
+                INDEPENDENT,
+                one_seed,
+                error,
+                system_fingerprint=c.system_fingerprint,
             )
         )
         if c.usage is not None:

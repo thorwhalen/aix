@@ -334,6 +334,9 @@ class Completion:
         model: The model id the provider reports having served the call, which
             can differ from the one requested (aliases, dated snapshots).
         raw: The untouched LiteLLM response, for anything not surfaced here.
+        system_fingerprint: The provider's identifier for the serving backend
+            configuration, when it reports one (OpenAI does). Seeded outputs
+            are only comparable across calls with the same fingerprint.
         values: With ``response_schema=``: each choice's validated value (a
             Pydantic instance for a Pydantic schema), ``None`` where invalid.
         errors: Aligned with ``values``: ``None``, or why that choice has no
@@ -355,6 +358,7 @@ class Completion:
     usage: Optional[Usage] = None
     model: Optional[str] = None
     raw: Any = field(default=None, repr=False, compare=False)
+    system_fingerprint: Optional[str] = None
     values: tuple = field(default=(), compare=False)
     errors: tuple = field(default=(), compare=False)
     schema_mode: Optional[str] = None
@@ -403,6 +407,7 @@ class Completion:
             usage=Usage.from_response(response),
             model=_as_str(_field(response, "model")),
             raw=response,
+            system_fingerprint=_as_str(_field(response, "system_fingerprint")),
         )
 
 
@@ -607,8 +612,12 @@ def complete(
         n: How many choices to ask the provider for in this one call. Only
             sent when ``n != 1``; providers without native ``n`` support reject
             it (see LiteLLM's ``get_supported_openai_params``).
-        seed: Best-effort reproducibility seed. Only sent when given; support
-            and the strength of the guarantee are provider-dependent.
+        seed: Best-effort reproducibility seed. Only sent when given. Support is
+            provider-dependent (``aix.supports(model, "seed")``); where it is
+            unsupported LiteLLM either drops it or rejects the call, and where
+            it is supported determinism is still best-effort -- compare
+            ``system_fingerprint`` across calls before reading a difference
+            as model instability.
         response_format: Passed through to LiteLLM (e.g. ``{"type": "json_object"}``).
             Mutually exclusive with ``response_schema``.
         response_schema: A JSON Schema dict or a Pydantic model class. The
