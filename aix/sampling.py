@@ -31,6 +31,7 @@ from aix.capabilities import supports
 from aix.chat import Completion, Usage, complete
 from aix.config import get_config as _get_config
 from aix.credentials import check_requirements as _check_requirements
+from aix.structured import ResponseSchema, SchemaValidationError
 
 __all__ = [
     "sample",
@@ -165,8 +166,9 @@ class Samples(list):
         usage: Total tokens over every request that reported usage, or ``None``
             if none did. Compare ``n_requests`` with ``n_usage_reports`` to see
             whether it is complete.
-        n_requests: How many requests were made.
-        n_usage_reports: How many of them reported usage.
+        n_requests: How many requests were made (schema repair requests included).
+        n_usage_reports: How many of them reported usage (a completion's repair
+            requests are counted with it when it reported usage).
     """
 
     def __init__(
@@ -231,6 +233,25 @@ def _parsed(text: str, parse: Optional[Callable[[str], Any]]):
         return None, e
 
 
+def _is_request_error(error: Optional[Exception]) -> bool:
+    """Whether a recorded per-choice error is a failed request (e.g. a repair
+    request that raised), as opposed to a reply that did not parse/validate."""
+    return error is not None and not isinstance(error, (SchemaValidationError,))
+
+
+def _payload(c: Completion, index: int, parse: Optional[Callable[[str], Any]]):
+    """``(payload, error)`` for choice ``index`` of ``c``.
+
+    The validated value when ``c`` was produced with a response schema, else
+    ``parse`` applied to the text.
+    """
+    if c.schema_mode is not None:
+        if index >= len(c.values):
+            return None, ValueError("The provider returned no choice for this sample")
+        return c.values[index], c.errors[index]
+    return _parsed(c.texts[index] if index < len(c.texts) else "", parse)
+
+
 def _is_unsupported_param_error(error: Exception) -> bool:
     """Whether the provider refused a request parameter (LiteLLM's error type).
 
@@ -249,6 +270,7 @@ def sample(
     model: str = None,
     strategy: Strategy = "auto",
     parse: Callable[[str], Any] = None,
+    response_schema: Union[dict, type] = None,
     on_error: OnError = "raise",
     api_key: str = None,
     **kwargs,
@@ -271,6 +293,10 @@ def sample(
             also falls back to independent if the provider refuses ``n``),
             ``"provider"`` (force one ``n`` request) or ``"independent"``.
             ``n=1`` is always a single plain request, recorded ``"independent"``.
+        response_schema: A JSON Schema dict or Pydantic model class, enforced and
+            validated per request as in :func:`aix.complete`; each payload is the
+            validated value, and a choice still invalid after repairs records its
+            ``SchemaValidationError`` as ``error``. Exclusive with ``parse``.
         parse: Optional ``text -> payload`` (e.g. ``json.loads``). A failure is
             recorded on that sample (``payload=None``, ``error=...``), not raised.
         on_error: When a request fails: ``"raise"`` (default) raises
@@ -297,6 +323,8 @@ def sample(
         raise ValueError(f"strategy must be one of {_STRATEGIES}, got {strategy!r}")
     if on_error not in _ON_ERROR:
         raise ValueError(f"on_error must be one of {_ON_ERROR}, got {on_error!r}")
+    if parse is not None and response_schema is not None:
+        raise ValueError("Pass parse or response_schema, not both.")
     reserved = _RESERVED_KWARGS.intersection(kwargs)
     if reserved:
         raise ValueError(
@@ -309,10 +337,16 @@ def sample(
     _check_requirements(model or _get_config().chat.model, api_key=api_key)
 
     call_kwargs = dict(model=model, temperature=temperature, api_key=api_key, **kwargs)
+    if response_schema is not None:
+        # Normalized once here, not once per request (it builds a validator).
+        call_kwargs["response_schema"] = ResponseSchema.from_schema(response_schema)
 
     samples: list[Sample] = []
     usages: list[Usage] = []
-    n_requests = 0
+    n_requests = n_usage_reports = 0
+    # A failed request -- including a schema repair request -- as opposed to a
+    # reply that did not parse/validate (which is always just recorded).
+    first_error, n_failed = None, 0
 
     use_provider_n = n > 1 and (
         strategy == "provider" or (strategy == "auto" and supports(model, "n"))
@@ -325,14 +359,19 @@ def sample(
                 raise
             use_provider_n = False  # supports() was wrong for this model
         else:
-            n_requests += 1
-            for text, reason in list(zip(batch.texts, batch.finish_reasons))[:n]:
-                payload, error = _parsed(text, parse)
+            n_requests += 1 + batch.repairs
+            for i, (text, reason) in enumerate(
+                list(zip(batch.texts, batch.finish_reasons))[:n]
+            ):
+                payload, error = _payload(batch, i, parse)
+                if batch.schema_mode is not None and _is_request_error(error):
+                    first_error, n_failed = first_error or error, n_failed + 1
                 samples.append(
                     Sample(text, payload, reason, None, PROVIDER_N, seed, error)
                 )
             if batch.usage is not None:
                 usages.append(batch.usage)
+                n_usage_reports += 1 + batch.repairs
 
     n_from_provider = len(samples)
     seeds = [
@@ -354,18 +393,19 @@ def sample(
                 stop.set()
             return e
 
-    first_error, n_failed = None, 0
     for one_seed, c in zip(
         seeds, concurrent_map(draw_one, seeds, concurrency=concurrency)
     ):
         if c is None:
             continue
-        n_requests += 1
+        n_requests += 1 + (0 if isinstance(c, Exception) else c.repairs)
         if isinstance(c, Exception):
             first_error, n_failed = first_error or c, n_failed + 1
             samples.append(Sample("", None, None, None, INDEPENDENT, one_seed, c))
             continue
-        payload, error = _parsed(c.text, parse)
+        payload, error = _payload(c, 0, parse)
+        if c.schema_mode is not None and _is_request_error(error):
+            first_error, n_failed = first_error or error, n_failed + 1
         samples.append(
             Sample(
                 c.text, payload, c.finish_reason, c.usage, INDEPENDENT, one_seed, error
@@ -373,6 +413,7 @@ def sample(
         )
         if c.usage is not None:
             usages.append(c.usage)
+            n_usage_reports += 1 + c.repairs
 
     if not use_provider_n:
         recorded = INDEPENDENT
@@ -383,7 +424,7 @@ def sample(
         strategy=recorded,
         usage=sum(usages, Usage()) if usages else None,
         n_requests=n_requests,
-        n_usage_reports=len(usages),
+        n_usage_reports=n_usage_reports,
     )
     if first_error is not None and on_error == "raise":
         raise SamplingError(
