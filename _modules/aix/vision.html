@@ -320,7 +320,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">mimetypes</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span> <span class="k">as</span> <span class="n">_replace_dataclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -329,12 +329,10 @@
     <span class="n">resolve_model</span> <span class="k">as</span> <span class="n">_resolve_model</span><span class="p">,</span>
     <span class="n">VisionConfig</span> <span class="k">as</span> <span class="n">_VisionConfig</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">aix.credentials</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">resolve_api_key</span> <span class="k">as</span> <span class="n">_resolve_api_key</span><span class="p">,</span>
-    <span class="n">requires_credentials</span> <span class="k">as</span> <span class="n">_requires_credentials</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.credentials</span><span class="w"> </span><span class="kn">import</span> <span class="n">requires_credentials</span> <span class="k">as</span> <span class="n">_requires_credentials</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix._litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">UNRESOLVED</span> <span class="k">as</span> <span class="n">_UNRESOLVED</span><span class="p">,</span> <span class="n">litellm_attr</span> <span class="k">as</span> <span class="n">_litellm_attr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.chat</span><span class="w"> </span><span class="kn">import</span> <span class="n">Usage</span> <span class="k">as</span> <span class="n">_Usage</span><span class="p">,</span> <span class="n">request_kwargs</span> <span class="k">as</span> <span class="n">_request_kwargs</span>
 
 <span class="c1"># LiteLLM is a soft dependency, imported privately (mirrors aix.chat) *and*</span>
 <span class="c1"># deferred: importing it fetches litellm's model-cost map over HTTPS, so</span>
@@ -476,6 +474,15 @@
 
 <span class="sd">    &gt;&gt;&gt; describe_image("cat.jpg", prompt="Caption it.")  # doctest: +SKIP</span>
 <span class="sd">    'A cat on a sofa.'</span>
+
+<span class="sd">    For usage, several samples (``n``) or validated structured output, send the</span>
+<span class="sd">    same image content through :func:`aix.complete` (or :func:`aix.sample`):</span>
+
+<span class="sd">    &gt;&gt;&gt; from aix import complete  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; c = complete([{"role": "user", "content": [  # doctest: +SKIP</span>
+<span class="sd">    ...     {"type": "text", "text": "Caption it."}, to_image_content("cat.jpg")]}],</span>
+<span class="sd">    ...     model="gpt-4o-mini", n=3)</span>
+<span class="sd">    &gt;&gt;&gt; c.texts, c.usage  # doctest: +SKIP</span>
 <span class="sd">    """</span>
     <span class="n">completion</span> <span class="o">=</span> <span class="n">_completion</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">completion</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -497,16 +504,13 @@
         <span class="p">}</span>
     <span class="p">]</span>
 
-    <span class="n">litellm_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span> <span class="s2">"messages"</span><span class="p">:</span> <span class="n">messages</span><span class="p">}</span>
-    <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"max_tokens"</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_tokens</span>
-    <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"temperature"</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
-
-    <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"api_key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
-
+    <span class="n">litellm_kwargs</span> <span class="o">=</span> <span class="n">_request_kwargs</span><span class="p">(</span>
+        <span class="n">messages</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="n">response</span> <span class="o">=</span> <span class="n">completion</span><span class="p">(</span><span class="o">**</span><span class="n">litellm_kwargs</span><span class="p">)</span>
@@ -554,6 +558,8 @@
 <span class="sd">        aspects: The per-aspect verdicts, one :class:`RubricVerdict` per</span>
 <span class="sd">            rubric item, in rubric order.</span>
 <span class="sd">        model: The vision model id that produced the verdict.</span>
+<span class="sd">        usage: Tokens billed for the comparison request (see</span>
+<span class="sd">            :class:`aix.Usage`), or ``None`` if the provider did not report it.</span>
 <span class="sd">    """</span>
 
     <span class="n">match</span><span class="p">:</span> <span class="nb">bool</span>
@@ -561,6 +567,7 @@
     <span class="n">explanation</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">aspects</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">RubricVerdict</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
     <span class="n">model</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">usage</span><span class="p">:</span> <span class="s2">"_Usage | None"</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_by_aspect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"dict[str, RubricVerdict]"</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">verdict</span><span class="o">.</span><span class="n">aspect</span><span class="p">:</span> <span class="n">verdict</span> <span class="k">for</span> <span class="n">verdict</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">}</span>
@@ -710,21 +717,21 @@
     <span class="p">]</span>
     <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="p">[</span><span class="n">text_block</span><span class="p">,</span> <span class="o">*</span><span class="n">image_blocks</span><span class="p">]}]</span>
 
-    <span class="n">litellm_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span> <span class="s2">"messages"</span><span class="p">:</span> <span class="n">messages</span><span class="p">}</span>
-    <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"max_tokens"</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_tokens</span>
-    <span class="k">if</span> <span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"temperature"</span><span class="p">]</span> <span class="o">=</span> <span class="n">temperature</span>
-
-    <span class="n">resolved_key</span> <span class="o">=</span> <span class="n">_resolve_api_key</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">resolved_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"api_key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolved_key</span>
-
+    <span class="n">litellm_kwargs</span> <span class="o">=</span> <span class="n">_request_kwargs</span><span class="p">(</span>
+        <span class="n">messages</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="n">response</span> <span class="o">=</span> <span class="n">completion</span><span class="p">(</span><span class="o">**</span><span class="n">litellm_kwargs</span><span class="p">)</span>
     <span class="n">raw</span> <span class="o">=</span> <span class="n">_extract_text</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">_parse_comparison</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">rubric</span><span class="o">=</span><span class="n">rubric</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_replace_dataclass</span><span class="p">(</span>
+        <span class="n">_parse_comparison</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">rubric</span><span class="o">=</span><span class="n">rubric</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">),</span>
+        <span class="n">usage</span><span class="o">=</span><span class="n">_Usage</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">response</span><span class="p">),</span>
+    <span class="p">)</span></div>
 
 
 
@@ -954,7 +961,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=59e51ddd"></script>
+</div><script src="../../_static/documentation_options.js?v=f0a569bb"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

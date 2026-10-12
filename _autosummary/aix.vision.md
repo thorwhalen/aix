@@ -102,7 +102,7 @@ resolved from `aix.config` at call time (see [`aix.config.VisionConfig`](aix.con
 
 Default instruction when the caller doesn’t supply one.
 
-### *class* aix.vision.ImageComparison(match, confidence, explanation, aspects=<factory>, model=None)
+### *class* aix.vision.ImageComparison(match, confidence, explanation, aspects=<factory>, model=None, usage=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -132,6 +132,11 @@ rubric item, in rubric order.
 #### model
 
 The vision model id that produced the verdict.
+
+#### usage
+
+Tokens billed for the comparison request (see
+[`aix.Usage`](aix.md#aix.Usage)), or `None` if the provider did not report it.
 
 #### get(aspect, default=None)
 
@@ -263,6 +268,17 @@ for VQA or a rubric for a judgement. Everything past `image` is keyword.
 ```pycon
 >>> describe_image("cat.jpg", prompt="Caption it.")
 'A cat on a sofa.'
+```
+
+For usage, several samples (`n`) or validated structured output, send the
+same image content through [`aix.complete()`](aix.md#aix.complete) (or [`aix.sample()`](aix.md#aix.sample)):
+
+```pycon
+>>> from aix import complete
+>>> c = complete([{"role": "user", "content": [
+...     {"type": "text", "text": "Caption it."}, to_image_content("cat.jpg")]}],
+...     model="gpt-4o-mini", n=3)
+>>> c.texts, c.usage
 ```
 
 ### aix.vision.to_image_content(image, , detail=None)

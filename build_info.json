@@ -1,32 +1,32 @@
 {
   "schema_version": 1,
-  "built_at": "2026-10-12T17:08:36Z",
+  "built_at": "2026-10-12T17:19:10Z",
   "package": {
     "name": "aix",
-    "version": "0.0.48",
+    "version": "0.0.49",
     "display_name": "aix",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "3547773f338464688ef2d3ba6426f8997637881c",
-    "short_commit": "3547773",
+    "commit": "9a77bf000322c9ba17aa96a76750747e07dd92e7",
+    "short_commit": "9a77bf0",
     "branch": "master",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/aix",
-    "commit_url": "https://github.com/thorwhalen/aix/commit/3547773f338464688ef2d3ba6426f8997637881c",
+    "commit_url": "https://github.com/thorwhalen/aix/commit/9a77bf000322c9ba17aa96a76750747e07dd92e7",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/aix",
-    "sha": "3547773f338464688ef2d3ba6426f8997637881c",
+    "sha": "9a77bf000322c9ba17aa96a76750747e07dd92e7",
     "sha_in_history": true,
     "ref": "refs/heads/master",
     "ref_name": "master",
-    "run_id": "38281986798",
-    "run_url": "https://github.com/thorwhalen/aix/actions/runs/38281986798",
+    "run_id": "38283104070",
+    "run_url": "https://github.com/thorwhalen/aix/actions/runs/38283104070",
     "server_url": "https://github.com"
   },
   "tools": {
@@ -56,20 +56,20 @@
   },
   "site": {
     "modules_documented": 23,
-    "objects_documented": 392
+    "objects_documented": 394
   },
   "pypi": {
     "checked": true,
-    "latest": "0.0.49",
+    "latest": "0.0.50",
     "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/aix && cd aix\ngit checkout 3547773f338464688ef2d3ba6426f8997637881c\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/aix && cd aix\ngit checkout 9a77bf000322c9ba17aa96a76750747e07dd92e7\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
     "aligned": false,
     "notes": [
-      "The documented version (0.0.48) is behind the latest release on PyPI (0.0.49): `pip install aix` gives newer code than these docs describe."
+      "The documented version (0.0.49) is behind the latest release on PyPI (0.0.50): `pip install aix` gives newer code than these docs describe."
     ]
   }
 }

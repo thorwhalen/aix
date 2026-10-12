@@ -404,7 +404,7 @@ resolved from <code class="docutils literal notranslate"><span class="pre">aix.c
 
 <dl class="py class">
 <dt class="sig sig-object py" id="aix.vision.ImageComparison">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">ImageComparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explanation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/vision.html#ImageComparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.vision.ImageComparison" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.vision.</span></span><span class="sig-name descname"><span class="pre">ImageComparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explanation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/vision.html#ImageComparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.vision.ImageComparison" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Structured result of comparing a candidate image to reference(s).</p>
 <p>Behaves like an ordered, read-only mapping of <code class="docutils literal notranslate"><span class="pre">aspect</span> <span class="pre">-&gt;</span> <span class="pre">RubricVerdict</span></code>
@@ -441,6 +441,13 @@ rubric item, in rubric order.</p>
 <dt class="sig sig-object py" id="aix.vision.ImageComparison.model">
 <span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#aix.vision.ImageComparison.model" title="Link to this definition">¶</a></dt>
 <dd><p>The vision model id that produced the verdict.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.vision.ImageComparison.usage">
+<span class="sig-name descname"><span class="pre">usage</span></span><a class="headerlink" href="#aix.vision.ImageComparison.usage" title="Link to this definition">¶</a></dt>
+<dd><p>Tokens billed for the comparison request (see
+<a class="reference internal" href="aix.html#aix.Usage" title="aix.Usage"><code class="xref py py-class docutils literal notranslate"><span class="pre">aix.Usage</span></code></a>), or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the provider did not report it.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -601,6 +608,15 @@ default (<a class="reference internal" href="aix.config.html#aix.config.VisionCo
 <span class="go">'A cat on a sofa.'</span>
 </pre></div>
 </div>
+<p>For usage, several samples (<code class="docutils literal notranslate"><span class="pre">n</span></code>) or validated structured output, send the
+same image content through <a class="reference internal" href="aix.html#aix.complete" title="aix.complete"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.complete()</span></code></a> (or <a class="reference internal" href="aix.html#aix.sample" title="aix.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.sample()</span></code></a>):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">complete</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">complete</span><span class="p">([{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"text"</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">:</span> <span class="s2">"Caption it."</span><span class="p">},</span> <span class="n">to_image_content</span><span class="p">(</span><span class="s2">"cat.jpg"</span><span class="p">)]}],</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="o">=</span><span class="s2">"gpt-4o-mini"</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">texts</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">usage</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -694,6 +710,7 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.</p>
 <li><a class="reference internal" href="#aix.vision.ImageComparison.explanation"><code class="docutils literal notranslate"><span class="pre">ImageComparison.explanation</span></code></a></li>
 <li><a class="reference internal" href="#aix.vision.ImageComparison.aspects"><code class="docutils literal notranslate"><span class="pre">ImageComparison.aspects</span></code></a></li>
 <li><a class="reference internal" href="#aix.vision.ImageComparison.model"><code class="docutils literal notranslate"><span class="pre">ImageComparison.model</span></code></a></li>
+<li><a class="reference internal" href="#aix.vision.ImageComparison.usage"><code class="docutils literal notranslate"><span class="pre">ImageComparison.usage</span></code></a></li>
 <li><a class="reference internal" href="#aix.vision.ImageComparison.get"><code class="docutils literal notranslate"><span class="pre">ImageComparison.get()</span></code></a></li>
 </ul>
 </li>
@@ -718,7 +735,7 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=59e51ddd"></script>
+</div><script src="../_static/documentation_options.js?v=f0a569bb"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
