@@ -451,7 +451,12 @@
 <span class="sd">            whether it is complete.</span>
 <span class="sd">        n_requests: How many requests were made (schema repair requests included).</span>
 <span class="sd">        n_usage_reports: How many of them reported usage (a completion's repair</span>
-<span class="sd">            requests are counted with it when it reported usage).</span>
+<span class="sd">            requests are counted with it when it reported usage). A provider</span>
+<span class="sd">            request refused with a 400 (see ``fallback_error``) reports none.</span>
+<span class="sd">        fallback_error: With ``strategy="auto"``: the error that made the</span>
+<span class="sd">            provider-side ``n`` request fall back to independent requests</span>
+<span class="sd">            (LiteLLM refusing ``n``, or the provider rejecting it with a 400),</span>
+<span class="sd">            else ``None``.</span>
 <span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -462,8 +467,10 @@
         <span class="n">usage</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Usage</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_requests</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">n_usage_reports</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">fallback_error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fallback_error</span> <span class="o">=</span> <span class="n">fallback_error</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">usage</span> <span class="o">=</span> <span class="n">usage</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_requests</span> <span class="o">=</span> <span class="n">n_requests</span>
@@ -485,7 +492,12 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">"Samples(</span><span class="si">{</span><span class="nb">list</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2">, strategy=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="si">!r}</span><span class="s2">, "</span>
-            <span class="sa">f</span><span class="s2">"usage=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">usage</span><span class="si">!r}</span><span class="s2">, n_requests=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_requests</span><span class="si">}</span><span class="s2">)"</span>
+            <span class="sa">f</span><span class="s2">"usage=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">usage</span><span class="si">!r}</span><span class="s2">, n_requests=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_requests</span><span class="si">}</span><span class="s2">"</span>
+            <span class="o">+</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">", fallback_error=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fallback_error</span><span class="si">!r}</span><span class="s2">)"</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fallback_error</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="s2">")"</span>
+            <span class="p">)</span>
         <span class="p">)</span></div>
 
 
@@ -539,12 +551,33 @@
     <span class="k">return</span> <span class="n">_parsed</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">texts</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">texts</span><span class="p">)</span> <span class="k">else</span> <span class="s2">""</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_is_unsupported_param_error</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Whether the provider refused a request parameter (LiteLLM's error type).</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_has_class_named</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether ``error`` is an instance of a class called ``name``.</span>
 
 <span class="sd">    Matched by name: aix must not import litellm just to name its exceptions.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"UnsupportedParamsError"</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="nb">type</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">name</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="nb">type</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_unsupported_param_error</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""LiteLLM refused a request parameter client-side, before sending it."""</span>
+    <span class="k">return</span> <span class="n">_has_class_named</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s2">"UnsupportedParamsError"</span><span class="p">)</span>
+
+
+<span class="c1"># 400 subclasses that are never about ``n``: resending the prompt alone would</span>
+<span class="c1"># only pay for the same rejection twice.</span>
+<span class="n">_NOT_ABOUT_N_ERRORS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"ContextWindowExceededError"</span><span class="p">,</span>
+    <span class="s2">"ContentPolicyViolationError"</span><span class="p">,</span>
+    <span class="s2">"RejectedRequestError"</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_bad_request_error</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The provider rejected the request (HTTP 400) -- possibly because of ``n``."""</span>
+    <span class="k">return</span> <span class="n">_has_class_named</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s2">"BadRequestError"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">_has_class_named</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_NOT_ABOUT_N_ERRORS</span>
+    <span class="p">)</span>
 
 
 <div class="viewcode-block" id="sample">
@@ -579,7 +612,10 @@
 <span class="sd">            ``chat.sample_concurrency``).</span>
 <span class="sd">        model: Model id or alias (``None`` = configured default).</span>
 <span class="sd">        strategy: ``"auto"`` (provider ``n`` when supported, else independent;</span>
-<span class="sd">            also falls back to independent if the provider refuses ``n``),</span>
+<span class="sd">            also falls back to independent if LiteLLM or the provider refuses</span>
+<span class="sd">            ``n`` -- for a provider 400 the first independent request is sent</span>
+<span class="sd">            alone as a probe, and if it fails too the original 400 is raised;</span>
+<span class="sd">            see :attr:`Samples.fallback_error`),</span>
 <span class="sd">            ``"provider"`` (force one ``n`` request) or ``"independent"``.</span>
 <span class="sd">            ``n=1`` is always a single plain request, recorded ``"independent"``.</span>
 <span class="sd">        response_schema: A JSON Schema dict or Pydantic model class, enforced and</span>
@@ -640,13 +676,26 @@
     <span class="n">use_provider_n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span>
         <span class="n">strategy</span> <span class="o">==</span> <span class="s2">"provider"</span> <span class="ow">or</span> <span class="p">(</span><span class="n">strategy</span> <span class="o">==</span> <span class="s2">"auto"</span> <span class="ow">and</span> <span class="n">supports</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">"n"</span><span class="p">))</span>
     <span class="p">)</span>
+    <span class="c1"># Why the provider-n request was abandoned for independent requests, if it was.</span>
+    <span class="n">fallback_error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># A 400 may or may not be about ``n``: the first independent request is</span>
+    <span class="c1"># then sent alone, as a probe, before the rest are launched.</span>
+    <span class="n">probe_first</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">use_provider_n</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">batch</span> <span class="o">=</span> <span class="n">complete</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="o">**</span><span class="n">call_kwargs</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">strategy</span> <span class="o">!=</span> <span class="s2">"auto"</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_is_unsupported_param_error</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">strategy</span> <span class="o">!=</span> <span class="s2">"auto"</span><span class="p">:</span>
                 <span class="k">raise</span>
-            <span class="n">use_provider_n</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># supports() was wrong for this model</span>
+            <span class="k">if</span> <span class="n">_is_unsupported_param_error</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="k">pass</span>  <span class="c1"># LiteLLM knows n is unsupported: supports() was wrong</span>
+            <span class="k">elif</span> <span class="n">_is_bad_request_error</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="n">probe_first</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># the provider refused it server-side</span>
+                <span class="n">n_requests</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># unlike a LiteLLM refusal, this one was sent</span>
+                <span class="n">n_failed</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="n">use_provider_n</span><span class="p">,</span> <span class="n">fallback_error</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">e</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">n_requests</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">batch</span><span class="o">.</span><span class="n">repairs</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
@@ -691,9 +740,19 @@
                 <span class="n">stop</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">e</span>
 
-    <span class="k">for</span> <span class="n">one_seed</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-        <span class="n">seeds</span><span class="p">,</span> <span class="n">concurrent_map</span><span class="p">(</span><span class="n">draw_one</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">concurrency</span><span class="o">=</span><span class="n">concurrency</span><span class="p">)</span>
-    <span class="p">):</span>
+    <span class="n">results</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">probe_first</span> <span class="ow">and</span> <span class="n">seeds</span><span class="p">:</span>
+        <span class="n">probe</span> <span class="o">=</span> <span class="n">draw_one</span><span class="p">(</span><span class="n">seeds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">probe</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_is_bad_request_error</span><span class="p">(</span><span class="n">probe</span><span class="p">):</span>
+            <span class="c1"># A plain request is rejected too: the 400 was not about n. Raise</span>
+            <span class="c1"># the probe's own rejection (the real reason), chained to the first.</span>
+            <span class="k">raise</span> <span class="n">probe</span> <span class="kn">from</span><span class="w"> </span><span class="nn">fallback_error</span>
+        <span class="c1"># Success, or an ordinary failure (rate limit, timeout...): from here</span>
+        <span class="c1"># the probe is just the first independent request (on_error applies).</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">probe</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">+=</span> <span class="n">concurrent_map</span><span class="p">(</span><span class="n">draw_one</span><span class="p">,</span> <span class="n">seeds</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="p">:],</span> <span class="n">concurrency</span><span class="o">=</span><span class="n">concurrency</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">one_seed</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">seeds</span><span class="p">,</span> <span class="n">results</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="n">n_requests</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">else</span> <span class="n">c</span><span class="o">.</span><span class="n">repairs</span><span class="p">)</span>
@@ -730,6 +789,7 @@
         <span class="n">usage</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">usages</span><span class="p">,</span> <span class="n">Usage</span><span class="p">())</span> <span class="k">if</span> <span class="n">usages</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_requests</span><span class="o">=</span><span class="n">n_requests</span><span class="p">,</span>
         <span class="n">n_usage_reports</span><span class="o">=</span><span class="n">n_usage_reports</span><span class="p">,</span>
+        <span class="n">fallback_error</span><span class="o">=</span><span class="n">fallback_error</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">first_error</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">on_error</span> <span class="o">==</span> <span class="s2">"raise"</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">SamplingError</span><span class="p">(</span>
@@ -767,7 +827,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=fb92ec9a"></script>
+</div><script src="../../_static/documentation_options.js?v=59e51ddd"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

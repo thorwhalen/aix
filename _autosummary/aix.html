@@ -1744,7 +1744,7 @@ honoured at all).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="aix.Samples">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">Samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_requests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_usage_reports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#Samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.Samples" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.</span></span><span class="sig-name descname"><span class="pre">Samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_requests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_usage_reports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#Samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.Samples" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
 <p>The list of <a class="reference internal" href="#aix.Sample" title="aix.Sample"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sample</span></code></a> returned by <a class="reference internal" href="#aix.sample" title="aix.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">sample()</span></code></a>, plus batch facts.</p>
 <p>It is a plain <code class="docutils literal notranslate"><span class="pre">list</span></code> otherwise: slicing or concatenating gives a <code class="docutils literal notranslate"><span class="pre">list</span></code>
@@ -1776,7 +1776,17 @@ whether it is complete.</p>
 <dt class="sig sig-object py" id="aix.Samples.n_usage_reports">
 <span class="sig-name descname"><span class="pre">n_usage_reports</span></span><a class="headerlink" href="#aix.Samples.n_usage_reports" title="Link to this definition">¶</a></dt>
 <dd><p>How many of them reported usage (a completion’s repair
-requests are counted with it when it reported usage).</p>
+requests are counted with it when it reported usage). A provider
+request refused with a 400 (see <code class="docutils literal notranslate"><span class="pre">fallback_error</span></code>) reports none.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aix.Samples.fallback_error">
+<span class="sig-name descname"><span class="pre">fallback_error</span></span><a class="headerlink" href="#aix.Samples.fallback_error" title="Link to this definition">¶</a></dt>
+<dd><p>With <code class="docutils literal notranslate"><span class="pre">strategy=&quot;auto&quot;</span></code>: the error that made the
+provider-side <code class="docutils literal notranslate"><span class="pre">n</span></code> request fall back to independent requests
+(LiteLLM refusing <code class="docutils literal notranslate"><span class="pre">n</span></code>, or the provider rejecting it with a 400),
+else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -3389,7 +3399,10 @@ base seeds do not overlap. Support is provider-dependent.</p></li>
 <code class="docutils literal notranslate"><span class="pre">chat.sample_concurrency</span></code>).</p></li>
 <li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Model id or alias (<code class="docutils literal notranslate"><span class="pre">None</span></code> = configured default).</p></li>
 <li><p><strong>strategy</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'auto'</span></code>, <code class="docutils literal notranslate"><span class="pre">'provider'</span></code>, <code class="docutils literal notranslate"><span class="pre">'independent'</span></code>]</span>) – <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> (provider <code class="docutils literal notranslate"><span class="pre">n</span></code> when supported, else independent;
-also falls back to independent if the provider refuses <code class="docutils literal notranslate"><span class="pre">n</span></code>),
+also falls back to independent if LiteLLM or the provider refuses
+<code class="docutils literal notranslate"><span class="pre">n</span></code> – for a provider 400 the first independent request is sent
+alone as a probe, and if it fails too the original 400 is raised;
+see <a class="reference internal" href="#aix.Samples.fallback_error" title="aix.Samples.fallback_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Samples.fallback_error</span></code></a>),
 <code class="docutils literal notranslate"><span class="pre">&quot;provider&quot;</span></code> (force one <code class="docutils literal notranslate"><span class="pre">n</span></code> request) or <code class="docutils literal notranslate"><span class="pre">&quot;independent&quot;</span></code>.
 <code class="docutils literal notranslate"><span class="pre">n=1</span></code> is always a single plain request, recorded <code class="docutils literal notranslate"><span class="pre">&quot;independent&quot;</span></code>.</p></li>
 <li><p><strong>response_schema</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#type" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>]</span>) – A JSON Schema dict or Pydantic model class, enforced and
@@ -3936,6 +3949,7 @@ backend — e.g. <code class="docutils literal notranslate"><span class="pre">di
 <li><a class="reference internal" href="#aix.Samples.usage"><code class="docutils literal notranslate"><span class="pre">Samples.usage</span></code></a></li>
 <li><a class="reference internal" href="#aix.Samples.n_requests"><code class="docutils literal notranslate"><span class="pre">Samples.n_requests</span></code></a></li>
 <li><a class="reference internal" href="#aix.Samples.n_usage_reports"><code class="docutils literal notranslate"><span class="pre">Samples.n_usage_reports</span></code></a></li>
+<li><a class="reference internal" href="#aix.Samples.fallback_error"><code class="docutils literal notranslate"><span class="pre">Samples.fallback_error</span></code></a></li>
 <li><a class="reference internal" href="#aix.Samples.errors"><code class="docutils literal notranslate"><span class="pre">Samples.errors</span></code></a></li>
 </ul>
 </li>
@@ -4006,7 +4020,7 @@ backend — e.g. <code class="docutils literal notranslate"><span class="pre">di
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=fb92ec9a"></script>
+</div><script src="../_static/documentation_options.js?v=59e51ddd"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -1074,7 +1074,7 @@ honoured at all).
 
 `True` when the request succeeded and the text parsed (if asked).
 
-### *class* aix.Samples(samples=(), , strategy, usage=None, n_requests=0, n_usage_reports=0)
+### *class* aix.Samples(samples=(), , strategy, usage=None, n_requests=0, n_usage_reports=0, fallback_error=None)
 
 Bases: [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
@@ -1101,7 +1101,15 @@ How many requests were made (schema repair requests included).
 #### n_usage_reports
 
 How many of them reported usage (a completion’s repair
-requests are counted with it when it reported usage).
+requests are counted with it when it reported usage). A provider
+request refused with a 400 (see `fallback_error`) reports none.
+
+#### fallback_error
+
+With `strategy="auto"`: the error that made the
+provider-side `n` request fall back to independent requests
+(LiteLLM refusing `n`, or the provider rejecting it with a 400),
+else `None`.
 
 #### *property* errors *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[Exception](https://docs.python.org/3/builtins/exceptions.html#Exception), ...]*
 
@@ -2538,7 +2546,10 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
     `chat.sample_concurrency`).
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model id or alias (`None` = configured default).
   * **strategy** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'auto'`, `'provider'`, `'independent'`]) – `"auto"` (provider `n` when supported, else independent;
-    also falls back to independent if the provider refuses `n`),
+    also falls back to independent if LiteLLM or the provider refuses
+    `n` – for a provider 400 the first independent request is sent
+    alone as a probe, and if it fails too the original 400 is raised;
+    see [`Samples.fallback_error`](#aix.Samples.fallback_error)),
     `"provider"` (force one `n` request) or `"independent"`.
     `n=1` is always a single plain request, recorded `"independent"`.
   * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and

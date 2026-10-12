@@ -1,4 +1,4 @@
-> built 2026-10-12 17:01 UTC from 20cf607 (master) · aix 0.0.47. Details: build_info.json
+> built 2026-10-12 17:08 UTC from 3547773 (master) · aix 0.0.48. Details: build_info.json
 
 # index.html.md
 
@@ -4210,7 +4210,7 @@ honoured at all).
 
 `True` when the request succeeded and the text parsed (if asked).
 
-### *class* aix.Samples(samples=(), , strategy, usage=None, n_requests=0, n_usage_reports=0)
+### *class* aix.Samples(samples=(), , strategy, usage=None, n_requests=0, n_usage_reports=0, fallback_error=None)
 
 Bases: [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
@@ -4237,7 +4237,15 @@ How many requests were made (schema repair requests included).
 #### n_usage_reports
 
 How many of them reported usage (a completion’s repair
-requests are counted with it when it reported usage).
+requests are counted with it when it reported usage). A provider
+request refused with a 400 (see `fallback_error`) reports none.
+
+#### fallback_error
+
+With `strategy="auto"`: the error that made the
+provider-side `n` request fall back to independent requests
+(LiteLLM refusing `n`, or the provider rejecting it with a 400),
+else `None`.
 
 #### *property* errors *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[Exception](https://docs.python.org/3/builtins/exceptions.html#Exception), ...]*
 
@@ -5674,7 +5682,10 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
     `chat.sample_concurrency`).
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model id or alias (`None` = configured default).
   * **strategy** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'auto'`, `'provider'`, `'independent'`]) – `"auto"` (provider `n` when supported, else independent;
-    also falls back to independent if the provider refuses `n`),
+    also falls back to independent if LiteLLM or the provider refuses
+    `n` – for a provider 400 the first independent request is sent
+    alone as a probe, and if it fails too the original 400 is raised;
+    see [`Samples.fallback_error`](_autosummary/aix.html.md#aix.Samples.fallback_error)),
     `"provider"` (force one `n` request) or `"independent"`.
     `n=1` is always a single plain request, recorded `"independent"`.
   * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
@@ -6770,7 +6781,7 @@ honoured at all).
 
 `True` when the request succeeded and the text parsed (if asked).
 
-### *class* aix.sampling.Samples(samples=(), , strategy, usage=None, n_requests=0, n_usage_reports=0)
+### *class* aix.sampling.Samples(samples=(), , strategy, usage=None, n_requests=0, n_usage_reports=0, fallback_error=None)
 
 Bases: [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
@@ -6797,7 +6808,15 @@ How many requests were made (schema repair requests included).
 #### n_usage_reports
 
 How many of them reported usage (a completion’s repair
-requests are counted with it when it reported usage).
+requests are counted with it when it reported usage). A provider
+request refused with a 400 (see `fallback_error`) reports none.
+
+#### fallback_error
+
+With `strategy="auto"`: the error that made the
+provider-side `n` request fall back to independent requests
+(LiteLLM refusing `n`, or the provider rejecting it with a 400),
+else `None`.
 
 #### *property* errors *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[Exception](https://docs.python.org/3/builtins/exceptions.html#Exception), ...]*
 
@@ -6864,7 +6883,10 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
     `chat.sample_concurrency`).
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model id or alias (`None` = configured default).
   * **strategy** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'auto'`, `'provider'`, `'independent'`]) – `"auto"` (provider `n` when supported, else independent;
-    also falls back to independent if the provider refuses `n`),
+    also falls back to independent if LiteLLM or the provider refuses
+    `n` – for a provider 400 the first independent request is sent
+    alone as a probe, and if it fails too the original 400 is raised;
+    see [`Samples.fallback_error`](_autosummary/aix.sampling.html.md#aix.sampling.Samples.fallback_error)),
     `"provider"` (force one `n` request) or `"independent"`.
     `n=1` is always a single plain request, recorded `"independent"`.
   * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
@@ -7690,18 +7712,18 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.
 
 # About this build
 
-This documentation was built on **2026-10-12 17:01 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/20cf60785b9fc22a0ddbcb498ab951b995ca1704"><code>20cf607</code></a> on branch <code>master</code>, for **aix 0.0.47** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-12 17:08 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/3547773f338464688ef2d3ba6426f8997637881c"><code>3547773</code></a> on branch <code>master</code>, for **aix 0.0.48** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.0.47) is behind the latest release on PyPI (0.0.48): `pip install aix` gives newer code than these docs describe.
+- The documented version (0.0.48) is behind the latest release on PyPI (0.0.49): `pip install aix` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/20cf60785b9fc22a0ddbcb498ab951b995ca1704"><code>20cf60785b9fc22a0ddbcb498ab951b995ca1704</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/3547773f338464688ef2d3ba6426f8997637881c"><code>3547773f338464688ef2d3ba6426f8997637881c</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -7712,9 +7734,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38281144134">38281144134</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38281986798">38281986798</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>20cf60785b9fc22a0ddbcb498ab951b995ca1704</code> (in the history of the built commit) |
+| Event commit | <code>3547773f338464688ef2d3ba6426f8997637881c</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -7739,13 +7761,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.48/">0.0.48</a>, newer than the documented version (0.0.47).
+Latest release: <a href="https://pypi.org/project/aix/0.0.49/">0.0.49</a>, newer than the documented version (0.0.48).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout 20cf60785b9fc22a0ddbcb498ab951b995ca1704
+git checkout 3547773f338464688ef2d3ba6426f8997637881c
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
