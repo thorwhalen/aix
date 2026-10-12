@@ -37,7 +37,7 @@ from functools import wraps
 from inspect import signature, Parameter
 
 # Import from aix.chat
-from aix.chat import chat, DFLT_CHAT_MODEL
+from aix.chat import chat, complete, DFLT_CHAT_MODEL
 from aix.sampling import concurrent_map, check_positive_int
 from aix.config import get_config as _get_config, resolve_model as _resolve_model
 
@@ -315,6 +315,7 @@ def prompt_func(
     template: str,
     *,
     output_schema: Union[dict, type] = None,
+    response_schema: Union[dict, type] = None,
     egress: Callable[[Any], Any] = None,
     model: str = None,
     temperature: float = None,
@@ -346,6 +347,15 @@ def prompt_func(
             - Dict mapping field names to types: {"name": str, "age": int}
             - A single type for simple outputs: str, int, list, etc.
             - None for plain text output (default)
+        response_schema: Optional JSON Schema dict or Pydantic model class for
+            *enforced, validated* structured output (nested objects, arrays,
+            enums, required/optional all work): routed to the provider's
+            strict ``json_schema`` mode where supported, otherwise JSON mode,
+            then validated client-side with a bounded repair retry (see
+            :func:`aix.complete`). The function returns the validated value (a
+            model instance for a Pydantic schema) or raises
+            ``aix.SchemaValidationError``. Prefer it over ``output_schema``,
+            which is flat, prompt-only and unvalidated; pass one or the other.
         egress: Optional post-processor ``(result) -> Any`` applied to the output
             before returning — on both the text and structured paths. Lets a caller
             keep "prompt → typed Python value" inside the facade (e.g. parse the
@@ -400,6 +410,8 @@ def prompt_func(
     # Parse the template. Supports the oa-style ``{name:default}`` default-aware
     # dialect (braces inside fenced ``` regions stay literal); plain ``{name}``
     # templates are unchanged, so existing callers behave identically.
+    if output_schema is not None and response_schema is not None:
+        raise ValueError("Pass output_schema or response_schema, not both.")
     format_ready, param_names, template_defaults = _prepare_template(template)
 
     # Build the actual function
@@ -416,8 +428,16 @@ def prompt_func(
         # Format the prompt (defaults already merged in)
         formatted_prompt = format_ready.format(**values)
 
+        if response_schema is not None:
+            result = complete(
+                formatted_prompt,
+                model=model,
+                temperature=temperature,
+                response_schema=response_schema,
+                **chat_kwargs,
+            ).value
         # If structured output is requested, modify the prompt
-        if output_schema is not None:
+        elif output_schema is not None:
             json_schema = _schema_to_json_schema(output_schema)
             # Add instruction for JSON output
             structured_prompt = (
@@ -450,7 +470,11 @@ def prompt_func(
     for param in param_names:
         generated_function.__doc__ += f"    {param}: Parameter from template\n"
 
-    if output_schema:
+    if response_schema is not None:
+        generated_function.__doc__ += (
+            f"\nReturns: Validated value matching response schema: {response_schema}"
+        )
+    elif output_schema:
         generated_function.__doc__ += (
             f"\nReturns: Structured data matching schema: {output_schema}"
         )
@@ -460,6 +484,7 @@ def prompt_func(
     # Add metadata
     generated_function.template = template
     generated_function.output_schema = output_schema
+    generated_function.response_schema = response_schema
     generated_function.egress = egress
     generated_function.param_names = param_names
 

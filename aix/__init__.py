@@ -78,6 +78,7 @@ from aix.chat import (
     ChatSession,
 )
 from aix.sampling import sample, Sample, Samples, SamplingError
+from aix.structured import ResponseSchema, SchemaValidationError
 from aix.embeddings import (
     embeddings,
     embed,
@@ -176,6 +177,8 @@ __all__ = [
     "Sample",
     "Samples",
     "SamplingError",
+    "ResponseSchema",
+    "SchemaValidationError",
     "chat_with_history",
     "ChatSession",
     # Embeddings

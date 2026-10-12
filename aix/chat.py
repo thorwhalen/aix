@@ -41,7 +41,12 @@ Examples:
 from collections.abc import Iterable, Mapping
 import numbers
 from functools import wraps
-from dataclasses import dataclass, field, fields as dataclass_fields
+from dataclasses import (
+    dataclass,
+    field,
+    fields as dataclass_fields,
+    replace as _replace_dataclass,
+)
 from typing import Union, Any, Optional
 
 from aix.config import (
@@ -55,6 +60,7 @@ from aix.credentials import (
 )
 
 from aix._litellm import UNRESOLVED as _UNRESOLVED, litellm_attr as _litellm_attr
+from aix.structured import ResponseSchema as _ResponseSchema, JSON_MODE as _JSON_MODE
 
 # LiteLLM is kept private (users shouldn't call it directly) *and* deferred:
 # importing it fetches litellm's model-cost map over HTTPS, so `import aix`
@@ -318,6 +324,14 @@ class Completion:
         model: The model id the provider reports having served the call, which
             can differ from the one requested (aliases, dated snapshots).
         raw: The untouched LiteLLM response, for anything not surfaced here.
+        values: With ``response_schema=``: each choice's validated value (a
+            Pydantic instance for a Pydantic schema), ``None`` where invalid.
+        errors: Aligned with ``values``: ``None``, or the
+            :class:`~aix.structured.SchemaValidationError` of a choice that was
+            still invalid after the repair retries.
+        schema_mode: How the schema was enforced: ``"strict"``, ``"schema"`` or
+            ``"json_mode"`` (see :mod:`aix.structured`); ``None`` without one.
+        repairs: How many repair requests were made (their tokens are in ``usage``).
 
     >>> c = Completion(texts=("a", "b"), finish_reasons=("stop", "length"))
     >>> c.text, c.finish_reason
@@ -329,6 +343,25 @@ class Completion:
     usage: Optional[Usage] = None
     model: Optional[str] = None
     raw: Any = field(default=None, repr=False, compare=False)
+    values: tuple = ()
+    errors: tuple = field(default=(), compare=False)
+    schema_mode: Optional[str] = None
+    repairs: int = 0
+
+    @property
+    def value(self) -> Any:
+        """The first choice's validated value (needs ``response_schema=``).
+
+        Raises the recorded :class:`~aix.structured.SchemaValidationError` if
+        that choice still did not validate after the repair retries.
+        """
+        if not self.values:
+            raise ValueError(
+                "No structured value: call complete(..., response_schema=...)"
+            )
+        if self.errors and self.errors[0] is not None:
+            raise self.errors[0]
+        return self.values[0]
 
     @property
     def text(self) -> str:
@@ -506,6 +539,20 @@ def _validate_complete_args(func):
             raise ValueError(
                 "complete() does not stream; use chat(..., stream=True) for streaming."
             )
+        if (
+            kwargs.get("response_schema") is not None
+            and kwargs.get("response_format") is not None
+        ):
+            raise ValueError("Pass response_schema or response_format, not both.")
+        max_repairs = kwargs.get("max_repairs")
+        if max_repairs is not None and (
+            isinstance(max_repairs, bool)
+            or not isinstance(max_repairs, numbers.Integral)
+            or max_repairs < 0
+        ):
+            raise ValueError(
+                f"max_repairs must be a non-negative integer, got {max_repairs!r}"
+            )
         return func(*args, **kwargs)
 
     return wrapper
@@ -522,6 +569,8 @@ def complete(
     n: int = 1,
     seed: int = None,
     response_format: Union[dict, type] = None,
+    response_schema: Union[dict, type] = None,
+    max_repairs: int = None,
     api_key: str = None,
     **kwargs,
 ) -> Completion:
@@ -543,6 +592,15 @@ def complete(
         seed: Best-effort reproducibility seed. Only sent when given; support
             and the strength of the guarantee are provider-dependent.
         response_format: Passed through to LiteLLM (e.g. ``{"type": "json_object"}``).
+            Mutually exclusive with ``response_schema``.
+        response_schema: A JSON Schema dict or a Pydantic model class. The
+            provider is asked to enforce it as strongly as the model allows
+            (strict ``json_schema`` > non-strict ``json_schema`` > JSON mode plus
+            the schema in the prompt; see :mod:`aix.structured`), and every
+            choice is validated client-side into ``values`` / ``errors``.
+        max_repairs: With ``response_schema``: how many times to re-ask for an
+            invalid choice, showing the model its error (``None`` = config
+            ``chat.schema_max_repairs``; ``0`` disables repair).
         api_key: Explicit API key; otherwise resolved as for :func:`chat`.
         **kwargs: Additional provider-specific parameters passed to LiteLLM.
 
@@ -561,6 +619,16 @@ def complete(
         Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17)
         >>> complete("Write an essay", max_tokens=5).finish_reason  # doctest: +SKIP
         'length'
+
+        Structured output, validated:
+
+        >>> from pydantic import BaseModel  # doctest: +SKIP
+        >>> class Verdict(BaseModel):  # doctest: +SKIP
+        ...     label: str
+        ...     confidence: float
+        >>> c = complete("Is the sky green?", response_schema=Verdict)  # doctest: +SKIP
+        >>> c.value, c.schema_mode  # doctest: +SKIP
+        (Verdict(label='no', confidence=0.99), 'strict')
     """
     n = int(n)  # already validated (see _validate_complete_args); np ints too
     completion = _require_completion()
@@ -577,9 +645,103 @@ def complete(
         "response_format": response_format,
     }
     litellm_kwargs.update({k: v for k, v in optional.items() if v is not None})
-    litellm_kwargs.update(kwargs)
 
-    return Completion.from_response(completion(**litellm_kwargs))
+    if response_schema is None:
+        litellm_kwargs.update(kwargs)
+        return Completion.from_response(completion(**litellm_kwargs))
+
+    spec = _ResponseSchema.from_schema(response_schema)
+    mode = spec.mode_for(litellm_kwargs["model"])
+    litellm_kwargs["response_format"] = spec.response_format(mode)
+    if mode == _JSON_MODE:
+        litellm_kwargs["messages"] = _with_instruction(
+            litellm_kwargs["messages"], spec.instruction()
+        )
+    litellm_kwargs.update(kwargs)
+    if max_repairs is None:
+        max_repairs = _get_config().chat.schema_max_repairs
+    return _validated(
+        completion,
+        Completion.from_response(completion(**litellm_kwargs)),
+        litellm_kwargs,
+        spec=spec,
+        mode=mode,
+        max_repairs=max_repairs,
+    )
+
+
+def _with_instruction(messages: list, instruction: str) -> list:
+    """``messages`` with ``instruction`` added to the final user turn (copied)."""
+    messages = [dict(m) for m in messages]
+    last = messages[-1] if messages else None
+    if last and last.get("role") == "user" and isinstance(last.get("content"), str):
+        last["content"] = f"{last['content']}\n\n{instruction}"
+    else:
+        messages.append({"role": "user", "content": instruction})
+    return messages
+
+
+def _validated(
+    completion_fn,
+    first: Completion,
+    litellm_kwargs: dict,
+    *,
+    spec,
+    mode: str,
+    max_repairs: int,
+) -> Completion:
+    """Validate every choice of ``first``, repairing invalid ones up to ``max_repairs``.
+
+    A repair is one extra ``n=1`` request: the conversation, the invalid reply
+    as the assistant turn, and the validation error as the next user turn. Its
+    tokens are added to ``usage``; the repaired text replaces the choice's.
+    """
+    from aix.structured import SchemaValidationError
+
+    texts, reasons = list(first.texts), list(first.finish_reasons)
+    values, errors = [], []
+    usages = [first.usage] if first.usage is not None else []
+    repairs = 0
+    repair_kwargs = {k: v for k, v in litellm_kwargs.items() if k != "n"}
+
+    for i, text in enumerate(texts):
+        for attempt in range(max_repairs + 1):
+            try:
+                values.append(spec.validate(text))
+                errors.append(None)
+                break
+            except SchemaValidationError as e:
+                if attempt == max_repairs:
+                    values.append(None)
+                    errors.append(e)
+                    break
+                repair_kwargs["messages"] = [
+                    *litellm_kwargs["messages"],
+                    {"role": "assistant", "content": text},
+                    {
+                        "role": "user",
+                        "content": f"That reply was invalid ({e.detail}). "
+                        + spec.instruction(),
+                    },
+                ]
+                fixed = Completion.from_response(completion_fn(**repair_kwargs))
+                repairs += 1
+                if fixed.usage is not None:
+                    usages.append(fixed.usage)
+                text = texts[i] = fixed.text
+                if i < len(reasons):
+                    reasons[i] = fixed.finish_reason
+
+    return _replace_dataclass(
+        first,
+        texts=tuple(texts),
+        finish_reasons=tuple(reasons),
+        usage=sum(usages, Usage()) if usages else None,
+        values=tuple(values),
+        errors=tuple(errors),
+        schema_mode=mode,
+        repairs=repairs,
+    )
 
 
 def chat_with_history(

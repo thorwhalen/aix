@@ -231,6 +231,17 @@ def _parsed(text: str, parse: Optional[Callable[[str], Any]]):
         return None, e
 
 
+def _payload(c: Completion, index: int, parse: Optional[Callable[[str], Any]]):
+    """``(payload, error)`` for choice ``index`` of ``c``.
+
+    The validated value when ``c`` was produced with a response schema, else
+    ``parse`` applied to the text.
+    """
+    if c.schema_mode is not None:
+        return c.values[index], c.errors[index]
+    return _parsed(c.texts[index] if index < len(c.texts) else "", parse)
+
+
 def _is_unsupported_param_error(error: Exception) -> bool:
     """Whether the provider refused a request parameter (LiteLLM's error type).
 
@@ -249,6 +260,7 @@ def sample(
     model: str = None,
     strategy: Strategy = "auto",
     parse: Callable[[str], Any] = None,
+    response_schema: Union[dict, type] = None,
     on_error: OnError = "raise",
     api_key: str = None,
     **kwargs,
@@ -271,6 +283,10 @@ def sample(
             also falls back to independent if the provider refuses ``n``),
             ``"provider"`` (force one ``n`` request) or ``"independent"``.
             ``n=1`` is always a single plain request, recorded ``"independent"``.
+        response_schema: A JSON Schema dict or Pydantic model class, enforced and
+            validated per request as in :func:`aix.complete`; each payload is the
+            validated value, and a choice still invalid after repairs records its
+            ``SchemaValidationError`` as ``error``. Exclusive with ``parse``.
         parse: Optional ``text -> payload`` (e.g. ``json.loads``). A failure is
             recorded on that sample (``payload=None``, ``error=...``), not raised.
         on_error: When a request fails: ``"raise"`` (default) raises
@@ -297,6 +313,8 @@ def sample(
         raise ValueError(f"strategy must be one of {_STRATEGIES}, got {strategy!r}")
     if on_error not in _ON_ERROR:
         raise ValueError(f"on_error must be one of {_ON_ERROR}, got {on_error!r}")
+    if parse is not None and response_schema is not None:
+        raise ValueError("Pass parse or response_schema, not both.")
     reserved = _RESERVED_KWARGS.intersection(kwargs)
     if reserved:
         raise ValueError(
@@ -309,6 +327,8 @@ def sample(
     _check_requirements(model or _get_config().chat.model, api_key=api_key)
 
     call_kwargs = dict(model=model, temperature=temperature, api_key=api_key, **kwargs)
+    if response_schema is not None:
+        call_kwargs["response_schema"] = response_schema
 
     samples: list[Sample] = []
     usages: list[Usage] = []
@@ -326,8 +346,10 @@ def sample(
             use_provider_n = False  # supports() was wrong for this model
         else:
             n_requests += 1
-            for text, reason in list(zip(batch.texts, batch.finish_reasons))[:n]:
-                payload, error = _parsed(text, parse)
+            for i, (text, reason) in enumerate(
+                list(zip(batch.texts, batch.finish_reasons))[:n]
+            ):
+                payload, error = _payload(batch, i, parse)
                 samples.append(
                     Sample(text, payload, reason, None, PROVIDER_N, seed, error)
                 )
@@ -365,7 +387,7 @@ def sample(
             first_error, n_failed = first_error or c, n_failed + 1
             samples.append(Sample("", None, None, None, INDEPENDENT, one_seed, c))
             continue
-        payload, error = _parsed(c.text, parse)
+        payload, error = _payload(c, 0, parse)
         samples.append(
             Sample(
                 c.text, payload, c.finish_reason, c.usage, INDEPENDENT, one_seed, error

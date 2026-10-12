@@ -134,6 +134,9 @@ class ChatConfig:
     # Max simultaneous requests when ``sample`` / ``constrained_answer(n=...)``
     # draw independent samples.
     sample_concurrency: int = _opt(5, flat="chat_sample_concurrency", cast=int)
+    # How many times ``complete(..., response_schema=...)`` re-asks for a choice
+    # that did not validate, showing the model its error.
+    schema_max_repairs: int = _opt(1, flat="chat_schema_max_repairs", cast=int)
 
 
 @dataclass(frozen=True)

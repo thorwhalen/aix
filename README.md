@@ -355,6 +355,41 @@ my_funcs.add("fix_bugs", "Fix bugs in: {code}")
 result = my_funcs.analyze(code="def foo(): return bar")
 ```
 
+#### Enforced, validated structured output
+
+`output_schema` above is flat and only requested in the prompt; nothing checks the reply against it. For anything nested (objects inside objects, arrays of objects, enums, required vs optional), pass `response_schema=`, either a Pydantic model or a JSON Schema dict. It works on `complete()`, `sample()` and `prompt_func()`:
+
+```python
+from typing import Literal
+from pydantic import BaseModel
+from aix import complete, prompt_func
+
+class Span(BaseModel):
+    start: int
+    end: int
+
+class Judgement(BaseModel):
+    value: Literal["yes", "no", "unsure"]
+    confidence: float
+    evidence: list[Span]
+
+judge = prompt_func("Does this text claim {claim}? {text}", response_schema=Judgement)
+judge(claim="...", text="...")       # -> Judgement(value='yes', confidence=0.8, evidence=[...])
+
+c = complete("...", response_schema=Judgement)
+c.value          # the validated Judgement (raises SchemaValidationError if still invalid)
+c.schema_mode    # 'strict' | 'schema' | 'json_mode' -- how the provider enforced it
+c.repairs        # extra requests made to fix invalid replies (their tokens are in c.usage)
+```
+
+The provider enforces the schema as strongly as the model allows:
+
+- **`strict`**: a strict `json_schema` response format, which constrains decoding. Used when LiteLLM's `supports_response_schema(model)` is true and the schema is strict-compatible (every object closes `additionalProperties` and requires all of its properties; Pydantic models are converted to that form automatically).
+- **`schema`**: the same format, non-strict, for a schema that is not strict-compatible.
+- **`json_mode`**: JSON mode plus the schema written into the prompt, for models without schema support.
+
+Every reply is also validated client-side. An invalid reply is re-asked up to `max_repairs` times (default from config `chat.schema_max_repairs`, which is 1), and each repair request shows the model its error.
+
 ### 4. Model Discovery & Selection
 
 Discover and filter models across providers:
