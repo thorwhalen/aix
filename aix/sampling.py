@@ -31,6 +31,7 @@ from aix.capabilities import supports
 from aix.chat import Completion, Usage, complete
 from aix.config import get_config as _get_config
 from aix.credentials import check_requirements as _check_requirements
+from aix.structured import ResponseSchema
 
 __all__ = [
     "sample",
@@ -165,8 +166,9 @@ class Samples(list):
         usage: Total tokens over every request that reported usage, or ``None``
             if none did. Compare ``n_requests`` with ``n_usage_reports`` to see
             whether it is complete.
-        n_requests: How many requests were made.
-        n_usage_reports: How many of them reported usage.
+        n_requests: How many requests were made (schema repair requests included).
+        n_usage_reports: How many of them reported usage (a completion's repair
+            requests are counted with it when it reported usage).
     """
 
     def __init__(
@@ -238,6 +240,8 @@ def _payload(c: Completion, index: int, parse: Optional[Callable[[str], Any]]):
     ``parse`` applied to the text.
     """
     if c.schema_mode is not None:
+        if index >= len(c.values):
+            return None, ValueError("The provider returned no choice for this sample")
         return c.values[index], c.errors[index]
     return _parsed(c.texts[index] if index < len(c.texts) else "", parse)
 
@@ -328,11 +332,12 @@ def sample(
 
     call_kwargs = dict(model=model, temperature=temperature, api_key=api_key, **kwargs)
     if response_schema is not None:
-        call_kwargs["response_schema"] = response_schema
+        # Normalized once here, not once per request (it builds a validator).
+        call_kwargs["response_schema"] = ResponseSchema.from_schema(response_schema)
 
     samples: list[Sample] = []
     usages: list[Usage] = []
-    n_requests = 0
+    n_requests = n_usage_reports = 0
 
     use_provider_n = n > 1 and (
         strategy == "provider" or (strategy == "auto" and supports(model, "n"))
@@ -345,7 +350,7 @@ def sample(
                 raise
             use_provider_n = False  # supports() was wrong for this model
         else:
-            n_requests += 1
+            n_requests += 1 + batch.repairs
             for i, (text, reason) in enumerate(
                 list(zip(batch.texts, batch.finish_reasons))[:n]
             ):
@@ -355,6 +360,7 @@ def sample(
                 )
             if batch.usage is not None:
                 usages.append(batch.usage)
+                n_usage_reports += 1 + batch.repairs
 
     n_from_provider = len(samples)
     seeds = [
@@ -382,7 +388,7 @@ def sample(
     ):
         if c is None:
             continue
-        n_requests += 1
+        n_requests += 1 + (0 if isinstance(c, Exception) else c.repairs)
         if isinstance(c, Exception):
             first_error, n_failed = first_error or c, n_failed + 1
             samples.append(Sample("", None, None, None, INDEPENDENT, one_seed, c))
@@ -395,6 +401,7 @@ def sample(
         )
         if c.usage is not None:
             usages.append(c.usage)
+            n_usage_reports += 1 + c.repairs
 
     if not use_provider_n:
         recorded = INDEPENDENT
@@ -405,7 +412,7 @@ def sample(
         strategy=recorded,
         usage=sum(usages, Usage()) if usages else None,
         n_requests=n_requests,
-        n_usage_reports=len(usages),
+        n_usage_reports=n_usage_reports,
     )
     if first_error is not None and on_error == "raise":
         raise SamplingError(

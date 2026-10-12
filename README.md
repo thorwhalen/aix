@@ -386,9 +386,12 @@ The provider enforces the schema as strongly as the model allows:
 
 - **`strict`**: a strict `json_schema` response format, which constrains decoding. Used when LiteLLM's `supports_response_schema(model)` is true and the schema is strict-compatible (every object closes `additionalProperties` and requires all of its properties; Pydantic models are converted to that form automatically).
 - **`schema`**: the same format, non-strict, for a schema that is not strict-compatible.
-- **`json_mode`**: JSON mode plus the schema written into the prompt, for models without schema support.
+- **`json_mode`**: JSON mode plus the schema written into the prompt, for models without schema support (or whose support is unknown).
+- **`prompt`**: the schema in the prompt only, for models LiteLLM knows accept no `response_format` at all.
 
-Every reply is also validated client-side. An invalid reply is re-asked up to `max_repairs` times (default from config `chat.schema_max_repairs`, which is 1), and each repair request shows the model its error.
+A schema whose root is not an object (a list, a union, a `RootModel`) is sent wrapped as `{"value": ...}`, since providers only constrain objects. It is unwrapped for you after validation.
+
+Every reply is also validated client-side. An invalid reply is re-asked up to `max_repairs` times (default from config `chat.schema_max_repairs`, which is 1), and each repair request shows the model its error. A refusal is recorded and never re-asked. A failed repair request is recorded on that choice; the other choices are kept.
 
 ### 4. Model Discovery & Selection
 

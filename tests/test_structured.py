@@ -309,3 +309,162 @@ def test_end_to_end_through_litellm_mock_response():
 def test_exports():
     assert aix.ResponseSchema is ResponseSchema
     assert aix.SchemaValidationError is SchemaValidationError
+
+
+class TestReviewRegressions:
+    """Findings from the adversarial review of #43."""
+
+    def test_non_object_root_is_wrapped_and_unwrapped(
+        self, fake_completion, schema_support
+    ):
+        from pydantic import RootModel
+
+        Ints = RootModel[list[int]]
+        fake_completion.return_value = _response('{"value": [1, 2, 3]}')
+        c = complete("q", response_schema=Ints)
+        wire = fake_completion.call_args.kwargs["response_format"]["json_schema"]
+        assert wire["schema"]["type"] == "object"
+        assert wire["schema"]["properties"]["value"]["type"] == "array"
+        assert c.value.root == [1, 2, 3]
+
+    def test_wrapped_dict_schema_hoists_defs(self):
+        schema = {
+            "type": "array",
+            "items": {"$ref": "#/$defs/P"},
+            "$defs": {
+                "P": {
+                    "type": "object",
+                    "properties": {"x": {"type": "integer"}},
+                    "required": ["x"],
+                    "additionalProperties": False,
+                }
+            },
+        }
+        spec = ResponseSchema.from_schema(schema)
+        assert spec.wrapped and "$defs" in spec.wire_schema
+        assert spec.strict_compatible
+        assert spec.validate('{"value": [{"x": 1}]}') == [{"x": 1}]
+        with pytest.raises(SchemaValidationError):
+            spec.validate('[{"x": 1}]')  # not the wrapper object
+
+    def test_prompt_mode_when_model_takes_no_response_format(
+        self, fake_completion, schema_support
+    ):
+        schema_support["value"] = False
+        fake_completion.return_value = _response(GOOD)
+        with patch(
+            "aix.capabilities._litellm_get_supported_openai_params",
+            lambda model: ["temperature", "max_tokens"],
+        ):
+            c = complete("q", response_schema=Judgement)
+        sent = fake_completion.call_args.kwargs
+        assert "response_format" not in sent
+        assert "JSON Schema" in sent["messages"][-1]["content"]
+        assert c.schema_mode == "prompt" and isinstance(c.value, Judgement)
+
+    def test_unknown_support_stays_json_mode(self, fake_completion, schema_support):
+        schema_support["value"] = False
+        fake_completion.return_value = _response(GOOD)
+        with patch(
+            "aix.capabilities._litellm_get_supported_openai_params", lambda model: None
+        ):
+            assert complete("q", response_schema=Judgement).schema_mode == "json_mode"
+
+    def test_pydantic_validated_in_json_mode(self):
+        import datetime
+        import enum
+
+        from pydantic import ConfigDict
+
+        class Color(enum.Enum):
+            red = "red"
+
+        class Strict(BaseModel):
+            model_config = ConfigDict(strict=True)
+            c: Color
+            d: datetime.date
+
+        out = ResponseSchema.from_schema(Strict).validate(
+            '{"c": "red", "d": "2024-01-02"}'
+        )
+        assert out.c is Color.red and out.d == datetime.date(2024, 1, 2)
+
+    def test_repair_request_error_keeps_other_choices(
+        self, fake_completion, schema_support
+    ):
+        fake_completion.side_effect = [_response(GOOD, "bad"), RuntimeError("429")]
+        c = complete("q", n=2, response_schema=Judgement, max_repairs=1)
+        assert isinstance(c.values[0], Judgement) and c.errors[0] is None
+        assert isinstance(c.errors[1], RuntimeError) and c.repairs == 1
+
+    def test_negative_configured_repairs_rejected(
+        self, fake_completion, schema_support
+    ):
+        fake_completion.return_value = _response(GOOD)
+        with aix.using(chat_schema_max_repairs=-1):
+            with pytest.raises(ValueError, match="max_repairs"):
+                complete("q", response_schema=Judgement)
+
+    def test_refusal_not_repaired(self, fake_completion, schema_support):
+        refusal = SimpleNamespace(
+            choices=[
+                SimpleNamespace(
+                    message=SimpleNamespace(content=None, refusal="I can't help"),
+                    finish_reason="stop",
+                )
+            ],
+            usage=None,
+            model="m",
+        )
+        fake_completion.return_value = refusal
+        c = complete("q", response_schema=Judgement, max_repairs=3)
+        assert fake_completion.call_count == 1 and c.repairs == 0
+        assert "refused" in str(c.errors[0])
+
+    def test_empty_reply_repair_uses_placeholder(self, fake_completion, schema_support):
+        fake_completion.side_effect = [_response(""), _response(GOOD)]
+        complete("q", response_schema=Judgement, max_repairs=1)
+        assistant = fake_completion.call_args.kwargs["messages"][-2]
+        assert assistant["role"] == "assistant" and assistant["content"]
+
+    def test_strict_check_is_structural(self):
+        closed = {
+            "type": "object",
+            "properties": {
+                "properties": {"type": "string"},
+                "kind": {"enum": [{"properties": 1}], "default": {"properties": {}}},
+            },
+            "required": ["properties", "kind"],
+            "additionalProperties": False,
+        }
+        assert _is_strict_compatible(closed)
+        assert not _is_strict_compatible(
+            {
+                **closed,
+                "properties": {
+                    "properties": {"type": "string", "minLength": 2},
+                    "kind": {"type": "string"},
+                },
+            }
+        )
+
+    def test_completion_with_dict_values_hashable(
+        self, fake_completion, schema_support
+    ):
+        fake_completion.return_value = _response('{"value": "yes"}')
+        hash(complete("q", response_schema=NESTED_DICT_SCHEMA))
+
+    def test_sample_counts_repair_requests(self, fake_completion, schema_support):
+        fake_completion.side_effect = [
+            _response("bad", usage=_usage()),
+            _response(GOOD, usage=_usage()),
+        ]
+        out = sample("q", n=1, response_schema=Judgement, max_repairs=1)
+        assert out.n_requests == 2 and out.n_usage_reports == 2
+
+    def test_sample_with_zero_choice_reply(self, fake_completion, schema_support):
+        fake_completion.return_value = SimpleNamespace(
+            choices=[], usage=None, model="m"
+        )
+        out = sample("q", n=1, response_schema=Judgement, on_error="record")
+        assert out[0].payload is None and out[0].error is not None
