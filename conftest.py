@@ -11,8 +11,10 @@ only applies to what is collected beneath it, and CI collects **two** trees:
 action adds ``--doctest-modules`` by default).  A ``tests/conftest.py`` would
 leave the doctest run reaching out.
 
-``setdefault`` leaves an explicitly-set value alone; litellm treats any
-non-empty value as "use the bundled map".  Deliberately *not* done inside the
+``setdefault`` leaves an explicitly-set value alone. The value is ``"True"``:
+older litellm releases took any non-empty value as "use the bundled map", but
+current ones accept only ``"true"`` (case-insensitive) -- with ``"1"`` the
+suite silently kept fetching the remote map.  Deliberately *not* done inside the
 library itself: ``os.environ`` is process-global, so that choice belongs to the
 operator, not to ``aix`` (see :mod:`aix._litellm`).
 ``tests/test_import_is_hermetic.py`` strips this from its subprocesses — with
@@ -21,4 +23,4 @@ it set, its socket guard could not fail.
 
 import os
 
-os.environ.setdefault("LITELLM_LOCAL_MODEL_COST_MAP", "1")
+os.environ.setdefault("LITELLM_LOCAL_MODEL_COST_MAP", "True")

@@ -18,14 +18,17 @@ https://github.com/thorwhalen/aix/issues/38.
 The fix is *when*, not *whether*.  Each ``aix`` module binds its litellm entry
 points to the :data:`UNRESOLVED` sentinel and resolves them through
 :func:`litellm_attr` on first use, so the import — and therefore the cost-map
-fetch — happens on the first actual provider call.  That call is already going
-over the network, so the map is still the fresh remote one and provider
-resolution is unchanged.
+fetch — happens on the first call that needs litellm: a provider call, or a
+capability lookup such as :func:`aix.supports` (which reads litellm's model
+data, so it also triggers the fetch).  A provider call is already going over
+the network, so the map is still the fresh remote one and provider resolution
+is unchanged.
 
 Why not force litellm's bundled map instead
 -------------------------------------------
-``litellm`` honours ``LITELLM_LOCAL_MODEL_COST_MAP``: set it to any non-empty
-value and litellm reads a copy bundled in the wheel instead of fetching.  It is
+``litellm`` honours ``LITELLM_LOCAL_MODEL_COST_MAP``: set it to ``True`` (older
+releases accepted any non-empty value; current ones only ``"true"``) and litellm
+reads a copy bundled in the wheel instead of fetching.  It is
 tempting for ``aix`` to set that itself, but it is the wrong default here:
 
 * **It is not free.** ``aix`` reads none of litellm's cost data (model pricing
@@ -42,7 +45,7 @@ tempting for ``aix`` to set that itself, but it is the wrong default here:
   setting it changes the behaviour of every other litellm user in the process.
 
 So ``aix`` sets no environment variable.  Operators who want the first call to
-be offline too can export ``LITELLM_LOCAL_MODEL_COST_MAP=1`` themselves, with
+be offline too can export ``LITELLM_LOCAL_MODEL_COST_MAP=True`` themselves, with
 the narrower bare-name resolution above as the known trade-off; ``aix`` stays
 out of that decision.
 """
