@@ -259,6 +259,25 @@ cs = [complete(q) for q in questions]
 total = sum((c.usage for c in cs if c.usage), Usage())
 ```
 
+To ask the same question several times (agreement, stability, majority vote), use `sample()`. It sends one request with provider-side `n` when LiteLLM reports that the model supports it, and otherwise makes `n` independent requests concurrently. It records which path it took, because the two are not the same statistical object:
+
+```python
+import json
+from aix import sample
+
+s = sample("Is a tomato a fruit? Reply as JSON {\"answer\": bool}", n=5,
+           temperature=1.0, parse=json.loads)
+s.strategy                    # 'provider_n', 'independent' or 'mixed'
+s.payloads                    # parsed answers (None where parsing failed)
+[x.finish_reason for x in s]  # 'content_filter' means refused, 'length' means truncated
+s.usage                       # total tokens across every request that reported usage
+s.n_requests                  # how many requests were made
+```
+
+A failed request does not discard the work already paid for. By default `sample()` raises `SamplingError` once the launched requests finish, and the partial batch is on its `.samples`. With `on_error="record"`, the failure is stored on that sample's `.error` instead. A `seed` is sent as-is with a provider-side `n` request; each independent request gets a seed derived from `(seed, index)`.
+
+`constrained_answer(..., n=k)` now runs its `k` calls concurrently too (`concurrency=`, default from config `chat.sample_concurrency`).
+
 ### 2. Embeddings
 
 Generate vector embeddings for semantic search and similarity:

@@ -28,6 +28,7 @@ Quick Start:
 Main Features:
     - chat(): Simple chat interface across providers
     - complete(): The whole response (all n choices, usage, finish reasons)
+    - sample(): n answers to one prompt, concurrently or via provider-side n
     - embeddings(): Vector embeddings for text
     - prompt_func(): Create functions from prompt templates
     - models: Model discovery and selection
@@ -76,6 +77,7 @@ from aix.chat import (
     chat_with_history,
     ChatSession,
 )
+from aix.sampling import sample, Sample, Samples, SamplingError
 from aix.embeddings import (
     embeddings,
     embed,
@@ -170,6 +172,10 @@ __all__ = [
     "Completion",
     "Usage",
     "ask",
+    "sample",
+    "Sample",
+    "Samples",
+    "SamplingError",
     "chat_with_history",
     "ChatSession",
     # Embeddings
