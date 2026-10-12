@@ -173,7 +173,8 @@ class Samples(list):
             whether it is complete.
         n_requests: How many requests were made (schema repair requests included).
         n_usage_reports: How many of them reported usage (a completion's repair
-            requests are counted with it when it reported usage).
+            requests are counted with it when it reported usage). A provider
+            request refused with a 400 (see ``fallback_error``) reports none.
         fallback_error: With ``strategy="auto"``: the error that made the
             provider-side ``n`` request fall back to independent requests
             (LiteLLM refusing ``n``, or the provider rejecting it with a 400),
@@ -213,7 +214,12 @@ class Samples(list):
     def __repr__(self) -> str:
         return (
             f"Samples({list.__repr__(self)}, strategy={self.strategy!r}, "
-            f"usage={self.usage!r}, n_requests={self.n_requests})"
+            f"usage={self.usage!r}, n_requests={self.n_requests}"
+            + (
+                f", fallback_error={self.fallback_error!r})"
+                if self.fallback_error is not None
+                else ")"
+            )
         )
 
 
@@ -276,9 +282,20 @@ def _is_unsupported_param_error(error: Exception) -> bool:
     return _has_class_named(error, "UnsupportedParamsError")
 
 
+# 400 subclasses that are never about ``n``: resending the prompt alone would
+# only pay for the same rejection twice.
+_NOT_ABOUT_N_ERRORS = (
+    "ContextWindowExceededError",
+    "ContentPolicyViolationError",
+    "RejectedRequestError",
+)
+
+
 def _is_bad_request_error(error: Exception) -> bool:
     """The provider rejected the request (HTTP 400) -- possibly because of ``n``."""
-    return _has_class_named(error, "BadRequestError")
+    return _has_class_named(error, "BadRequestError") and not any(
+        _has_class_named(error, name) for name in _NOT_ABOUT_N_ERRORS
+    )
 
 
 def sample(
@@ -391,6 +408,7 @@ def sample(
             elif _is_bad_request_error(e):
                 probe_first = True  # the provider refused it server-side
                 n_requests += 1  # unlike a LiteLLM refusal, this one was sent
+                n_failed += 1
             else:
                 raise
             use_provider_n, fallback_error = False, e
@@ -440,12 +458,14 @@ def sample(
 
     results: list = []
     if probe_first and seeds:
-        try:
-            results.append(complete(prompt, n=1, seed=seeds[0], **call_kwargs))
-        except Exception:
-            # A plain request fails too: the 400 was not about n. Surface the
-            # provider's original rejection rather than a batch of copies.
-            raise fallback_error
+        probe = draw_one(seeds[0])
+        if isinstance(probe, Exception) and _is_bad_request_error(probe):
+            # A plain request is rejected too: the 400 was not about n. Raise
+            # the probe's own rejection (the real reason), chained to the first.
+            raise probe from fallback_error
+        # Success, or an ordinary failure (rate limit, timeout...): from here
+        # the probe is just the first independent request (on_error applies).
+        results.append(probe)
     results += concurrent_map(draw_one, seeds[len(results) :], concurrency=concurrency)
 
     for one_seed, c in zip(seeds, results):

@@ -453,12 +453,66 @@ class TestServerSideNRefusal:
         assert out.n_requests == 5  # the refused (sent) n request + 4 singles
         assert calls[0]["n"] == 4 and all("n" not in c for c in calls[1:])
 
-    def test_unrelated_400_raises_original(self, fake_completion, params_support):
+    def test_unrelated_400_raises_the_probe_rejection(
+        self, fake_completion, params_support
+    ):
         params_support["params"] = ["n"]
-        calls = self._refuse_n(fake_completion, plain_ok=False)
-        with pytest.raises(self.BadRequestError):
+        calls = []
+
+        def respond(**kw):
+            calls.append(kw)
+            if kw.get("n", 1) > 1:
+                raise self.BadRequestError("'n' must be 1")
+            raise self.BadRequestError("prompt rejected")
+
+        fake_completion.side_effect = respond
+        with pytest.raises(self.BadRequestError, match="prompt rejected") as info:
             sample("q", n=4, concurrency=4)
+        assert "'n' must be 1" in str(info.value.__cause__)
         assert len(calls) == 2  # the n request + one probe, not a batch of copies
+
+    def _refuse_n_then_transient_probe(self, fake_completion):
+        calls = []
+
+        def respond(**kw):
+            calls.append(kw)
+            if kw.get("n", 1) > 1:
+                raise self.BadRequestError("'n' must be 1")
+            if len(calls) == 2:
+                raise RuntimeError("429 rate limited")
+            return _response(["x"], usage=_usage())
+
+        fake_completion.side_effect = respond
+        return calls
+
+    def test_transient_probe_failure_is_recorded(self, fake_completion, params_support):
+        params_support["params"] = ["n"]
+        self._refuse_n_then_transient_probe(fake_completion)
+        out = sample("q", n=3, on_error="record", seed=7)
+        assert len(out) == 3 and isinstance(out[0].error, RuntimeError)
+        assert [s.seed for s in out] == [7, _derived_seed(7, 1), _derived_seed(7, 2)]
+        assert out.n_requests == 4 and out.n_usage_reports == 2
+        assert "fallback_error" in repr(out)
+
+    def test_transient_probe_failure_raises_sampling_error(
+        self, fake_completion, params_support
+    ):
+        params_support["params"] = ["n"]
+        calls = self._refuse_n_then_transient_probe(fake_completion)
+        with pytest.raises(SamplingError) as info:
+            sample("q", n=3)
+        assert isinstance(info.value.__cause__, RuntimeError)
+        assert len(calls) == 2  # fail-fast: nothing launched after the probe failed
+
+    def test_context_window_error_not_probed(self, fake_completion, params_support):
+        class ContextWindowExceededError(self.BadRequestError):
+            pass
+
+        params_support["params"] = ["n"]
+        fake_completion.side_effect = ContextWindowExceededError("too long")
+        with pytest.raises(ContextWindowExceededError):
+            sample("q", n=3)
+        assert fake_completion.call_count == 1
 
     def test_forced_provider_does_not_fall_back(self, fake_completion, params_support):
         params_support["params"] = ["n"]
