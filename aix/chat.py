@@ -336,7 +336,8 @@ class Completion:
         raw: The untouched LiteLLM response, for anything not surfaced here.
         system_fingerprint: The provider's identifier for the serving backend
             configuration, when it reports one (OpenAI does). Seeded outputs
-            are only comparable across calls with the same fingerprint.
+            are only comparable across calls with the same fingerprint. A
+            response replayed from a cache carries its *original* fingerprint.
         values: With ``response_schema=``: each choice's validated value (a
             Pydantic instance for a Pydantic schema), ``None`` where invalid.
         errors: Aligned with ``values``: ``None``, or why that choice has no
@@ -358,11 +359,11 @@ class Completion:
     usage: Optional[Usage] = None
     model: Optional[str] = None
     raw: Any = field(default=None, repr=False, compare=False)
-    system_fingerprint: Optional[str] = None
     values: tuple = field(default=(), compare=False)
     errors: tuple = field(default=(), compare=False)
     schema_mode: Optional[str] = None
     repairs: int = 0
+    system_fingerprint: Optional[str] = None
 
     @property
     def value(self) -> Any:

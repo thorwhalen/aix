@@ -86,3 +86,21 @@ def test_fingerprint_absent_is_none():
             choices=_response().choices, usage=None, model="m"
         )
         assert aix.complete("q").system_fingerprint is None
+
+
+def test_non_string_param_is_false():
+    assert supports("gpt-4o-mini", ["seed"]) is False
+    assert supports("gpt-4o-mini", None) is False
+
+
+def test_broken_capability_check_is_false():
+    with patch.dict(CAPABILITIES, {"x": lambda m: 1 / 0, "y": lambda m: "yes"}):
+        assert supports("m", "x") is False
+        assert supports("m", "y") is True
+
+
+def test_suite_uses_bundled_cost_map():
+    """The root conftest must use a value current litellm honours ("true")."""
+    import os
+
+    assert os.environ["LITELLM_LOCAL_MODEL_COST_MAP"].lower() == "true"
