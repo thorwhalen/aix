@@ -405,7 +405,11 @@ def requires_credentials(default_model: Callable[[], Optional[str]]):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            model = kwargs.get("model") or default_model()
+            # Resolve aliases ("best", "fast", configured ones) first: the
+            # preflight must check the provider of the model actually called.
+            from aix.config import resolve_model
+
+            model = resolve_model(kwargs.get("model") or default_model())
             check_requirements(model, api_key=kwargs.get("api_key"))
             return func(*args, **kwargs)
 

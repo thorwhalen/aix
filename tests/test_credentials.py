@@ -167,3 +167,19 @@ class TestChatKeyInjection:
         with pytest.raises(MissingCredentialError):
             _aix_chat.chat("hi", model="gpt-4o")
         mock_completion.assert_not_called()
+
+
+def test_preflight_resolves_aliases(no_keys, monkeypatch):
+    """`chat(model="best")` must check the aliased model's provider, not "best"."""
+    import aix
+    from aix.credentials import MissingCredentialError, requires_credentials
+
+    @requires_credentials(lambda: "gpt-4o-mini")
+    def f(*, model=None, api_key=None):
+        return model
+
+    with aix.using(aliases={"seer": "anthropic/claude-x"}):
+        with pytest.raises(MissingCredentialError):
+            f(model="seer")  # no anthropic key: the alias's provider is checked
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+        assert f(model="seer") == "seer"  # the wrapped call still sees the alias
