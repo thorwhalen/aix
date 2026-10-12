@@ -19,6 +19,7 @@ chat_models = {
     "gpt-4-32k": {},
     "gpt-4-turbo": {},
     "gpt-3.5-turbo": {},
+    "o1": {},
     "o1-preview": {},
     "o1-mini": {},
     "gpt-4o": {},
@@ -27,17 +28,31 @@ chat_models = {
 
 
 def _oa_is_installed() -> bool:
-    """Whether ``oa`` can be imported, checked without importing it."""
+    """Whether ``oa`` is installed, checked without importing it.
+
+    A namespace package (a stray ``oa/`` folder without ``__init__.py`` on the
+    path) has no ``origin`` and does not count.
+    """
     try:
-        return find_spec("oa") is not None
+        spec = find_spec("oa")
     except (ImportError, ValueError):
         return False
+    return spec is not None and spec.origin not in (None, "namespace")
 
 
 if _oa_is_installed():
 
-    def chat(prompt: str, *, model: str = "gpt-4o-mini", **kwargs):
-        """Chat through ``oa``, importing it (and resolving its key) on first use."""
-        from oa import chat as oa_chat
+    def chat(*args, **kwargs):
+        """Chat through ``oa.chat`` (same arguments), importing ``oa`` on first use.
 
-        return oa_chat(prompt, model=model, **kwargs)
+        Everything is passed through, so ``oa``'s own defaults (e.g. its
+        configured default model) and options (``messages=``...) still apply.
+        """
+        try:
+            from oa import chat as oa_chat
+        except ImportError as e:
+            raise ImportError(
+                f"The {name!r} legacy chat backend requires missing packages: "
+                f"{required_packages}. Please install them and try again."
+            ) from e
+        return oa_chat(*args, **kwargs)

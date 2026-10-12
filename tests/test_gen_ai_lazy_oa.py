@@ -21,6 +21,7 @@ def _run(tmp_path, code):
     pkg.mkdir()
     (pkg / "__init__.py").write_text(FAKE_OA)
     env = {
+        "HOME": str(tmp_path),
         "PATH": "/usr/bin:/bin",
         "PYTHONPATH": f"{tmp_path}",
         "LITELLM_LOCAL_MODEL_COST_MAP": "True",
@@ -29,6 +30,7 @@ def _run(tmp_path, code):
         [sys.executable, "-c", code],
         env=env,
         stdin=subprocess.DEVNULL,
+        cwd=tmp_path,
         capture_output=True,
         text=True,
         timeout=120,
@@ -56,3 +58,24 @@ def test_oa_imported_on_first_legacy_call(tmp_path):
     )
     assert result.returncode == 0, result.stderr[-2000:]
     assert "fake oa: imported at import time" in result.stdout
+
+
+def test_passthrough_arguments(monkeypatch):
+    """The lazy wrapper forwards every argument to oa.chat unchanged."""
+    import types
+
+    from aix.gen_ai import openai_genai
+
+    if not hasattr(openai_genai, "chat"):
+        import pytest
+
+        pytest.skip("oa not installed")
+    seen = {}
+    fake = types.ModuleType("oa")
+    fake.chat = lambda *a, **k: seen.update(args=a, kwargs=k) or "ok"
+    monkeypatch.setitem(__import__("sys").modules, "oa", fake)
+    assert openai_genai.chat(messages=[{"role": "user", "content": "x"}]) == "ok"
+    assert seen == {
+        "args": (),
+        "kwargs": {"messages": [{"role": "user", "content": "x"}]},
+    }
