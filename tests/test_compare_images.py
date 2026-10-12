@@ -258,3 +258,50 @@ class TestErrors:
         with pytest.raises(ValueError):
             compare_images("https://x/c.jpg", "https://x/r.jpg", rubric=[], model="gpt-4o", api_key="sk-test")
         mock_completion.assert_not_called()
+
+
+class TestSharedRequestPath:
+    """Issue #56: vision builds its request through aix.chat.request_kwargs."""
+
+    def test_alias_and_unset_params_like_chat(self, monkeypatch):
+        from unittest.mock import MagicMock
+
+        from aix import using
+
+        response = MagicMock()
+        response.choices = [MagicMock()]
+        response.choices[0].message.content = "a cat"
+        fake = MagicMock(return_value=response)
+        monkeypatch.setattr(_aix_vision, "_litellm_completion", fake)
+        with using(aliases={"seer": "openai/gpt-4o-mini"}):
+            _aix_vision.describe_image(b"\x89PNG\r\n\x1a\n" + b"0" * 8, model="seer")
+        sent = fake.call_args.kwargs
+        assert sent["model"] == "openai/gpt-4o-mini"
+        assert (
+            "temperature" not in sent and "max_tokens" not in sent
+        )  # provider default
+        assert sent["api_key"]  # resolved by the shared path
+
+    def test_comparison_carries_usage(self, monkeypatch):
+        from unittest.mock import MagicMock
+
+        from aix import Usage
+
+        response = MagicMock()
+        response.choices = [MagicMock()]
+        response.choices[
+            0
+        ].message.content = (
+            '{"match": true, "confidence": 0.9, "explanation": "same", "aspects": []}'
+        )
+        response.usage = {
+            "prompt_tokens": 7,
+            "completion_tokens": 3,
+            "total_tokens": 10,
+        }
+        monkeypatch.setattr(
+            _aix_vision, "_litellm_completion", MagicMock(return_value=response)
+        )
+        png = b"\x89PNG\r\n\x1a\n" + b"0" * 8
+        result = compare_images(png, png)
+        assert result.usage == Usage(7, 3, 10)

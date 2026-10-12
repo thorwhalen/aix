@@ -440,7 +440,7 @@ def edit_image(
 
     # Build parameters
     params = {
-        "model": model or "dall-e-2",
+        "model": _resolve_model(model or "dall-e-2"),
         "prompt": prompt,
         "image": image_data,
         "n": n,
@@ -521,7 +521,7 @@ def create_variation(
 
     # Build parameters
     params = {
-        "model": model or "dall-e-2",
+        "model": _resolve_model(model or "dall-e-2"),
         "image": image_data,
         "n": n,
     }

@@ -439,25 +439,47 @@ def _completion_kwargs(
     messages = _normalize_prompt(prompt)
 
     cfg = _get_config().chat
-    model = _resolve_model(model or cfg.model)
     temperature = temperature if temperature is not None else cfg.temperature
     if max_tokens is None:
         max_tokens = cfg.max_tokens
+    return request_kwargs(
+        messages,
+        model=model or cfg.model,
+        api_key=api_key,
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
 
-    litellm_kwargs = {
-        "model": model,
-        "messages": messages,
-        "temperature": temperature,
-    }
-    if max_tokens is not None:
-        litellm_kwargs["max_tokens"] = max_tokens
 
-    # Resolve and inject the API key (explicit arg > env/.env > config store).
-    # When None, fall back to LiteLLM's own implicit reading.
+def request_kwargs(
+    messages: list,
+    *,
+    model: str,
+    api_key: Optional[str] = None,
+    **params: Any,
+) -> dict:
+    """LiteLLM ``completion`` kwargs for one request, with no defaults applied.
+
+    The one place an aix request's model and credentials are settled: the model
+    alias is resolved, the API key is resolved and injected (explicit >
+    env/.env > config store; left to LiteLLM when none is found), and only
+    the ``params`` that are set are kept -- ``None`` means "provider default",
+    so it is not sent. Callers apply their own defaults first (:func:`chat`
+    and :func:`complete` from ``config.chat``, :mod:`aix.vision` from
+    ``config.vision``), then layer their ``**kwargs`` on top of the result.
+
+    >>> kw = request_kwargs([{"role": "user", "content": "hi"}], model="m",
+    ...                     api_key="sk-x", temperature=None, max_tokens=5)
+    >>> sorted(kw), kw["max_tokens"]
+    (['api_key', 'max_tokens', 'messages', 'model'], 5)
+    """
+    model = _resolve_model(model)
+    kwargs = {"model": model, "messages": messages}
+    kwargs.update({k: v for k, v in params.items() if v is not None})
     resolved_key = _resolve_api_key(model, api_key=api_key)
     if resolved_key is not None:
-        litellm_kwargs["api_key"] = resolved_key
-    return litellm_kwargs
+        kwargs["api_key"] = resolved_key
+    return kwargs
 
 
 @_requires_credentials(lambda: _get_config().chat.model)

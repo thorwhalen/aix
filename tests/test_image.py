@@ -187,3 +187,25 @@ class TestGenerateImages:
         call_kwargs = mock_image_gen.call_args[1]
         # Should default to DFLT_NUM_IMAGES (1)
         assert call_kwargs["n"] >= 1
+
+
+@pytest.mark.parametrize("call", ["edit", "variation"])
+@patch("aix.image._litellm_image_generation")
+def test_edit_and_variation_resolve_aliases(mock_image_gen, call, tmp_path):
+    """The preflight resolves aliases, so the request must use the same model."""
+    import aix
+    from aix.image import create_variation, edit_image
+
+    data = Mock()
+    data.url, data.b64_json, data.revised_prompt = "https://x/y.png", None, None
+    mock_image_gen.return_value = Mock(data=[data])
+    png = tmp_path / "in.png"
+    png.write_bytes(b"\x89PNG\r\n\x1a\n")
+    with aix.using(aliases={"ed": "openai/dall-e-2"}):
+        if call == "edit":
+            edit_image(png, "add a hat", model="ed")
+        else:
+            create_variation(png, model="ed")
+    sent = mock_image_gen.call_args.kwargs
+    assert sent["model"] == "openai/dall-e-2"
+    assert sent["api_key"]
