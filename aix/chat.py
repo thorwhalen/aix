@@ -764,6 +764,14 @@ def _validated(
                     repairs += 1
                 if fixed.usage is not None:
                     usages.append(fixed.usage)
+                refusal = _refusals(fixed.raw, 1)[0]
+                if refusal:
+                    texts[i] = fixed.text
+                    return None, SchemaValidationError(
+                        f"The model refused: {refusal}",
+                        text=fixed.text,
+                        detail="refused",
+                    )
                 text = texts[i] = fixed.text
                 if i < len(reasons):
                     reasons[i] = fixed.finish_reason

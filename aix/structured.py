@@ -85,6 +85,9 @@ _STRICT_UNSUPPORTED_KEYWORDS = frozenset(
         "not",
         "dependentRequired",
         "dependentSchemas",
+        "oneOf",
+        "allOf",
+        "discriminator",
     }
 )
 # Sub-schema positions, walked structurally (never into enum/const/default data).
@@ -183,6 +186,8 @@ def _is_strict_compatible(schema: Any) -> bool:
         return not isinstance(schema, bool)  # boolean schemas are not strict
     if _STRICT_UNSUPPORTED_KEYWORDS.intersection(schema):
         return False
+    if "$ref" in schema and len(schema) > 1:  # a $ref with sibling keywords
+        return False
     if _is_object_node(schema):
         props = schema.get("properties", {})
         if schema.get("additionalProperties", True) is not False:
@@ -192,10 +197,29 @@ def _is_strict_compatible(schema: Any) -> bool:
     return all(_is_strict_compatible(sub) for sub in _subschemas(schema))
 
 
+def _rebased_refs(node: Any, prefix: str) -> Any:
+    """``node`` with root-relative ``$ref``s re-pointed under ``prefix``.
+
+    ``$defs`` / ``definitions`` refs are left alone (those are hoisted to the
+    wrapper's root); ``"#"`` and other ``"#/..."`` refs pointed at the old root.
+    """
+    if isinstance(node, list):
+        return [_rebased_refs(v, prefix) for v in node]
+    if not isinstance(node, Mapping):
+        return node
+    out = {k: _rebased_refs(v, prefix) for k, v in node.items()}
+    ref = out.get("$ref")
+    if isinstance(ref, str) and (ref == "#" or ref.startswith("#/")):
+        if not ref.startswith(("#/$defs/", "#/definitions/")):
+            out["$ref"] = prefix + ref[1:]
+    return out
+
+
 def _wrapped(schema: dict) -> dict:
     """``{"value": schema}`` as a closed object, hoisting ``$defs`` so refs resolve."""
     inner = dict(schema)
     defs = {k: inner.pop(k) for k in ("$defs", "definitions") if k in inner}
+    inner = _rebased_refs(inner, f"#/properties/{_WRAP_KEY}")
     return {
         "type": "object",
         "properties": {_WRAP_KEY: inner},
@@ -367,14 +391,10 @@ class ResponseSchema:
             raise SchemaValidationError(
                 f"Reply is not valid JSON: {e}", text=text, detail=f"not JSON ({e})"
             ) from e
-        if self.wrapped:
-            if not (isinstance(parsed, dict) and set(parsed) == {_WRAP_KEY}):
-                raise SchemaValidationError(
-                    f"Reply is not a {{{_WRAP_KEY!r}: ...}} object",
-                    text=text,
-                    detail=f'expected an object with the single key "{_WRAP_KEY}"',
-                )
+        if self.wrapped and isinstance(parsed, dict) and set(parsed) == {_WRAP_KEY}:
             payload = json.dumps(parsed[_WRAP_KEY])
+        # Otherwise (wrapped schema, bare reply -- common in prompt mode) the
+        # reply is validated as is against the caller's schema.
         try:
             return self._coerce_json(payload)
         except Exception as e:  # pydantic.ValidationError / ValueError

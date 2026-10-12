@@ -344,8 +344,9 @@ class TestReviewRegressions:
         assert spec.wrapped and "$defs" in spec.wire_schema
         assert spec.strict_compatible
         assert spec.validate('{"value": [{"x": 1}]}') == [{"x": 1}]
+        assert spec.validate('[{"x": 1}]') == [{"x": 1}]  # bare reply accepted too
         with pytest.raises(SchemaValidationError):
-            spec.validate('[{"x": 1}]')  # not the wrapper object
+            spec.validate('{"value": [{"x": "one"}]}')
 
     def test_prompt_mode_when_model_takes_no_response_format(
         self, fake_completion, schema_support
@@ -468,3 +469,78 @@ class TestReviewRegressions:
         )
         out = sample("q", n=1, response_schema=Judgement, on_error="record")
         assert out[0].payload is None and out[0].error is not None
+
+
+class TestReReviewRegressions:
+    def test_bare_reply_to_wrapped_schema_accepted(self):
+        spec = ResponseSchema.from_schema(
+            {"type": "array", "items": {"type": "integer"}}
+        )
+        assert spec.validate("[1, 2]") == [1, 2]
+        assert spec.validate('{"value": [1, 2]}') == [1, 2]
+
+    def test_recursive_root_ref_rebased(self):
+        tree = {
+            "type": "array",
+            "items": {"anyOf": [{"type": "integer"}, {"$ref": "#"}]},
+        }
+        spec = ResponseSchema.from_schema(tree)
+        inner = spec.wire_schema["properties"]["value"]
+        assert inner["items"]["anyOf"][1]["$ref"] == "#/properties/value"
+        assert spec.validate('{"value": [1, [2, [3]]]}') == [1, [2, [3]]]
+
+    @pytest.mark.parametrize("keyword", ["oneOf", "allOf"])
+    def test_combinators_not_strict(self, keyword):
+        schema = {
+            "type": "object",
+            "properties": {keyword: {"type": "string"}},  # data name, still fine
+            "required": [keyword],
+            "additionalProperties": False,
+        }
+        assert _is_strict_compatible(schema)
+        schema["properties"] = {"a": {keyword: [{"type": "string"}]}}
+        schema["required"] = ["a"]
+        assert not _is_strict_compatible(schema)
+
+    def test_ref_with_siblings_not_strict(self):
+        schema = {
+            "type": "object",
+            "properties": {"a": {"$ref": "#/$defs/X", "description": "d"}},
+            "required": ["a"],
+            "additionalProperties": False,
+            "$defs": {"X": {"type": "string"}},
+        }
+        assert not _is_strict_compatible(schema)
+
+    def test_refusal_inside_repair_not_repaired_again(
+        self, fake_completion, schema_support
+    ):
+        refusal = SimpleNamespace(
+            choices=[
+                SimpleNamespace(
+                    message=SimpleNamespace(content=None, refusal="no"),
+                    finish_reason="stop",
+                )
+            ],
+            usage=None,
+            model="m",
+        )
+        fake_completion.side_effect = [_response("bad"), refusal]
+        c = complete("q", response_schema=Judgement, max_repairs=3)
+        assert fake_completion.call_count == 2 and "refused" in str(c.errors[0])
+
+    def test_sample_raises_on_failed_repair_request(
+        self, fake_completion, schema_support
+    ):
+        from aix.sampling import SamplingError
+
+        fake_completion.side_effect = [_response("bad"), RuntimeError("429")]
+        with pytest.raises(SamplingError):
+            sample("q", n=1, response_schema=Judgement, max_repairs=1)
+
+    def test_sample_records_invalid_reply_without_raising(
+        self, fake_completion, schema_support
+    ):
+        fake_completion.return_value = _response("bad")
+        out = sample("q", n=1, response_schema=Judgement, max_repairs=0)
+        assert isinstance(out[0].error, SchemaValidationError)

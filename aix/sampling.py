@@ -31,7 +31,7 @@ from aix.capabilities import supports
 from aix.chat import Completion, Usage, complete
 from aix.config import get_config as _get_config
 from aix.credentials import check_requirements as _check_requirements
-from aix.structured import ResponseSchema
+from aix.structured import ResponseSchema, SchemaValidationError
 
 __all__ = [
     "sample",
@@ -233,6 +233,12 @@ def _parsed(text: str, parse: Optional[Callable[[str], Any]]):
         return None, e
 
 
+def _is_request_error(error: Optional[Exception]) -> bool:
+    """Whether a recorded per-choice error is a failed request (e.g. a repair
+    request that raised), as opposed to a reply that did not parse/validate."""
+    return error is not None and not isinstance(error, (SchemaValidationError,))
+
+
 def _payload(c: Completion, index: int, parse: Optional[Callable[[str], Any]]):
     """``(payload, error)`` for choice ``index`` of ``c``.
 
@@ -338,6 +344,9 @@ def sample(
     samples: list[Sample] = []
     usages: list[Usage] = []
     n_requests = n_usage_reports = 0
+    # A failed request -- including a schema repair request -- as opposed to a
+    # reply that did not parse/validate (which is always just recorded).
+    first_error, n_failed = None, 0
 
     use_provider_n = n > 1 and (
         strategy == "provider" or (strategy == "auto" and supports(model, "n"))
@@ -355,6 +364,8 @@ def sample(
                 list(zip(batch.texts, batch.finish_reasons))[:n]
             ):
                 payload, error = _payload(batch, i, parse)
+                if batch.schema_mode is not None and _is_request_error(error):
+                    first_error, n_failed = first_error or error, n_failed + 1
                 samples.append(
                     Sample(text, payload, reason, None, PROVIDER_N, seed, error)
                 )
@@ -382,7 +393,6 @@ def sample(
                 stop.set()
             return e
 
-    first_error, n_failed = None, 0
     for one_seed, c in zip(
         seeds, concurrent_map(draw_one, seeds, concurrency=concurrency)
     ):
@@ -394,6 +404,8 @@ def sample(
             samples.append(Sample("", None, None, None, INDEPENDENT, one_seed, c))
             continue
         payload, error = _payload(c, 0, parse)
+        if c.schema_mode is not None and _is_request_error(error):
+            first_error, n_failed = first_error or error, n_failed + 1
         samples.append(
             Sample(
                 c.text, payload, c.finish_reason, c.usage, INDEPENDENT, one_seed, error
