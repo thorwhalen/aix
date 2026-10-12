@@ -38,6 +38,7 @@ from inspect import signature, Parameter
 
 # Import from aix.chat
 from aix.chat import chat, DFLT_CHAT_MODEL
+from aix.sampling import concurrent_map
 from aix.config import get_config as _get_config, resolve_model as _resolve_model
 
 
@@ -936,6 +937,7 @@ def constrained_answer(
     n: int = 1,
     on_violation: Literal["raise", "return"] = "raise",
     max_retries: int = 0,
+    concurrency: int = None,
 ):
     """
     Get an answer from the LLM constrained to a set of valid answers or types.
@@ -964,7 +966,10 @@ def constrained_answer(
         enhance_prompt: If True, adds explicit instructions to the prompt about
             JSON formatting and constraints. If False (default), relies on
             response_format alone. Default is False to match oa behavior.
-        n: Number of times to call the LLM (default: 1)
+        n: Number of times to call the LLM (default: 1). The ``n`` calls are
+            independent and run concurrently (see ``concurrency``); each is
+            validated (and retried) on its own. For raw samples with finish
+            reasons and usage, use :func:`aix.sample`.
         on_violation: What to do when the model's answer does not satisfy
             `valid_answers`. `'raise'` (default) raises `ConstraintViolation`.
             `'return'` returns the model's value unchecked -- the behaviour of
@@ -972,6 +977,8 @@ def constrained_answer(
         max_retries: How many times to re-ask the model after a violation
             before giving up (default: 0, i.e. ask exactly once). Ignored when
             `on_violation='return'`, which never detects a violation.
+        concurrency: Max simultaneous calls when ``n > 1`` (default: config
+            ``chat.sample_concurrency``).
 
     Returns:
         One of the valid answers, respecting the type constraint.
@@ -1053,7 +1060,9 @@ def constrained_answer(
             on_violation=on_violation,
             max_retries=max_retries,
         )
-        return [f() for _ in range(n)]
+        if concurrency is None:
+            concurrency = _get_config().chat.sample_concurrency
+        return concurrent_map(lambda _: f(), range(n), concurrency=concurrency)
 
     # Determine the expected type for type conversion
     expected_type = None

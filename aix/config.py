@@ -126,11 +126,14 @@ def _env_name(f) -> str:
 
 @dataclass(frozen=True)
 class ChatConfig:
-    """Defaults for ``chat`` / ``ask`` / ``prompt_func``."""
+    """Defaults for ``chat`` / ``ask`` / ``complete`` / ``sample`` / ``prompt_func``."""
 
     model: str = _opt("gpt-4.1-mini", flat="chat_model")
     temperature: float = _opt(1.0, flat="chat_temperature", cast=float)
     max_tokens: Optional[int] = _opt(None, flat="chat_max_tokens", cast=int)
+    # Max simultaneous requests when ``sample`` / ``constrained_answer(n=...)``
+    # draw independent samples.
+    sample_concurrency: int = _opt(5, flat="chat_sample_concurrency", cast=int)
 
 
 @dataclass(frozen=True)
