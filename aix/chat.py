@@ -27,10 +27,20 @@ Examples:
     >>> for chunk in chat("Count to 3", stream=True):  # doctest: +SKIP
     ...     print(chunk, end='')
     1, 2, 3
+
+    The whole response -- every choice, token usage, finish reasons, the model
+    that actually served the call -- via :func:`complete`:
+
+    >>> c = complete("Name a color", n=3, temperature=1.0)  # doctest: +SKIP
+    >>> c.texts  # doctest: +SKIP
+    ('Blue', 'Green', 'Red')
+    >>> c.usage.total_tokens, c.finish_reasons  # doctest: +SKIP
+    (41, ('stop', 'stop', 'stop'))
 """
 
-from collections.abc import Iterable
-from typing import Union, Any
+from collections.abc import Iterable, Mapping
+from dataclasses import dataclass, field
+from typing import Union, Any, Optional
 
 from aix.config import (
     get_config as _get_config,
@@ -142,6 +152,199 @@ def _extract_text_from_stream(stream: Iterable) -> Iterable[str]:
             continue
 
 
+def _field(obj: Any, name: str) -> Any:
+    """Read ``name`` from a LiteLLM response part, attribute- or key-style.
+
+    LiteLLM returns pydantic-ish objects, but some providers and caches hand
+    back plain dicts; reading both keeps extraction provider-agnostic.
+    """
+    if isinstance(obj, Mapping):
+        return obj.get(name)
+    return getattr(obj, name, None)
+
+
+def _as_int(value: Any) -> Optional[int]:
+    """``value`` if it is a real integer count, else ``None`` (never coerces)."""
+    if isinstance(value, int) and not isinstance(value, bool):
+        return value
+    return None
+
+
+def _as_str(value: Any) -> Optional[str]:
+    """``value`` if it is a string, else ``None``."""
+    return value if isinstance(value, str) else None
+
+
+@dataclass(frozen=True)
+class Usage:
+    """Token counts billed for one call (or summed over several).
+
+    Counts a provider did not report are ``0``. Usages add, so the cost of a
+    batch of calls is ``sum(c.usage for c in completions)``.
+
+    >>> Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15)
+    Usage(prompt_tokens=10, completion_tokens=5, total_tokens=15)
+    >>> sum([Usage(1, 2, 3), Usage(10, 20, 30)])
+    Usage(prompt_tokens=11, completion_tokens=22, total_tokens=33)
+    """
+
+    prompt_tokens: int = 0
+    completion_tokens: int = 0
+    total_tokens: int = 0
+
+    def __add__(self, other: "Usage") -> "Usage":
+        if not isinstance(other, Usage):
+            return NotImplemented
+        return Usage(
+            prompt_tokens=self.prompt_tokens + other.prompt_tokens,
+            completion_tokens=self.completion_tokens + other.completion_tokens,
+            total_tokens=self.total_tokens + other.total_tokens,
+        )
+
+    def __radd__(self, other: Any) -> "Usage":
+        # Lets the builtin ``sum`` start from its integer 0.
+        if other == 0:
+            return self
+        return self.__add__(other)
+
+    @classmethod
+    def from_response(cls, response: Any) -> Optional["Usage"]:
+        """Read the ``usage`` block of a LiteLLM response; ``None`` if absent.
+
+        >>> Usage.from_response({"usage": {"prompt_tokens": 3, "completion_tokens": 4}})
+        Usage(prompt_tokens=3, completion_tokens=4, total_tokens=7)
+        >>> Usage.from_response({}) is None
+        True
+        """
+        usage = _field(response, "usage")
+        if usage is None:
+            return None
+        counts = {
+            name: _as_int(_field(usage, name))
+            for name in ("prompt_tokens", "completion_tokens", "total_tokens")
+        }
+        if all(v is None for v in counts.values()):
+            return None
+        prompt, completion = (
+            counts["prompt_tokens"] or 0,
+            counts["completion_tokens"] or 0,
+        )
+        total = counts["total_tokens"]
+        return cls(
+            prompt_tokens=prompt,
+            completion_tokens=completion,
+            total_tokens=total if total is not None else prompt + completion,
+        )
+
+
+@dataclass(frozen=True)
+class Completion:
+    """Everything a chat completion returned, not just the first text.
+
+    Attributes:
+        texts: The text of every choice, in order (``n`` of them when ``n`` was
+            requested). A choice with no text content (e.g. a pure tool call)
+            is ``""``, as in :func:`chat`.
+        finish_reasons: Why each choice stopped (``"stop"``, ``"length"``,
+            ``"content_filter"``, ``"tool_calls"``...), aligned with ``texts``;
+            ``None`` where the provider did not say. ``"length"`` means the
+            text was truncated by ``max_tokens``.
+        usage: Tokens billed for the whole call (all choices together), or
+            ``None`` if the provider did not report usage.
+        model: The model id the provider reports having served the call, which
+            can differ from the one requested (aliases, dated snapshots).
+        raw: The untouched LiteLLM response, for anything not surfaced here.
+
+    >>> c = Completion(texts=("a", "b"), finish_reasons=("stop", "length"))
+    >>> c.text, c.finish_reason
+    ('a', 'stop')
+    """
+
+    texts: tuple[str, ...]
+    finish_reasons: tuple[Optional[str], ...] = ()
+    usage: Optional[Usage] = None
+    model: Optional[str] = None
+    raw: Any = field(default=None, repr=False, compare=False)
+
+    @property
+    def text(self) -> str:
+        """The first choice's text -- what :func:`chat` would have returned."""
+        return self.texts[0] if self.texts else ""
+
+    @property
+    def finish_reason(self) -> Optional[str]:
+        """The first choice's finish reason."""
+        return self.finish_reasons[0] if self.finish_reasons else None
+
+    def __str__(self) -> str:
+        return self.text
+
+    @classmethod
+    def from_response(cls, response: Any) -> "Completion":
+        """Build a :class:`Completion` from a (non-streaming) LiteLLM response."""
+        choices = _field(response, "choices") or []
+        texts, reasons = [], []
+        for choice in choices:
+            message = _field(choice, "message")
+            texts.append(_as_str(_field(message, "content")) or "")
+            reasons.append(_as_str(_field(choice, "finish_reason")))
+        return cls(
+            texts=tuple(texts),
+            finish_reasons=tuple(reasons),
+            usage=Usage.from_response(response),
+            model=_as_str(_field(response, "model")),
+            raw=response,
+        )
+
+
+def _require_completion():
+    """Resolve litellm's ``completion`` or raise an install hint."""
+    completion = _completion()
+    if completion is None:
+        raise ImportError(
+            "LiteLLM is required for chat functionality. "
+            "Install it with: pip install litellm"
+        )
+    return completion
+
+
+def _completion_kwargs(
+    prompt: Union[str, Iterable[dict]],
+    *,
+    model: Optional[str],
+    temperature: Optional[float],
+    max_tokens: Optional[int],
+    api_key: Optional[str],
+) -> dict:
+    """The LiteLLM ``completion`` kwargs shared by :func:`chat` and :func:`complete`.
+
+    Normalizes the prompt, fills defaults from the active config (explicit
+    arguments win), and injects the resolved API key.
+    """
+    messages = _normalize_prompt(prompt)
+
+    cfg = _get_config().chat
+    model = _resolve_model(model or cfg.model)
+    temperature = temperature if temperature is not None else cfg.temperature
+    if max_tokens is None:
+        max_tokens = cfg.max_tokens
+
+    litellm_kwargs = {
+        "model": model,
+        "messages": messages,
+        "temperature": temperature,
+    }
+    if max_tokens is not None:
+        litellm_kwargs["max_tokens"] = max_tokens
+
+    # Resolve and inject the API key (explicit arg > env/.env > config store).
+    # When None, fall back to LiteLLM's own implicit reading.
+    resolved_key = _resolve_api_key(model, api_key=api_key)
+    if resolved_key is not None:
+        litellm_kwargs["api_key"] = resolved_key
+    return litellm_kwargs
+
+
 @_requires_credentials(lambda: _get_config().chat.model)
 def chat(
     prompt: Union[str, Iterable[dict]],
@@ -200,39 +403,15 @@ def chat(
         >>> chat(messages)  # doctest: +SKIP
         '2+2 equals 4.'
     """
-    completion = _completion()
-    if completion is None:
-        raise ImportError(
-            "LiteLLM is required for chat functionality. "
-            "Install it with: pip install litellm"
-        )
-
-    # Normalize inputs
-    messages = _normalize_prompt(prompt)
-
-    # Apply defaults from the active config (explicit args still win)
-    cfg = _get_config().chat
-    model = _resolve_model(model or cfg.model)
-    temperature = temperature if temperature is not None else cfg.temperature
-    if max_tokens is None:
-        max_tokens = cfg.max_tokens
-
-    # Build LiteLLM parameters
-    litellm_kwargs = {
-        "model": model,
-        "messages": messages,
-        "temperature": temperature,
-        "stream": stream,
-    }
-
-    if max_tokens is not None:
-        litellm_kwargs["max_tokens"] = max_tokens
-
-    # Resolve and inject the API key (explicit arg > env/.env > config store).
-    # When None, fall back to LiteLLM's own implicit reading.
-    resolved_key = _resolve_api_key(model, api_key=api_key)
-    if resolved_key is not None:
-        litellm_kwargs["api_key"] = resolved_key
+    completion = _require_completion()
+    litellm_kwargs = _completion_kwargs(
+        prompt,
+        model=model,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        api_key=api_key,
+    )
+    litellm_kwargs["stream"] = stream
 
     # Add any additional provider-specific kwargs
     litellm_kwargs.update(kwargs)
@@ -245,6 +424,82 @@ def chat(
         return _extract_text_from_stream(response)
     else:
         return _extract_text_from_response(response)
+
+
+@_requires_credentials(lambda: _get_config().chat.model)
+def complete(
+    prompt: Union[str, Iterable[dict]],
+    *,
+    model: str = None,
+    temperature: float = None,
+    max_tokens: int = None,
+    n: int = 1,
+    seed: int = None,
+    response_format: Union[dict, type] = None,
+    api_key: str = None,
+    **kwargs,
+) -> Completion:
+    """Send a chat prompt and get the whole response back as a :class:`Completion`.
+
+    The non-lossy sibling of :func:`chat`: same inputs and defaults, but instead
+    of the first choice's text it returns every choice (``texts``), why each one
+    stopped (``finish_reasons``), the tokens billed (``usage``), the model that
+    served the call, and the raw response.
+
+    Args:
+        prompt: A string (becomes a user message) or a list of message dicts.
+        model: Model identifier or alias. If None, uses the configured default.
+        temperature: Sampling temperature. If None, uses the configured default.
+        max_tokens: Maximum tokens per choice. If None, uses the configured default.
+        n: How many choices to ask the provider for in this one call. Only
+            sent when ``n != 1``; providers without native ``n`` support reject
+            it (see LiteLLM's ``get_supported_openai_params``).
+        seed: Best-effort reproducibility seed. Only sent when given; support
+            and the strength of the guarantee are provider-dependent.
+        response_format: Passed through to LiteLLM (e.g. ``{"type": "json_object"}``).
+        api_key: Explicit API key; otherwise resolved as for :func:`chat`.
+        **kwargs: Additional provider-specific parameters passed to LiteLLM.
+
+    Returns:
+        A :class:`Completion`.
+
+    Raises:
+        ImportError: If LiteLLM is not installed.
+        ValueError: If ``n`` is not a positive integer, or the prompt is invalid.
+
+    Examples:
+        >>> c = complete("Name a color", n=3)  # doctest: +SKIP
+        >>> c.texts, c.finish_reasons  # doctest: +SKIP
+        (('Blue', 'Green', 'Red'), ('stop', 'stop', 'stop'))
+        >>> c.usage  # doctest: +SKIP
+        Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17)
+        >>> complete("Write an essay", max_tokens=5).finish_reason  # doctest: +SKIP
+        'length'
+    """
+    if isinstance(n, bool) or not isinstance(n, int) or n < 1:
+        raise ValueError(f"n must be a positive integer, got {n!r}")
+    if kwargs.get("stream"):
+        raise ValueError(
+            "complete() does not stream; use chat(..., stream=True) for streaming."
+        )
+
+    completion = _require_completion()
+    litellm_kwargs = _completion_kwargs(
+        prompt,
+        model=model,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        api_key=api_key,
+    )
+    optional = {
+        "n": n if n != 1 else None,
+        "seed": seed,
+        "response_format": response_format,
+    }
+    litellm_kwargs.update({k: v for k, v in optional.items() if v is not None})
+    litellm_kwargs.update(kwargs)
+
+    return Completion.from_response(completion(**litellm_kwargs))
 
 
 def chat_with_history(

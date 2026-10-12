@@ -241,6 +241,22 @@ response = session.send("What is 2+2?")
 response = session.send("And if I add 3 to that?")  # Remembers context
 ```
 
+`chat()` returns only the first choice's text. When you need the rest of the response (every one of `n` choices, token usage, why each choice stopped, the model that actually served the call), use `complete()`, which takes the same arguments and returns a `Completion`:
+
+```python
+from aix import complete
+
+c = complete("Name a color", n=3, temperature=1.0)
+c.texts           # ('Blue', 'Green', 'Red')     -- all n choices
+c.finish_reasons  # ('stop', 'stop', 'stop')     -- 'length' means truncated by max_tokens
+c.usage           # Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17)
+c.model           # the model id the provider reports having served
+c.text            # first choice, i.e. what chat() would return
+c.raw             # the untouched LiteLLM response
+
+sum(complete(q).usage for q in questions)  # Usage values add up, for cost reporting
+```
+
 ### 2. Embeddings
 
 Generate vector embeddings for semantic search and similarity:
