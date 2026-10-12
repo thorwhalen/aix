@@ -5,6 +5,7 @@ and prompts on stdin in an interactive session. So `import aix` must not touch
 it; the legacy backend imports it on first call.
 """
 
+import os
 import subprocess
 import sys
 import textwrap
@@ -20,12 +21,15 @@ def _run(tmp_path, code):
     pkg = tmp_path / "oa"
     pkg.mkdir()
     (pkg / "__init__.py").write_text(FAKE_OA)
-    env = {
-        "HOME": str(tmp_path),
-        "PATH": "/usr/bin:/bin",
-        "PYTHONPATH": f"{tmp_path}",
-        "LITELLM_LOCAL_MODEL_COST_MAP": "True",
-    }
+    # Start from the real environment (Windows needs SYSTEMROOT etc. just to
+    # start Python), minus any key, with the fake `oa` first on the path.
+    env = {k: v for k, v in os.environ.items() if not k.endswith("_API_KEY")}
+    env.update(
+        HOME=str(tmp_path),
+        USERPROFILE=str(tmp_path),
+        PYTHONPATH=str(tmp_path),
+        LITELLM_LOCAL_MODEL_COST_MAP="True",
+    )
     return subprocess.run(
         [sys.executable, "-c", code],
         env=env,
