@@ -254,7 +254,7 @@ True
 ... )
 ```
 
-### aix.prompts.prompt_func(template, , output_schema=None, egress=None, model=None, temperature=None, name=None, \*\*chat_kwargs)
+### aix.prompts.prompt_func(template, , output_schema=None, response_schema=None, egress=None, model=None, temperature=None, name=None, \*\*chat_kwargs)
 
 Create a callable function from a prompt template.
 
@@ -283,6 +283,15 @@ exactly as before.
     - Dict mapping field names to types: {“name”: str, “age”: int}
     - A single type for simple outputs: str, int, list, etc.
     - None for plain text output (default)
+  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional JSON Schema dict or Pydantic model class for
+    *enforced, validated* structured output (nested objects, arrays,
+    enums, required/optional all work): routed to the provider’s
+    strict `json_schema` mode where supported, otherwise JSON mode,
+    then validated client-side with a bounded repair retry (see
+    [`aix.complete()`](aix.html.md#aix.complete)). The function returns the validated value (a
+    model instance for a Pydantic schema) or raises
+    `aix.SchemaValidationError`. Prefer it over `output_schema`,
+    which is flat, prompt-only and unvalidated; pass one or the other.
   * **egress** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional post-processor `(result) -> Any` applied to the output
     before returning — on both the text and structured paths. Lets a caller
     keep “prompt → typed Python value” inside the facade (e.g. parse the

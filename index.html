@@ -226,6 +226,7 @@
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.prompts.html">aix.prompts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.sampling.html">aix.sampling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.structured.html">aix.structured</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.util.html">aix.util</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.video.html">aix.video</a></li>
 <li class="toctree-l3"><a class="reference internal" href="_autosummary/aix.vision.html">aix.vision</a></li>
@@ -564,13 +565,17 @@ store lives in your user app-config folder — never in the repo.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">sample</span>
 
-<span class="n">s</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="s2">"Is a tomato a fruit? Reply as JSON {</span><span class="se">\"</span><span class="s2">answer</span><span class="se">\"</span><span class="s2">: bool}"</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-           <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">parse</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">)</span>
-<span class="n">s</span><span class="o">.</span><span class="n">strategy</span>                    <span class="c1"># 'provider_n', 'independent' or 'mixed'</span>
-<span class="n">s</span><span class="o">.</span><span class="n">payloads</span>                    <span class="c1"># parsed answers (None where parsing failed)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span>
+    <span class="s1">'Is a tomato a fruit? Reply as JSON {"answer": bool}'</span><span class="p">,</span>
+    <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">parse</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">strategy</span>  <span class="c1"># 'provider_n', 'independent' or 'mixed'</span>
+<span class="n">s</span><span class="o">.</span><span class="n">payloads</span>  <span class="c1"># parsed answers (None where parsing failed)</span>
 <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">finish_reason</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>  <span class="c1"># 'content_filter' means refused, 'length' means truncated</span>
-<span class="n">s</span><span class="o">.</span><span class="n">usage</span>                       <span class="c1"># total tokens across every request that reported usage</span>
-<span class="n">s</span><span class="o">.</span><span class="n">n_requests</span>                  <span class="c1"># how many requests were made</span>
+<span class="n">s</span><span class="o">.</span><span class="n">usage</span>  <span class="c1"># total tokens across every request that reported usage</span>
+<span class="n">s</span><span class="o">.</span><span class="n">n_requests</span>  <span class="c1"># how many requests were made</span>
 </pre></div>
 </div>
 <p>A failed request does not discard the work already paid for. By default <code class="docutils literal notranslate"><span class="pre">sample()</span></code> raises <code class="docutils literal notranslate"><span class="pre">SamplingError</span></code> once the launched requests finish, and the partial batch is on its <code class="docutils literal notranslate"><span class="pre">.samples</span></code>. With <code class="docutils literal notranslate"><span class="pre">on_error=&quot;record&quot;</span></code>, the failure is stored on that sample’s <code class="docutils literal notranslate"><span class="pre">.error</span></code> instead. A <code class="docutils literal notranslate"><span class="pre">seed</span></code> is sent as-is with a provider-side <code class="docutils literal notranslate"><span class="pre">n</span></code> request; each independent request gets a seed derived from <code class="docutils literal notranslate"><span class="pre">(seed,</span> <span class="pre">index)</span></code>.</p>
@@ -650,6 +655,41 @@ store lives in your user app-config folder — never in the repo.</p>
 <span class="n">result</span> <span class="o">=</span> <span class="n">my_funcs</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s2">"def foo(): return bar"</span><span class="p">)</span>
 </pre></div>
 </div>
+<section id="enforced-validated-structured-output">
+<h4>Enforced, validated structured output<a class="headerlink" href="#enforced-validated-structured-output" title="Link to this heading">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">output_schema</span></code> above is flat and only requested in the prompt; nothing checks the reply against it. For anything nested (objects inside objects, arrays of objects, enums, required vs optional), pass <code class="docutils literal notranslate"><span class="pre">response_schema=</span></code>, either a Pydantic model or a JSON Schema dict. It works on <code class="docutils literal notranslate"><span class="pre">complete()</span></code>, <code class="docutils literal notranslate"><span class="pre">sample()</span></code> and <code class="docutils literal notranslate"><span class="pre">prompt_func()</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">complete</span><span class="p">,</span> <span class="n">prompt_func</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Span</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">start</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">end</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Judgement</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"yes"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"unsure"</span><span class="p">]</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">evidence</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Span</span><span class="p">]</span>
+
+<span class="n">judge</span> <span class="o">=</span> <span class="n">prompt_func</span><span class="p">(</span><span class="s2">"Does this text claim </span><span class="si">{claim}</span><span class="s2">? </span><span class="si">{text}</span><span class="s2">"</span><span class="p">,</span> <span class="n">response_schema</span><span class="o">=</span><span class="n">Judgement</span><span class="p">)</span>
+<span class="n">judge</span><span class="p">(</span><span class="n">claim</span><span class="o">=</span><span class="s2">"..."</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"..."</span><span class="p">)</span>       <span class="c1"># -&gt; Judgement(value='yes', confidence=0.8, evidence=[...])</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">complete</span><span class="p">(</span><span class="s2">"..."</span><span class="p">,</span> <span class="n">response_schema</span><span class="o">=</span><span class="n">Judgement</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">value</span>          <span class="c1"># the validated Judgement (raises SchemaValidationError if still invalid)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">schema_mode</span>    <span class="c1"># 'strict' | 'schema' | 'json_mode' -- how the provider enforced it</span>
+<span class="n">c</span><span class="o">.</span><span class="n">repairs</span>        <span class="c1"># extra requests made to fix invalid replies (their tokens are in c.usage)</span>
+</pre></div>
+</div>
+<p>The provider enforces the schema as strongly as the model allows:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">strict</span></code></strong>: a strict <code class="docutils literal notranslate"><span class="pre">json_schema</span></code> response format, which constrains decoding. Used when LiteLLM’s <code class="docutils literal notranslate"><span class="pre">supports_response_schema(model)</span></code> is true and the schema is strict-compatible (every object closes <code class="docutils literal notranslate"><span class="pre">additionalProperties</span></code> and requires all of its properties; Pydantic models are converted to that form automatically).</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">schema</span></code></strong>: the same format, non-strict, for a schema that is not strict-compatible.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">json_mode</span></code></strong>: JSON mode plus the schema written into the prompt, for models without schema support (or whose support is unknown).</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">prompt</span></code></strong>: the schema in the prompt only, for models LiteLLM knows accept no <code class="docutils literal notranslate"><span class="pre">response_format</span></code> at all.</p></li>
+</ul>
+<p>A schema whose root is not an object (a list, a union, a <code class="docutils literal notranslate"><span class="pre">RootModel</span></code>) is sent wrapped as <code class="docutils literal notranslate"><span class="pre">{&quot;value&quot;:</span> <span class="pre">...}</span></code>, since providers only constrain objects. It is unwrapped for you after validation.</p>
+<p>Every reply is also validated client-side. An invalid reply is re-asked up to <code class="docutils literal notranslate"><span class="pre">max_repairs</span></code> times (default from config <code class="docutils literal notranslate"><span class="pre">chat.schema_max_repairs</span></code>, which is 1), and each repair request shows the model its error. A refusal is recorded and never re-asked. A failed repair request is recorded on that choice; the other choices are kept.</p>
+</section>
 </section>
 <section id="model-discovery-selection">
 <h3>4. Model Discovery &amp; Selection<a class="headerlink" href="#model-discovery-selection" title="Link to this heading">¶</a></h3>
@@ -1046,7 +1086,7 @@ resolving — pass those provider-prefixed (<code class="docutils literal notran
 </section>
 </section>
 
-<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-12 16:14 UTC from <a href="https://github.com/thorwhalen/aix/commit/f4944bdb99785d2745f84268b82775df0cdc43ce">f4944bd</a> (master) · aix 0.0.44 · <a href="about-this-build.html">about this build</a></p>
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-12 16:38 UTC from <a href="https://github.com/thorwhalen/aix/commit/5073ee397a7f3ae4af7b12902fe34900ba57ad8b">5073ee3</a> (master) · aix 0.0.45 · <a href="about-this-build.html">about this build</a></p>
         </article>
       </div>
       <footer>
@@ -1103,7 +1143,10 @@ resolving — pass those provider-prefixed (<code class="docutils literal notran
 <li><a class="reference internal" href="#core-features">Core Features</a><ul>
 <li><a class="reference internal" href="#chat-interface">1. Chat Interface</a></li>
 <li><a class="reference internal" href="#embeddings">2. Embeddings</a></li>
-<li><a class="reference internal" href="#prompt-based-functions">3. Prompt-Based Functions</a></li>
+<li><a class="reference internal" href="#prompt-based-functions">3. Prompt-Based Functions</a><ul>
+<li><a class="reference internal" href="#enforced-validated-structured-output">Enforced, validated structured output</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#model-discovery-selection">4. Model Discovery &amp; Selection</a></li>
 <li><a class="reference internal" href="#batch-operations">5. Batch Operations</a></li>
 <li><a class="reference internal" href="#image-generation">6. Image Generation</a></li>
@@ -1157,7 +1200,7 @@ resolving — pass those provider-prefixed (<code class="docutils literal notran
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=db237671"></script>
+</div><script src="_static/documentation_options.js?v=72630217"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>

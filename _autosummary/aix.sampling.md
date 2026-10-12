@@ -106,11 +106,12 @@ whether it is complete.
 
 #### n_requests
 
-How many requests were made.
+How many requests were made (schema repair requests included).
 
 #### n_usage_reports
 
-How many of them reported usage.
+How many of them reported usage (a completion’s repair
+requests are counted with it when it reported usage).
 
 #### *property* errors *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[Exception](https://docs.python.org/3/builtins/exceptions.html#Exception), ...]*
 
@@ -160,7 +161,7 @@ exception in item order propagates.
 [0, 1, 4, 9, 16]
 ```
 
-### aix.sampling.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, on_error='raise', api_key=None, \*\*kwargs)
+### aix.sampling.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, response_schema=None, on_error='raise', api_key=None, \*\*kwargs)
 
 Draw `n` answers to `prompt`, each with its finish reason and usage.
 
@@ -180,6 +181,10 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
     also falls back to independent if the provider refuses `n`),
     `"provider"` (force one `n` request) or `"independent"`.
     `n=1` is always a single plain request, recorded `"independent"`.
+  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
+    validated per request as in [`aix.complete()`](aix.md#aix.complete); each payload is the
+    validated value, and a choice still invalid after repairs records its
+    `SchemaValidationError` as `error`. Exclusive with `parse`.
   * **parse** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional `text -> payload` (e.g. `json.loads`). A failure is
     recorded on that sample (`payload=None`, `error=...`), not raised.
   * **on_error** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'raise'`, `'record'`]) – When a request fails: `"raise"` (default) raises

@@ -223,6 +223,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.prompts.html">aix.prompts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.sampling.html">aix.sampling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.structured.html">aix.structured</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.util.html">aix.util</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.video.html">aix.video</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.vision.html">aix.vision</a></li>
@@ -401,7 +402,10 @@
     <span class="n">max_tokens</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"chat_max_tokens"</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
     <span class="c1"># Max simultaneous requests when ``sample`` / ``constrained_answer(n=...)``</span>
     <span class="c1"># draw independent samples.</span>
-    <span class="n">sample_concurrency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"chat_sample_concurrency"</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span></div>
+    <span class="n">sample_concurrency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"chat_sample_concurrency"</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="c1"># How many times ``complete(..., response_schema=...)`` re-asks for a choice</span>
+    <span class="c1"># that did not validate, showing the model its error.</span>
+    <span class="n">schema_max_repairs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"chat_schema_max_repairs"</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span></div>
 
 
 
@@ -737,7 +741,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=db237671"></script>
+</div><script src="../../_static/documentation_options.js?v=72630217"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

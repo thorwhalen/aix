@@ -223,6 +223,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.prompts.html">aix.prompts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.sampling.html">aix.sampling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.structured.html">aix.structured</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.util.html">aix.util</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.video.html">aix.video</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.vision.html">aix.vision</a></li>
@@ -307,7 +308,12 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numbers</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">fields</span> <span class="k">as</span> <span class="n">dataclass_fields</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">dataclass</span><span class="p">,</span>
+    <span class="n">field</span><span class="p">,</span>
+    <span class="n">fields</span> <span class="k">as</span> <span class="n">dataclass_fields</span><span class="p">,</span>
+    <span class="n">replace</span> <span class="k">as</span> <span class="n">_replace_dataclass</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.config</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -321,6 +327,17 @@
 <span class="p">)</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix._litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">UNRESOLVED</span> <span class="k">as</span> <span class="n">_UNRESOLVED</span><span class="p">,</span> <span class="n">litellm_attr</span> <span class="k">as</span> <span class="n">_litellm_attr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.structured</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ResponseSchema</span> <span class="k">as</span> <span class="n">_ResponseSchema</span><span class="p">,</span>
+    <span class="n">JSON_MODE</span> <span class="k">as</span> <span class="n">_JSON_MODE</span><span class="p">,</span>
+    <span class="n">PROMPT</span> <span class="k">as</span> <span class="n">_PROMPT</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Modes in which the provider is not told the schema, so the prompt must say it.</span>
+<span class="n">_SCHEMA_IN_PROMPT_MODES</span> <span class="o">=</span> <span class="p">(</span><span class="n">_JSON_MODE</span><span class="p">,</span> <span class="n">_PROMPT</span><span class="p">)</span>
+<span class="c1"># Assistant turn standing in for an empty reply in a repair request (some</span>
+<span class="c1"># providers reject empty text blocks).</span>
+<span class="n">_EMPTY_REPLY_PLACEHOLDER</span> <span class="o">=</span> <span class="s2">"(empty reply)"</span>
 
 <span class="c1"># LiteLLM is kept private (users shouldn't call it directly) *and* deferred:</span>
 <span class="c1"># importing it fetches litellm's model-cost map over HTTPS, so `import aix`</span>
@@ -592,6 +609,16 @@
 <span class="sd">        model: The model id the provider reports having served the call, which</span>
 <span class="sd">            can differ from the one requested (aliases, dated snapshots).</span>
 <span class="sd">        raw: The untouched LiteLLM response, for anything not surfaced here.</span>
+<span class="sd">        values: With ``response_schema=``: each choice's validated value (a</span>
+<span class="sd">            Pydantic instance for a Pydantic schema), ``None`` where invalid.</span>
+<span class="sd">        errors: Aligned with ``values``: ``None``, or why that choice has no</span>
+<span class="sd">            value -- the :class:`~aix.structured.SchemaValidationError` of a</span>
+<span class="sd">            reply still invalid after the repair retries (or a refusal), or the</span>
+<span class="sd">            exception a repair request raised.</span>
+<span class="sd">        schema_mode: How the schema was enforced: ``"strict"``, ``"schema"``,</span>
+<span class="sd">            ``"json_mode"`` or ``"prompt"`` (see :mod:`aix.structured`);</span>
+<span class="sd">            ``None`` without one.</span>
+<span class="sd">        repairs: How many repair requests were made (their tokens are in ``usage``).</span>
 
 <span class="sd">    &gt;&gt;&gt; c = Completion(texts=("a", "b"), finish_reasons=("stop", "length"))</span>
 <span class="sd">    &gt;&gt;&gt; c.text, c.finish_reason</span>
@@ -603,6 +630,25 @@
     <span class="n">usage</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Usage</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">raw</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">values</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="p">(),</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">errors</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="p">(),</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">schema_mode</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">repairs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""The first choice's validated value (needs ``response_schema=``).</span>
+
+<span class="sd">        Raises the recorded :class:`~aix.structured.SchemaValidationError` if</span>
+<span class="sd">        that choice still did not validate after the repair retries.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"No structured value: call complete(..., response_schema=...)"</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -771,6 +817,19 @@
 
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_max_repairs</span><span class="p">(</span><span class="n">max_repairs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""``int(max_repairs)`` if it is a non-negative integer, else ``ValueError``."""</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_repairs</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_repairs</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="n">max_repairs</span> <span class="o">&lt;</span> <span class="mi">0</span>
+    <span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"max_repairs must be a non-negative integer, got </span><span class="si">{</span><span class="n">max_repairs</span><span class="si">!r}</span><span class="s2">"</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">max_repairs</span><span class="p">)</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_complete_args</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Reject bad :func:`complete` arguments before the credential preflight.</span>
 
@@ -787,6 +846,13 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">"complete() does not stream; use chat(..., stream=True) for streaming."</span>
             <span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"response_schema"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"response_format"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Pass response_schema or response_format, not both."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"max_repairs"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_check_max_repairs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">"max_repairs"</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
@@ -805,6 +871,8 @@
     <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">response_format</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">response_schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_repairs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Completion</span><span class="p">:</span>
@@ -826,6 +894,15 @@
 <span class="sd">        seed: Best-effort reproducibility seed. Only sent when given; support</span>
 <span class="sd">            and the strength of the guarantee are provider-dependent.</span>
 <span class="sd">        response_format: Passed through to LiteLLM (e.g. ``{"type": "json_object"}``).</span>
+<span class="sd">            Mutually exclusive with ``response_schema``.</span>
+<span class="sd">        response_schema: A JSON Schema dict or a Pydantic model class. The</span>
+<span class="sd">            provider is asked to enforce it as strongly as the model allows</span>
+<span class="sd">            (strict ``json_schema`` &gt; non-strict ``json_schema`` &gt; JSON mode plus</span>
+<span class="sd">            the schema in the prompt; see :mod:`aix.structured`), and every</span>
+<span class="sd">            choice is validated client-side into ``values`` / ``errors``.</span>
+<span class="sd">        max_repairs: With ``response_schema``: how many times to re-ask for an</span>
+<span class="sd">            invalid choice, showing the model its error (``None`` = config</span>
+<span class="sd">            ``chat.schema_max_repairs``; ``0`` disables repair).</span>
 <span class="sd">        api_key: Explicit API key; otherwise resolved as for :func:`chat`.</span>
 <span class="sd">        **kwargs: Additional provider-specific parameters passed to LiteLLM.</span>
 
@@ -844,6 +921,16 @@
 <span class="sd">        Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17)</span>
 <span class="sd">        &gt;&gt;&gt; complete("Write an essay", max_tokens=5).finish_reason  # doctest: +SKIP</span>
 <span class="sd">        'length'</span>
+
+<span class="sd">        Structured output, validated:</span>
+
+<span class="sd">        &gt;&gt;&gt; from pydantic import BaseModel  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; class Verdict(BaseModel):  # doctest: +SKIP</span>
+<span class="sd">        ...     label: str</span>
+<span class="sd">        ...     confidence: float</span>
+<span class="sd">        &gt;&gt;&gt; c = complete("Is the sky green?", response_schema=Verdict)  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; c.value, c.schema_mode  # doctest: +SKIP</span>
+<span class="sd">        (Verdict(label='no', confidence=0.99), 'strict')</span>
 <span class="sd">    """</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>  <span class="c1"># already validated (see _validate_complete_args); np ints too</span>
     <span class="n">completion</span> <span class="o">=</span> <span class="n">_require_completion</span><span class="p">()</span>
@@ -860,10 +947,136 @@
         <span class="s2">"response_format"</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">optional</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">})</span>
+
+    <span class="k">if</span> <span class="n">response_schema</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Completion</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">completion</span><span class="p">(</span><span class="o">**</span><span class="n">litellm_kwargs</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">max_repairs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">max_repairs</span> <span class="o">=</span> <span class="n">_check_max_repairs</span><span class="p">(</span><span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">schema_max_repairs</span><span class="p">)</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">_ResponseSchema</span><span class="o">.</span><span class="n">from_schema</span><span class="p">(</span><span class="n">response_schema</span><span class="p">)</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">mode_for</span><span class="p">(</span><span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"model"</span><span class="p">])</span>
+    <span class="n">response_format</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">response_format</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">response_format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"response_format"</span><span class="p">]</span> <span class="o">=</span> <span class="n">response_format</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">_SCHEMA_IN_PROMPT_MODES</span><span class="p">:</span>
+        <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"messages"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_with_instruction</span><span class="p">(</span>
+            <span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"messages"</span><span class="p">],</span> <span class="n">spec</span><span class="o">.</span><span class="n">instruction</span><span class="p">()</span>
+        <span class="p">)</span>
     <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_validated</span><span class="p">(</span>
+        <span class="n">completion</span><span class="p">,</span>
+        <span class="n">Completion</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">completion</span><span class="p">(</span><span class="o">**</span><span class="n">litellm_kwargs</span><span class="p">)),</span>
+        <span class="n">litellm_kwargs</span><span class="p">,</span>
+        <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">max_repairs</span><span class="o">=</span><span class="n">max_repairs</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
-    <span class="k">return</span> <span class="n">Completion</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">completion</span><span class="p">(</span><span class="o">**</span><span class="n">litellm_kwargs</span><span class="p">))</span></div>
 
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_with_instruction</span><span class="p">(</span><span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">instruction</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""``messages`` with ``instruction`` added to the final user turn (copied)."""</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">]</span>
+    <span class="n">last</span> <span class="o">=</span> <span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">messages</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">last</span> <span class="ow">and</span> <span class="n">last</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"role"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"user"</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">last</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"content"</span><span class="p">),</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">last</span><span class="p">[</span><span class="s2">"content"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">last</span><span class="p">[</span><span class="s1">'content'</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="si">{</span><span class="n">instruction</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">instruction</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">messages</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_refusals</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">n_choices</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Each choice's ``message.refusal`` text (OpenAI structured outputs), or ``None``."""</span>
+    <span class="n">choices</span> <span class="o">=</span> <span class="n">_field</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s2">"choices"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="p">[</span><span class="n">_as_str</span><span class="p">(</span><span class="n">_field</span><span class="p">(</span><span class="n">_field</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">),</span> <span class="s2">"refusal"</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">found</span> <span class="o">+</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_choices</span><span class="p">)[:</span><span class="n">n_choices</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validated</span><span class="p">(</span>
+    <span class="n">completion_fn</span><span class="p">,</span>
+    <span class="n">first</span><span class="p">:</span> <span class="n">Completion</span><span class="p">,</span>
+    <span class="n">litellm_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">spec</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">max_repairs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Completion</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Validate every choice of ``first``, repairing invalid ones up to ``max_repairs``.</span>
+
+<span class="sd">    A repair is one extra ``n=1`` request: the conversation, the invalid reply</span>
+<span class="sd">    as the assistant turn, and the validation error as the next user turn. Its</span>
+<span class="sd">    tokens are added to ``usage``; the repaired text replaces the choice's.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">aix.structured</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemaValidationError</span>
+
+    <span class="n">texts</span><span class="p">,</span> <span class="n">reasons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">first</span><span class="o">.</span><span class="n">texts</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">first</span><span class="o">.</span><span class="n">finish_reasons</span><span class="p">)</span>
+    <span class="n">refusals</span> <span class="o">=</span> <span class="n">_refusals</span><span class="p">(</span><span class="n">first</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">texts</span><span class="p">))</span>
+    <span class="n">values</span><span class="p">,</span> <span class="n">errors</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">usages</span> <span class="o">=</span> <span class="p">[</span><span class="n">first</span><span class="o">.</span><span class="n">usage</span><span class="p">]</span> <span class="k">if</span> <span class="n">first</span><span class="o">.</span><span class="n">usage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+    <span class="n">repairs</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">repair_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">litellm_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">"n"</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_choice</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""``(value, error)`` for choice ``i``, repairing it in place if needed."""</span>
+        <span class="k">nonlocal</span> <span class="n">repairs</span>
+        <span class="k">if</span> <span class="n">refusals</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="c1"># A refusal is an answer, not a formatting slip: never "repair" it.</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">SchemaValidationError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The model refused: </span><span class="si">{</span><span class="n">refusals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">"refused"</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_repairs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">spec</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="kc">None</span>
+            <span class="k">except</span> <span class="n">SchemaValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">attempt</span> <span class="o">==</span> <span class="n">max_repairs</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">e</span>
+                <span class="n">repair_kwargs</span><span class="p">[</span><span class="s2">"messages"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="o">*</span><span class="n">litellm_kwargs</span><span class="p">[</span><span class="s2">"messages"</span><span class="p">],</span>
+                    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"assistant"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">text</span> <span class="ow">or</span> <span class="n">_EMPTY_REPLY_PLACEHOLDER</span><span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
+                        <span class="s2">"content"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"That reply was invalid (</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">detail</span><span class="si">}</span><span class="s2">). "</span>
+                        <span class="o">+</span> <span class="n">spec</span><span class="o">.</span><span class="n">instruction</span><span class="p">(),</span>
+                    <span class="p">},</span>
+                <span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">fixed</span> <span class="o">=</span> <span class="n">Completion</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">completion_fn</span><span class="p">(</span><span class="o">**</span><span class="n">repair_kwargs</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">request_error</span><span class="p">:</span>
+                    <span class="c1"># Keep the other choices: record this one as failed.</span>
+                    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">request_error</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="n">repairs</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">fixed</span><span class="o">.</span><span class="n">usage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">usages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fixed</span><span class="o">.</span><span class="n">usage</span><span class="p">)</span>
+                <span class="n">refusal</span> <span class="o">=</span> <span class="n">_refusals</span><span class="p">(</span><span class="n">fixed</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">refusal</span><span class="p">:</span>
+                    <span class="n">texts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fixed</span><span class="o">.</span><span class="n">text</span>
+                    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">SchemaValidationError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">"The model refused: </span><span class="si">{</span><span class="n">refusal</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="n">fixed</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                        <span class="n">detail</span><span class="o">=</span><span class="s2">"refused"</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">texts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fixed</span><span class="o">.</span><span class="n">text</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">reasons</span><span class="p">):</span>
+                    <span class="n">reasons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fixed</span><span class="o">.</span><span class="n">finish_reason</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>  <span class="c1"># pragma: no cover - loop always returns</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">texts</span><span class="p">):</span>
+        <span class="n">value</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">validate_choice</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_replace_dataclass</span><span class="p">(</span>
+        <span class="n">first</span><span class="p">,</span>
+        <span class="n">texts</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">texts</span><span class="p">),</span>
+        <span class="n">finish_reasons</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">reasons</span><span class="p">),</span>
+        <span class="n">usage</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">usages</span><span class="p">,</span> <span class="n">Usage</span><span class="p">())</span> <span class="k">if</span> <span class="n">usages</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">values</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">values</span><span class="p">),</span>
+        <span class="n">errors</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">errors</span><span class="p">),</span>
+        <span class="n">schema_mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+        <span class="n">repairs</span><span class="o">=</span><span class="n">repairs</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
 <div class="viewcode-block" id="chat_with_history">
@@ -1018,7 +1231,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=db237671"></script>
+</div><script src="../../_static/documentation_options.js?v=72630217"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

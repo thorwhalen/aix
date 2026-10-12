@@ -24,6 +24,7 @@
 - [aix.prompts](aix.prompts.html.md): Prompt-based function creation for AIX.
 - [aix.sampling](aix.sampling.html.md): Repeated sampling: &#96;n&#96; answers to one prompt, drawn as fast as the provider allows.
 - [aix.stores](aix.stores.html.md): Storage layers for AIX.
+- [aix.structured](aix.structured.html.md): Structured output: a schema in, validated values out, enforced as far as the provider allows.
 - [aix.util](aix.util.html.md): Utils for AIX.
 - [aix.video](aix.video.html.md): Video generation interface for AIX.
 - [aix.vision](aix.vision.html.md): Image-to-text (vision) interface for AIX.

@@ -1,4 +1,4 @@
-> built 2026-10-12 16:14 UTC from f4944bd (master) · aix 0.0.44. Details: build_info.json
+> built 2026-10-12 16:38 UTC from 5073ee3 (master) · aix 0.0.45. Details: build_info.json
 
 # index.html.md
 
@@ -271,13 +271,17 @@ To ask the same question several times (agreement, stability, majority vote), us
 import json
 from aix import sample
 
-s = sample("Is a tomato a fruit? Reply as JSON {\"answer\": bool}", n=5,
-           temperature=1.0, parse=json.loads)
-s.strategy                    # 'provider_n', 'independent' or 'mixed'
-s.payloads                    # parsed answers (None where parsing failed)
+s = sample(
+    'Is a tomato a fruit? Reply as JSON {"answer": bool}',
+    n=5,
+    temperature=1.0,
+    parse=json.loads,
+)
+s.strategy  # 'provider_n', 'independent' or 'mixed'
+s.payloads  # parsed answers (None where parsing failed)
 [x.finish_reason for x in s]  # 'content_filter' means refused, 'length' means truncated
-s.usage                       # total tokens across every request that reported usage
-s.n_requests                  # how many requests were made
+s.usage  # total tokens across every request that reported usage
+s.n_requests  # how many requests were made
 ```
 
 A failed request does not discard the work already paid for. By default `sample()` raises `SamplingError` once the launched requests finish, and the partial batch is on its `.samples`. With `on_error="record"`, the failure is stored on that sample’s `.error` instead. A `seed` is sent as-is with a provider-side `n` request; each independent request gets a seed derived from `(seed, index)`.
@@ -360,6 +364,44 @@ my_funcs.add("fix_bugs", "Fix bugs in: {code}")
 
 result = my_funcs.analyze(code="def foo(): return bar")
 ```
+
+#### Enforced, validated structured output
+
+`output_schema` above is flat and only requested in the prompt; nothing checks the reply against it. For anything nested (objects inside objects, arrays of objects, enums, required vs optional), pass `response_schema=`, either a Pydantic model or a JSON Schema dict. It works on `complete()`, `sample()` and `prompt_func()`:
+
+```python
+from typing import Literal
+from pydantic import BaseModel
+from aix import complete, prompt_func
+
+class Span(BaseModel):
+    start: int
+    end: int
+
+class Judgement(BaseModel):
+    value: Literal["yes", "no", "unsure"]
+    confidence: float
+    evidence: list[Span]
+
+judge = prompt_func("Does this text claim {claim}? {text}", response_schema=Judgement)
+judge(claim="...", text="...")       # -> Judgement(value='yes', confidence=0.8, evidence=[...])
+
+c = complete("...", response_schema=Judgement)
+c.value          # the validated Judgement (raises SchemaValidationError if still invalid)
+c.schema_mode    # 'strict' | 'schema' | 'json_mode' -- how the provider enforced it
+c.repairs        # extra requests made to fix invalid replies (their tokens are in c.usage)
+```
+
+The provider enforces the schema as strongly as the model allows:
+
+- **`strict`**: a strict `json_schema` response format, which constrains decoding. Used when LiteLLM’s `supports_response_schema(model)` is true and the schema is strict-compatible (every object closes `additionalProperties` and requires all of its properties; Pydantic models are converted to that form automatically).
+- **`schema`**: the same format, non-strict, for a schema that is not strict-compatible.
+- **`json_mode`**: JSON mode plus the schema written into the prompt, for models without schema support (or whose support is unknown).
+- **`prompt`**: the schema in the prompt only, for models LiteLLM knows accept no `response_format` at all.
+
+A schema whose root is not an object (a list, a union, a `RootModel`) is sent wrapped as `{"value": ...}`, since providers only constrain objects. It is unwrapped for you after validation.
+
+Every reply is also validated client-side. An invalid reply is re-asked up to `max_repairs` times (default from config `chat.schema_max_repairs`, which is 1), and each repair request shows the model its error. A refusal is recorded and never re-asked. A failed repair request is recorded on that choice; the other choices are kept.
 
 ### 4. Model Discovery & Selection
 
@@ -2621,7 +2663,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `text_to_speech` / `transcribe` / `translate_audio`.
 
-### *class* aix.config.ChatConfig(model='gpt-4.1-mini', temperature=1.0, max_tokens=None, sample_concurrency=5)
+### *class* aix.config.ChatConfig(model='gpt-4.1-mini', temperature=1.0, max_tokens=None, sample_concurrency=5, schema_max_repairs=1)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3141,6 +3183,7 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 | [`Usage`](_autosummary/aix.html.md#aix.Usage)([prompt_tokens, completion_tokens, ...])     | Token counts billed for one call (or summed over several).                                                                                                   |
 | [`Sample`](_autosummary/aix.html.md#aix.Sample)(text, payload[, finish_reason, ...])        | One drawn answer.                                                                                                                                            |
 | [`Samples`](_autosummary/aix.html.md#aix.Samples)([samples, usage, n_requests, ...])         | The list of [`Sample`](_autosummary/aix.html.md#aix.Sample) returned by [`sample()`](_autosummary/aix.html.md#aix.sample), plus batch facts. |
+| [`ResponseSchema`](_autosummary/aix.html.md#aix.ResponseSchema)(name, json_schema, ...[, ...])      | A normalized response schema: its JSON Schema, name, and validator.                                                                                          |
 | [`ChatSession`](_autosummary/aix.html.md#aix.ChatSession)([system_prompt, model])                | Stateful chat session that maintains conversation history.                                                                                                   |
 | [`EmbeddingCache`](_autosummary/aix.html.md#aix.EmbeddingCache)([model])                            | Cache for embeddings to avoid redundant API calls.                                                                                                           |
 | [`PromptFuncs`](_autosummary/aix.html.md#aix.PromptFuncs)([model])                               | Collection of prompt-based functions.                                                                                                                        |
@@ -3156,10 +3199,11 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 
 ### Exceptions
 
-| [`MissingCredentialError`](_autosummary/aix.html.md#aix.MissingCredentialError)(model_or_provider, \*)   | Raised when a required API key cannot be resolved.                                                           |
-|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| [`SamplingError`](_autosummary/aix.html.md#aix.SamplingError)(message, \*[, samples])           | A request inside [`sample()`](_autosummary/aix.html.md#aix.sample) failed (with `on_error="raise"`). |
-| [`ConstraintViolation`](_autosummary/aix.html.md#aix.ConstraintViolation)(message, \*[, answer, ...]) | Raised when an LLM answer does not satisfy the requested constraint.                                         |
+| [`MissingCredentialError`](_autosummary/aix.html.md#aix.MissingCredentialError)(model_or_provider, \*)      | Raised when a required API key cannot be resolved.                                                           |
+|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| [`SamplingError`](_autosummary/aix.html.md#aix.SamplingError)(message, \*[, samples])              | A request inside [`sample()`](_autosummary/aix.html.md#aix.sample) failed (with `on_error="raise"`). |
+| [`SchemaValidationError`](_autosummary/aix.html.md#aix.SchemaValidationError)(message, \*[, text, detail]) | A reply was not JSON, or did not match the response schema.                                                  |
+| [`ConstraintViolation`](_autosummary/aix.html.md#aix.ConstraintViolation)(message, \*[, answer, ...])    | Raised when an LLM answer does not satisfy the requested constraint.                                         |
 
 ### *class* aix.AixConfig(chat=<factory>, embeddings=<factory>, image=<factory>, audio=<factory>, video=<factory>, vision=<factory>, aliases=<factory>)
 
@@ -3288,7 +3332,7 @@ Send a message and get a response.
 * **Returns:**
   Assistant’s response
 
-### *class* aix.Completion(texts, finish_reasons=(), usage=None, model=None, raw=None)
+### *class* aix.Completion(texts, finish_reasons=(), usage=None, model=None, raw=None, values=(), errors=(), schema_mode=None, repairs=0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3323,6 +3367,28 @@ can differ from the one requested (aliases, dated snapshots).
 
 The untouched LiteLLM response, for anything not surfaced here.
 
+#### values
+
+With `response_schema=`: each choice’s validated value (a
+Pydantic instance for a Pydantic schema), `None` where invalid.
+
+#### errors
+
+Aligned with `values`: `None`, or why that choice has no
+value – the [`SchemaValidationError`](_autosummary/aix.structured.html.md#aix.structured.SchemaValidationError) of a
+reply still invalid after the repair retries (or a refusal), or the
+exception a repair request raised.
+
+#### schema_mode
+
+How the schema was enforced: `"strict"`, `"schema"`,
+`"json_mode"` or `"prompt"` (see [`aix.structured`](_autosummary/aix.structured.html.md#module-aix.structured));
+`None` without one.
+
+#### repairs
+
+How many repair requests were made (their tokens are in `usage`).
+
 ```pycon
 >>> c = Completion(texts=("a", "b"), finish_reasons=("stop", "length"))
 >>> c.text, c.finish_reason
@@ -3343,6 +3409,13 @@ Build a [`Completion`](_autosummary/aix.html.md#aix.Completion) from a (non-stre
 #### *property* text *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The first choice’s text (`""` if there are no choices).
+
+#### *property* value *: [Any](https://docs.python.org/3/library/typing.html#typing.Any)*
+
+The first choice’s validated value (needs `response_schema=`).
+
+Raises the recorded [`SchemaValidationError`](_autosummary/aix.structured.html.md#aix.structured.SchemaValidationError) if
+that choice still did not validate after the repair retries.
 
 ### *exception* aix.ConstraintViolation(message, , answer=None, valid_answers=None)
 
@@ -3908,6 +3981,80 @@ Add a function to the collection.
 
 Get all function names.
 
+### *class* aix.ResponseSchema(name, json_schema, wire_schema, strict_compatible, source, wrapped=False, \_coerce_json=None)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+A normalized response schema: its JSON Schema, name, and validator.
+
+Build it with [`from_schema()`](_autosummary/aix.html.md#aix.ResponseSchema.from_schema); [`aix.complete()`](_autosummary/aix.html.md#aix.complete) does that for you
+from `response_schema=`.
+
+#### name
+
+The schema name sent to the provider.
+
+#### json_schema
+
+The caller’s JSON Schema dict (what a value must match).
+
+#### wire_schema
+
+What is sent: `json_schema` itself, or wrapped as
+`{"value": json_schema}` when its root is not an object.
+
+#### strict_compatible
+
+Whether `wire_schema` satisfies strict-mode rules.
+
+#### wrapped
+
+Whether `wire_schema` is the `{"value": ...}` wrapper.
+
+#### source
+
+What the caller passed (a dict or a Pydantic model class).
+
+#### *classmethod* from_schema(schema)
+
+Normalize a JSON Schema dict or a Pydantic model class.
+
+* **Raises:**
+  * [**TypeError**](https://docs.python.org/3/builtins/exceptions.html#TypeError) – For anything else.
+  * **jsonschema.SchemaError** – For a malformed JSON Schema dict.
+* **Return type:**
+  [`ResponseSchema`](_autosummary/aix.structured.html.md#aix.structured.ResponseSchema)
+
+#### instruction()
+
+The prompt text that asks for this schema (JSON / prompt modes, repairs).
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+#### mode_for(model)
+
+The strongest enforcement mode available for `model` and this schema.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+#### response_format(mode)
+
+The LiteLLM `response_format` for `mode` (`None` for `"prompt"`).
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+
+#### validate(text)
+
+Parse and validate a reply; return the value (a model instance for Pydantic).
+
+* **Raises:**
+  [**SchemaValidationError**](_autosummary/aix.html.md#aix.SchemaValidationError) – If `text` is not JSON or does not match.
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 ### *class* aix.RubricVerdict(aspect, match, confidence, note='')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
@@ -3996,11 +4143,12 @@ whether it is complete.
 
 #### n_requests
 
-How many requests were made.
+How many requests were made (schema repair requests included).
 
 #### n_usage_reports
 
-How many of them reported usage.
+How many of them reported usage (a completion’s repair
+requests are counted with it when it reported usage).
 
 #### *property* errors *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[Exception](https://docs.python.org/3/builtins/exceptions.html#Exception), ...]*
 
@@ -4017,6 +4165,20 @@ flight are awaited, so the work already paid for is not lost: `samples`
 holds every request that was made, failed ones included (as samples whose
 `error` is set) – possibly fewer than `n`. The first failure is
 `__cause__`.
+
+### *exception* aix.SchemaValidationError(message, , text='', detail='')
+
+Bases: [`ValueError`](https://docs.python.org/3/builtins/exceptions.html#ValueError)
+
+A reply was not JSON, or did not match the response schema.
+
+#### text
+
+The reply that failed.
+
+#### detail
+
+The parse / validation message (what a repair prompt is told).
 
 ### *class* aix.TranscriptionResult(text, language=None, duration=None, segments=None, model=None)
 
@@ -4506,7 +4668,7 @@ Filmmaking rubric, a locked reference *set*:
 True
 ```
 
-### aix.complete(prompt, , model=None, temperature=None, max_tokens=None, n=1, seed=None, response_format=None, api_key=None, \*\*kwargs)
+### aix.complete(prompt, , model=None, temperature=None, max_tokens=None, n=1, seed=None, response_format=None, response_schema=None, max_repairs=None, api_key=None, \*\*kwargs)
 
 Send a chat prompt and get the whole response back as a [`Completion`](_autosummary/aix.html.md#aix.Completion).
 
@@ -4526,6 +4688,15 @@ served the call, and the raw response.
   * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Best-effort reproducibility seed. Only sent when given; support
     and the strength of the guarantee are provider-dependent.
   * **response_format** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Passed through to LiteLLM (e.g. `{"type": "json_object"}`).
+    Mutually exclusive with `response_schema`.
+  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or a Pydantic model class. The
+    provider is asked to enforce it as strongly as the model allows
+    (strict `json_schema` > non-strict `json_schema` > JSON mode plus
+    the schema in the prompt; see [`aix.structured`](_autosummary/aix.structured.html.md#module-aix.structured)), and every
+    choice is validated client-side into `values` / `errors`.
+  * **max_repairs** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – With `response_schema`: how many times to re-ask for an
+    invalid choice, showing the model its error (`None` = config
+    `chat.schema_max_repairs`; `0` disables repair).
   * **api_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Explicit API key; otherwise resolved as for [`chat()`](_autosummary/aix.html.md#aix.chat).
   * **\*\*kwargs** – Additional provider-specific parameters passed to LiteLLM.
 * **Return type:**
@@ -4546,6 +4717,18 @@ served the call, and the raw response.
 Usage(prompt_tokens=11, completion_tokens=6, total_tokens=17)
 >>> complete("Write an essay", max_tokens=5).finish_reason
 'length'
+```
+
+Structured output, validated:
+
+```pycon
+>>> from pydantic import BaseModel
+>>> class Verdict(BaseModel):
+...     label: str
+...     confidence: float
+>>> c = complete("Is the sky green?", response_schema=Verdict)
+>>> c.value, c.schema_mode
+(Verdict(label='no', confidence=0.99), 'strict')
 ```
 
 ### aix.configure(\*\*overrides)
@@ -5175,7 +5358,7 @@ sit above this and are applied elsewhere.
 * **Returns:**
   A fully resolved [`AixConfig`](_autosummary/aix.html.md#aix.AixConfig).
 
-### aix.prompt_func(template, , output_schema=None, egress=None, model=None, temperature=None, name=None, \*\*chat_kwargs)
+### aix.prompt_func(template, , output_schema=None, response_schema=None, egress=None, model=None, temperature=None, name=None, \*\*chat_kwargs)
 
 Create a callable function from a prompt template.
 
@@ -5204,6 +5387,15 @@ exactly as before.
     - Dict mapping field names to types: {“name”: str, “age”: int}
     - A single type for simple outputs: str, int, list, etc.
     - None for plain text output (default)
+  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional JSON Schema dict or Pydantic model class for
+    *enforced, validated* structured output (nested objects, arrays,
+    enums, required/optional all work): routed to the provider’s
+    strict `json_schema` mode where supported, otherwise JSON mode,
+    then validated client-side with a bounded repair retry (see
+    [`aix.complete()`](_autosummary/aix.html.md#aix.complete)). The function returns the validated value (a
+    model instance for a Pydantic schema) or raises
+    `aix.SchemaValidationError`. Prefer it over `output_schema`,
+    which is flat, prompt-only and unvalidated; pass one or the other.
   * **egress** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional post-processor `(result) -> Any` applied to the output
     before returning — on both the text and structured paths. Lets a caller
     keep “prompt → typed Python value” inside the facade (e.g. parse the
@@ -5372,7 +5564,7 @@ True
 * **Return type:**
   [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
-### aix.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, on_error='raise', api_key=None, \*\*kwargs)
+### aix.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, response_schema=None, on_error='raise', api_key=None, \*\*kwargs)
 
 Draw `n` answers to `prompt`, each with its finish reason and usage.
 
@@ -5392,6 +5584,10 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
     also falls back to independent if the provider refuses `n`),
     `"provider"` (force one `n` request) or `"independent"`.
     `n=1` is always a single plain request, recorded `"independent"`.
+  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
+    validated per request as in [`aix.complete()`](_autosummary/aix.html.md#aix.complete); each payload is the
+    validated value, and a choice still invalid after repairs records its
+    `SchemaValidationError` as `error`. Exclusive with `parse`.
   * **parse** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional `text -> payload` (e.g. `json.loads`). A failure is
     recorded on that sample (`payload=None`, `error=...`), not raised.
   * **on_error** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'raise'`, `'record'`]) – When a request fails: `"raise"` (default) raises
@@ -5605,23 +5801,24 @@ Context manager applying scoped overrides, restored on exit.
 
 ### Modules
 
-| [`config`](_autosummary/aix.config.html.md#module-aix.config)             | Central configuration for AIX (single source of truth for defaults).                |
-|---------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
-| [`ai_models`](_autosummary/aix.ai_models.html.md#module-aix.ai_models)       | AI Model Management Module.                                                         |
-| [`audio`](_autosummary/aix.audio.html.md#module-aix.audio)               | Audio operations interface for AIX.                                                 |
-| [`batches`](_autosummary/aix.batches.html.md#module-aix.batches)           | Batch processing interface for AIX.                                                 |
-| [`capabilities`](_autosummary/aix.capabilities.html.md#module-aix.capabilities) | What a model supports, asked before calling it.                                     |
-| [`credentials`](_autosummary/aix.credentials.html.md#module-aix.credentials)   | Unified, discoverable API-key / secret resolution for AIX.                          |
-| [`gen_ai`](_autosummary/aix.gen_ai.html.md#module-aix.gen_ai)             | Generative AI modules.                                                              |
-| [`image`](_autosummary/aix.image.html.md#module-aix.image)               | Image generation interface for AIX.                                                 |
-| [`misc`](_autosummary/aix.misc.html.md#module-aix.misc)                 | Misc AIX functions.                                                                 |
-| [`models`](_autosummary/aix.models.html.md#aix.models)                    | User-friendly interface for model discovery and selection.                          |
-| [`prompts`](_autosummary/aix.prompts.html.md#module-aix.prompts)           | Prompt-based function creation for AIX.                                             |
-| [`sampling`](_autosummary/aix.sampling.html.md#module-aix.sampling)         | Repeated sampling: `n` answers to one prompt, drawn as fast as the provider allows. |
-| [`stores`](_autosummary/aix.stores.html.md#module-aix.stores)             | Storage layers for AIX.                                                             |
-| [`util`](_autosummary/aix.util.html.md#module-aix.util)                 | Utils for AIX.                                                                      |
-| [`video`](_autosummary/aix.video.html.md#module-aix.video)               | Video generation interface for AIX.                                                 |
-| [`vision`](_autosummary/aix.vision.html.md#module-aix.vision)             | Image-to-text (vision) interface for AIX.                                           |
+| [`config`](_autosummary/aix.config.html.md#module-aix.config)             | Central configuration for AIX (single source of truth for defaults).                          |
+|---------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| [`ai_models`](_autosummary/aix.ai_models.html.md#module-aix.ai_models)       | AI Model Management Module.                                                                   |
+| [`audio`](_autosummary/aix.audio.html.md#module-aix.audio)               | Audio operations interface for AIX.                                                           |
+| [`batches`](_autosummary/aix.batches.html.md#module-aix.batches)           | Batch processing interface for AIX.                                                           |
+| [`capabilities`](_autosummary/aix.capabilities.html.md#module-aix.capabilities) | What a model supports, asked before calling it.                                               |
+| [`credentials`](_autosummary/aix.credentials.html.md#module-aix.credentials)   | Unified, discoverable API-key / secret resolution for AIX.                                    |
+| [`gen_ai`](_autosummary/aix.gen_ai.html.md#module-aix.gen_ai)             | Generative AI modules.                                                                        |
+| [`image`](_autosummary/aix.image.html.md#module-aix.image)               | Image generation interface for AIX.                                                           |
+| [`misc`](_autosummary/aix.misc.html.md#module-aix.misc)                 | Misc AIX functions.                                                                           |
+| [`models`](_autosummary/aix.models.html.md#aix.models)                    | User-friendly interface for model discovery and selection.                                    |
+| [`prompts`](_autosummary/aix.prompts.html.md#module-aix.prompts)           | Prompt-based function creation for AIX.                                                       |
+| [`sampling`](_autosummary/aix.sampling.html.md#module-aix.sampling)         | Repeated sampling: `n` answers to one prompt, drawn as fast as the provider allows.           |
+| [`stores`](_autosummary/aix.stores.html.md#module-aix.stores)             | Storage layers for AIX.                                                                       |
+| [`structured`](_autosummary/aix.structured.html.md#module-aix.structured)     | Structured output: a schema in, validated values out, enforced as far as the provider allows. |
+| [`util`](_autosummary/aix.util.html.md#module-aix.util)                 | Utils for AIX.                                                                                |
+| [`video`](_autosummary/aix.video.html.md#module-aix.video)               | Video generation interface for AIX.                                                           |
+| [`vision`](_autosummary/aix.vision.html.md#module-aix.vision)             | Image-to-text (vision) interface for AIX.                                                     |
 
 
 # _autosummary/aix.image.html.md
@@ -6196,7 +6393,7 @@ True
 ... )
 ```
 
-### aix.prompts.prompt_func(template, , output_schema=None, egress=None, model=None, temperature=None, name=None, \*\*chat_kwargs)
+### aix.prompts.prompt_func(template, , output_schema=None, response_schema=None, egress=None, model=None, temperature=None, name=None, \*\*chat_kwargs)
 
 Create a callable function from a prompt template.
 
@@ -6225,6 +6422,15 @@ exactly as before.
     - Dict mapping field names to types: {“name”: str, “age”: int}
     - A single type for simple outputs: str, int, list, etc.
     - None for plain text output (default)
+  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional JSON Schema dict or Pydantic model class for
+    *enforced, validated* structured output (nested objects, arrays,
+    enums, required/optional all work): routed to the provider’s
+    strict `json_schema` mode where supported, otherwise JSON mode,
+    then validated client-side with a bounded repair retry (see
+    [`aix.complete()`](_autosummary/aix.html.md#aix.complete)). The function returns the validated value (a
+    model instance for a Pydantic schema) or raises
+    `aix.SchemaValidationError`. Prefer it over `output_schema`,
+    which is flat, prompt-only and unvalidated; pass one or the other.
   * **egress** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional post-processor `(result) -> Any` applied to the output
     before returning — on both the text and structured paths. Lets a caller
     keep “prompt → typed Python value” inside the facade (e.g. parse the
@@ -6447,11 +6653,12 @@ whether it is complete.
 
 #### n_requests
 
-How many requests were made.
+How many requests were made (schema repair requests included).
 
 #### n_usage_reports
 
-How many of them reported usage.
+How many of them reported usage (a completion’s repair
+requests are counted with it when it reported usage).
 
 #### *property* errors *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[Exception](https://docs.python.org/3/builtins/exceptions.html#Exception), ...]*
 
@@ -6501,7 +6708,7 @@ exception in item order propagates.
 [0, 1, 4, 9, 16]
 ```
 
-### aix.sampling.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, on_error='raise', api_key=None, \*\*kwargs)
+### aix.sampling.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, response_schema=None, on_error='raise', api_key=None, \*\*kwargs)
 
 Draw `n` answers to `prompt`, each with its finish reason and usage.
 
@@ -6521,6 +6728,10 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
     also falls back to independent if the provider refuses `n`),
     `"provider"` (force one `n` request) or `"independent"`.
     `n=1` is always a single plain request, recorded `"independent"`.
+  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
+    validated per request as in [`aix.complete()`](_autosummary/aix.html.md#aix.complete); each payload is the
+    validated value, and a choice still invalid after repairs records its
+    `SchemaValidationError` as `error`. Exclusive with `parse`.
   * **parse** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional `text -> payload` (e.g. `json.loads`). A failure is
     recorded on that sample (`payload=None`, `error=...`), not raised.
   * **on_error** ([`Literal`](https://docs.python.org/3/library/typing.html#typing.Literal)[`'raise'`, `'record'`]) – When a request fails: `"raise"` (default) raises
@@ -6575,6 +6786,144 @@ Otherwise, the bytes are decoded using v.decode(‘utf-8’).
   The decoded text.
 * **Return type:**
   [*str*](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+
+# _autosummary/aix.structured.html.md
+
+# aix.structured
+
+Structured output: a schema in, validated values out, enforced as far as the provider allows.
+
+A *response schema* is a JSON Schema `dict` or a Pydantic model class. It is
+turned into a [`ResponseSchema`](_autosummary/aix.structured.html.md#aix.structured.ResponseSchema), which knows
+
+* how to ask the provider for it – the strongest mode the model supports:
+  - `"strict"`: `response_format={"type": "json_schema", ..., "strict": true}`,
+    the provider constrains decoding to the schema. Used when LiteLLM reports
+    `supports_response_schema(model)` *and* the schema is strict-compatible
+    (every object closes `additionalProperties` and requires all its
+    properties – Pydantic models are converted to that form automatically);
+  - `"schema"`: the same `json_schema` format, non-strict, for a
+    schema-capable model and a schema that is not strict-compatible;
+  - `"json_mode"`: `{"type": "json_object"}` plus the schema in the prompt,
+    for models without schema support (or whose support is unknown);
+  - `"prompt"`: the schema in the prompt only, for models LiteLLM knows do
+    not accept a `response_format` at all;
+* and how to validate a reply client-side, which happens on every path (it is
+  cheap, and “the provider enforced it” is a claim worth checking).
+
+Providers only accept an *object* at the root of a structured reply (strict
+`json_schema` and JSON mode alike), so a schema whose root is not an object
+(an array, a union, a scalar) is sent wrapped as `{"value": <schema>}` and
+unwrapped after validation – transparently to the caller.
+
+```pycon
+>>> spec = ResponseSchema.from_schema({"type": "object", "properties": {"x": {"type": "integer"}}, "required": ["x"]})
+>>> spec.validate('{"x": 3}')
+{'x': 3}
+>>> spec.validate('{"x": "three"}')
+Traceback (most recent call last):
+...
+aix.structured.SchemaValidationError: ...
+```
+
+### Classes
+
+| [`ResponseSchema`](_autosummary/aix.structured.html.md#aix.structured.ResponseSchema)(name, json_schema, ...[, ...])   | A normalized response schema: its JSON Schema, name, and validator.   |
+|--------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+
+### Exceptions
+
+| [`SchemaValidationError`](_autosummary/aix.structured.html.md#aix.structured.SchemaValidationError)(message, \*[, text, detail])   | A reply was not JSON, or did not match the response schema.   |
+|-------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
+
+### *class* aix.structured.ResponseSchema(name, json_schema, wire_schema, strict_compatible, source, wrapped=False, \_coerce_json=None)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+A normalized response schema: its JSON Schema, name, and validator.
+
+Build it with [`from_schema()`](_autosummary/aix.structured.html.md#aix.structured.ResponseSchema.from_schema); [`aix.complete()`](_autosummary/aix.html.md#aix.complete) does that for you
+from `response_schema=`.
+
+#### name
+
+The schema name sent to the provider.
+
+#### json_schema
+
+The caller’s JSON Schema dict (what a value must match).
+
+#### wire_schema
+
+What is sent: `json_schema` itself, or wrapped as
+`{"value": json_schema}` when its root is not an object.
+
+#### strict_compatible
+
+Whether `wire_schema` satisfies strict-mode rules.
+
+#### wrapped
+
+Whether `wire_schema` is the `{"value": ...}` wrapper.
+
+#### source
+
+What the caller passed (a dict or a Pydantic model class).
+
+#### *classmethod* from_schema(schema)
+
+Normalize a JSON Schema dict or a Pydantic model class.
+
+* **Raises:**
+  * [**TypeError**](https://docs.python.org/3/builtins/exceptions.html#TypeError) – For anything else.
+  * **jsonschema.SchemaError** – For a malformed JSON Schema dict.
+* **Return type:**
+  [`ResponseSchema`](_autosummary/aix.structured.html.md#aix.structured.ResponseSchema)
+
+#### instruction()
+
+The prompt text that asks for this schema (JSON / prompt modes, repairs).
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+#### mode_for(model)
+
+The strongest enforcement mode available for `model` and this schema.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+#### response_format(mode)
+
+The LiteLLM `response_format` for `mode` (`None` for `"prompt"`).
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+
+#### validate(text)
+
+Parse and validate a reply; return the value (a model instance for Pydantic).
+
+* **Raises:**
+  [**SchemaValidationError**](_autosummary/aix.structured.html.md#aix.structured.SchemaValidationError) – If `text` is not JSON or does not match.
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
+### *exception* aix.structured.SchemaValidationError(message, , text='', detail='')
+
+Bases: [`ValueError`](https://docs.python.org/3/builtins/exceptions.html#ValueError)
+
+A reply was not JSON, or did not match the response schema.
+
+#### text
+
+The reply that failed.
+
+#### detail
+
+The parse / validation message (what a repair prompt is told).
 
 
 # _autosummary/aix.util.html.md
@@ -7202,18 +7551,18 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.
 
 # About this build
 
-This documentation was built on **2026-10-12 16:14 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/f4944bdb99785d2745f84268b82775df0cdc43ce"><code>f4944bd</code></a> on branch <code>master</code>, for **aix 0.0.44** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-12 16:38 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/5073ee397a7f3ae4af7b12902fe34900ba57ad8b"><code>5073ee3</code></a> on branch <code>master</code>, for **aix 0.0.45** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.0.44) is behind the latest release on PyPI (0.0.45): `pip install aix` gives newer code than these docs describe.
+- The documented version (0.0.45) is behind the latest release on PyPI (0.0.46): `pip install aix` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/f4944bdb99785d2745f84268b82775df0cdc43ce"><code>f4944bdb99785d2745f84268b82775df0cdc43ce</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/5073ee397a7f3ae4af7b12902fe34900ba57ad8b"><code>5073ee397a7f3ae4af7b12902fe34900ba57ad8b</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -7224,9 +7573,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38275687670">38275687670</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38278547000">38278547000</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>f4944bdb99785d2745f84268b82775df0cdc43ce</code> (in the history of the built commit) |
+| Event commit | <code>5073ee397a7f3ae4af7b12902fe34900ba57ad8b</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -7251,13 +7600,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.45/">0.0.45</a>, newer than the documented version (0.0.44).
+Latest release: <a href="https://pypi.org/project/aix/0.0.46/">0.0.46</a>, newer than the documented version (0.0.45).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout f4944bdb99785d2745f84268b82775df0cdc43ce
+git checkout 5073ee397a7f3ae4af7b12902fe34900ba57ad8b
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

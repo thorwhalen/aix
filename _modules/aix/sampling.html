@@ -223,6 +223,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.prompts.html">aix.prompts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.sampling.html">aix.sampling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.structured.html">aix.structured</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.util.html">aix.util</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.video.html">aix.video</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.vision.html">aix.vision</a></li>
@@ -297,6 +298,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.chat</span><span class="w"> </span><span class="kn">import</span> <span class="n">Completion</span><span class="p">,</span> <span class="n">Usage</span><span class="p">,</span> <span class="n">complete</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_config</span> <span class="k">as</span> <span class="n">_get_config</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.credentials</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_requirements</span> <span class="k">as</span> <span class="n">_check_requirements</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.structured</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResponseSchema</span><span class="p">,</span> <span class="n">SchemaValidationError</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"sample"</span><span class="p">,</span>
@@ -442,8 +444,9 @@
 <span class="sd">        usage: Total tokens over every request that reported usage, or ``None``</span>
 <span class="sd">            if none did. Compare ``n_requests`` with ``n_usage_reports`` to see</span>
 <span class="sd">            whether it is complete.</span>
-<span class="sd">        n_requests: How many requests were made.</span>
-<span class="sd">        n_usage_reports: How many of them reported usage.</span>
+<span class="sd">        n_requests: How many requests were made (schema repair requests included).</span>
+<span class="sd">        n_usage_reports: How many of them reported usage (a completion's repair</span>
+<span class="sd">            requests are counted with it when it reported usage).</span>
 <span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -512,6 +515,25 @@
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">e</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_request_error</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether a recorded per-choice error is a failed request (e.g. a repair</span>
+<span class="sd">    request that raised), as opposed to a reply that did not parse/validate."""</span>
+    <span class="k">return</span> <span class="n">error</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="p">(</span><span class="n">SchemaValidationError</span><span class="p">,))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_payload</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="n">Completion</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">parse</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Any</span><span class="p">]]):</span>
+<span class="w">    </span><span class="sd">"""``(payload, error)`` for choice ``index`` of ``c``.</span>
+
+<span class="sd">    The validated value when ``c`` was produced with a response schema, else</span>
+<span class="sd">    ``parse`` applied to the text.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">schema_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The provider returned no choice for this sample"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">c</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">_parsed</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">texts</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">texts</span><span class="p">)</span> <span class="k">else</span> <span class="s2">""</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_unsupported_param_error</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Whether the provider refused a request parameter (LiteLLM's error type).</span>
 
@@ -532,6 +554,7 @@
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span> <span class="o">=</span> <span class="s2">"auto"</span><span class="p">,</span>
     <span class="n">parse</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">response_schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">on_error</span><span class="p">:</span> <span class="n">OnError</span> <span class="o">=</span> <span class="s2">"raise"</span><span class="p">,</span>
     <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
@@ -554,6 +577,10 @@
 <span class="sd">            also falls back to independent if the provider refuses ``n``),</span>
 <span class="sd">            ``"provider"`` (force one ``n`` request) or ``"independent"``.</span>
 <span class="sd">            ``n=1`` is always a single plain request, recorded ``"independent"``.</span>
+<span class="sd">        response_schema: A JSON Schema dict or Pydantic model class, enforced and</span>
+<span class="sd">            validated per request as in :func:`aix.complete`; each payload is the</span>
+<span class="sd">            validated value, and a choice still invalid after repairs records its</span>
+<span class="sd">            ``SchemaValidationError`` as ``error``. Exclusive with ``parse``.</span>
 <span class="sd">        parse: Optional ``text -&gt; payload`` (e.g. ``json.loads``). A failure is</span>
 <span class="sd">            recorded on that sample (``payload=None``, ``error=...``), not raised.</span>
 <span class="sd">        on_error: When a request fails: ``"raise"`` (default) raises</span>
@@ -580,6 +607,8 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"strategy must be one of </span><span class="si">{</span><span class="n">_STRATEGIES</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">strategy</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">on_error</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_ON_ERROR</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"on_error must be one of </span><span class="si">{</span><span class="n">_ON_ERROR</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">on_error</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parse</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">response_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Pass parse or response_schema, not both."</span><span class="p">)</span>
     <span class="n">reserved</span> <span class="o">=</span> <span class="n">_RESERVED_KWARGS</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">reserved</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -592,10 +621,16 @@
     <span class="n">_check_requirements</span><span class="p">(</span><span class="n">model</span> <span class="ow">or</span> <span class="n">_get_config</span><span class="p">()</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
 
     <span class="n">call_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">response_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Normalized once here, not once per request (it builds a validator).</span>
+        <span class="n">call_kwargs</span><span class="p">[</span><span class="s2">"response_schema"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ResponseSchema</span><span class="o">.</span><span class="n">from_schema</span><span class="p">(</span><span class="n">response_schema</span><span class="p">)</span>
 
     <span class="n">samples</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sample</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">usages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Usage</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">n_requests</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n_requests</span> <span class="o">=</span> <span class="n">n_usage_reports</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># A failed request -- including a schema repair request -- as opposed to a</span>
+    <span class="c1"># reply that did not parse/validate (which is always just recorded).</span>
+    <span class="n">first_error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span>
 
     <span class="n">use_provider_n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span>
         <span class="n">strategy</span> <span class="o">==</span> <span class="s2">"provider"</span> <span class="ow">or</span> <span class="p">(</span><span class="n">strategy</span> <span class="o">==</span> <span class="s2">"auto"</span> <span class="ow">and</span> <span class="n">supports</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">"n"</span><span class="p">))</span>
@@ -608,14 +643,19 @@
                 <span class="k">raise</span>
             <span class="n">use_provider_n</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># supports() was wrong for this model</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">n_requests</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">reason</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">texts</span><span class="p">,</span> <span class="n">batch</span><span class="o">.</span><span class="n">finish_reasons</span><span class="p">))[:</span><span class="n">n</span><span class="p">]:</span>
-                <span class="n">payload</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">_parsed</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+            <span class="n">n_requests</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">batch</span><span class="o">.</span><span class="n">repairs</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">texts</span><span class="p">,</span> <span class="n">batch</span><span class="o">.</span><span class="n">finish_reasons</span><span class="p">))[:</span><span class="n">n</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="n">payload</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">_payload</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">schema_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">_is_request_error</span><span class="p">(</span><span class="n">error</span><span class="p">):</span>
+                    <span class="n">first_error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">=</span> <span class="n">first_error</span> <span class="ow">or</span> <span class="n">error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">Sample</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">reason</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">PROVIDER_N</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">usage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">usages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">usage</span><span class="p">)</span>
+                <span class="n">n_usage_reports</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">batch</span><span class="o">.</span><span class="n">repairs</span>
 
     <span class="n">n_from_provider</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
     <span class="n">seeds</span> <span class="o">=</span> <span class="p">[</span>
@@ -637,18 +677,19 @@
                 <span class="n">stop</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">e</span>
 
-    <span class="n">first_error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">one_seed</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
         <span class="n">seeds</span><span class="p">,</span> <span class="n">concurrent_map</span><span class="p">(</span><span class="n">draw_one</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">concurrency</span><span class="o">=</span><span class="n">concurrency</span><span class="p">)</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
-        <span class="n">n_requests</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">n_requests</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">else</span> <span class="n">c</span><span class="o">.</span><span class="n">repairs</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
             <span class="n">first_error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">=</span> <span class="n">first_error</span> <span class="ow">or</span> <span class="n">c</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Sample</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">INDEPENDENT</span><span class="p">,</span> <span class="n">one_seed</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
             <span class="k">continue</span>
-        <span class="n">payload</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">_parsed</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+        <span class="n">payload</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">_payload</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">parse</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">schema_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">_is_request_error</span><span class="p">(</span><span class="n">error</span><span class="p">):</span>
+            <span class="n">first_error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">=</span> <span class="n">first_error</span> <span class="ow">or</span> <span class="n">error</span><span class="p">,</span> <span class="n">n_failed</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">Sample</span><span class="p">(</span>
                 <span class="n">c</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">finish_reason</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">usage</span><span class="p">,</span> <span class="n">INDEPENDENT</span><span class="p">,</span> <span class="n">one_seed</span><span class="p">,</span> <span class="n">error</span>
@@ -656,6 +697,7 @@
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">usage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">usages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">usage</span><span class="p">)</span>
+            <span class="n">n_usage_reports</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">repairs</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">use_provider_n</span><span class="p">:</span>
         <span class="n">recorded</span> <span class="o">=</span> <span class="n">INDEPENDENT</span>
@@ -666,7 +708,7 @@
         <span class="n">strategy</span><span class="o">=</span><span class="n">recorded</span><span class="p">,</span>
         <span class="n">usage</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">usages</span><span class="p">,</span> <span class="n">Usage</span><span class="p">())</span> <span class="k">if</span> <span class="n">usages</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_requests</span><span class="o">=</span><span class="n">n_requests</span><span class="p">,</span>
-        <span class="n">n_usage_reports</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">usages</span><span class="p">),</span>
+        <span class="n">n_usage_reports</span><span class="o">=</span><span class="n">n_usage_reports</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">first_error</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">on_error</span> <span class="o">==</span> <span class="s2">"raise"</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">SamplingError</span><span class="p">(</span>
@@ -704,7 +746,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=db237671"></script>
+</div><script src="../../_static/documentation_options.js?v=72630217"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

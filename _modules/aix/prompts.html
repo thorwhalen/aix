@@ -223,6 +223,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.prompts.html">aix.prompts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.sampling.html">aix.sampling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.stores.html">aix.stores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.structured.html">aix.structured</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.util.html">aix.util</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.video.html">aix.video</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../_autosummary/aix.vision.html">aix.vision</a></li>
@@ -303,7 +304,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">inspect</span><span class="w"> </span><span class="kn">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">Parameter</span>
 
 <span class="c1"># Import from aix.chat</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">aix.chat</span><span class="w"> </span><span class="kn">import</span> <span class="n">chat</span><span class="p">,</span> <span class="n">DFLT_CHAT_MODEL</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.chat</span><span class="w"> </span><span class="kn">import</span> <span class="n">chat</span><span class="p">,</span> <span class="n">complete</span><span class="p">,</span> <span class="n">DFLT_CHAT_MODEL</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.sampling</span><span class="w"> </span><span class="kn">import</span> <span class="n">concurrent_map</span><span class="p">,</span> <span class="n">check_positive_int</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_config</span> <span class="k">as</span> <span class="n">_get_config</span><span class="p">,</span> <span class="n">resolve_model</span> <span class="k">as</span> <span class="n">_resolve_model</span>
 
@@ -583,6 +584,7 @@
     <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">output_schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">response_schema</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">egress</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -614,6 +616,15 @@
 <span class="sd">            - Dict mapping field names to types: {"name": str, "age": int}</span>
 <span class="sd">            - A single type for simple outputs: str, int, list, etc.</span>
 <span class="sd">            - None for plain text output (default)</span>
+<span class="sd">        response_schema: Optional JSON Schema dict or Pydantic model class for</span>
+<span class="sd">            *enforced, validated* structured output (nested objects, arrays,</span>
+<span class="sd">            enums, required/optional all work): routed to the provider's</span>
+<span class="sd">            strict ``json_schema`` mode where supported, otherwise JSON mode,</span>
+<span class="sd">            then validated client-side with a bounded repair retry (see</span>
+<span class="sd">            :func:`aix.complete`). The function returns the validated value (a</span>
+<span class="sd">            model instance for a Pydantic schema) or raises</span>
+<span class="sd">            ``aix.SchemaValidationError``. Prefer it over ``output_schema``,</span>
+<span class="sd">            which is flat, prompt-only and unvalidated; pass one or the other.</span>
 <span class="sd">        egress: Optional post-processor ``(result) -&gt; Any`` applied to the output</span>
 <span class="sd">            before returning — on both the text and structured paths. Lets a caller</span>
 <span class="sd">            keep "prompt → typed Python value" inside the facade (e.g. parse the</span>
@@ -668,6 +679,8 @@
     <span class="c1"># Parse the template. Supports the oa-style ``{name:default}`` default-aware</span>
     <span class="c1"># dialect (braces inside fenced ``` regions stay literal); plain ``{name}``</span>
     <span class="c1"># templates are unchanged, so existing callers behave identically.</span>
+    <span class="k">if</span> <span class="n">output_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">response_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Pass output_schema or response_schema, not both."</span><span class="p">)</span>
     <span class="n">format_ready</span><span class="p">,</span> <span class="n">param_names</span><span class="p">,</span> <span class="n">template_defaults</span> <span class="o">=</span> <span class="n">_prepare_template</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
 
     <span class="c1"># Build the actual function</span>
@@ -684,8 +697,16 @@
         <span class="c1"># Format the prompt (defaults already merged in)</span>
         <span class="n">formatted_prompt</span> <span class="o">=</span> <span class="n">format_ready</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">values</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">response_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">complete</span><span class="p">(</span>
+                <span class="n">formatted_prompt</span><span class="p">,</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+                <span class="n">response_schema</span><span class="o">=</span><span class="n">response_schema</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">chat_kwargs</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">value</span>
         <span class="c1"># If structured output is requested, modify the prompt</span>
-        <span class="k">if</span> <span class="n">output_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">output_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">json_schema</span> <span class="o">=</span> <span class="n">_schema_to_json_schema</span><span class="p">(</span><span class="n">output_schema</span><span class="p">)</span>
             <span class="c1"># Add instruction for JSON output</span>
             <span class="n">structured_prompt</span> <span class="o">=</span> <span class="p">(</span>
@@ -718,7 +739,11 @@
     <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_names</span><span class="p">:</span>
         <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">: Parameter from template</span><span class="se">\n</span><span class="s2">"</span>
 
-    <span class="k">if</span> <span class="n">output_schema</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">response_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Returns: Validated value matching response schema: </span><span class="si">{</span><span class="n">response_schema</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">output_schema</span><span class="p">:</span>
         <span class="n">generated_function</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Returns: Structured data matching schema: </span><span class="si">{</span><span class="n">output_schema</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
@@ -728,6 +753,7 @@
     <span class="c1"># Add metadata</span>
     <span class="n">generated_function</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">template</span>
     <span class="n">generated_function</span><span class="o">.</span><span class="n">output_schema</span> <span class="o">=</span> <span class="n">output_schema</span>
+    <span class="n">generated_function</span><span class="o">.</span><span class="n">response_schema</span> <span class="o">=</span> <span class="n">response_schema</span>
     <span class="n">generated_function</span><span class="o">.</span><span class="n">egress</span> <span class="o">=</span> <span class="n">egress</span>
     <span class="n">generated_function</span><span class="o">.</span><span class="n">param_names</span> <span class="o">=</span> <span class="n">param_names</span>
 
@@ -1490,7 +1516,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=db237671"></script>
+</div><script src="../../_static/documentation_options.js?v=72630217"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

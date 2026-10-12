@@ -104,7 +104,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `text_to_speech` / `transcribe` / `translate_audio`.
 
-### *class* aix.config.ChatConfig(model='gpt-4.1-mini', temperature=1.0, max_tokens=None, sample_concurrency=5)
+### *class* aix.config.ChatConfig(model='gpt-4.1-mini', temperature=1.0, max_tokens=None, sample_concurrency=5, schema_max_repairs=1)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

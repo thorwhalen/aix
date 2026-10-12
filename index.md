@@ -267,13 +267,17 @@ To ask the same question several times (agreement, stability, majority vote), us
 import json
 from aix import sample
 
-s = sample("Is a tomato a fruit? Reply as JSON {\"answer\": bool}", n=5,
-           temperature=1.0, parse=json.loads)
-s.strategy                    # 'provider_n', 'independent' or 'mixed'
-s.payloads                    # parsed answers (None where parsing failed)
+s = sample(
+    'Is a tomato a fruit? Reply as JSON {"answer": bool}',
+    n=5,
+    temperature=1.0,
+    parse=json.loads,
+)
+s.strategy  # 'provider_n', 'independent' or 'mixed'
+s.payloads  # parsed answers (None where parsing failed)
 [x.finish_reason for x in s]  # 'content_filter' means refused, 'length' means truncated
-s.usage                       # total tokens across every request that reported usage
-s.n_requests                  # how many requests were made
+s.usage  # total tokens across every request that reported usage
+s.n_requests  # how many requests were made
 ```
 
 A failed request does not discard the work already paid for. By default `sample()` raises `SamplingError` once the launched requests finish, and the partial batch is on its `.samples`. With `on_error="record"`, the failure is stored on that sample’s `.error` instead. A `seed` is sent as-is with a provider-side `n` request; each independent request gets a seed derived from `(seed, index)`.
@@ -356,6 +360,44 @@ my_funcs.add("fix_bugs", "Fix bugs in: {code}")
 
 result = my_funcs.analyze(code="def foo(): return bar")
 ```
+
+#### Enforced, validated structured output
+
+`output_schema` above is flat and only requested in the prompt; nothing checks the reply against it. For anything nested (objects inside objects, arrays of objects, enums, required vs optional), pass `response_schema=`, either a Pydantic model or a JSON Schema dict. It works on `complete()`, `sample()` and `prompt_func()`:
+
+```python
+from typing import Literal
+from pydantic import BaseModel
+from aix import complete, prompt_func
+
+class Span(BaseModel):
+    start: int
+    end: int
+
+class Judgement(BaseModel):
+    value: Literal["yes", "no", "unsure"]
+    confidence: float
+    evidence: list[Span]
+
+judge = prompt_func("Does this text claim {claim}? {text}", response_schema=Judgement)
+judge(claim="...", text="...")       # -> Judgement(value='yes', confidence=0.8, evidence=[...])
+
+c = complete("...", response_schema=Judgement)
+c.value          # the validated Judgement (raises SchemaValidationError if still invalid)
+c.schema_mode    # 'strict' | 'schema' | 'json_mode' -- how the provider enforced it
+c.repairs        # extra requests made to fix invalid replies (their tokens are in c.usage)
+```
+
+The provider enforces the schema as strongly as the model allows:
+
+- **`strict`**: a strict `json_schema` response format, which constrains decoding. Used when LiteLLM’s `supports_response_schema(model)` is true and the schema is strict-compatible (every object closes `additionalProperties` and requires all of its properties; Pydantic models are converted to that form automatically).
+- **`schema`**: the same format, non-strict, for a schema that is not strict-compatible.
+- **`json_mode`**: JSON mode plus the schema written into the prompt, for models without schema support (or whose support is unknown).
+- **`prompt`**: the schema in the prompt only, for models LiteLLM knows accept no `response_format` at all.
+
+A schema whose root is not an object (a list, a union, a `RootModel`) is sent wrapped as `{"value": ...}`, since providers only constrain objects. It is unwrapped for you after validation.
+
+Every reply is also validated client-side. An invalid reply is re-asked up to `max_repairs` times (default from config `chat.schema_max_repairs`, which is 1), and each repair request shows the model its error. A refusal is recorded and never re-asked. A failed repair request is recorded on that choice; the other choices are kept.
 
 ### 4. Model Discovery & Selection
 

@@ -61,6 +61,7 @@
       Usage
       Sample
       Samples
+      ResponseSchema
       ChatSession
       EmbeddingCache
       PromptFuncs
@@ -80,6 +81,7 @@
    
       MissingCredentialError
       SamplingError
+      SchemaValidationError
       ConstraintViolation
    
 .. rubric:: Modules
@@ -101,6 +103,7 @@
    prompts
    sampling
    stores
+   structured
    util
    video
    vision

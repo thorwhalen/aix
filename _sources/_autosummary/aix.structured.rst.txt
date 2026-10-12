@@ -1,0 +1,18 @@
+aix.structured
+==============
+
+.. automodule:: aix.structured
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ResponseSchema
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      SchemaValidationError
+   
