@@ -19,6 +19,7 @@ independently and the batch is marked ``"mixed"``.
 ('provider_n', 52)
 """
 
+import copy
 import hashlib
 import numbers
 import threading
@@ -29,7 +30,11 @@ from typing import Any, Literal, Optional, TypeVar, Union
 
 from aix.capabilities import supports
 from aix.chat import Completion, Usage, complete
-from aix.config import get_config as _get_config, submit_in_context
+from aix.config import (
+    get_config as _get_config,
+    resolve_model as _resolve_model,
+    submit_in_context,
+)
 from aix.credentials import check_requirements as _check_requirements
 from aix.structured import ResponseSchema, SchemaValidationError
 
@@ -40,6 +45,7 @@ __all__ = [
     "SamplingError",
     "concurrent_map",
     "check_positive_int",
+    "forget_n_refusals",
 ]
 
 T = TypeVar("T")
@@ -298,6 +304,57 @@ def _is_bad_request_error(error: Exception) -> bool:
     )
 
 
+# Models known (this process) to refuse a provider-side ``n``, mapped to the error
+# that showed it. Lets ``strategy="auto"`` skip the doomed request (and, for a
+# server-side 400, the probe) on every later call.
+_N_REFUSALS: dict[tuple, Exception] = {}
+
+
+def _remember_n_refusal(key: tuple, error: Exception) -> None:
+    """Memoise a *copy* of ``error``, stripped of traceback and cause chain.
+
+    A process-long memo must not pin the call's frames (or its request), and the
+    error handed back to this call's caller keeps its own traceback.
+    """
+    try:
+        stored = copy.copy(error)
+    except Exception:  # an exception that cannot be copied: keep its message
+        stored = RuntimeError(str(error))
+    stored.__traceback__ = stored.__cause__ = stored.__context__ = None
+    _N_REFUSALS[key] = stored
+
+
+def forget_n_refusals(model: Optional[str] = None) -> None:
+    """Forget which models were found to refuse a provider-side ``n``.
+
+    ``sample(strategy="auto")`` remembers, per resolved model id (and endpoint
+    kwargs) and for the life of the process, that a provider refused ``n`` with a
+    400 and a plain request then succeeded. That is a heuristic: a 400 caused by
+    ``n`` *combined with* another argument is remembered too. Call this if a
+    provider has since started accepting ``n``. ``model=None`` forgets every model.
+
+    >>> forget_n_refusals()
+    """
+    if model is None:
+        _N_REFUSALS.clear()
+    else:
+        resolved = _n_refusal_key(model)[0]
+        for key in [k for k in list(_N_REFUSALS) if k[0] == resolved]:
+            _N_REFUSALS.pop(key, None)
+
+
+# Request kwargs that pick the endpoint: the same model id behind another one may
+# well accept ``n``.
+_ENDPOINT_KWARGS = ("api_base", "base_url", "custom_llm_provider", "api_version")
+
+
+def _n_refusal_key(model: Optional[str], kwargs: Optional[dict] = None) -> tuple:
+    """Memo key: the resolved model id, plus any endpoint-selecting kwargs."""
+    kwargs = kwargs or {}
+    endpoint = tuple((k, str(kwargs[k])) for k in _ENDPOINT_KWARGS if k in kwargs)
+    return (_resolve_model(model or _get_config().chat.model), endpoint)
+
+
 def sample(
     prompt: Union[str, Iterable[dict]],
     *,
@@ -389,11 +446,15 @@ def sample(
     # reply that did not parse/validate (which is always just recorded).
     first_error, n_failed = None, 0
 
+    refusal_key = _n_refusal_key(model, kwargs)
+    known_refusal = _N_REFUSALS.get(refusal_key) if strategy == "auto" else None
     use_provider_n = n > 1 and (
-        strategy == "provider" or (strategy == "auto" and supports(model, "n"))
+        strategy == "provider"
+        or (strategy == "auto" and known_refusal is None and supports(model, "n"))
     )
-    # Why the provider-n request was abandoned for independent requests, if it was.
-    fallback_error: Optional[Exception] = None
+    # Why the provider-n request was abandoned for independent requests, if it was
+    # (here: remembered from an earlier call).
+    fallback_error: Optional[Exception] = known_refusal if n > 1 else None
     # A 400 may or may not be about ``n``: the first independent request is
     # then sent alone, as a probe, before the rest are launched.
     probe_first = False
@@ -404,7 +465,10 @@ def sample(
             if strategy != "auto":
                 raise
             if _is_unsupported_param_error(e):
-                pass  # LiteLLM knows n is unsupported: supports() was wrong
+                # LiteLLM knows n is unsupported: supports() was wrong. Not
+                # memoised: it may be about another kwarg, and no request was
+                # sent, so there is no cost to save.
+                pass
             elif _is_bad_request_error(e):
                 probe_first = True  # the provider refused it server-side
                 n_requests += 1  # unlike a LiteLLM refusal, this one was sent
@@ -465,6 +529,9 @@ def sample(
             raise probe from fallback_error
         # Success, or an ordinary failure (rate limit, timeout...): from here
         # the probe is just the first independent request (on_error applies).
+        if not isinstance(probe, Exception):
+            # A plain request works where n was refused: the 400 was about n.
+            _remember_n_refusal(refusal_key, fallback_error)
         results.append(probe)
     results += concurrent_map(draw_one, seeds[len(results) :], concurrency=concurrency)
 

@@ -209,3 +209,25 @@ def test_edit_and_variation_resolve_aliases(mock_image_gen, call, tmp_path):
     sent = mock_image_gen.call_args.kwargs
     assert sent["model"] == "openai/dall-e-2"
     assert sent["api_key"]
+
+
+@pytest.mark.parametrize("call", ["edit", "variation"])
+@patch("aix.image._litellm_image_generation")
+def test_edit_and_variation_models_come_from_config(mock_image_gen, call, tmp_path):
+    """Issue #62: the default model is config.image.*_model, not a literal."""
+    import aix
+    from aix.image import create_variation, edit_image
+
+    data = Mock()
+    data.url, data.b64_json, data.revised_prompt = "https://x/y.png", None, None
+    mock_image_gen.return_value = Mock(data=[data])
+    png = tmp_path / "in.png"
+    png.write_bytes(b"\x89PNG\r\n\x1a\n")
+    with aix.using(image_edit_model="openai/edit-x", image_variation_model="openai/var-y"):
+        if call == "edit":
+            edit_image(png, "add a hat")
+            assert mock_image_gen.call_args.kwargs["model"] == "openai/edit-x"
+        else:
+            create_variation(png)
+            assert mock_image_gen.call_args.kwargs["model"] == "openai/var-y"
+    assert aix.get_config().image.edit_model == "dall-e-2"  # shipped default

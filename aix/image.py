@@ -386,7 +386,7 @@ def generate_images(
     return images
 
 
-@_requires_credentials(lambda: "dall-e-2")
+@_requires_credentials(lambda: _get_config().image.edit_model)
 def edit_image(
     image_path: Union[str, Path],
     prompt: str,
@@ -404,7 +404,7 @@ def edit_image(
         image_path: Path to the image to edit
         prompt: Description of the desired edit
         mask_path: Optional path to mask image (transparent areas will be edited)
-        model: Model to use (typically 'dall-e-2' for edits)
+        model: Model to use (``None`` = configured ``image.edit_model``)
         size: Output image size
         n: Number of variations to generate
         **kwargs: Additional provider-specific parameters
@@ -440,7 +440,7 @@ def edit_image(
 
     # Build parameters
     params = {
-        "model": _resolve_model(model or "dall-e-2"),
+        "model": _resolve_model(model or _get_config().image.edit_model),
         "prompt": prompt,
         "image": image_data,
         "n": n,
@@ -476,7 +476,7 @@ def edit_image(
     return images[0] if n == 1 else images
 
 
-@_requires_credentials(lambda: "dall-e-2")
+@_requires_credentials(lambda: _get_config().image.variation_model)
 def create_variation(
     image_path: Union[str, Path],
     *,
@@ -490,7 +490,7 @@ def create_variation(
 
     Args:
         image_path: Path to the source image
-        model: Model to use (typically 'dall-e-2')
+        model: Model to use (``None`` = configured ``image.variation_model``)
         size: Output image size
         n: Number of variations to generate
         **kwargs: Additional provider-specific parameters
@@ -521,7 +521,7 @@ def create_variation(
 
     # Build parameters
     params = {
-        "model": _resolve_model(model or "dall-e-2"),
+        "model": _resolve_model(model or _get_config().image.variation_model),
         "image": image_data,
         "n": n,
     }

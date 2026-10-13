@@ -527,6 +527,91 @@ class TestServerSideNRefusal:
         params_support["params"] = None
         assert sample("q", n=2).fallback_error is None
 
+    def test_refusal_is_remembered_per_model(self, fake_completion, params_support):
+        """Issue #61: the second call neither sends n nor probes."""
+        params_support["params"] = ["n"]
+        calls = self._refuse_n(fake_completion)
+        first = sample("q", n=3, concurrency=1)
+        assert first.strategy == "independent" and len(calls) == 4  # n + 3 singles
+        calls.clear()
+        second = sample("q", n=3, concurrency=1)
+        assert second.strategy == "independent" and len(second) == 3
+        assert len(calls) == 3 and all("n" not in c for c in calls)
+        assert isinstance(second.fallback_error, self.BadRequestError)
+        assert second.n_requests == 3
+
+    def test_memo_is_per_model_and_forgettable(self, fake_completion, params_support):
+        from aix.sampling import forget_n_refusals
+
+        params_support["params"] = ["n"]
+        calls = self._refuse_n(fake_completion)
+        sample("q", n=2, model="openai/model-a", concurrency=1)
+        calls.clear()
+        sample("q", n=2, model="openai/model-b", concurrency=1)  # another model: tries n again
+        assert calls[0]["n"] == 2
+        calls.clear()
+        forget_n_refusals("openai/model-a")
+        sample("q", n=2, model="openai/model-a", concurrency=1)
+        assert calls[0]["n"] == 2
+
+    def test_unrelated_400_is_not_remembered(self, fake_completion, params_support):
+        params_support["params"] = ["n"]
+        self._refuse_n(fake_completion, plain_ok=False)
+        with pytest.raises(self.BadRequestError):
+            sample("q", n=3)
+        calls = self._refuse_n(fake_completion)  # the provider recovers
+        sample("q", n=3, concurrency=1)
+        assert calls[0]["n"] == 3  # n was tried again, not skipped
+
+    def test_forced_provider_ignores_memo(self, fake_completion, params_support):
+        params_support["params"] = ["n"]
+        calls = self._refuse_n(fake_completion)
+        sample("q", n=2, concurrency=1)
+        calls.clear()
+        with pytest.raises(self.BadRequestError):
+            sample("q", n=2, strategy="provider")
+        assert calls[0]["n"] == 2
+
+    def test_litellm_refusal_is_not_remembered(self, fake_completion, params_support):
+        """It may be about another kwarg, and no request was sent anyway."""
+
+        class UnsupportedParamsError(Exception):
+            pass
+
+        params_support["params"] = ["n"]
+        calls = []
+
+        def respond(**kw):
+            calls.append(kw)
+            if kw.get("n", 1) > 1 and "top_k" in kw:
+                raise UnsupportedParamsError("top_k not supported")
+            return _response(["x"] * kw.get("n", 1), usage=_usage())
+
+        fake_completion.side_effect = respond
+        sample("q", n=2, top_k=5, concurrency=1)
+        out = sample("q", n=2)  # no top_k now: n must be tried and honoured
+        assert calls[-1]["n"] == 2 and out.fallback_error is None
+        assert out.strategy == "provider_n"
+
+    def test_memo_distinguishes_endpoints(self, fake_completion, params_support):
+        params_support["params"] = ["n"]
+        calls = self._refuse_n(fake_completion)
+        sample("q", n=2, base_url="http://local", concurrency=1)
+        calls.clear()
+        sample("q", n=2, concurrency=1)  # default endpoint: not covered by the memo
+        assert calls[0]["n"] == 2
+
+    def test_memoised_error_is_a_stripped_copy(self, fake_completion, params_support):
+        from aix.sampling import _N_REFUSALS
+
+        params_support["params"] = ["n"]
+        self._refuse_n(fake_completion)
+        out = sample("q", n=2, concurrency=1)
+        (stored,) = _N_REFUSALS.values()
+        assert stored is not out.fallback_error
+        assert stored.__traceback__ is None and stored.__context__ is None
+        assert out.fallback_error.__traceback__ is not None
+
     def test_litellm_refusal_recorded_too(self, fake_completion, params_support):
         class UnsupportedParamsError(Exception):
             pass
