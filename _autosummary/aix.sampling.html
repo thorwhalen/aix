@@ -307,6 +307,9 @@ independently and the batch is marked <code class="docutils literal notranslate"
 <tr class="row-odd"><td><p><a class="reference internal" href="#aix.sampling.check_positive_int" title="aix.sampling.check_positive_int"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_positive_int</span></code></a>(name, value)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int(value)</span></code> if it is a positive integer (not a bool), else <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#aix.sampling.forget_n_refusals" title="aix.sampling.forget_n_refusals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forget_n_refusals</span></code></a>([model])</p></td>
+<td><p>Forget which models were found to refuse a provider-side <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -512,6 +515,25 @@ exception in item order propagates.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="aix.sampling.forget_n_refusals">
+<span class="sig-prename descclassname"><span class="pre">aix.sampling.</span></span><span class="sig-name descname"><span class="pre">forget_n_refusals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#forget_n_refusals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.sampling.forget_n_refusals" title="Link to this definition">¶</a></dt>
+<dd><p>Forget which models were found to refuse a provider-side <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sample(strategy=&quot;auto&quot;)</span></code> remembers, per resolved model id (and endpoint
+kwargs) and for the life of the process, that a provider refused <code class="docutils literal notranslate"><span class="pre">n</span></code> with a
+400 and a plain request then succeeded. That is a heuristic: a 400 caused by
+<code class="docutils literal notranslate"><span class="pre">n</span></code> <em>combined with</em> another argument is remembered too. Call this if a
+provider has since started accepting <code class="docutils literal notranslate"><span class="pre">n</span></code>. <code class="docutils literal notranslate"><span class="pre">model=None</span></code> forgets every model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">forget_n_refusals</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="aix.sampling.sample">
 <span class="sig-prename descclassname"><span class="pre">aix.sampling.</span></span><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concurrency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_schema</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.sampling.sample" title="Link to this definition">¶</a></dt>
 <dd><p>Draw <code class="docutils literal notranslate"><span class="pre">n</span></code> answers to <code class="docutils literal notranslate"><span class="pre">prompt</span></code>, each with its finish reason and usage.</p>
@@ -645,6 +667,7 @@ that sample’s <code class="docutils literal notranslate"><span class="pre">err
 <li><a class="reference internal" href="#aix.sampling.SamplingError"><code class="docutils literal notranslate"><span class="pre">SamplingError</span></code></a></li>
 <li><a class="reference internal" href="#aix.sampling.check_positive_int"><code class="docutils literal notranslate"><span class="pre">check_positive_int()</span></code></a></li>
 <li><a class="reference internal" href="#aix.sampling.concurrent_map"><code class="docutils literal notranslate"><span class="pre">concurrent_map()</span></code></a></li>
+<li><a class="reference internal" href="#aix.sampling.forget_n_refusals"><code class="docutils literal notranslate"><span class="pre">forget_n_refusals()</span></code></a></li>
 <li><a class="reference internal" href="#aix.sampling.sample"><code class="docutils literal notranslate"><span class="pre">sample()</span></code></a></li>
 </ul>
 </li>
@@ -657,7 +680,7 @@ that sample’s <code class="docutils literal notranslate"><span class="pre">err
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=b7c92933"></script>
+</div><script src="../_static/documentation_options.js?v=1e895d55"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

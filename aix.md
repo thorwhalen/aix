@@ -1,4 +1,4 @@
-> built 2026-10-13 03:14 UTC from c8a11b5 (master) · aix 0.0.50. Details: build_info.json
+> built 2026-10-13 03:24 UTC from ed8482a (master) · aix 0.0.51. Details: build_info.json
 
 # index.html.md
 
@@ -134,6 +134,7 @@ model = "text-embedding-3-small"
 [image]
 model = "dall-e-3"
 size = "1024x1024"
+edit_model = "dall-e-2"
 
 [audio]
 tts_model = "gpt-4o-mini-tts"
@@ -2683,6 +2684,7 @@ model = "text-embedding-3-small"
 [image]
 model = "dall-e-3"
 size = "1024x1024"
+edit_model = "dall-e-2"
 
 [audio]
 tts_model = "tts-1"
@@ -2710,14 +2712,14 @@ best = "anthropic/claude-sonnet-4"
 
 ### Classes
 
-| [`ChatConfig`](_autosummary/aix.config.html.md#aix.config.ChatConfig)([model, temperature, max_tokens, ...])   | Defaults for `chat` / `ask` / `complete` / `sample` / `prompt_func`.   |
-|------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
-| [`EmbeddingConfig`](_autosummary/aix.config.html.md#aix.config.EmbeddingConfig)([model, batch_size])                | Defaults for `embeddings` / `embed`.                                   |
-| [`ImageConfig`](_autosummary/aix.config.html.md#aix.config.ImageConfig)([model, size, quality, num_images])     | Defaults for `generate_image` / `generate_images`.                     |
-| [`AudioConfig`](_autosummary/aix.config.html.md#aix.config.AudioConfig)([tts_model, tts_voice, ...])            | Defaults for `text_to_speech` / `transcribe` / `translate_audio`.      |
-| [`VideoConfig`](_autosummary/aix.config.html.md#aix.config.VideoConfig)([provider])                             | Defaults for `generate_video` (provider-dependent).                    |
-| [`VisionConfig`](_autosummary/aix.config.html.md#aix.config.VisionConfig)([model])                               | Defaults for `describe_image` (image→text).                            |
-| [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)([chat, embeddings, image, audio, ...])    | Top-level AIX configuration (single source of truth for defaults).     |
+| [`ChatConfig`](_autosummary/aix.config.html.md#aix.config.ChatConfig)([model, temperature, max_tokens, ...])   | Defaults for `chat` / `ask` / `complete` / `sample` / `prompt_func`.            |
+|------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [`EmbeddingConfig`](_autosummary/aix.config.html.md#aix.config.EmbeddingConfig)([model, batch_size])                | Defaults for `embeddings` / `embed`.                                            |
+| [`ImageConfig`](_autosummary/aix.config.html.md#aix.config.ImageConfig)([model, size, quality, ...])            | Defaults for `generate_image` / `generate_images` and the edit/variation calls. |
+| [`AudioConfig`](_autosummary/aix.config.html.md#aix.config.AudioConfig)([tts_model, tts_voice, ...])            | Defaults for `text_to_speech` / `transcribe` / `translate_audio`.               |
+| [`VideoConfig`](_autosummary/aix.config.html.md#aix.config.VideoConfig)([provider])                             | Defaults for `generate_video` (provider-dependent).                             |
+| [`VisionConfig`](_autosummary/aix.config.html.md#aix.config.VisionConfig)([model])                               | Defaults for `describe_image` (image→text).                                     |
+| [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)([chat, embeddings, image, audio, ...])    | Top-level AIX configuration (single source of truth for defaults).              |
 
 ### *class* aix.config.AixConfig(chat=<factory>, embeddings=<factory>, image=<factory>, audio=<factory>, video=<factory>, vision=<factory>, aliases=<factory>)
 
@@ -2743,11 +2745,14 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `embeddings` / `embed`.
 
-### *class* aix.config.ImageConfig(model='dall-e-3', size='1024x1024', quality='standard', num_images=1)
+### *class* aix.config.ImageConfig(model='dall-e-3', size='1024x1024', quality='standard', num_images=1, edit_model='dall-e-2', variation_model='dall-e-2')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-Defaults for `generate_image` / `generate_images`.
+Defaults for `generate_image` / `generate_images` and the edit/variation calls.
+
+`edit_model` and `variation_model` are separate from `model` because the
+default generation model (`dall-e-3`) does not support edits or variations.
 
 ### *class* aix.config.VideoConfig(provider=None)
 
@@ -5017,7 +5022,7 @@ Create variations of an existing image.
 
 * **Parameters:**
   * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (typically ‘dall-e-2’)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.variation_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -5114,7 +5119,7 @@ Edit an existing image based on a prompt.
   * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the image to edit
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Description of the desired edit
   * **mask_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Optional path to mask image (transparent areas will be edited)
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (typically ‘dall-e-2’ for edits)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.edit_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -6130,7 +6135,7 @@ Create variations of an existing image.
 
 * **Parameters:**
   * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (typically ‘dall-e-2’)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.variation_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -6160,7 +6165,7 @@ Edit an existing image based on a prompt.
   * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the image to edit
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Description of the desired edit
   * **mask_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Optional path to mask image (transparent areas will be edited)
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (typically ‘dall-e-2’ for edits)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.edit_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -6764,6 +6769,7 @@ independently and the batch is marked `"mixed"`.
 |----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
 | [`concurrent_map`](_autosummary/aix.sampling.html.md#aix.sampling.concurrent_map)(func, items, \*, concurrency)      | `[func(x) for x in items]`, run on up to `concurrency` threads, in order. |
 | [`check_positive_int`](_autosummary/aix.sampling.html.md#aix.sampling.check_positive_int)(name, value)                   | `int(value)` if it is a positive integer (not a bool), else `ValueError`. |
+| [`forget_n_refusals`](_autosummary/aix.sampling.html.md#aix.sampling.forget_n_refusals)([model])                        | Forget which models were found to refuse a provider-side `n`.             |
 
 ### Classes
 
@@ -6910,6 +6916,23 @@ exception in item order propagates.
 ```pycon
 >>> concurrent_map(lambda x: x * x, range(5), concurrency=3)
 [0, 1, 4, 9, 16]
+```
+
+### aix.sampling.forget_n_refusals(model=None)
+
+Forget which models were found to refuse a provider-side `n`.
+
+`sample(strategy="auto")` remembers, per resolved model id (and endpoint
+kwargs) and for the life of the process, that a provider refused `n` with a
+400 and a plain request then succeeded. That is a heuristic: a 400 caused by
+`n` *combined with* another argument is remembered too. Call this if a
+provider has since started accepting `n`. `model=None` forgets every model.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+```pycon
+>>> forget_n_refusals()
 ```
 
 ### aix.sampling.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, response_schema=None, on_error='raise', api_key=None, \*\*kwargs)
@@ -7774,16 +7797,18 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.
 
 # About this build
 
-This documentation was built on **2026-10-13 03:14 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/c8a11b5d5c853005cfc666ccb5dde075a22d79d4"><code>c8a11b5</code></a> on branch <code>master</code>, for **aix 0.0.50** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-13 03:24 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/ed8482a168cf308738372470a7d8f443194402ec"><code>ed8482a</code></a> on branch <code>master</code>, for **aix 0.0.51** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.51) is behind the latest release on PyPI (0.0.52): `pip install aix` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/c8a11b5d5c853005cfc666ccb5dde075a22d79d4"><code>c8a11b5d5c853005cfc666ccb5dde075a22d79d4</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/ed8482a168cf308738372470a7d8f443194402ec"><code>ed8482a168cf308738372470a7d8f443194402ec</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -7794,9 +7819,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38340595488">38340595488</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38341343013">38341343013</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>c8a11b5d5c853005cfc666ccb5dde075a22d79d4</code> (in the history of the built commit) |
+| Event commit | <code>ed8482a168cf308738372470a7d8f443194402ec</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -7821,13 +7846,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.50/">0.0.50</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/aix/0.0.52/">0.0.52</a>, newer than the documented version (0.0.51).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout c8a11b5d5c853005cfc666ccb5dde075a22d79d4
+git checkout ed8482a168cf308738372470a7d8f443194402ec
 pip install "epythet==0.2.13"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

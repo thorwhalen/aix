@@ -28,6 +28,7 @@ independently and the batch is marked `"mixed"`.
 |----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
 | [`concurrent_map`](#aix.sampling.concurrent_map)(func, items, \*, concurrency)      | `[func(x) for x in items]`, run on up to `concurrency` threads, in order. |
 | [`check_positive_int`](#aix.sampling.check_positive_int)(name, value)                   | `int(value)` if it is a positive integer (not a bool), else `ValueError`. |
+| [`forget_n_refusals`](#aix.sampling.forget_n_refusals)([model])                        | Forget which models were found to refuse a provider-side `n`.             |
 
 ### Classes
 
@@ -174,6 +175,23 @@ exception in item order propagates.
 ```pycon
 >>> concurrent_map(lambda x: x * x, range(5), concurrency=3)
 [0, 1, 4, 9, 16]
+```
+
+### aix.sampling.forget_n_refusals(model=None)
+
+Forget which models were found to refuse a provider-side `n`.
+
+`sample(strategy="auto")` remembers, per resolved model id (and endpoint
+kwargs) and for the life of the process, that a provider refused `n` with a
+400 and a plain request then succeeded. That is a heuristic: a 400 caused by
+`n` *combined with* another argument is remembered too. Call this if a
+provider has since started accepting `n`. `model=None` forgets every model.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+```pycon
+>>> forget_n_refusals()
 ```
 
 ### aix.sampling.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, response_schema=None, on_error='raise', api_key=None, \*\*kwargs)

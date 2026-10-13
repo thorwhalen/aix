@@ -324,6 +324,7 @@ tasks are isolated).</p>
 <span class="p">[</span><span class="n">image</span><span class="p">]</span>
 <span class="n">model</span> <span class="o">=</span> <span class="s2">"dall-e-3"</span>
 <span class="n">size</span> <span class="o">=</span> <span class="s2">"1024x1024"</span>
+<span class="n">edit_model</span> <span class="o">=</span> <span class="s2">"dall-e-2"</span>
 
 <span class="p">[</span><span class="n">audio</span><span class="p">]</span>
 <span class="n">tts_model</span> <span class="o">=</span> <span class="s2">"tts-1"</span>
@@ -376,8 +377,8 @@ tasks are isolated).</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#aix.config.EmbeddingConfig" title="aix.config.EmbeddingConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EmbeddingConfig</span></code></a>([model, batch_size])</p></td>
 <td><p>Defaults for <code class="docutils literal notranslate"><span class="pre">embeddings</span></code> / <code class="docutils literal notranslate"><span class="pre">embed</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#aix.config.ImageConfig" title="aix.config.ImageConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImageConfig</span></code></a>([model, size, quality, num_images])</p></td>
-<td><p>Defaults for <code class="docutils literal notranslate"><span class="pre">generate_image</span></code> / <code class="docutils literal notranslate"><span class="pre">generate_images</span></code>.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#aix.config.ImageConfig" title="aix.config.ImageConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImageConfig</span></code></a>([model, size, quality, ...])</p></td>
+<td><p>Defaults for <code class="docutils literal notranslate"><span class="pre">generate_image</span></code> / <code class="docutils literal notranslate"><span class="pre">generate_images</span></code> and the edit/variation calls.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#aix.config.AudioConfig" title="aix.config.AudioConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AudioConfig</span></code></a>([tts_model, tts_voice, ...])</p></td>
 <td><p>Defaults for <code class="docutils literal notranslate"><span class="pre">text_to_speech</span></code> / <code class="docutils literal notranslate"><span class="pre">transcribe</span></code> / <code class="docutils literal notranslate"><span class="pre">translate_audio</span></code>.</p></td>
@@ -432,9 +433,11 @@ tasks are isolated).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="aix.config.ImageConfig">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">ImageConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dall-e-3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1024x1024'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#ImageConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.ImageConfig" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">ImageConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dall-e-3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1024x1024'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edit_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dall-e-2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dall-e-2'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#ImageConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.ImageConfig" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Defaults for <code class="docutils literal notranslate"><span class="pre">generate_image</span></code> / <code class="docutils literal notranslate"><span class="pre">generate_images</span></code>.</p>
+<p>Defaults for <code class="docutils literal notranslate"><span class="pre">generate_image</span></code> / <code class="docutils literal notranslate"><span class="pre">generate_images</span></code> and the edit/variation calls.</p>
+<p><code class="docutils literal notranslate"><span class="pre">edit_model</span></code> and <code class="docutils literal notranslate"><span class="pre">variation_model</span></code> are separate from <code class="docutils literal notranslate"><span class="pre">model</span></code> because the
+default generation model (<code class="docutils literal notranslate"><span class="pre">dall-e-3</span></code>) does not support edits or variations.</p>
 <dl class="field-list simple">
 </dl>
 </dd></dl>
@@ -677,7 +680,7 @@ block keeps the scope for its lifetime.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=b7c92933"></script>
+</div><script src="../_static/documentation_options.js?v=1e895d55"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

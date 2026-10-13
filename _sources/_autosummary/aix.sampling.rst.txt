@@ -11,6 +11,7 @@ aix.sampling
       sample
       concurrent_map
       check_positive_int
+      forget_n_refusals
    
    .. rubric:: Classes
 

@@ -116,7 +116,7 @@ Create variations of an existing image.
 
 * **Parameters:**
   * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (typically ‘dall-e-2’)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.variation_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -146,7 +146,7 @@ Edit an existing image based on a prompt.
   * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the image to edit
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Description of the desired edit
   * **mask_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Optional path to mask image (transparent areas will be edited)
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (typically ‘dall-e-2’ for edits)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.edit_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters

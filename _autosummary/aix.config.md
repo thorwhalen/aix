@@ -58,6 +58,7 @@ model = "text-embedding-3-small"
 [image]
 model = "dall-e-3"
 size = "1024x1024"
+edit_model = "dall-e-2"
 
 [audio]
 tts_model = "tts-1"
@@ -85,14 +86,14 @@ best = "anthropic/claude-sonnet-4"
 
 ### Classes
 
-| [`ChatConfig`](#aix.config.ChatConfig)([model, temperature, max_tokens, ...])   | Defaults for `chat` / `ask` / `complete` / `sample` / `prompt_func`.   |
-|------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
-| [`EmbeddingConfig`](#aix.config.EmbeddingConfig)([model, batch_size])                | Defaults for `embeddings` / `embed`.                                   |
-| [`ImageConfig`](#aix.config.ImageConfig)([model, size, quality, num_images])     | Defaults for `generate_image` / `generate_images`.                     |
-| [`AudioConfig`](#aix.config.AudioConfig)([tts_model, tts_voice, ...])            | Defaults for `text_to_speech` / `transcribe` / `translate_audio`.      |
-| [`VideoConfig`](#aix.config.VideoConfig)([provider])                             | Defaults for `generate_video` (provider-dependent).                    |
-| [`VisionConfig`](#aix.config.VisionConfig)([model])                               | Defaults for `describe_image` (image→text).                            |
-| [`AixConfig`](#aix.config.AixConfig)([chat, embeddings, image, audio, ...])    | Top-level AIX configuration (single source of truth for defaults).     |
+| [`ChatConfig`](#aix.config.ChatConfig)([model, temperature, max_tokens, ...])   | Defaults for `chat` / `ask` / `complete` / `sample` / `prompt_func`.            |
+|------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [`EmbeddingConfig`](#aix.config.EmbeddingConfig)([model, batch_size])                | Defaults for `embeddings` / `embed`.                                            |
+| [`ImageConfig`](#aix.config.ImageConfig)([model, size, quality, ...])            | Defaults for `generate_image` / `generate_images` and the edit/variation calls. |
+| [`AudioConfig`](#aix.config.AudioConfig)([tts_model, tts_voice, ...])            | Defaults for `text_to_speech` / `transcribe` / `translate_audio`.               |
+| [`VideoConfig`](#aix.config.VideoConfig)([provider])                             | Defaults for `generate_video` (provider-dependent).                             |
+| [`VisionConfig`](#aix.config.VisionConfig)([model])                               | Defaults for `describe_image` (image→text).                                     |
+| [`AixConfig`](#aix.config.AixConfig)([chat, embeddings, image, audio, ...])    | Top-level AIX configuration (single source of truth for defaults).              |
 
 ### *class* aix.config.AixConfig(chat=<factory>, embeddings=<factory>, image=<factory>, audio=<factory>, video=<factory>, vision=<factory>, aliases=<factory>)
 
@@ -118,11 +119,14 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `embeddings` / `embed`.
 
-### *class* aix.config.ImageConfig(model='dall-e-3', size='1024x1024', quality='standard', num_images=1)
+### *class* aix.config.ImageConfig(model='dall-e-3', size='1024x1024', quality='standard', num_images=1, edit_model='dall-e-2', variation_model='dall-e-2')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-Defaults for `generate_image` / `generate_images`.
+Defaults for `generate_image` / `generate_images` and the edit/variation calls.
+
+`edit_model` and `variation_model` are separate from `model` because the
+default generation model (`dall-e-3`) does not support edits or variations.
 
 ### *class* aix.config.VideoConfig(provider=None)
 
