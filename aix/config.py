@@ -65,7 +65,7 @@ Examples:
 """
 
 import os
-from contextvars import ContextVar
+from contextvars import ContextVar, copy_context
 from contextlib import contextmanager
 from dataclasses import dataclass, field, fields, replace, is_dataclass, MISSING
 from typing import Any, Callable, Optional, Mapping, Iterator
@@ -377,15 +377,28 @@ def configure(**overrides: Any) -> AixConfig:
     return set_config(_apply_overrides(get_config(), overrides))
 
 
+def submit_in_context(executor: Any, func: Callable, /, *args: Any, **kwargs: Any):
+    """``executor.submit(func, ...)``, run inside a copy of the caller's context.
+
+    A pool thread starts with an empty context, so it would not see an enclosing
+    :func:`using` block. aix's own pools submit through this so a scoped config
+    reaches their workers. Each call takes its own copy (a context can only be
+    entered by one thread at a time).
+    """
+    return executor.submit(copy_context().run, func, *args, **kwargs)
+
+
 @contextmanager
 def using(**overrides: Any) -> Iterator[AixConfig]:
     """Context manager applying scoped overrides, restored on exit.
 
     The override lives in a :class:`~contextvars.ContextVar`, so it is private to the
     current thread / asyncio task: concurrent ``using()`` blocks do not leak into each
-    other, nor into code running outside any block. (A new thread starts with an empty
-    context and sees the process-wide config; use :func:`contextvars.copy_context` to
-    carry a scope into one.)
+    other, nor into code running outside any block. A thread you start yourself
+    typically begins with an empty context and sees the process-wide config (carry a
+    scope into it with :func:`contextvars.copy_context`); aix's own worker pools
+    (``sample``, ``batch_chat``...) propagate it. An asyncio task created inside the
+    block keeps the scope for its lifetime.
 
     Examples:
         >>> from aix import config
@@ -394,11 +407,18 @@ def using(**overrides: Any) -> Iterator[AixConfig]:
         0.0
     """
     scoped = _apply_overrides(get_config(), overrides)
+    previous = _scoped_config.get()
     token = _scoped_config.set(scoped)
     try:
         yield scoped
     finally:
-        _scoped_config.reset(token)
+        try:
+            _scoped_config.reset(token)
+        except ValueError:
+            # Exited from a different context than it was entered in (e.g. a
+            # generator closed from another thread): reset() refuses. Restore the
+            # value by hand in this context instead of raising from cleanup.
+            _scoped_config.set(previous)
 
 
 def resolve_model(

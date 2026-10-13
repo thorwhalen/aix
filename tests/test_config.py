@@ -238,3 +238,44 @@ def test_nested_using_restores_outer(restore_active_config):
             assert get_config().chat.model == "outer/m"
         assert get_config().chat.temperature != 0.5
         assert get_config().chat.model == "outer/m"
+
+
+def test_using_reaches_aix_worker_pools(restore_active_config):
+    from unittest.mock import patch
+
+    from aix.batches import batch_chat
+    from aix.sampling import concurrent_map
+
+    with using(chat_model="scoped/model"):
+        seen = concurrent_map(
+            lambda _: get_config().chat.model, range(3), concurrency=3
+        )
+        assert seen == ["scoped/model"] * 3
+
+        with patch(
+            "aix.batches.chat", side_effect=lambda *a, **k: get_config().chat.model
+        ):
+            out = list(batch_chat(["a", "b", "c"], max_workers=3))
+        assert out == ["scoped/model"] * 3
+
+
+def test_using_exited_from_another_thread_does_not_raise(restore_active_config):
+    import threading
+
+    def gen():
+        with using(chat_model="gen/model"):
+            yield
+
+    g, errors = gen(), []
+    next(g)
+
+    def close():
+        try:
+            g.close()  # a different context than the one that entered the block
+        except Exception as e:
+            errors.append(e)
+
+    t = threading.Thread(target=close)
+    t.start()
+    t.join()
+    assert not errors

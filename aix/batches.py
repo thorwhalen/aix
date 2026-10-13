@@ -32,6 +32,7 @@ import time
 
 # Import from aix modules
 from aix.chat import chat, _normalize_prompt
+from aix.config import submit_in_context
 from aix.embeddings import embeddings
 
 # Default configurations
@@ -263,7 +264,9 @@ def batch_chat(
             futures = {}
             for i, prompt in enumerate(chunk):
                 idx = chunk_idx * batch_size + i
-                future = executor.submit(chat, prompt, model=model, **chat_kwargs)
+                future = submit_in_context(
+                    executor, chat, prompt, model=model, **chat_kwargs
+                )
                 futures[future] = idx
 
             # Collect results as they complete
@@ -469,7 +472,7 @@ def batch_process(
             futures = {}
             for i, item in enumerate(chunk):
                 idx = chunk_idx * batch_size + i
-                future = executor.submit(process_with_retry, item, idx)
+                future = submit_in_context(executor, process_with_retry, item, idx)
                 futures[future] = idx
 
             for future in as_completed(futures):
