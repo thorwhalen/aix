@@ -635,3 +635,46 @@ def test_real_litellm_bad_request_is_recognised():
 
     err = litellm.BadRequestError("n must be 1", model="m", llm_provider="groq")
     assert _is_bad_request_error(err)
+
+
+class TestSamplesAndMemoEdges:
+    """Coverage for batch accessors and the n-refusal memo (sprint review)."""
+
+    def test_samples_accessors(self):
+        err = ValueError("bad")
+        batch = Samples(
+            [Sample("a", 1), Sample("b", None, error=err)], strategy="independent"
+        )
+        assert batch.texts == ("a", "b")
+        assert batch.payloads == (1, None)
+        assert batch.errors == (err,)
+        assert "strategy='independent'" in repr(batch)
+
+    def test_uncopyable_error_is_memoised_by_message(self):
+        from aix import sampling
+
+        class Uncopyable(Exception):
+            def __copy__(self):
+                raise TypeError("no copy")
+
+        sampling.forget_n_refusals()
+        try:
+            sampling._remember_n_refusal(("m", ()), Uncopyable("n refused"))
+            stored = sampling._N_REFUSALS[("m", ())]
+            assert isinstance(stored, RuntimeError) and "n refused" in str(stored)
+            assert stored.__traceback__ is None
+        finally:
+            sampling.forget_n_refusals()
+
+    def test_forget_n_refusals_for_one_model(self):
+        from aix import sampling
+
+        sampling.forget_n_refusals()
+        try:
+            sampling._remember_n_refusal(("keep/model", ()), ValueError("x"))
+            sampling._remember_n_refusal(("drop/model", ()), ValueError("x"))
+            sampling.forget_n_refusals("drop/model")
+            assert ("drop/model", ()) not in sampling._N_REFUSALS
+            assert ("keep/model", ()) in sampling._N_REFUSALS
+        finally:
+            sampling.forget_n_refusals()
