@@ -111,3 +111,13 @@ def mock_model_manager(sample_models):
     manager.get_connector_metadata = Mock(return_value={"model": "test"})
 
     return manager
+
+
+@pytest.fixture(autouse=True)
+def forget_n_refusals_between_tests():
+    """``sample()`` remembers per model that ``n`` was refused; keep tests independent."""
+    from aix.sampling import forget_n_refusals
+
+    forget_n_refusals()
+    yield
+    forget_n_refusals()

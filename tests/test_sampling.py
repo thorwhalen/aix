@@ -527,6 +527,51 @@ class TestServerSideNRefusal:
         params_support["params"] = None
         assert sample("q", n=2).fallback_error is None
 
+    def test_refusal_is_remembered_per_model(self, fake_completion, params_support):
+        """Issue #61: the second call neither sends n nor probes."""
+        params_support["params"] = ["n"]
+        calls = self._refuse_n(fake_completion)
+        first = sample("q", n=3, concurrency=1)
+        assert first.strategy == "independent" and len(calls) == 4  # n + 3 singles
+        calls.clear()
+        second = sample("q", n=3, concurrency=1)
+        assert second.strategy == "independent" and len(second) == 3
+        assert len(calls) == 3 and all("n" not in c for c in calls)
+        assert isinstance(second.fallback_error, self.BadRequestError)
+        assert second.n_requests == 3
+
+    def test_memo_is_per_model_and_forgettable(self, fake_completion, params_support):
+        from aix.sampling import forget_n_refusals
+
+        params_support["params"] = ["n"]
+        calls = self._refuse_n(fake_completion)
+        sample("q", n=2, model="openai/model-a", concurrency=1)
+        calls.clear()
+        sample("q", n=2, model="openai/model-b", concurrency=1)  # another model: tries n again
+        assert calls[0]["n"] == 2
+        calls.clear()
+        forget_n_refusals("openai/model-a")
+        sample("q", n=2, model="openai/model-a", concurrency=1)
+        assert calls[0]["n"] == 2
+
+    def test_unrelated_400_is_not_remembered(self, fake_completion, params_support):
+        params_support["params"] = ["n"]
+        self._refuse_n(fake_completion, plain_ok=False)
+        with pytest.raises(self.BadRequestError):
+            sample("q", n=3)
+        calls = self._refuse_n(fake_completion)  # the provider recovers
+        sample("q", n=3, concurrency=1)
+        assert calls[0]["n"] == 3  # n was tried again, not skipped
+
+    def test_forced_provider_ignores_memo(self, fake_completion, params_support):
+        params_support["params"] = ["n"]
+        calls = self._refuse_n(fake_completion)
+        sample("q", n=2, concurrency=1)
+        calls.clear()
+        with pytest.raises(self.BadRequestError):
+            sample("q", n=2, strategy="provider")
+        assert calls[0]["n"] == 2
+
     def test_litellm_refusal_recorded_too(self, fake_completion, params_support):
         class UnsupportedParamsError(Exception):
             pass

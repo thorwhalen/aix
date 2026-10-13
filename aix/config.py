@@ -152,12 +152,18 @@ class EmbeddingConfig:
 
 @dataclass(frozen=True)
 class ImageConfig:
-    """Defaults for ``generate_image`` / ``generate_images``."""
+    """Defaults for ``generate_image`` / ``generate_images`` and the edit/variation calls.
+
+    ``edit_model`` and ``variation_model`` are separate from ``model`` because the
+    default generation model (``dall-e-3``) does not support edits or variations.
+    """
 
     model: str = _opt("dall-e-3", flat="image_model")
     size: str = _opt("1024x1024", flat="image_size")
     quality: str = _opt("standard", flat="image_quality")
     num_images: int = _opt(1, flat="image_num_images", cast=int)
+    edit_model: str = _opt("dall-e-2", flat="image_edit_model")
+    variation_model: str = _opt("dall-e-2", flat="image_variation_model")
 
 
 @dataclass(frozen=True)
