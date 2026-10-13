@@ -50,6 +50,7 @@ Examples:
         [image]
         model = "dall-e-3"
         size = "1024x1024"
+        edit_model = "dall-e-2"
 
         [audio]
         tts_model = "tts-1"

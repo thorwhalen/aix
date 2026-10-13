@@ -572,6 +572,46 @@ class TestServerSideNRefusal:
             sample("q", n=2, strategy="provider")
         assert calls[0]["n"] == 2
 
+    def test_litellm_refusal_is_not_remembered(self, fake_completion, params_support):
+        """It may be about another kwarg, and no request was sent anyway."""
+
+        class UnsupportedParamsError(Exception):
+            pass
+
+        params_support["params"] = ["n"]
+        calls = []
+
+        def respond(**kw):
+            calls.append(kw)
+            if kw.get("n", 1) > 1 and "top_k" in kw:
+                raise UnsupportedParamsError("top_k not supported")
+            return _response(["x"] * kw.get("n", 1), usage=_usage())
+
+        fake_completion.side_effect = respond
+        sample("q", n=2, top_k=5, concurrency=1)
+        out = sample("q", n=2)  # no top_k now: n must be tried and honoured
+        assert calls[-1]["n"] == 2 and out.fallback_error is None
+        assert out.strategy == "provider_n"
+
+    def test_memo_distinguishes_endpoints(self, fake_completion, params_support):
+        params_support["params"] = ["n"]
+        calls = self._refuse_n(fake_completion)
+        sample("q", n=2, base_url="http://local", concurrency=1)
+        calls.clear()
+        sample("q", n=2, concurrency=1)  # default endpoint: not covered by the memo
+        assert calls[0]["n"] == 2
+
+    def test_memoised_error_is_a_stripped_copy(self, fake_completion, params_support):
+        from aix.sampling import _N_REFUSALS
+
+        params_support["params"] = ["n"]
+        self._refuse_n(fake_completion)
+        out = sample("q", n=2, concurrency=1)
+        (stored,) = _N_REFUSALS.values()
+        assert stored is not out.fallback_error
+        assert stored.__traceback__ is None and stored.__context__ is None
+        assert out.fallback_error.__traceback__ is not None
+
     def test_litellm_refusal_recorded_too(self, fake_completion, params_support):
         class UnsupportedParamsError(Exception):
             pass

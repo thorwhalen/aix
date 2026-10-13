@@ -19,6 +19,7 @@ independently and the batch is marked ``"mixed"``.
 ('provider_n', 52)
 """
 
+import copy
 import hashlib
 import numbers
 import threading
@@ -310,16 +311,27 @@ _N_REFUSALS: dict[tuple, Exception] = {}
 
 
 def _remember_n_refusal(key: tuple, error: Exception) -> None:
-    error.__traceback__ = None  # a long-lived memo must not pin the call's frames
-    _N_REFUSALS[key] = error
+    """Memoise a *copy* of ``error``, stripped of traceback and cause chain.
+
+    A process-long memo must not pin the call's frames (or its request), and the
+    error handed back to this call's caller keeps its own traceback.
+    """
+    try:
+        stored = copy.copy(error)
+    except Exception:  # an exception that cannot be copied: keep its message
+        stored = RuntimeError(str(error))
+    stored.__traceback__ = stored.__cause__ = stored.__context__ = None
+    _N_REFUSALS[key] = stored
 
 
 def forget_n_refusals(model: Optional[str] = None) -> None:
     """Forget which models were found to refuse a provider-side ``n``.
 
-    ``sample(strategy="auto")`` remembers, per resolved model id and for the life of
-    the process, that a model refused ``n``. Call this if a provider has since
-    started accepting it. ``model=None`` forgets every model.
+    ``sample(strategy="auto")`` remembers, per resolved model id (and endpoint
+    kwargs) and for the life of the process, that a provider refused ``n`` with a
+    400 and a plain request then succeeded. That is a heuristic: a 400 caused by
+    ``n`` *combined with* another argument is remembered too. Call this if a
+    provider has since started accepting ``n``. ``model=None`` forgets every model.
 
     >>> forget_n_refusals()
     """
@@ -327,13 +339,20 @@ def forget_n_refusals(model: Optional[str] = None) -> None:
         _N_REFUSALS.clear()
     else:
         resolved = _n_refusal_key(model)[0]
-        for key in [k for k in _N_REFUSALS if k[0] == resolved]:
+        for key in [k for k in list(_N_REFUSALS) if k[0] == resolved]:
             _N_REFUSALS.pop(key, None)
 
 
-def _n_refusal_key(model: Optional[str], api_base: Optional[str] = None) -> tuple:
-    """Memo key: the resolved model id, plus the endpoint when one is given."""
-    return (_resolve_model(model or _get_config().chat.model), api_base)
+# Request kwargs that pick the endpoint: the same model id behind another one may
+# well accept ``n``.
+_ENDPOINT_KWARGS = ("api_base", "base_url", "custom_llm_provider", "api_version")
+
+
+def _n_refusal_key(model: Optional[str], kwargs: Optional[dict] = None) -> tuple:
+    """Memo key: the resolved model id, plus any endpoint-selecting kwargs."""
+    kwargs = kwargs or {}
+    endpoint = tuple((k, str(kwargs[k])) for k in _ENDPOINT_KWARGS if k in kwargs)
+    return (_resolve_model(model or _get_config().chat.model), endpoint)
 
 
 def sample(
@@ -427,7 +446,7 @@ def sample(
     # reply that did not parse/validate (which is always just recorded).
     first_error, n_failed = None, 0
 
-    refusal_key = _n_refusal_key(model, kwargs.get("api_base"))
+    refusal_key = _n_refusal_key(model, kwargs)
     known_refusal = _N_REFUSALS.get(refusal_key) if strategy == "auto" else None
     use_provider_n = n > 1 and (
         strategy == "provider"
@@ -446,8 +465,10 @@ def sample(
             if strategy != "auto":
                 raise
             if _is_unsupported_param_error(e):
-                # LiteLLM knows n is unsupported: supports() was wrong
-                _remember_n_refusal(refusal_key, e)
+                # LiteLLM knows n is unsupported: supports() was wrong. Not
+                # memoised: it may be about another kwarg, and no request was
+                # sent, so there is no cost to save.
+                pass
             elif _is_bad_request_error(e):
                 probe_first = True  # the provider refused it server-side
                 n_requests += 1  # unlike a LiteLLM refusal, this one was sent

@@ -128,6 +128,7 @@ model = "text-embedding-3-small"
 [image]
 model = "dall-e-3"
 size = "1024x1024"
+edit_model = "dall-e-2"
 
 [audio]
 tts_model = "gpt-4o-mini-tts"
