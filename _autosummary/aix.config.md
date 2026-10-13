@@ -22,7 +22,9 @@ Resolution layers, highest precedence first:
 
 The schema is a set of frozen dataclasses (immutable). A module-level \*active
 config\* pointer holds the currently resolved [`AixConfig`](#aix.config.AixConfig); [`configure()`](#aix.config.configure)
-and [`using()`](#aix.config.using) swap that pointer rather than mutating in place.
+and [`using()`](#aix.config.using) swap that pointer rather than mutating in place (`using` swaps a
+context-local overlay, so concurrent `with` blocks in different threads or asyncio
+tasks are isolated).
 
 ### Examples
 
@@ -169,6 +171,9 @@ Apply runtime overrides to the active config and return it.
 
 Return the current active [`AixConfig`](#aix.config.AixConfig).
 
+Inside a [`using()`](#aix.config.using) block this is the scoped config of the current thread or
+asyncio task; otherwise the process-wide config.
+
 * **Return type:**
   [`AixConfig`](#aix.config.AixConfig)
 
@@ -221,12 +226,23 @@ True
 
 Replace the active config wholesale. Returns the new active config.
 
+Inside a [`using()`](#aix.config.using) block this replaces only that block’s scoped config (it
+is discarded on exit); outside, it replaces the process-wide config.
+
 * **Return type:**
   [`AixConfig`](#aix.config.AixConfig)
 
 ### aix.config.using(\*\*overrides)
 
 Context manager applying scoped overrides, restored on exit.
+
+The override lives in a [`ContextVar`](https://docs.python.org/3/library/contextvars.html#contextvars.ContextVar), so it is private to the
+current thread / asyncio task: concurrent `using()` blocks do not leak into each
+other, nor into code running outside any block. A thread you start yourself
+typically begins with an empty context and sees the process-wide config (carry a
+scope into it with [`contextvars.copy_context()`](https://docs.python.org/3/library/contextvars.html#contextvars.copy_context)); aix’s own worker pools
+(`sample`, `batch_chat`…) propagate it. An asyncio task created inside the
+block keeps the scope for its lifetime.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`AixConfig`](#aix.config.AixConfig)]

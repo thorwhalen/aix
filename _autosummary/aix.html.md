@@ -2280,6 +2280,9 @@ provider-specific API keys.
 
 Return the current active [`AixConfig`](#aix.AixConfig).
 
+Inside a [`using()`](#aix.using) block this is the scoped config of the current thread or
+asyncio task; otherwise the process-wide config.
+
 * **Return type:**
   [`AixConfig`](aix.config.html.md#aix.config.AixConfig)
 
@@ -2594,6 +2597,9 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
 
 Replace the active config wholesale. Returns the new active config.
 
+Inside a [`using()`](#aix.using) block this replaces only that block’s scoped config (it
+is discarded on exit); outside, it replaces the process-wide config.
+
 * **Return type:**
   [`AixConfig`](aix.config.html.md#aix.config.AixConfig)
 
@@ -2809,6 +2815,14 @@ Currently uses Whisper’s translation capability which translates to English.
 ### aix.using(\*\*overrides)
 
 Context manager applying scoped overrides, restored on exit.
+
+The override lives in a [`ContextVar`](https://docs.python.org/3/library/contextvars.html#contextvars.ContextVar), so it is private to the
+current thread / asyncio task: concurrent `using()` blocks do not leak into each
+other, nor into code running outside any block. A thread you start yourself
+typically begins with an empty context and sees the process-wide config (carry a
+scope into it with [`contextvars.copy_context()`](https://docs.python.org/3/library/contextvars.html#contextvars.copy_context)); aix’s own worker pools
+(`sample`, `batch_chat`…) propagate it. An asyncio task created inside the
+block keeps the scope for its lifetime.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`AixConfig`](aix.config.html.md#aix.config.AixConfig)]

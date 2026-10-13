@@ -295,7 +295,9 @@ scopes an override to a <code class="docutils literal notranslate"><span class="
 </ol>
 <p>The schema is a set of frozen dataclasses (immutable). A module-level *active
 config* pointer holds the currently resolved <a class="reference internal" href="#aix.config.AixConfig" title="aix.config.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a>; <a class="reference internal" href="#aix.config.configure" title="aix.config.configure"><code class="xref py py-func docutils literal notranslate"><span class="pre">configure()</span></code></a>
-and <a class="reference internal" href="#aix.config.using" title="aix.config.using"><code class="xref py py-func docutils literal notranslate"><span class="pre">using()</span></code></a> swap that pointer rather than mutating in place.</p>
+and <a class="reference internal" href="#aix.config.using" title="aix.config.using"><code class="xref py py-func docutils literal notranslate"><span class="pre">using()</span></code></a> swap that pointer rather than mutating in place (<code class="docutils literal notranslate"><span class="pre">using</span></code> swaps a
+context-local overlay, so concurrent <code class="docutils literal notranslate"><span class="pre">with</span></code> blocks in different threads or asyncio
+tasks are isolated).</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
@@ -495,6 +497,8 @@ or the <code class="docutils literal notranslate"><span class="pre">[vision]</sp
 <dt class="sig sig-object py" id="aix.config.get_config">
 <span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#get_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.get_config" title="Link to this definition">¶</a></dt>
 <dd><p>Return the current active <a class="reference internal" href="#aix.config.AixConfig" title="aix.config.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a>.</p>
+<p>Inside a <a class="reference internal" href="#aix.config.using" title="aix.config.using"><code class="xref py py-func docutils literal notranslate"><span class="pre">using()</span></code></a> block this is the scoped config of the current thread or
+asyncio task; otherwise the process-wide config.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#aix.config.AixConfig" title="aix.config.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a></span></p>
@@ -560,6 +564,8 @@ treated as a literal id, not an error. Inspect available aliases via
 <dt class="sig sig-object py" id="aix.config.set_config">
 <span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">set_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#set_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.set_config" title="Link to this definition">¶</a></dt>
 <dd><p>Replace the active config wholesale. Returns the new active config.</p>
+<p>Inside a <a class="reference internal" href="#aix.config.using" title="aix.config.using"><code class="xref py py-func docutils literal notranslate"><span class="pre">using()</span></code></a> block this replaces only that block’s scoped config (it
+is discarded on exit); outside, it replaces the process-wide config.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#aix.config.AixConfig" title="aix.config.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a></span></p>
@@ -571,6 +577,13 @@ treated as a literal id, not an error. Inspect available aliases via
 <dt class="sig sig-object py" id="aix.config.using">
 <span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">using</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#using"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.using" title="Link to this definition">¶</a></dt>
 <dd><p>Context manager applying scoped overrides, restored on exit.</p>
+<p>The override lives in a <a class="reference external" href="https://docs.python.org/3/library/contextvars.html#contextvars.ContextVar" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContextVar</span></code></a>, so it is private to the
+current thread / asyncio task: concurrent <code class="docutils literal notranslate"><span class="pre">using()</span></code> blocks do not leak into each
+other, nor into code running outside any block. A thread you start yourself
+typically begins with an empty context and sees the process-wide config (carry a
+scope into it with <a class="reference external" href="https://docs.python.org/3/library/contextvars.html#contextvars.copy_context" title="(in Python v3.15)"><code class="xref py py-func docutils literal notranslate"><span class="pre">contextvars.copy_context()</span></code></a>); aix’s own worker pools
+(<code class="docutils literal notranslate"><span class="pre">sample</span></code>, <code class="docutils literal notranslate"><span class="pre">batch_chat</span></code>…) propagate it. An asyncio task created inside the
+block keeps the scope for its lifetime.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference internal" href="#aix.config.AixConfig" title="aix.config.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a>]</span></p>
@@ -664,7 +677,7 @@ treated as a literal id, not an error. Inspect available aliases via
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=f0a569bb"></script>
+</div><script src="../_static/documentation_options.js?v=b7c92933"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

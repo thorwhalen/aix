@@ -287,7 +287,9 @@
 
 <span class="sd">The schema is a set of frozen dataclasses (immutable). A module-level *active</span>
 <span class="sd">config* pointer holds the currently resolved :class:`AixConfig`; :func:`configure`</span>
-<span class="sd">and :func:`using` swap that pointer rather than mutating in place.</span>
+<span class="sd">and :func:`using` swap that pointer rather than mutating in place (``using`` swaps a</span>
+<span class="sd">context-local overlay, so concurrent ``with`` blocks in different threads or asyncio</span>
+<span class="sd">tasks are isolated).</span>
 
 <span class="sd">Examples:</span>
 <span class="sd">    &gt;&gt;&gt; from aix import config</span>
@@ -330,6 +332,7 @@
 <span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextvars</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContextVar</span><span class="p">,</span> <span class="n">copy_context</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">replace</span><span class="p">,</span> <span class="n">is_dataclass</span><span class="p">,</span> <span class="n">MISSING</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Iterator</span>
@@ -576,7 +579,15 @@
 <span class="c1"># Active config + runtime overrides</span>
 <span class="c1"># --------------------------------------------------------------------------- #</span>
 
+<span class="c1"># Process-wide config, changed by configure()/set_config().</span>
 <span class="n">_active_config</span><span class="p">:</span> <span class="n">AixConfig</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">()</span>
+
+<span class="c1"># Context-local overlay set by using(): each thread / asyncio task has its own value,</span>
+<span class="c1"># so concurrent using() blocks cannot see each other's overrides. ``None`` means</span>
+<span class="c1"># "no scoped override here -- fall through to the process-wide config".</span>
+<span class="n">_scoped_config</span><span class="p">:</span> <span class="n">ContextVar</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">AixConfig</span><span class="p">]]</span> <span class="o">=</span> <span class="n">ContextVar</span><span class="p">(</span>
+    <span class="s2">"aix_scoped_config"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
 
 <span class="c1"># Flat override name -&gt; (section attr, field name), built from field metadata.</span>
 <span class="n">_FLAT_INDEX</span> <span class="o">=</span> <span class="p">{</span>
@@ -589,20 +600,32 @@
 <div class="viewcode-block" id="get_config">
 <a class="viewcode-back" href="../../_autosummary/aix.config.html#aix.get_config">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AixConfig</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Return the current active :class:`AixConfig`."""</span>
-    <span class="k">return</span> <span class="n">_active_config</span></div>
+<span class="w">    </span><span class="sd">"""Return the current active :class:`AixConfig`.</span>
+
+<span class="sd">    Inside a :func:`using` block this is the scoped config of the current thread or</span>
+<span class="sd">    asyncio task; otherwise the process-wide config.</span>
+<span class="sd">    """</span>
+    <span class="n">scoped</span> <span class="o">=</span> <span class="n">_scoped_config</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">_active_config</span> <span class="k">if</span> <span class="n">scoped</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">scoped</span></div>
 
 
 
 <div class="viewcode-block" id="set_config">
 <a class="viewcode-back" href="../../_autosummary/aix.config.html#aix.set_config">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">set_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">AixConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AixConfig</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Replace the active config wholesale. Returns the new active config."""</span>
+<span class="w">    </span><span class="sd">"""Replace the active config wholesale. Returns the new active config.</span>
+
+<span class="sd">    Inside a :func:`using` block this replaces only that block's scoped config (it</span>
+<span class="sd">    is discarded on exit); outside, it replaces the process-wide config.</span>
+<span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_active_config</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">AixConfig</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Expected AixConfig, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="n">_active_config</span> <span class="o">=</span> <span class="n">config</span>
-    <span class="k">return</span> <span class="n">_active_config</span></div>
+    <span class="k">if</span> <span class="n">_scoped_config</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_scoped_config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_active_config</span> <span class="o">=</span> <span class="n">config</span>
+    <span class="k">return</span> <span class="n">config</span></div>
 
 
 
@@ -653,8 +676,19 @@
 <span class="sd">        &gt;&gt;&gt; config.get_config().chat.temperature</span>
 <span class="sd">        0.2</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">set_config</span><span class="p">(</span><span class="n">_apply_overrides</span><span class="p">(</span><span class="n">_active_config</span><span class="p">,</span> <span class="n">overrides</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">set_config</span><span class="p">(</span><span class="n">_apply_overrides</span><span class="p">(</span><span class="n">get_config</span><span class="p">(),</span> <span class="n">overrides</span><span class="p">))</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">submit_in_context</span><span class="p">(</span><span class="n">executor</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""``executor.submit(func, ...)``, run inside a copy of the caller's context.</span>
+
+<span class="sd">    A pool thread starts with an empty context, so it would not see an enclosing</span>
+<span class="sd">    :func:`using` block. aix's own pools submit through this so a scoped config</span>
+<span class="sd">    reaches their workers. Each call takes its own copy (a context can only be</span>
+<span class="sd">    entered by one thread at a time).</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">copy_context</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="using">
@@ -663,19 +697,33 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">using</span><span class="p">(</span><span class="o">**</span><span class="n">overrides</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">AixConfig</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">"""Context manager applying scoped overrides, restored on exit.</span>
 
+<span class="sd">    The override lives in a :class:`~contextvars.ContextVar`, so it is private to the</span>
+<span class="sd">    current thread / asyncio task: concurrent ``using()`` blocks do not leak into each</span>
+<span class="sd">    other, nor into code running outside any block. A thread you start yourself</span>
+<span class="sd">    typically begins with an empty context and sees the process-wide config (carry a</span>
+<span class="sd">    scope into it with :func:`contextvars.copy_context`); aix's own worker pools</span>
+<span class="sd">    (``sample``, ``batch_chat``...) propagate it. An asyncio task created inside the</span>
+<span class="sd">    block keeps the scope for its lifetime.</span>
+
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; from aix import config</span>
 <span class="sd">        &gt;&gt;&gt; with config.using(chat_temperature=0.0) as c:</span>
 <span class="sd">        ...     c.chat.temperature</span>
 <span class="sd">        0.0</span>
 <span class="sd">    """</span>
-    <span class="k">global</span> <span class="n">_active_config</span>
-    <span class="n">previous</span> <span class="o">=</span> <span class="n">_active_config</span>
+    <span class="n">scoped</span> <span class="o">=</span> <span class="n">_apply_overrides</span><span class="p">(</span><span class="n">get_config</span><span class="p">(),</span> <span class="n">overrides</span><span class="p">)</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="n">_scoped_config</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">_scoped_config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">scoped</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">_active_config</span> <span class="o">=</span> <span class="n">_apply_overrides</span><span class="p">(</span><span class="n">previous</span><span class="p">,</span> <span class="n">overrides</span><span class="p">)</span>
-        <span class="k">yield</span> <span class="n">_active_config</span>
+        <span class="k">yield</span> <span class="n">scoped</span>
     <span class="k">finally</span><span class="p">:</span>
-        <span class="n">_active_config</span> <span class="o">=</span> <span class="n">previous</span></div>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_scoped_config</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># Exited from a different context than it was entered in (e.g. a</span>
+            <span class="c1"># generator closed from another thread): reset() refuses. Restore the</span>
+            <span class="c1"># value by hand in this context instead of raising from cleanup.</span>
+            <span class="n">_scoped_config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span></div>
 
 
 
@@ -741,7 +789,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=f0a569bb"></script>
+</div><script src="../../_static/documentation_options.js?v=b7c92933"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

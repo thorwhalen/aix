@@ -296,7 +296,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.capabilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">supports</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.chat</span><span class="w"> </span><span class="kn">import</span> <span class="n">Completion</span><span class="p">,</span> <span class="n">Usage</span><span class="p">,</span> <span class="n">complete</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">aix.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_config</span> <span class="k">as</span> <span class="n">_get_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aix.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_config</span> <span class="k">as</span> <span class="n">_get_config</span><span class="p">,</span> <span class="n">submit_in_context</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.credentials</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_requirements</span> <span class="k">as</span> <span class="n">_check_requirements</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">aix.structured</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResponseSchema</span><span class="p">,</span> <span class="n">SchemaValidationError</span>
 
@@ -365,7 +365,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span>
     <span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">concurrency</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)))</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span>
+        <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">submit_in_context</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">]</span>
     <span class="k">finally</span><span class="p">:</span>
         <span class="c1"># On success every future is done; on failure, drop the queued ones.</span>
@@ -827,7 +827,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=f0a569bb"></script>
+</div><script src="../../_static/documentation_options.js?v=b7c92933"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

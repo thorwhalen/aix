@@ -1,4 +1,4 @@
-> built 2026-10-12 17:19 UTC from 9a77bf0 (master) · aix 0.0.49. Details: build_info.json
+> built 2026-10-13 03:14 UTC from c8a11b5 (master) · aix 0.0.50. Details: build_info.json
 
 # index.html.md
 
@@ -2647,7 +2647,9 @@ Resolution layers, highest precedence first:
 
 The schema is a set of frozen dataclasses (immutable). A module-level \*active
 config\* pointer holds the currently resolved [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig); [`configure()`](_autosummary/aix.config.html.md#aix.config.configure)
-and [`using()`](_autosummary/aix.config.html.md#aix.config.using) swap that pointer rather than mutating in place.
+and [`using()`](_autosummary/aix.config.html.md#aix.config.using) swap that pointer rather than mutating in place (`using` swaps a
+context-local overlay, so concurrent `with` blocks in different threads or asyncio
+tasks are isolated).
 
 ### Examples
 
@@ -2794,6 +2796,9 @@ Apply runtime overrides to the active config and return it.
 
 Return the current active [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig).
 
+Inside a [`using()`](_autosummary/aix.config.html.md#aix.config.using) block this is the scoped config of the current thread or
+asyncio task; otherwise the process-wide config.
+
 * **Return type:**
   [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)
 
@@ -2846,12 +2851,23 @@ True
 
 Replace the active config wholesale. Returns the new active config.
 
+Inside a [`using()`](_autosummary/aix.config.html.md#aix.config.using) block this replaces only that block’s scoped config (it
+is discarded on exit); outside, it replaces the process-wide config.
+
 * **Return type:**
   [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)
 
 ### aix.config.using(\*\*overrides)
 
 Context manager applying scoped overrides, restored on exit.
+
+The override lives in a [`ContextVar`](https://docs.python.org/3/library/contextvars.html#contextvars.ContextVar), so it is private to the
+current thread / asyncio task: concurrent `using()` blocks do not leak into each
+other, nor into code running outside any block. A thread you start yourself
+typically begins with an empty context and sees the process-wide config (carry a
+scope into it with [`contextvars.copy_context()`](https://docs.python.org/3/library/contextvars.html#contextvars.copy_context)); aix’s own worker pools
+(`sample`, `batch_chat`…) propagate it. An asyncio task created inside the
+block keeps the scope for its lifetime.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)]
@@ -5416,6 +5432,9 @@ provider-specific API keys.
 
 Return the current active [`AixConfig`](_autosummary/aix.html.md#aix.AixConfig).
 
+Inside a [`using()`](_autosummary/aix.html.md#aix.using) block this is the scoped config of the current thread or
+asyncio task; otherwise the process-wide config.
+
 * **Return type:**
   [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)
 
@@ -5730,6 +5749,9 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
 
 Replace the active config wholesale. Returns the new active config.
 
+Inside a [`using()`](_autosummary/aix.html.md#aix.using) block this replaces only that block’s scoped config (it
+is discarded on exit); outside, it replaces the process-wide config.
+
 * **Return type:**
   [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)
 
@@ -5945,6 +5967,14 @@ Currently uses Whisper’s translation capability which translates to English.
 ### aix.using(\*\*overrides)
 
 Context manager applying scoped overrides, restored on exit.
+
+The override lives in a [`ContextVar`](https://docs.python.org/3/library/contextvars.html#contextvars.ContextVar), so it is private to the
+current thread / asyncio task: concurrent `using()` blocks do not leak into each
+other, nor into code running outside any block. A thread you start yourself
+typically begins with an empty context and sees the process-wide config (carry a
+scope into it with [`contextvars.copy_context()`](https://docs.python.org/3/library/contextvars.html#contextvars.copy_context)); aix’s own worker pools
+(`sample`, `batch_chat`…) propagate it. An asyncio task created inside the
+block keeps the scope for its lifetime.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)]
@@ -7744,18 +7774,16 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.
 
 # About this build
 
-This documentation was built on **2026-10-12 17:19 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/9a77bf000322c9ba17aa96a76750747e07dd92e7"><code>9a77bf0</code></a> on branch <code>master</code>, for **aix 0.0.49** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-13 03:14 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/c8a11b5d5c853005cfc666ccb5dde075a22d79d4"><code>c8a11b5</code></a> on branch <code>master</code>, for **aix 0.0.50** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.0.49) is behind the latest release on PyPI (0.0.50): `pip install aix` gives newer code than these docs describe.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/9a77bf000322c9ba17aa96a76750747e07dd92e7"><code>9a77bf000322c9ba17aa96a76750747e07dd92e7</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/c8a11b5d5c853005cfc666ccb5dde075a22d79d4"><code>c8a11b5d5c853005cfc666ccb5dde075a22d79d4</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -7766,15 +7794,15 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38283104070">38283104070</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38340595488">38340595488</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>9a77bf000322c9ba17aa96a76750747e07dd92e7</code> (in the history of the built commit) |
+| Event commit | <code>c8a11b5d5c853005cfc666ccb5dde075a22d79d4</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.12  |
+| epythet  | 0.2.13  |
 | Sphinx   | 9.1.0   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
@@ -7793,14 +7821,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.50/">0.0.50</a>, newer than the documented version (0.0.49).
+Latest release: <a href="https://pypi.org/project/aix/0.0.50/">0.0.50</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout 9a77bf000322c9ba17aa96a76750747e07dd92e7
-pip install "epythet==0.2.12"
+git checkout c8a11b5d5c853005cfc666ccb5dde075a22d79d4
+pip install "epythet==0.2.13"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 
