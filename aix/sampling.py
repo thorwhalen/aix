@@ -29,7 +29,7 @@ from typing import Any, Literal, Optional, TypeVar, Union
 
 from aix.capabilities import supports
 from aix.chat import Completion, Usage, complete
-from aix.config import get_config as _get_config
+from aix.config import get_config as _get_config, submit_in_context
 from aix.credentials import check_requirements as _check_requirements
 from aix.structured import ResponseSchema, SchemaValidationError
 
@@ -93,7 +93,7 @@ def concurrent_map(
         return [func(x) for x in items]
     pool = ThreadPoolExecutor(max_workers=min(concurrency, len(items)))
     try:
-        futures = [pool.submit(func, x) for x in items]
+        futures = [submit_in_context(pool, func, x) for x in items]
         return [f.result() for f in futures]
     finally:
         # On success every future is done; on failure, drop the queued ones.

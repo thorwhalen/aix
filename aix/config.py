@@ -20,7 +20,9 @@ Resolution layers, highest precedence first:
 
 The schema is a set of frozen dataclasses (immutable). A module-level *active
 config* pointer holds the currently resolved :class:`AixConfig`; :func:`configure`
-and :func:`using` swap that pointer rather than mutating in place.
+and :func:`using` swap that pointer rather than mutating in place (``using`` swaps a
+context-local overlay, so concurrent ``with`` blocks in different threads or asyncio
+tasks are isolated).
 
 Examples:
     >>> from aix import config
@@ -63,6 +65,7 @@ Examples:
 """
 
 import os
+from contextvars import ContextVar, copy_context
 from contextlib import contextmanager
 from dataclasses import dataclass, field, fields, replace, is_dataclass, MISSING
 from typing import Any, Callable, Optional, Mapping, Iterator
@@ -282,7 +285,15 @@ def load_config(
 # Active config + runtime overrides
 # --------------------------------------------------------------------------- #
 
+# Process-wide config, changed by configure()/set_config().
 _active_config: AixConfig = load_config()
+
+# Context-local overlay set by using(): each thread / asyncio task has its own value,
+# so concurrent using() blocks cannot see each other's overrides. ``None`` means
+# "no scoped override here -- fall through to the process-wide config".
+_scoped_config: ContextVar[Optional[AixConfig]] = ContextVar(
+    "aix_scoped_config", default=None
+)
 
 # Flat override name -> (section attr, field name), built from field metadata.
 _FLAT_INDEX = {
@@ -293,17 +304,29 @@ _FLAT_INDEX = {
 
 
 def get_config() -> AixConfig:
-    """Return the current active :class:`AixConfig`."""
-    return _active_config
+    """Return the current active :class:`AixConfig`.
+
+    Inside a :func:`using` block this is the scoped config of the current thread or
+    asyncio task; otherwise the process-wide config.
+    """
+    scoped = _scoped_config.get()
+    return _active_config if scoped is None else scoped
 
 
 def set_config(config: AixConfig) -> AixConfig:
-    """Replace the active config wholesale. Returns the new active config."""
+    """Replace the active config wholesale. Returns the new active config.
+
+    Inside a :func:`using` block this replaces only that block's scoped config (it
+    is discarded on exit); outside, it replaces the process-wide config.
+    """
     global _active_config
     if not isinstance(config, AixConfig):
         raise TypeError(f"Expected AixConfig, got {type(config)}")
-    _active_config = config
-    return _active_config
+    if _scoped_config.get() is not None:
+        _scoped_config.set(config)
+    else:
+        _active_config = config
+    return config
 
 
 def _apply_overrides(base: AixConfig, overrides: Mapping[str, Any]) -> AixConfig:
@@ -351,12 +374,31 @@ def configure(**overrides: Any) -> AixConfig:
         >>> config.get_config().chat.temperature
         0.2
     """
-    return set_config(_apply_overrides(_active_config, overrides))
+    return set_config(_apply_overrides(get_config(), overrides))
+
+
+def submit_in_context(executor: Any, func: Callable, /, *args: Any, **kwargs: Any):
+    """``executor.submit(func, ...)``, run inside a copy of the caller's context.
+
+    A pool thread starts with an empty context, so it would not see an enclosing
+    :func:`using` block. aix's own pools submit through this so a scoped config
+    reaches their workers. Each call takes its own copy (a context can only be
+    entered by one thread at a time).
+    """
+    return executor.submit(copy_context().run, func, *args, **kwargs)
 
 
 @contextmanager
 def using(**overrides: Any) -> Iterator[AixConfig]:
     """Context manager applying scoped overrides, restored on exit.
+
+    The override lives in a :class:`~contextvars.ContextVar`, so it is private to the
+    current thread / asyncio task: concurrent ``using()`` blocks do not leak into each
+    other, nor into code running outside any block. A thread you start yourself
+    typically begins with an empty context and sees the process-wide config (carry a
+    scope into it with :func:`contextvars.copy_context`); aix's own worker pools
+    (``sample``, ``batch_chat``...) propagate it. An asyncio task created inside the
+    block keeps the scope for its lifetime.
 
     Examples:
         >>> from aix import config
@@ -364,13 +406,19 @@ def using(**overrides: Any) -> Iterator[AixConfig]:
         ...     c.chat.temperature
         0.0
     """
-    global _active_config
-    previous = _active_config
+    scoped = _apply_overrides(get_config(), overrides)
+    previous = _scoped_config.get()
+    token = _scoped_config.set(scoped)
     try:
-        _active_config = _apply_overrides(previous, overrides)
-        yield _active_config
+        yield scoped
     finally:
-        _active_config = previous
+        try:
+            _scoped_config.reset(token)
+        except ValueError:
+            # Exited from a different context than it was entered in (e.g. a
+            # generator closed from another thread): reset() refuses. Restore the
+            # value by hand in this context instead of raising from cleanup.
+            _scoped_config.set(previous)
 
 
 def resolve_model(
