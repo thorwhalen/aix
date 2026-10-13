@@ -170,3 +170,71 @@ def test_active_config_drives_function_defaults(restore_active_config):
     # ...while the active config reflects the override used at call time.
     assert get_config().chat.model == "active/chat"
     assert get_config().embeddings.model == "active/embed"
+
+
+def test_using_is_isolated_across_threads(restore_active_config):
+    import threading
+
+    both_inside = threading.Barrier(2, timeout=10)
+    seen, errors = {}, []
+
+    def worker(name, model):
+        try:
+            with using(chat_model=model):
+                both_inside.wait()  # both threads are now inside their own block
+                seen[name] = get_config().chat.model
+                both_inside.wait()  # neither exits until both have read
+        except Exception as e:  # pragma: no cover - surfaced below
+            errors.append(e)
+
+    threads = [
+        threading.Thread(target=worker, args=(n, m))
+        for n, m in (("a", "x/a"), ("b", "x/b"))
+    ]
+    [t.start() for t in threads]
+    [t.join() for t in threads]
+    assert not errors
+    assert seen == {"a": "x/a", "b": "x/b"}
+
+
+def test_using_does_not_leak_into_other_thread(restore_active_config):
+    import threading
+
+    outside = get_config().chat.model
+    seen = []
+    with using(chat_model="scoped/model"):
+        t = threading.Thread(target=lambda: seen.append(get_config().chat.model))
+        t.start()
+        t.join()
+    assert seen == [outside]
+
+
+def test_using_is_isolated_across_asyncio_tasks(restore_active_config):
+    import asyncio
+
+    async def task(model, delay):
+        with using(chat_model=model):
+            await asyncio.sleep(delay)
+            return get_config().chat.model
+
+    async def main():
+        return await asyncio.gather(task("x/a", 0.02), task("x/b", 0.01))
+
+    assert asyncio.run(main()) == ["x/a", "x/b"]
+
+
+def test_configure_inside_using_is_scoped(restore_active_config):
+    before = get_config().chat.model
+    with using(chat_temperature=0.0):
+        configure(chat_model="inner/model")
+        assert get_config().chat.model == "inner/model"
+        assert get_config().chat.temperature == 0.0
+    assert get_config().chat.model == before
+
+
+def test_nested_using_restores_outer(restore_active_config):
+    with using(chat_model="outer/m"):
+        with using(chat_temperature=0.5):
+            assert get_config().chat.model == "outer/m"
+        assert get_config().chat.temperature != 0.5
+        assert get_config().chat.model == "outer/m"
