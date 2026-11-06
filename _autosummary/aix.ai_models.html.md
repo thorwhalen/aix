@@ -100,9 +100,6 @@ Format metadata for DSPy framework.
 
 Format for DSPy.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> connector = DSPyConnector()
 >>> model = Model(id="gpt-4", provider="openai")
@@ -110,6 +107,9 @@ Format for DSPy.
 >>> "model" in metadata
 True
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 #### *property* name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -125,9 +125,6 @@ Connector for LangChain library.
 
 Format for LangChain.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> connector = LangChainConnector()
 >>> model = Model(id="gpt-4", provider="openai")
@@ -136,11 +133,14 @@ Format for LangChain.
 'gpt-4'
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
 #### *property* name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 Unique identifier for this connector.
 
-### *class* aix.ai_models.Model(id, provider, context_size=None, is_local=False, capabilities=<factory>, cost_per_token=<factory>, tags=<factory>, connector_metadata=<factory>, custom_metadata=<factory>)
+### *class* aix.ai_models.Model(id, provider, context_size=None, is_local=False, capabilities=dict(), cost_per_token=dict(), tags=set(), connector_metadata=dict(), custom_metadata=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -161,9 +161,6 @@ Represents an AI model with its metadata.
 
 Check if model matches given criteria.
 
-* **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
-
 ```pycon
 >>> model = Model(id="gpt-4", provider="openai", is_local=False)
 >>> model.matches_filter(provider="openai")
@@ -171,6 +168,9 @@ True
 >>> model.matches_filter(is_local=True)
 False
 ```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### to_dict()
 
@@ -198,9 +198,6 @@ Combines model registry, sources, and connectors into a single facade.
 
 Add tags to a model.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -209,6 +206,9 @@ Add tags to a model.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### *property* connectors *: [ConnectorRegistry](aix.ai_models.base.html.md#aix.ai_models.base.ConnectorRegistry)*
 
 Access to connector registry.
@@ -216,9 +216,6 @@ Access to connector registry.
 #### create_model_group(group_name, model_ids)
 
 Create a named group of models using tags.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -229,6 +226,9 @@ Create a named group of models using tags.
 >>> len(premium)
 2
 ```
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### discover_all(, auto_register=True)
 
@@ -276,9 +276,6 @@ Get formatted metadata for a specific connector.
 
 Get a specific model by ID.
 
-* **Return type:**
-  [`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -286,6 +283,9 @@ Get a specific model by ID.
 >>> model.id
 'gpt-4'
 ```
+
+* **Return type:**
+  [`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)
 
 #### list_model_groups()
 
@@ -300,9 +300,6 @@ List all model groups.
 
 List models with optional filtering.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -313,6 +310,9 @@ List models with optional filtering.
 >>> local[0].id
 'llama2'
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 #### list_sources()
 
@@ -336,9 +336,6 @@ True
 
 Register a model connector.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> manager = ModelManager()
 >>> connector = OpenAIConnector()
@@ -347,12 +344,12 @@ Register a model connector.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### register_source(name, source)
 
 Register a model discovery source.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -362,12 +359,12 @@ Register a model discovery source.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### set_custom_metadata(model_id, key, value)
 
 Set custom metadata on a model.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -376,6 +373,9 @@ Set custom metadata on a model.
 >>> manager.models["gpt-4"].custom_metadata["my_note"]
 'Use for production'
 ```
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* aix.ai_models.ModelRegistry(, storage_path=None)
 
@@ -396,9 +396,6 @@ True
 
 Filter models by multiple criteria.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> registry = ModelRegistry()
 >>> registry["gpt-4"] = Model(id="gpt-4", provider="openai", context_size=8192)
@@ -407,6 +404,9 @@ Filter models by multiple criteria.
 >>> len(local_models)
 1
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 ### *class* aix.ai_models.ModelSource
 
@@ -433,9 +433,6 @@ Format metadata for direct Ollama API calls.
 
 Format for Ollama API.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> connector = OllamaConnector()
 >>> model = Model(id="ollama/llama2", provider="ollama", is_local=True)
@@ -444,6 +441,9 @@ Format for Ollama API.
 >>> metadata["model"]
 'llama2'
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 #### *property* name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -461,15 +461,15 @@ Queries the Ollama API for models available on the local machine.
 
 Fetch locally installed Ollama models.
 
-* **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> source = OllamaSource()
 >>> models = list(source.discover_models())  # May be empty if Ollama not running
 >>> all(m.is_local for m in models)
 True
 ```
+
+* **Return type:**
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 ### *class* aix.ai_models.OpenAIConnector
 
@@ -521,15 +521,15 @@ OpenRouter maintains a comprehensive registry of models across providers.
 
 Fetch models from OpenRouter API.
 
-* **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> source = OpenRouterSource()
 >>> models = list(source.discover_models())
 >>> len(models) > 0  # Should find many models
 True
 ```
+
+* **Return type:**
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 ### *class* aix.ai_models.ProviderAPISource(provider_name, , api_key=None, base_url='https://api.openai.com/v1', timeout=30)
 
@@ -552,14 +552,14 @@ Requires valid API key for the provider.
 
 Get a pre-configured model manager.
 
-* **Return type:**
-  [`ModelManager`](aix.ai_models.manager.html.md#aix.ai_models.manager.ModelManager)
-
 ```pycon
 >>> manager = get_manager()
 >>> len(manager.connectors) > 0
 True
 ```
+
+* **Return type:**
+  [`ModelManager`](aix.ai_models.manager.html.md#aix.ai_models.manager.ModelManager)
 
 ### Modules
 

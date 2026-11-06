@@ -95,7 +95,7 @@ best = "anthropic/claude-sonnet-4"
 | [`VisionConfig`](#aix.config.VisionConfig)([model])                               | Defaults for `describe_image` (image→text).                                     |
 | [`AixConfig`](#aix.config.AixConfig)([chat, embeddings, image, audio, ...])    | Top-level AIX configuration (single source of truth for defaults).              |
 
-### *class* aix.config.AixConfig(chat=<factory>, embeddings=<factory>, image=<factory>, audio=<factory>, video=<factory>, vision=<factory>, aliases=<factory>)
+### *class* aix.config.AixConfig(chat=ChatConfig(), embeddings=EmbeddingConfig(), image=ImageConfig(), audio=AudioConfig(), video=VideoConfig(), vision=VisionConfig(), aliases=<factory>)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -119,14 +119,18 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `embeddings` / `embed`.
 
-### *class* aix.config.ImageConfig(model='dall-e-3', size='1024x1024', quality='standard', num_images=1, edit_model='dall-e-2', variation_model='dall-e-2')
+### *class* aix.config.ImageConfig(model='gpt-image-1.5', size='1024x1024', quality='auto', num_images=1, edit_model='gpt-image-1.5', variation_model='dall-e-2')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `generate_image` / `generate_images` and the edit/variation calls.
 
-`edit_model` and `variation_model` are separate from `model` because the
-default generation model (`dall-e-3`) does not support edits or variations.
+OpenAI retired the DALL-E models from its images endpoint (`dall-e-3` returns
+“does not exist” as of late 2026), so the defaults are the `gpt-image` family:
+`gpt-image-1.5` for generation and edits. `quality` for that family is one of
+`low`, `medium`, `high` or `auto` (DALL-E’s `standard`/`hd` are
+rejected). Variations are still a DALL-E 2 feature with no gpt-image equivalent;
+`variation_model` is kept for callers whose provider still serves it.
 
 ### *class* aix.config.VideoConfig(provider=None)
 
@@ -156,9 +160,6 @@ Path to the user config file (env `AIX_CONFIG_FILE` overrides default).
 
 Apply runtime overrides to the active config and return it.
 
-* **Return type:**
-  [`AixConfig`](#aix.config.AixConfig)
-
 ### Examples
 
 ```pycon
@@ -170,6 +171,9 @@ Apply runtime overrides to the active config and return it.
 >>> config.get_config().chat.temperature
 0.2
 ```
+
+* **Return type:**
+  [`AixConfig`](#aix.config.AixConfig)
 
 ### aix.config.get_config()
 
@@ -248,9 +252,6 @@ scope into it with [`contextvars.copy_context()`](https://docs.python.org/3/libr
 (`sample`, `batch_chat`…) propagate it. An asyncio task created inside the
 block keeps the scope for its lifetime.
 
-* **Return type:**
-  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`AixConfig`](#aix.config.AixConfig)]
-
 ### Examples
 
 ```pycon
@@ -259,3 +260,6 @@ block keeps the scope for its lifetime.
 ...     c.chat.temperature
 0.0
 ```
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`AixConfig`](#aix.config.AixConfig)]

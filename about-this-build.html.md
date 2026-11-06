@@ -2,16 +2,18 @@
 
 # About this build
 
-This documentation was built on **2026-10-13 07:17 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/12cee7696063f1137a4ec4115019f940f1d152ee"><code>12cee76</code></a> on branch <code>master</code>, for **aix 0.0.52** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-06 11:10 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/6a239e935305b2fad301c70bdd332fa491314bcf"><code>6a239e9</code></a> on branch <code>master</code>, for **aix 0.0.53** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.53) is behind the latest release on PyPI (0.0.54): `pip install aix` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/12cee7696063f1137a4ec4115019f940f1d152ee"><code>12cee7696063f1137a4ec4115019f940f1d152ee</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/6a239e935305b2fad301c70bdd332fa491314bcf"><code>6a239e935305b2fad301c70bdd332fa491314bcf</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -22,18 +24,18 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38361465520">38361465520</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/42207895587">42207895587</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>12cee7696063f1137a4ec4115019f940f1d152ee</code> (in the history of the built commit) |
+| Event commit | <code>6a239e935305b2fad301c70bdd332fa491314bcf</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.14  |
-| Sphinx   | 9.1.0   |
+| epythet  | 0.2.22  |
+| Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
-| Python   | 3.12.15 |
+| Python   | 3.12.16 |
 
 ## Configuration as resolved
 
@@ -49,14 +51,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.52/">0.0.52</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/aix/0.0.54/">0.0.54</a>, newer than the documented version (0.0.53).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout 12cee7696063f1137a4ec4115019f940f1d152ee
-pip install "epythet==0.2.14"
+git checkout 6a239e935305b2fad301c70bdd332fa491314bcf
+pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

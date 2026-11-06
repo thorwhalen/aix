@@ -51,10 +51,16 @@ One drawn answer.
 
 The raw text of this choice (`""` if its request failed).
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### payload
 
 `parse(text)` when a `parse` function was given, else `text`;
 `None` if the request or the parsing failed (see `error`).
+
+* **Type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
 
 #### finish_reason
 
@@ -62,24 +68,39 @@ Why this choice stopped. `"length"` = truncated,
 `"content_filter"` = refused/filtered; check it before treating the
 payload as a judgement.
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 #### usage
 
 Tokens for the request that produced *only this* sample, or
 `None` when it shared a provider-side `n` request (whose usage
 cannot be split per choice; see [`Samples.usage`](#aix.sampling.Samples.usage)).
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Usage`](aix.html.md#aix.Usage)]
+
 #### strategy
 
 How this sample was drawn: `"provider_n"` or `"independent"`.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### seed
 
 The seed sent with its request, if any.
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]
+
 #### error
 
 The exception this sample’s request raised (with
 `on_error="record"`) or that `parse` raised on its text.
+
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Exception`](https://docs.python.org/3/builtins/exceptions.html#Exception)]
 
 #### system_fingerprint
 
@@ -87,6 +108,9 @@ The serving backend’s fingerprint for its request,
 when reported. Seeded samples are only comparable across equal
 fingerprints (see [`aix.supports()`](aix.html.md#aix.supports) for whether `seed` is
 honoured at all).
+
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 #### *property* ok *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
 
@@ -149,9 +173,6 @@ holds every request that was made, failed ones included (as samples whose
 
 `int(value)` if it is a positive integer (not a bool), else `ValueError`.
 
-* **Return type:**
-  [`int`](https://docs.python.org/3/builtins/functions.html#int)
-
 ```pycon
 >>> check_positive_int("n", 3)
 3
@@ -161,6 +182,9 @@ Traceback (most recent call last):
 ValueError: n must be a positive integer, got 0
 ```
 
+* **Return type:**
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
+
 ### aix.sampling.concurrent_map(func, items, , concurrency)
 
 `[func(x) for x in items]`, run on up to `concurrency` threads, in order.
@@ -169,13 +193,13 @@ Fails fast like the serial loop would: once a call raises, calls not yet
 started are cancelled (those already running finish), and the first
 exception in item order propagates.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`R`)]
-
 ```pycon
 >>> concurrent_map(lambda x: x * x, range(5), concurrency=3)
 [0, 1, 4, 9, 16]
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[`R`]
 
 ### aix.sampling.forget_n_refusals(model=None)
 
@@ -187,19 +211,19 @@ kwargs) and for the life of the process, that a provider refused `n` with a
 `n` *combined with* another argument is remembered too. Call this if a
 provider has since started accepting `n`. `model=None` forgets every model.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> forget_n_refusals()
 ```
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### aix.sampling.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, response_schema=None, on_error='raise', api_key=None, \*\*kwargs)
 
 Draw `n` answers to `prompt`, each with its finish reason and usage.
 
 * **Parameters:**
-  * **prompt** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string or a list of message dicts, as for [`aix.chat()`](aix.html.md#aix.chat).
+  * **prompt** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string or a list of message dicts, as for [`aix.chat()`](aix.html.md#aix.chat).
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many samples to draw.
   * **temperature** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sampling temperature (`None` = configured default). At
     `0` the samples mostly coincide, which is rarely what you want here.
@@ -217,7 +241,7 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
     see [`Samples.fallback_error`](#aix.sampling.Samples.fallback_error)),
     `"provider"` (force one `n` request) or `"independent"`.
     `n=1` is always a single plain request, recorded `"independent"`.
-  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
+  * **response_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
     validated per request as in [`aix.complete()`](aix.html.md#aix.complete); each payload is the
     validated value, and a choice still invalid after repairs records its
     `SchemaValidationError` as `error`. Exclusive with `parse`.

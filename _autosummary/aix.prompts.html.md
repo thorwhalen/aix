@@ -129,7 +129,7 @@ Add a function to the collection.
 * **Parameters:**
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Function name (will be accessible as attribute)
   * **template** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Prompt template
-  * **output_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output
+  * **output_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output
   * **\*\*kwargs** – Additional parameters for prompt_func
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -151,7 +151,7 @@ as a convenient tool to do response statistics and validation (via n>1).
 
 * **Parameters:**
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The question or prompt to ask the LLM
-  * **valid_answers** (`Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`int`](https://docs.python.org/3/builtins/functions.html#int)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`float`](https://docs.python.org/3/builtins/functions.html#float)], [`type`](https://docs.python.org/3/builtins/functions.html#type), [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – 
+  * **valid_answers** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`int`](https://docs.python.org/3/builtins/functions.html#int)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`float`](https://docs.python.org/3/builtins/functions.html#float)], [`type`](https://docs.python.org/3/builtins/functions.html#type), [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – 
 
     Can be:
     - list[str]: List of valid string options
@@ -279,11 +279,11 @@ exactly as before.
 
 * **Parameters:**
   * **template** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Prompt template with {var} placeholders for parameters
-  * **output_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output. Can be:
+  * **output_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output. Can be:
     - Dict mapping field names to types: {“name”: str, “age”: int}
     - A single type for simple outputs: str, int, list, etc.
     - None for plain text output (default)
-  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional JSON Schema dict or Pydantic model class for
+  * **response_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional JSON Schema dict or Pydantic model class for
     *enforced, validated* structured output (nested objects, arrays,
     enums, required/optional all work): routed to the provider’s
     strict `json_schema` mode where supported, otherwise JSON mode,
@@ -361,7 +361,7 @@ This is an explicit alias for prompt_func with output_schema.
 
 * **Parameters:**
   * **template** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Prompt template
-  * **schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Output schema
+  * **schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Output schema
   * **\*\*kwargs** – Additional parameters for prompt_func
 * **Return type:**
   [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)

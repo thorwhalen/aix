@@ -6,10 +6,11 @@
 <link rel="alternate" type="text/markdown" href="image.html.md">
 <link rel="describedby" href="../../llms.txt" type="text/markdown"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
-    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.1.1 and Furo 2025.12.19 -->
         <title>aix.image - aix</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -287,7 +288,7 @@
 <span class="sd">    With specific model:</span>
 <span class="sd">    &gt;&gt;&gt; image = generate_image(</span>
 <span class="sd">    ...     "Abstract art with vibrant colors",</span>
-<span class="sd">    ...     model="dall-e-3"</span>
+<span class="sd">    ...     model="gpt-image-1.5"</span>
 <span class="sd">    ... )  # doctest: +SKIP</span>
 <span class="sd">"""</span>
 
@@ -352,7 +353,7 @@
 <span class="sd">    Provides convenient access to image data in various formats.</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; img = GeneratedImage(url="https://...", model="dall-e-3")  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; img = GeneratedImage(url="https://...", model="gpt-image-1.5")  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; img.save("output.png")  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; img.show()  # doctest: +SKIP</span>
 <span class="sd">        &gt;&gt;&gt; data = img.as_bytes()  # doctest: +SKIP</span>
@@ -487,7 +488,7 @@
     <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"url"</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedImage</span><span class="p">:</span>
@@ -495,11 +496,13 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        prompt: Text description of the image to generate</span>
-<span class="sd">        model: Model to use (e.g., 'dall-e-2', 'dall-e-3', 'stable-diffusion')</span>
+<span class="sd">        model: Model to use (e.g., 'gpt-image-1.5', 'gpt-image-1-mini', 'stable-diffusion')</span>
 <span class="sd">        size: Image size (e.g., '1024x1024', '512x512', '1792x1024')</span>
 <span class="sd">        quality: Image quality ('standard' or 'hd' for DALL-E 3)</span>
 <span class="sd">        style: Image style ('vivid' or 'natural' for DALL-E 3)</span>
-<span class="sd">        response_format: Format of response ('url' or 'b64_json')</span>
+<span class="sd">        response_format: Format of response ('url' or 'b64_json'). Left out of the</span>
+<span class="sd">            request when None, since some providers and models (OpenAI's gpt-image</span>
+<span class="sd">            models, and the images endpoint as of 2026) reject the parameter.</span>
 <span class="sd">        api_key: Explicit API key. If None, resolved from the environment / .env</span>
 <span class="sd">            / AIX config store for the model's provider (see aix.credentials).</span>
 <span class="sd">        **kwargs: Additional provider-specific parameters</span>
@@ -518,9 +521,8 @@
 <span class="sd">        &gt;&gt;&gt; # High quality with DALL-E 3</span>
 <span class="sd">        &gt;&gt;&gt; image = generate_image(</span>
 <span class="sd">        ...     "Abstract art with vibrant colors",</span>
-<span class="sd">        ...     model="dall-e-3",</span>
-<span class="sd">        ...     quality="hd",</span>
-<span class="sd">        ...     style="vivid"</span>
+<span class="sd">        ...     model="gpt-image-1.5",</span>
+<span class="sd">        ...     quality="high",</span>
 <span class="sd">        ... )  # doctest: +SKIP</span>
 
 <span class="sd">        &gt;&gt;&gt; # Specific size</span>
@@ -547,8 +549,9 @@
         <span class="s2">"prompt"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
         <span class="s2">"n"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
         <span class="s2">"size"</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
-        <span class="s2">"response_format"</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
     <span class="p">}</span>
+    <span class="k">if</span> <span class="n">response_format</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"response_format"</span><span class="p">]</span> <span class="o">=</span> <span class="n">response_format</span>
 
     <span class="k">if</span> <span class="n">quality</span><span class="p">:</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">"quality"</span><span class="p">]</span> <span class="o">=</span> <span class="n">quality</span>
@@ -590,7 +593,7 @@
     <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"url"</span><span class="p">,</span>
+    <span class="n">response_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">GeneratedImage</span><span class="p">]:</span>
@@ -603,7 +606,7 @@
 <span class="sd">        size: Image size</span>
 <span class="sd">        quality: Image quality</span>
 <span class="sd">        style: Image style</span>
-<span class="sd">        response_format: Format of response</span>
+<span class="sd">        response_format: Format of response, sent only when given</span>
 <span class="sd">        **kwargs: Additional provider-specific parameters</span>
 
 <span class="sd">    Returns:</span>
@@ -638,8 +641,9 @@
         <span class="s2">"prompt"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
         <span class="s2">"n"</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span>
         <span class="s2">"size"</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
-        <span class="s2">"response_format"</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
     <span class="p">}</span>
+    <span class="k">if</span> <span class="n">response_format</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">"response_format"</span><span class="p">]</span> <span class="o">=</span> <span class="n">response_format</span>
 
     <span class="k">if</span> <span class="n">quality</span><span class="p">:</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">"quality"</span><span class="p">]</span> <span class="o">=</span> <span class="n">quality</span>
@@ -873,7 +877,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=3e38c7be"></script>
+</div><script src="../../_static/documentation_options.js?v=9778b3d8"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

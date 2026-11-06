@@ -6,10 +6,11 @@
 <link rel="alternate" type="text/markdown" href="config.html.md">
 <link rel="describedby" href="../../llms.txt" type="text/markdown"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
-    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.1.1 and Furo 2025.12.19 -->
         <title>aix.config - aix</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -430,15 +431,19 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">ImageConfig</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Defaults for ``generate_image`` / ``generate_images`` and the edit/variation calls.</span>
 
-<span class="sd">    ``edit_model`` and ``variation_model`` are separate from ``model`` because the</span>
-<span class="sd">    default generation model (``dall-e-3``) does not support edits or variations.</span>
+<span class="sd">    OpenAI retired the DALL-E models from its images endpoint (``dall-e-3`` returns</span>
+<span class="sd">    "does not exist" as of late 2026), so the defaults are the ``gpt-image`` family:</span>
+<span class="sd">    ``gpt-image-1.5`` for generation and edits. ``quality`` for that family is one of</span>
+<span class="sd">    ``low``, ``medium``, ``high`` or ``auto`` (DALL-E's ``standard``/``hd`` are</span>
+<span class="sd">    rejected). Variations are still a DALL-E 2 feature with no gpt-image equivalent;</span>
+<span class="sd">    ``variation_model`` is kept for callers whose provider still serves it.</span>
 <span class="sd">    """</span>
 
-    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">"dall-e-3"</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"image_model"</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">"gpt-image-1.5"</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"image_model"</span><span class="p">)</span>
     <span class="n">size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">"1024x1024"</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"image_size"</span><span class="p">)</span>
-    <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">"standard"</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"image_quality"</span><span class="p">)</span>
+    <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">"auto"</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"image_quality"</span><span class="p">)</span>
     <span class="n">num_images</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"image_num_images"</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-    <span class="n">edit_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">"dall-e-2"</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"image_edit_model"</span><span class="p">)</span>
+    <span class="n">edit_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">"gpt-image-1.5"</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"image_edit_model"</span><span class="p">)</span>
     <span class="n">variation_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_opt</span><span class="p">(</span><span class="s2">"dall-e-2"</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="s2">"image_variation_model"</span><span class="p">)</span></div>
 
 
@@ -796,7 +801,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=3e38c7be"></script>
+</div><script src="../../_static/documentation_options.js?v=9778b3d8"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

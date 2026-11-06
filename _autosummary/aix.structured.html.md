@@ -58,26 +58,44 @@ from `response_schema=`.
 
 The schema name sent to the provider.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### json_schema
 
 The caller’s JSON Schema dict (what a value must match).
+
+* **Type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 #### wire_schema
 
 What is sent: `json_schema` itself, or wrapped as
 `{"value": json_schema}` when its root is not an object.
 
+* **Type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
 #### strict_compatible
 
 Whether `wire_schema` satisfies strict-mode rules.
+
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### wrapped
 
 Whether `wire_schema` is the `{"value": ...}` wrapper.
 
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
 #### source
 
 What the caller passed (a dict or a Pydantic model class).
+
+* **Type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
 
 #### *classmethod* from_schema(schema)
 

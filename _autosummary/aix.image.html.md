@@ -31,7 +31,7 @@ With specific model:
 ```pycon
 >>> image = generate_image(
 ...     "Abstract art with vibrant colors",
-...     model="dall-e-3"
+...     model="gpt-image-1.5"
 ... )
 ```
 
@@ -59,7 +59,7 @@ Provides convenient access to image data in various formats.
 ### Examples
 
 ```pycon
->>> img = GeneratedImage(url="https://...", model="dall-e-3")
+>>> img = GeneratedImage(url="https://...", model="gpt-image-1.5")
 >>> img.save("output.png")
 >>> img.show()
 >>> data = img.as_bytes()
@@ -88,7 +88,7 @@ Get image as PIL Image object.
 Save image to file.
 
 * **Parameters:**
-  * **path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
+  * **path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
   * **format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image format (e.g., ‘PNG’, ‘JPEG’). Auto-detected from path if None.
 
 ### Examples
@@ -115,13 +115,13 @@ Requires PIL (Pillow) to be installed.
 Create variations of an existing image.
 
 * **Parameters:**
-  * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
+  * **image_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.variation_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
 * **Return type:**
-  `Union`[[`GeneratedImage`](#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](#aix.image.GeneratedImage)]]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`GeneratedImage`](#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](#aix.image.GeneratedImage)]]
 * **Returns:**
   GeneratedImage or list of GeneratedImage objects
 
@@ -143,15 +143,15 @@ Create variations of an existing image.
 Edit an existing image based on a prompt.
 
 * **Parameters:**
-  * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the image to edit
+  * **image_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the image to edit
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Description of the desired edit
-  * **mask_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Optional path to mask image (transparent areas will be edited)
+  * **mask_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Optional path to mask image (transparent areas will be edited)
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.edit_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
 * **Return type:**
-  `Union`[[`GeneratedImage`](#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](#aix.image.GeneratedImage)]]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`GeneratedImage`](#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](#aix.image.GeneratedImage)]]
 * **Returns:**
   GeneratedImage or list of GeneratedImage objects
 
@@ -167,17 +167,19 @@ Edit an existing image based on a prompt.
 >>> edited.save("edited_photo.png")
 ```
 
-### aix.image.generate_image(prompt, , model=None, size=None, quality=None, style=None, response_format='url', api_key=None, \*\*kwargs)
+### aix.image.generate_image(prompt, , model=None, size=None, quality=None, style=None, response_format=None, api_key=None, \*\*kwargs)
 
 Generate a single image from a text prompt.
 
 * **Parameters:**
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Text description of the image to generate
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘dall-e-2’, ‘dall-e-3’, ‘stable-diffusion’)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘gpt-image-1.5’, ‘gpt-image-1-mini’, ‘stable-diffusion’)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image size (e.g., ‘1024x1024’, ‘512x512’, ‘1792x1024’)
   * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image quality (‘standard’ or ‘hd’ for DALL-E 3)
   * **style** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image style (‘vivid’ or ‘natural’ for DALL-E 3)
-  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response (‘url’ or ‘b64_json’)
+  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response (‘url’ or ‘b64_json’). Left out of the
+    request when None, since some providers and models (OpenAI’s gpt-image
+    models, and the images endpoint as of 2026) reject the parameter.
   * **api_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Explicit API key. If None, resolved from the environment / .env
     / AIX config store for the model’s provider (see aix.credentials).
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -200,9 +202,8 @@ Generate a single image from a text prompt.
 >>> # High quality with DALL-E 3
 >>> image = generate_image(
 ...     "Abstract art with vibrant colors",
-...     model="dall-e-3",
-...     quality="hd",
-...     style="vivid"
+...     model="gpt-image-1.5",
+...     quality="high",
 ... )
 ```
 
@@ -214,7 +215,7 @@ Generate a single image from a text prompt.
 ... )
 ```
 
-### aix.image.generate_images(prompt, , n=None, model=None, size=None, quality=None, style=None, response_format='url', api_key=None, \*\*kwargs)
+### aix.image.generate_images(prompt, , n=None, model=None, size=None, quality=None, style=None, response_format=None, api_key=None, \*\*kwargs)
 
 Generate multiple images from a text prompt.
 
@@ -225,7 +226,7 @@ Generate multiple images from a text prompt.
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image size
   * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image quality
   * **style** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image style
-  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response
+  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response, sent only when given
   * **\*\*kwargs** – Additional provider-specific parameters
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](#aix.image.GeneratedImage)]

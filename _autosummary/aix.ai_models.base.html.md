@@ -53,7 +53,7 @@ Registry for managing model connectors.
 True
 ```
 
-### *class* aix.ai_models.base.Model(id, provider, context_size=None, is_local=False, capabilities=<factory>, cost_per_token=<factory>, tags=<factory>, connector_metadata=<factory>, custom_metadata=<factory>)
+### *class* aix.ai_models.base.Model(id, provider, context_size=None, is_local=False, capabilities=dict(), cost_per_token=dict(), tags=set(), connector_metadata=dict(), custom_metadata=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -74,9 +74,6 @@ Represents an AI model with its metadata.
 
 Check if model matches given criteria.
 
-* **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
-
 ```pycon
 >>> model = Model(id="gpt-4", provider="openai", is_local=False)
 >>> model.matches_filter(provider="openai")
@@ -84,6 +81,9 @@ True
 >>> model.matches_filter(is_local=True)
 False
 ```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### to_dict()
 
@@ -111,9 +111,6 @@ True
 
 Filter models by multiple criteria.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](#aix.ai_models.base.Model)]
-
 ```pycon
 >>> registry = ModelRegistry()
 >>> registry["gpt-4"] = Model(id="gpt-4", provider="openai", context_size=8192)
@@ -122,6 +119,9 @@ Filter models by multiple criteria.
 >>> len(local_models)
 1
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](#aix.ai_models.base.Model)]
 
 ### *class* aix.ai_models.base.ModelSource
 

@@ -9,10 +9,11 @@
 <link rel="alternate" type="text/markdown" href="aix.config.html.md">
 <link rel="describedby" href="llms.txt"><link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="aix.ai_models" href="aix.ai_models.html"><link rel="prev" title="aix" href="aix.html">
 
-    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.1.1 and Furo 2025.12.19 -->
         <title>aix.config - aix</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -397,7 +398,7 @@ tasks are isolated).</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="aix.config.AixConfig">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">AixConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embeddings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#AixConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.AixConfig" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">AixConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ChatConfig()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embeddings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">EmbeddingConfig()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ImageConfig()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">AudioConfig()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">VideoConfig()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">VisionConfig()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#AixConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.AixConfig" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Top-level AIX configuration (single source of truth for defaults).</p>
 <dl class="field-list simple">
@@ -433,11 +434,15 @@ tasks are isolated).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="aix.config.ImageConfig">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">ImageConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dall-e-3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1024x1024'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edit_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dall-e-2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dall-e-2'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#ImageConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.ImageConfig" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">ImageConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gpt-image-1.5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1024x1024'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edit_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gpt-image-1.5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dall-e-2'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#ImageConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.ImageConfig" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Defaults for <code class="docutils literal notranslate"><span class="pre">generate_image</span></code> / <code class="docutils literal notranslate"><span class="pre">generate_images</span></code> and the edit/variation calls.</p>
-<p><code class="docutils literal notranslate"><span class="pre">edit_model</span></code> and <code class="docutils literal notranslate"><span class="pre">variation_model</span></code> are separate from <code class="docutils literal notranslate"><span class="pre">model</span></code> because the
-default generation model (<code class="docutils literal notranslate"><span class="pre">dall-e-3</span></code>) does not support edits or variations.</p>
+<p>OpenAI retired the DALL-E models from its images endpoint (<code class="docutils literal notranslate"><span class="pre">dall-e-3</span></code> returns
+“does not exist” as of late 2026), so the defaults are the <code class="docutils literal notranslate"><span class="pre">gpt-image</span></code> family:
+<code class="docutils literal notranslate"><span class="pre">gpt-image-1.5</span></code> for generation and edits. <code class="docutils literal notranslate"><span class="pre">quality</span></code> for that family is one of
+<code class="docutils literal notranslate"><span class="pre">low</span></code>, <code class="docutils literal notranslate"><span class="pre">medium</span></code>, <code class="docutils literal notranslate"><span class="pre">high</span></code> or <code class="docutils literal notranslate"><span class="pre">auto</span></code> (DALL-E’s <code class="docutils literal notranslate"><span class="pre">standard</span></code>/<code class="docutils literal notranslate"><span class="pre">hd</span></code> are
+rejected). Variations are still a DALL-E 2 feature with no gpt-image equivalent;
+<code class="docutils literal notranslate"><span class="pre">variation_model</span></code> is kept for callers whose provider still serves it.</p>
 <dl class="field-list simple">
 </dl>
 </dd></dl>
@@ -479,11 +484,6 @@ or the <code class="docutils literal notranslate"><span class="pre">[vision]</sp
 <dt class="sig sig-object py" id="aix.config.configure">
 <span class="sig-prename descclassname"><span class="pre">aix.config.</span></span><span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/config.html#configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.config.configure" title="Link to this definition">¶</a></dt>
 <dd><p>Apply runtime overrides to the active config and return it.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#aix.config.AixConfig" title="aix.config.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a></span></p>
-</dd>
-</dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">chat_model</span><span class="o">=</span><span class="s2">"openai/gpt-4o-mini"</span><span class="p">)</span>
@@ -494,6 +494,11 @@ or the <code class="docutils literal notranslate"><span class="pre">[vision]</sp
 <span class="go">0.2</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#aix.config.AixConfig" title="aix.config.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -587,11 +592,6 @@ typically begins with an empty context and sees the process-wide config (carry a
 scope into it with <a class="reference external" href="https://docs.python.org/3/library/contextvars.html#contextvars.copy_context" title="(in Python v3.15)"><code class="xref py py-func docutils literal notranslate"><span class="pre">contextvars.copy_context()</span></code></a>); aix’s own worker pools
 (<code class="docutils literal notranslate"><span class="pre">sample</span></code>, <code class="docutils literal notranslate"><span class="pre">batch_chat</span></code>…) propagate it. An asyncio task created inside the
 block keeps the scope for its lifetime.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference internal" href="#aix.config.AixConfig" title="aix.config.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a>]</span></p>
-</dd>
-</dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">aix</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">config</span><span class="o">.</span><span class="n">using</span><span class="p">(</span><span class="n">chat_temperature</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span> <span class="k">as</span> <span class="n">c</span><span class="p">:</span>
@@ -599,6 +599,11 @@ block keeps the scope for its lifetime.</p>
 <span class="go">0.0</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference internal" href="#aix.config.AixConfig" title="aix.config.AixConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">AixConfig</span></code></a>]</span></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -680,7 +685,7 @@ block keeps the scope for its lifetime.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3e38c7be"></script>
+</div><script src="../_static/documentation_options.js?v=9778b3d8"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

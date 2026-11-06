@@ -106,15 +106,15 @@ via [`resolve_api_key()`](#aix.credentials.resolve_api_key) (explicit arg, env/.
 
 Returns `True` when a key is available.
 
-* **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
-
 ### Examples
 
 ```pycon
 >>> check_requirements("gpt-4o", api_key="sk-explicit")
 True
 ```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### aix.credentials.infer_provider(model_or_provider)
 
@@ -123,9 +123,6 @@ Infer the provider name from a model id (or pass through a provider name).
 Uses LiteLLM’s `get_llm_provider` when available. If `model_or_provider`
 is already a known provider name (a key in `PROVIDER_ENV_VARS`), it is
 returned as-is. Returns `None` if the provider cannot be determined.
-
-* **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### Examples
 
@@ -138,12 +135,12 @@ returned as-is. Returns `None` if the provider cannot be determined.
 True
 ```
 
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 ### aix.credentials.provider_env_vars(provider)
 
 Return the env-var name(s) for `provider` as a list (possibly empty).
-
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### Examples
 
@@ -155,6 +152,9 @@ Return the env-var name(s) for `provider` as a list (possibly empty).
 >>> provider_env_vars("totally-unknown-provider")
 []
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### aix.credentials.requires_credentials(default_model)
 

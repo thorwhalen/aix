@@ -80,7 +80,7 @@ Get video as bytes.
 Save video to file.
 
 * **Parameters:**
-  **path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
+  **path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
 
 ### Examples
 
@@ -104,7 +104,7 @@ Wait for video generation to complete (for async operations).
 Animate a static image into a video.
 
 * **Parameters:**
-  * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
+  * **image_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional text prompt to guide the animation
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Video generation model to use
   * **duration** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Animation duration in seconds
@@ -154,7 +154,7 @@ Estimate the cost of video generation.
 Extend an existing video with additional generated content.
 
 * **Parameters:**
-  * **video_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source video
+  * **video_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source video
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional text prompt to guide the extension
   * **extend_duration** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – How many seconds to add
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Video generation model
@@ -293,7 +293,7 @@ Get list of available video generation providers.
 Interpolate frames to create smoother video.
 
 * **Parameters:**
-  * **video_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source video
+  * **video_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source video
   * **target_fps** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Target frames per second
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Frame interpolation model
   * **\*\*kwargs** – Additional provider-specific parameters

@@ -61,9 +61,15 @@ replied with text starting “ERROR:”, and to reach the original exception.
 
 The exception that was caught.
 
+* **Type:**
+  [`BaseException`](https://docs.python.org/3/builtins/exceptions.html#BaseException)
+
 #### index
 
 Position of the failed item in the input, when known.
+
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]
 
 ### Examples
 
@@ -103,7 +109,7 @@ Clear stored results and errors.
 Process chat prompts and store results.
 
 * **Parameters:**
-  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Prompts to process
+  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Prompts to process
   * **\*\*kwargs** – Additional parameters for batch_chat()
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
@@ -140,7 +146,7 @@ This function processes multiple prompts efficiently by:
 3. Yielding results in the same order as input
 
 * **Parameters:**
-  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Iterable of prompts (strings or message lists)
+  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Iterable of prompts (strings or message lists)
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use for all prompts
   * **batch_size** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of prompts to process in each batch
   * **max_workers** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Maximum number of parallel workers

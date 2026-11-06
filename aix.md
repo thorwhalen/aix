@@ -1,4 +1,4 @@
-> built 2026-10-13 07:17 UTC from 12cee76 (master) · aix 0.0.52. Details: build_info.json
+> built 2026-11-06 11:10 UTC from 6a239e9 (master) · aix 0.0.53. Details: build_info.json
 
 # index.html.md
 
@@ -132,9 +132,9 @@ temperature = 1.0
 model = "text-embedding-3-small"
 
 [image]
-model = "dall-e-3"
+model = "gpt-image-1.5"
 size = "1024x1024"
-edit_model = "dall-e-2"
+edit_model = "gpt-image-1.5"
 
 [audio]
 tts_model = "gpt-4o-mini-tts"
@@ -516,7 +516,7 @@ image.save("landscape.png")
 
 # High quality with DALL-E 3
 image = generate_image(
-    "Abstract art with vibrant colors", model="dall-e-3", quality="hd", style="vivid"
+    "Abstract art with vibrant colors", model="gpt-image-1.5", quality="high"
 )
 
 # Generate multiple variations
@@ -876,7 +876,7 @@ Registry for managing model connectors.
 True
 ```
 
-### *class* aix.ai_models.base.Model(id, provider, context_size=None, is_local=False, capabilities=<factory>, cost_per_token=<factory>, tags=<factory>, connector_metadata=<factory>, custom_metadata=<factory>)
+### *class* aix.ai_models.base.Model(id, provider, context_size=None, is_local=False, capabilities=dict(), cost_per_token=dict(), tags=set(), connector_metadata=dict(), custom_metadata=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -897,9 +897,6 @@ Represents an AI model with its metadata.
 
 Check if model matches given criteria.
 
-* **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
-
 ```pycon
 >>> model = Model(id="gpt-4", provider="openai", is_local=False)
 >>> model.matches_filter(provider="openai")
@@ -907,6 +904,9 @@ True
 >>> model.matches_filter(is_local=True)
 False
 ```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### to_dict()
 
@@ -934,9 +934,6 @@ True
 
 Filter models by multiple criteria.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> registry = ModelRegistry()
 >>> registry["gpt-4"] = Model(id="gpt-4", provider="openai", context_size=8192)
@@ -945,6 +942,9 @@ Filter models by multiple criteria.
 >>> len(local_models)
 1
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 ### *class* aix.ai_models.base.ModelSource
 
@@ -1066,9 +1066,6 @@ Format metadata for DSPy framework.
 
 Format for DSPy.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> connector = DSPyConnector()
 >>> model = Model(id="gpt-4", provider="openai")
@@ -1076,6 +1073,9 @@ Format for DSPy.
 >>> "model" in metadata
 True
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 #### *property* name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -1091,9 +1091,6 @@ Connector for LangChain library.
 
 Format for LangChain.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> connector = LangChainConnector()
 >>> model = Model(id="gpt-4", provider="openai")
@@ -1102,11 +1099,14 @@ Format for LangChain.
 'gpt-4'
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
 #### *property* name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 Unique identifier for this connector.
 
-### *class* aix.ai_models.Model(id, provider, context_size=None, is_local=False, capabilities=<factory>, cost_per_token=<factory>, tags=<factory>, connector_metadata=<factory>, custom_metadata=<factory>)
+### *class* aix.ai_models.Model(id, provider, context_size=None, is_local=False, capabilities=dict(), cost_per_token=dict(), tags=set(), connector_metadata=dict(), custom_metadata=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1127,9 +1127,6 @@ Represents an AI model with its metadata.
 
 Check if model matches given criteria.
 
-* **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
-
 ```pycon
 >>> model = Model(id="gpt-4", provider="openai", is_local=False)
 >>> model.matches_filter(provider="openai")
@@ -1137,6 +1134,9 @@ True
 >>> model.matches_filter(is_local=True)
 False
 ```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### to_dict()
 
@@ -1164,9 +1164,6 @@ Combines model registry, sources, and connectors into a single facade.
 
 Add tags to a model.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -1175,6 +1172,9 @@ Add tags to a model.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### *property* connectors *: [ConnectorRegistry](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.ConnectorRegistry)*
 
 Access to connector registry.
@@ -1182,9 +1182,6 @@ Access to connector registry.
 #### create_model_group(group_name, model_ids)
 
 Create a named group of models using tags.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -1195,6 +1192,9 @@ Create a named group of models using tags.
 >>> len(premium)
 2
 ```
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### discover_all(, auto_register=True)
 
@@ -1242,9 +1242,6 @@ Get formatted metadata for a specific connector.
 
 Get a specific model by ID.
 
-* **Return type:**
-  [`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -1252,6 +1249,9 @@ Get a specific model by ID.
 >>> model.id
 'gpt-4'
 ```
+
+* **Return type:**
+  [`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)
 
 #### list_model_groups()
 
@@ -1266,9 +1266,6 @@ List all model groups.
 
 List models with optional filtering.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -1279,6 +1276,9 @@ List models with optional filtering.
 >>> local[0].id
 'llama2'
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 #### list_sources()
 
@@ -1302,9 +1302,6 @@ True
 
 Register a model connector.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> manager = ModelManager()
 >>> connector = OpenAIConnector()
@@ -1313,12 +1310,12 @@ Register a model connector.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### register_source(name, source)
 
 Register a model discovery source.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -1328,12 +1325,12 @@ Register a model discovery source.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### set_custom_metadata(model_id, key, value)
 
 Set custom metadata on a model.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -1342,6 +1339,9 @@ Set custom metadata on a model.
 >>> manager.models["gpt-4"].custom_metadata["my_note"]
 'Use for production'
 ```
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* aix.ai_models.ModelRegistry(, storage_path=None)
 
@@ -1362,9 +1362,6 @@ True
 
 Filter models by multiple criteria.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> registry = ModelRegistry()
 >>> registry["gpt-4"] = Model(id="gpt-4", provider="openai", context_size=8192)
@@ -1373,6 +1370,9 @@ Filter models by multiple criteria.
 >>> len(local_models)
 1
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 ### *class* aix.ai_models.ModelSource
 
@@ -1399,9 +1399,6 @@ Format metadata for direct Ollama API calls.
 
 Format for Ollama API.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> connector = OllamaConnector()
 >>> model = Model(id="ollama/llama2", provider="ollama", is_local=True)
@@ -1410,6 +1407,9 @@ Format for Ollama API.
 >>> metadata["model"]
 'llama2'
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 #### *property* name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -1427,15 +1427,15 @@ Queries the Ollama API for models available on the local machine.
 
 Fetch locally installed Ollama models.
 
-* **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> source = OllamaSource()
 >>> models = list(source.discover_models())  # May be empty if Ollama not running
 >>> all(m.is_local for m in models)
 True
 ```
+
+* **Return type:**
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 ### *class* aix.ai_models.OpenAIConnector
 
@@ -1487,15 +1487,15 @@ OpenRouter maintains a comprehensive registry of models across providers.
 
 Fetch models from OpenRouter API.
 
-* **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> source = OpenRouterSource()
 >>> models = list(source.discover_models())
 >>> len(models) > 0  # Should find many models
 True
 ```
+
+* **Return type:**
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 ### *class* aix.ai_models.ProviderAPISource(provider_name, , api_key=None, base_url='https://api.openai.com/v1', timeout=30)
 
@@ -1518,14 +1518,14 @@ Requires valid API key for the provider.
 
 Get a pre-configured model manager.
 
-* **Return type:**
-  [`ModelManager`](_autosummary/aix.ai_models.manager.html.md#aix.ai_models.manager.ModelManager)
-
 ```pycon
 >>> manager = get_manager()
 >>> len(manager.connectors) > 0
 True
 ```
+
+* **Return type:**
+  [`ModelManager`](_autosummary/aix.ai_models.manager.html.md#aix.ai_models.manager.ModelManager)
 
 ### Modules
 
@@ -1572,9 +1572,6 @@ Combines model registry, sources, and connectors into a single facade.
 
 Add tags to a model.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -1583,6 +1580,9 @@ Add tags to a model.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### *property* connectors *: [ConnectorRegistry](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.ConnectorRegistry)*
 
 Access to connector registry.
@@ -1590,9 +1590,6 @@ Access to connector registry.
 #### create_model_group(group_name, model_ids)
 
 Create a named group of models using tags.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -1603,6 +1600,9 @@ Create a named group of models using tags.
 >>> len(premium)
 2
 ```
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### discover_all(, auto_register=True)
 
@@ -1650,9 +1650,6 @@ Get formatted metadata for a specific connector.
 
 Get a specific model by ID.
 
-* **Return type:**
-  [`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -1660,6 +1657,9 @@ Get a specific model by ID.
 >>> model.id
 'gpt-4'
 ```
+
+* **Return type:**
+  [`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)
 
 #### list_model_groups()
 
@@ -1674,9 +1674,6 @@ List all model groups.
 
 List models with optional filtering.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -1687,6 +1684,9 @@ List models with optional filtering.
 >>> local[0].id
 'llama2'
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 #### list_sources()
 
@@ -1710,9 +1710,6 @@ True
 
 Register a model connector.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> manager = ModelManager()
 >>> connector = OpenAIConnector()
@@ -1721,12 +1718,12 @@ Register a model connector.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### register_source(name, source)
 
 Register a model discovery source.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -1736,12 +1733,12 @@ Register a model discovery source.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### set_custom_metadata(model_id, key, value)
 
 Set custom metadata on a model.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -1751,18 +1748,21 @@ Set custom metadata on a model.
 'Use for production'
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### aix.ai_models.manager.get_manager(storage_path=None)
 
 Get a pre-configured model manager.
-
-* **Return type:**
-  [`ModelManager`](_autosummary/aix.ai_models.manager.html.md#aix.ai_models.manager.ModelManager)
 
 ```pycon
 >>> manager = get_manager()
 >>> len(manager.connectors) > 0
 True
 ```
+
+* **Return type:**
+  [`ModelManager`](_autosummary/aix.ai_models.manager.html.md#aix.ai_models.manager.ModelManager)
 
 
 # _autosummary/aix.ai_models.sources.html.md
@@ -1796,9 +1796,6 @@ Format metadata for DSPy framework.
 
 Format for DSPy.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> connector = DSPyConnector()
 >>> model = Model(id="gpt-4", provider="openai")
@@ -1806,6 +1803,9 @@ Format for DSPy.
 >>> "model" in metadata
 True
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 #### *property* name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -1821,9 +1821,6 @@ Connector for LangChain library.
 
 Format for LangChain.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> connector = LangChainConnector()
 >>> model = Model(id="gpt-4", provider="openai")
@@ -1831,6 +1828,9 @@ Format for LangChain.
 >>> metadata["model_name"]
 'gpt-4'
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 #### *property* name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -1846,9 +1846,6 @@ Format metadata for direct Ollama API calls.
 
 Format for Ollama API.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
-
 ```pycon
 >>> connector = OllamaConnector()
 >>> model = Model(id="ollama/llama2", provider="ollama", is_local=True)
@@ -1857,6 +1854,9 @@ Format for Ollama API.
 >>> metadata["model"]
 'llama2'
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 #### *property* name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -1874,15 +1874,15 @@ Queries the Ollama API for models available on the local machine.
 
 Fetch locally installed Ollama models.
 
-* **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> source = OllamaSource()
 >>> models = list(source.discover_models())  # May be empty if Ollama not running
 >>> all(m.is_local for m in models)
 True
 ```
+
+* **Return type:**
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 ### *class* aix.ai_models.sources.OpenAIConnector
 
@@ -1934,15 +1934,15 @@ OpenRouter maintains a comprehensive registry of models across providers.
 
 Fetch models from OpenRouter API.
 
-* **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> source = OpenRouterSource()
 >>> models = list(source.discover_models())
 >>> len(models) > 0  # Should find many models
 True
 ```
+
+* **Return type:**
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Model`](_autosummary/aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 ### *class* aix.ai_models.sources.ProviderAPISource(provider_name, , api_key=None, base_url='https://api.openai.com/v1', timeout=30)
 
@@ -2045,7 +2045,7 @@ Requires a system audio player or library like pygame/pyaudio.
 Save audio to file.
 
 * **Parameters:**
-  **path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
+  **path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
 
 ### Examples
 
@@ -2126,7 +2126,7 @@ SRT/VTT output. The return type is unchanged either way, so existing callers
 are unaffected.
 
 * **Parameters:**
-  * **audio** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes.
+  * **audio** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes.
   * **engine** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional `scribed` backend id (e.g. `"faster-whisper"`,
     `"deepgram"`). When given, transcription is delegated to scribed
     (which resolves that engine’s own credentials); the LiteLLM path is
@@ -2143,7 +2143,7 @@ are unaffected.
   * **\*\*kwargs** – Additional parameters (forwarded to LiteLLM, or to the scribed
     backend — e.g. `diarize=True`).
 * **Return type:**
-  `Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`TranscriptionResult`](_autosummary/aix.audio.html.md#aix.audio.TranscriptionResult)]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`TranscriptionResult`](_autosummary/aix.audio.html.md#aix.audio.TranscriptionResult)]
 * **Returns:**
   `str` for `response_format` in {text, srt, vtt}, else a
   [`TranscriptionResult`](_autosummary/aix.audio.html.md#aix.audio.TranscriptionResult).
@@ -2168,7 +2168,7 @@ are unaffected.
 Transcribe audio with detailed timestamps.
 
 * **Parameters:**
-  * **audio** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
+  * **audio** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
   * **granularity** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Timestamp granularity (‘word’ or ‘segment’)
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Transcription model
   * **\*\*kwargs** – Additional parameters for transcribe()
@@ -2197,7 +2197,7 @@ Translate audio from any language to English.
 Currently uses Whisper’s translation capability which translates to English.
 
 * **Parameters:**
-  * **audio** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
+  * **audio** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Translation model (typically ‘whisper-1’)
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional text to guide translation
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -2281,9 +2281,15 @@ replied with text starting “ERROR:”, and to reach the original exception.
 
 The exception that was caught.
 
+* **Type:**
+  [`BaseException`](https://docs.python.org/3/builtins/exceptions.html#BaseException)
+
 #### index
 
 Position of the failed item in the input, when known.
+
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]
 
 ### Examples
 
@@ -2323,7 +2329,7 @@ Clear stored results and errors.
 Process chat prompts and store results.
 
 * **Parameters:**
-  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Prompts to process
+  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Prompts to process
   * **\*\*kwargs** – Additional parameters for batch_chat()
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
@@ -2360,7 +2366,7 @@ This function processes multiple prompts efficiently by:
 3. Yielding results in the same order as input
 
 * **Parameters:**
-  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Iterable of prompts (strings or message lists)
+  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Iterable of prompts (strings or message lists)
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use for all prompts
   * **batch_size** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of prompts to process in each batch
   * **max_workers** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Maximum number of parallel workers
@@ -2721,7 +2727,7 @@ best = "anthropic/claude-sonnet-4"
 | [`VisionConfig`](_autosummary/aix.config.html.md#aix.config.VisionConfig)([model])                               | Defaults for `describe_image` (image→text).                                     |
 | [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)([chat, embeddings, image, audio, ...])    | Top-level AIX configuration (single source of truth for defaults).              |
 
-### *class* aix.config.AixConfig(chat=<factory>, embeddings=<factory>, image=<factory>, audio=<factory>, video=<factory>, vision=<factory>, aliases=<factory>)
+### *class* aix.config.AixConfig(chat=ChatConfig(), embeddings=EmbeddingConfig(), image=ImageConfig(), audio=AudioConfig(), video=VideoConfig(), vision=VisionConfig(), aliases=<factory>)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2745,14 +2751,18 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `embeddings` / `embed`.
 
-### *class* aix.config.ImageConfig(model='dall-e-3', size='1024x1024', quality='standard', num_images=1, edit_model='dall-e-2', variation_model='dall-e-2')
+### *class* aix.config.ImageConfig(model='gpt-image-1.5', size='1024x1024', quality='auto', num_images=1, edit_model='gpt-image-1.5', variation_model='dall-e-2')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `generate_image` / `generate_images` and the edit/variation calls.
 
-`edit_model` and `variation_model` are separate from `model` because the
-default generation model (`dall-e-3`) does not support edits or variations.
+OpenAI retired the DALL-E models from its images endpoint (`dall-e-3` returns
+“does not exist” as of late 2026), so the defaults are the `gpt-image` family:
+`gpt-image-1.5` for generation and edits. `quality` for that family is one of
+`low`, `medium`, `high` or `auto` (DALL-E’s `standard`/`hd` are
+rejected). Variations are still a DALL-E 2 feature with no gpt-image equivalent;
+`variation_model` is kept for callers whose provider still serves it.
 
 ### *class* aix.config.VideoConfig(provider=None)
 
@@ -2782,9 +2792,6 @@ Path to the user config file (env `AIX_CONFIG_FILE` overrides default).
 
 Apply runtime overrides to the active config and return it.
 
-* **Return type:**
-  [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)
-
 ### Examples
 
 ```pycon
@@ -2796,6 +2803,9 @@ Apply runtime overrides to the active config and return it.
 >>> config.get_config().chat.temperature
 0.2
 ```
+
+* **Return type:**
+  [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)
 
 ### aix.config.get_config()
 
@@ -2874,9 +2884,6 @@ scope into it with [`contextvars.copy_context()`](https://docs.python.org/3/libr
 (`sample`, `batch_chat`…) propagate it. An asyncio task created inside the
 block keeps the scope for its lifetime.
 
-* **Return type:**
-  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)]
-
 ### Examples
 
 ```pycon
@@ -2885,6 +2892,9 @@ block keeps the scope for its lifetime.
 ...     c.chat.temperature
 0.0
 ```
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)]
 
 
 # _autosummary/aix.credentials.html.md
@@ -2997,15 +3007,15 @@ via [`resolve_api_key()`](_autosummary/aix.credentials.html.md#aix.credentials.r
 
 Returns `True` when a key is available.
 
-* **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
-
 ### Examples
 
 ```pycon
 >>> check_requirements("gpt-4o", api_key="sk-explicit")
 True
 ```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### aix.credentials.infer_provider(model_or_provider)
 
@@ -3014,9 +3024,6 @@ Infer the provider name from a model id (or pass through a provider name).
 Uses LiteLLM’s `get_llm_provider` when available. If `model_or_provider`
 is already a known provider name (a key in `PROVIDER_ENV_VARS`), it is
 returned as-is. Returns `None` if the provider cannot be determined.
-
-* **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### Examples
 
@@ -3029,12 +3036,12 @@ returned as-is. Returns `None` if the provider cannot be determined.
 True
 ```
 
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 ### aix.credentials.provider_env_vars(provider)
 
 Return the env-var name(s) for `provider` as a list (possibly empty).
-
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### Examples
 
@@ -3046,6 +3053,9 @@ Return the env-var name(s) for `provider` as a list (possibly empty).
 >>> provider_env_vars("totally-unknown-provider")
 []
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### aix.credentials.requires_credentials(default_model)
 
@@ -3301,7 +3311,7 @@ For detailed documentation, see: [https://github.com/thorwhalen/aix](https://git
 | [`SchemaValidationError`](_autosummary/aix.html.md#aix.SchemaValidationError)(message, \*[, text, detail]) | A reply was not JSON, or did not match the response schema.                                                  |
 | [`ConstraintViolation`](_autosummary/aix.html.md#aix.ConstraintViolation)(message, \*[, answer, ...])    | Raised when an LLM answer does not satisfy the requested constraint.                                         |
 
-### *class* aix.AixConfig(chat=<factory>, embeddings=<factory>, image=<factory>, audio=<factory>, video=<factory>, vision=<factory>, aliases=<factory>)
+### *class* aix.AixConfig(chat=ChatConfig(), embeddings=EmbeddingConfig(), image=ImageConfig(), audio=AudioConfig(), video=VideoConfig(), vision=VisionConfig(), aliases=<factory>)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3323,9 +3333,15 @@ replied with text starting “ERROR:”, and to reach the original exception.
 
 The exception that was caught.
 
+* **Type:**
+  [`BaseException`](https://docs.python.org/3/builtins/exceptions.html#BaseException)
+
 #### index
 
 Position of the failed item in the input, when known.
+
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]
 
 ### Examples
 
@@ -3365,7 +3381,7 @@ Clear stored results and errors.
 Process chat prompts and store results.
 
 * **Parameters:**
-  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Prompts to process
+  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Prompts to process
   * **\*\*kwargs** – Additional parameters for batch_chat()
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
@@ -3441,6 +3457,9 @@ requested). A choice with no text content (e.g. a pure tool call)
 is `""`; list-of-parts content is reduced to its joined text parts.
 Tool calls themselves are not surfaced here – read them from `raw`.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### finish_reasons
 
 Why each choice stopped (`"stop"`, `"length"`,
@@ -3448,20 +3467,32 @@ Why each choice stopped (`"stop"`, `"length"`,
 `None` where the provider did not say. `"length"` means the
 text was truncated by `max_tokens`.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### usage
 
 Tokens billed for the whole call (all choices together), or
 `None` if the provider did not report usage (so filter before
 summing: `sum((c.usage for c in cs if c.usage), Usage())`).
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Usage`](_autosummary/aix.html.md#aix.Usage)]
+
 #### model
 
 The model id the provider reports having served the call, which
 can differ from the one requested (aliases, dated snapshots).
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 #### raw
 
 The untouched LiteLLM response, for anything not surfaced here.
+
+* **Type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
 
 #### system_fingerprint
 
@@ -3470,10 +3501,16 @@ configuration, when it reports one (OpenAI does). Seeded outputs
 are only comparable across calls with the same fingerprint. A
 response replayed from a cache carries its *original* fingerprint.
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 #### values
 
 With `response_schema=`: each choice’s validated value (a
 Pydantic instance for a Pydantic schema), `None` where invalid.
+
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
 #### errors
 
@@ -3482,15 +3519,24 @@ value – the [`SchemaValidationError`](_autosummary/aix.structured.html.md#aix.
 reply still invalid after the repair retries (or a refusal), or the
 exception a repair request raised.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
+
 #### schema_mode
 
 How the schema was enforced: `"strict"`, `"schema"`,
 `"json_mode"` or `"prompt"` (see [`aix.structured`](_autosummary/aix.structured.html.md#module-aix.structured));
 `None` without one.
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 #### repairs
 
 How many repair requests were made (their tokens are in `usage`).
+
+* **Type:**
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 ```pycon
 >>> c = Completion(texts=("a", "b"), finish_reasons=("stop", "length"))
@@ -3498,7 +3544,7 @@ How many repair requests were made (their tokens are in `usage`).
 ('a', 'stop')
 ```
 
-#### *property* finish_reason *: [str](https://docs.python.org/3/builtins/stdtypes.html#str) | [None](https://docs.python.org/3/builtins/constants.html#None)*
+#### *property* finish_reason *: [Optional](https://docs.python.org/3/library/typing.html#typing.Optional)[[str](https://docs.python.org/3/builtins/stdtypes.html#str)]*
 
 The first choice’s finish reason.
 
@@ -3635,7 +3681,7 @@ Requires a system audio player or library like pygame/pyaudio.
 Save audio to file.
 
 * **Parameters:**
-  **path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
+  **path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
 
 ### Examples
 
@@ -3655,7 +3701,7 @@ Provides convenient access to image data in various formats.
 ### Examples
 
 ```pycon
->>> img = GeneratedImage(url="https://...", model="dall-e-3")
+>>> img = GeneratedImage(url="https://...", model="gpt-image-1.5")
 >>> img.save("output.png")
 >>> img.show()
 >>> data = img.as_bytes()
@@ -3684,7 +3730,7 @@ Get image as PIL Image object.
 Save image to file.
 
 * **Parameters:**
-  * **path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
+  * **path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
   * **format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image format (e.g., ‘PNG’, ‘JPEG’). Auto-detected from path if None.
 
 ### Examples
@@ -3737,7 +3783,7 @@ Get video as bytes.
 Save video to file.
 
 * **Parameters:**
-  **path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
+  **path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
 
 ### Examples
 
@@ -3756,7 +3802,7 @@ Wait for video generation to complete (for async operations).
   * [**TimeoutError**](https://docs.python.org/3/builtins/exceptions.html#TimeoutError) – If generation doesn’t complete within max_wait
   * [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – If generation fails
 
-### *class* aix.ImageComparison(match, confidence, explanation, aspects=<factory>, model=None, usage=None)
+### *class* aix.ImageComparison(match, confidence, explanation, aspects=tuple(), model=None, usage=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3770,27 +3816,45 @@ lookups read naturally, while also carrying the overall verdict.
 
 Overall pass/fail across the whole rubric.
 
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
 #### confidence
 
 Overall confidence in `[0.0, 1.0]`.
 
+* **Type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 #### explanation
 
 A short overall summary of the comparison.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### aspects
 
 The per-aspect verdicts, one [`RubricVerdict`](_autosummary/aix.html.md#aix.RubricVerdict) per
 rubric item, in rubric order.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`RubricVerdict`](_autosummary/aix.vision.html.md#aix.vision.RubricVerdict), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### model
 
 The vision model id that produced the verdict.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### usage
 
 Tokens billed for the comparison request (see
 [`aix.Usage`](_autosummary/aix.html.md#aix.Usage)), or `None` if the provider did not report it.
+
+* **Type:**
+  [`Usage`](_autosummary/aix.html.md#aix.Usage) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get(aspect, default=None)
 
@@ -4080,7 +4144,7 @@ Add a function to the collection.
 * **Parameters:**
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Function name (will be accessible as attribute)
   * **template** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Prompt template
-  * **output_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output
+  * **output_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output
   * **\*\*kwargs** – Additional parameters for prompt_func
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -4102,26 +4166,44 @@ from `response_schema=`.
 
 The schema name sent to the provider.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### json_schema
 
 The caller’s JSON Schema dict (what a value must match).
+
+* **Type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 #### wire_schema
 
 What is sent: `json_schema` itself, or wrapped as
 `{"value": json_schema}` when its root is not an object.
 
+* **Type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
 #### strict_compatible
 
 Whether `wire_schema` satisfies strict-mode rules.
+
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### wrapped
 
 Whether `wire_schema` is the `{"value": ...}` wrapper.
 
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
 #### source
 
 What the caller passed (a dict or a Pydantic model class).
+
+* **Type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
 
 #### *classmethod* from_schema(schema)
 
@@ -4173,17 +4255,29 @@ A vision model’s verdict on a single rubric aspect.
 
 The rubric item this verdict is about (e.g. `"identity"`).
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### match
 
 Whether the candidate matches the reference for this aspect.
+
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### confidence
 
 The model’s self-reported confidence in `[0.0, 1.0]`.
 
+* **Type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 #### note
 
 A short free-text explanation of the verdict.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### *class* aix.Sample(text, payload, finish_reason=None, usage=None, strategy='independent', seed=None, error=None, system_fingerprint=None)
 
@@ -4195,10 +4289,16 @@ One drawn answer.
 
 The raw text of this choice (`""` if its request failed).
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### payload
 
 `parse(text)` when a `parse` function was given, else `text`;
 `None` if the request or the parsing failed (see `error`).
+
+* **Type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
 
 #### finish_reason
 
@@ -4206,24 +4306,39 @@ Why this choice stopped. `"length"` = truncated,
 `"content_filter"` = refused/filtered; check it before treating the
 payload as a judgement.
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 #### usage
 
 Tokens for the request that produced *only this* sample, or
 `None` when it shared a provider-side `n` request (whose usage
 cannot be split per choice; see [`Samples.usage`](_autosummary/aix.html.md#aix.Samples.usage)).
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Usage`](_autosummary/aix.html.md#aix.Usage)]
+
 #### strategy
 
 How this sample was drawn: `"provider_n"` or `"independent"`.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### seed
 
 The seed sent with its request, if any.
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]
+
 #### error
 
 The exception this sample’s request raised (with
 `on_error="record"`) or that `parse` raised on its text.
+
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Exception`](https://docs.python.org/3/builtins/exceptions.html#Exception)]
 
 #### system_fingerprint
 
@@ -4231,6 +4346,9 @@ The serving backend’s fingerprint for its request,
 when reported. Seeded samples are only comparable across equal
 fingerprints (see [`aix.supports()`](_autosummary/aix.html.md#aix.supports) for whether `seed` is
 honoured at all).
+
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 #### *property* ok *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
 
@@ -4348,9 +4466,6 @@ True
 
 Read the `usage` block of a LiteLLM response; `None` if absent.
 
-* **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Usage`](_autosummary/aix.html.md#aix.Usage)]
-
 ```pycon
 >>> u = Usage.from_response({"usage": {"prompt_tokens": 3, "completion_tokens": 4}})
 >>> u.prompt_tokens, u.completion_tokens, u.total_tokens
@@ -4359,12 +4474,15 @@ Read the `usage` block of a LiteLLM response; `None` if absent.
 True
 ```
 
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Usage`](_autosummary/aix.html.md#aix.Usage)]
+
 ### aix.animate_image_to_video(image_path, prompt=None, , model=None, duration=3.0, motion_strength=0.5, \*\*kwargs)
 
 Animate a static image into a video.
 
 * **Parameters:**
-  * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
+  * **image_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional text prompt to guide the animation
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Video generation model to use
   * **duration** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Animation duration in seconds
@@ -4421,7 +4539,7 @@ This function processes multiple prompts efficiently by:
 3. Yielding results in the same order as input
 
 * **Parameters:**
-  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Iterable of prompts (strings or message lists)
+  * **prompts** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]]) – Iterable of prompts (strings or message lists)
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use for all prompts
   * **batch_size** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of prompts to process in each batch
   * **max_workers** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Maximum number of parallel workers
@@ -4601,7 +4719,7 @@ This is the main chat interface for AIX. It abstracts away provider-specific
 details and provides a clean, consistent API across all models.
 
 * **Parameters:**
-  * **prompt** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – Either a string (becomes a user message) or a list of message dicts
+  * **prompt** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – Either a string (becomes a user message) or a list of message dicts
     with ‘role’ and ‘content’ keys
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model identifier (e.g., ‘gpt-4o’, ‘claude-sonnet-4’,
     ‘openrouter/anthropic/claude-3.5-sonnet’). If None, uses default.
@@ -4617,7 +4735,7 @@ details and provides a clean, consistent API across all models.
   Complete response as string
   If stream=True: Iterator yielding text chunks as they arrive
 * **Return type:**
-  `Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 * **Raises:**
   * [**ImportError**](https://docs.python.org/3/builtins/exceptions.html#ImportError) – If LiteLLM is not installed
   * [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If prompt format is invalid
@@ -4711,15 +4829,15 @@ via [`resolve_api_key()`](_autosummary/aix.html.md#aix.resolve_api_key) (explici
 
 Returns `True` when a key is available.
 
-* **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
-
 ### Examples
 
 ```pycon
 >>> check_requirements("gpt-4o", api_key="sk-explicit")
 True
 ```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### aix.compare_images(candidate, reference, , rubric=('identity', 'costume', 'setting', 'lighting', 'props'), model=None, api_key=None, max_tokens=None, temperature=0.0, detail=None, instruction='You are a strict visual continuity supervisor. The FIRST image is the CANDIDATE; the remaining image(s) are the locked REFERENCE the candidate must match. Judge each rubric aspect INDEPENDENTLY (do not let one aspect color another). For each aspect decide whether the candidate matches the reference, give a confidence in [0.0, 1.0], and a short note explaining what matches or drifts. Then give an overall match (true only if every important aspect matches), an overall confidence, and a one-sentence explanation.', \*\*kwargs)
 
@@ -4737,9 +4855,9 @@ The comparison is *pointwise* (each aspect judged on its own), not a ranked
 pairwise comparison, to avoid position bias.
 
 * **Parameters:**
-  * **candidate** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image under review (URL / path / bytes / PIL image /
+  * **candidate** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image under review (URL / path / bytes / PIL image /
     `data:` URI — anything [`to_image_content()`](_autosummary/aix.html.md#aix.to_image_content) accepts).
-  * **reference** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any), [`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – The locked reference — a single image *or* a sequence of
+  * **reference** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any), [`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – The locked reference — a single image *or* a sequence of
     images (a locked set) in the same flexible formats. An empty
     sequence is an error.
   * **rubric** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The aspects to evaluate, one verdict per item. Defaults to
@@ -4801,7 +4919,7 @@ stopped (`finish_reasons`), the tokens billed (`usage`), the model that
 served the call, and the raw response.
 
 * **Parameters:**
-  * **prompt** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string (becomes a user message) or a list of message dicts.
+  * **prompt** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string (becomes a user message) or a list of message dicts.
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model identifier or alias. If None, uses the configured default.
   * **temperature** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sampling temperature. If None, uses the configured default.
   * **max_tokens** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Maximum tokens per choice. If None, uses the configured default.
@@ -4814,9 +4932,9 @@ served the call, and the raw response.
     it is supported determinism is still best-effort – compare
     `system_fingerprint` across calls before reading a difference
     as model instability.
-  * **response_format** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Passed through to LiteLLM (e.g. `{"type": "json_object"}`).
+  * **response_format** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Passed through to LiteLLM (e.g. `{"type": "json_object"}`).
     Mutually exclusive with `response_schema`.
-  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or a Pydantic model class. The
+  * **response_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or a Pydantic model class. The
     provider is asked to enforce it as strongly as the model allows
     (strict `json_schema` > non-strict `json_schema` > JSON mode plus
     the schema in the prompt; see [`aix.structured`](_autosummary/aix.structured.html.md#module-aix.structured)), and every
@@ -4862,9 +4980,6 @@ Structured output, validated:
 
 Apply runtime overrides to the active config and return it.
 
-* **Return type:**
-  [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)
-
 ### Examples
 
 ```pycon
@@ -4876,6 +4991,9 @@ Apply runtime overrides to the active config and return it.
 >>> config.get_config().chat.temperature
 0.2
 ```
+
+* **Return type:**
+  [`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)
 
 ### aix.constrained_answer(prompt, valid_answers, , model=None, temperature=None, enhance_prompt=False, n=1, on_violation='raise', max_retries=0, concurrency=None)
 
@@ -4890,7 +5008,7 @@ as a convenient tool to do response statistics and validation (via n>1).
 
 * **Parameters:**
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The question or prompt to ask the LLM
-  * **valid_answers** (`Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`int`](https://docs.python.org/3/builtins/functions.html#int)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`float`](https://docs.python.org/3/builtins/functions.html#float)], [`type`](https://docs.python.org/3/builtins/functions.html#type), [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – 
+  * **valid_answers** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`int`](https://docs.python.org/3/builtins/functions.html#int)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`float`](https://docs.python.org/3/builtins/functions.html#float)], [`type`](https://docs.python.org/3/builtins/functions.html#type), [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – 
 
     Can be:
     - list[str]: List of valid string options
@@ -5021,13 +5139,13 @@ True
 Create variations of an existing image.
 
 * **Parameters:**
-  * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
+  * **image_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.variation_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
 * **Return type:**
-  `Union`[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage)]]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage)]]
 * **Returns:**
   GeneratedImage or list of GeneratedImage objects
 
@@ -5054,7 +5172,7 @@ the instruction (default: a generic “describe this image”); pass a question
 for VQA or a rubric for a judgement. Everything past `image` is keyword.
 
 * **Parameters:**
-  * **image** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image (URL / path / bytes / PIL image / `data:` URI).
+  * **image** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image (URL / path / bytes / PIL image / `data:` URI).
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The text instruction accompanying the image.
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – Vision-capable model id (e.g. `gpt-4o`, `claude-sonnet-4-6`,
     `gemini/gemini-1.5-pro`) or an alias. `None` → the configured
@@ -5116,15 +5234,15 @@ True
 Edit an existing image based on a prompt.
 
 * **Parameters:**
-  * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the image to edit
+  * **image_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the image to edit
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Description of the desired edit
-  * **mask_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Optional path to mask image (transparent areas will be edited)
+  * **mask_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Optional path to mask image (transparent areas will be edited)
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.edit_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
 * **Return type:**
-  `Union`[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage)]]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage)]]
 * **Returns:**
   GeneratedImage or list of GeneratedImage objects
 
@@ -5233,7 +5351,7 @@ details and provides a clean, consistent API across all embedding models.
 Extend an existing video with additional generated content.
 
 * **Parameters:**
-  * **video_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source video
+  * **video_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source video
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional text prompt to guide the extension
   * **extend_duration** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – How many seconds to add
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Video generation model
@@ -5281,7 +5399,7 @@ True
 Find most similar texts to a query.
 
 * **Parameters:**
-  * **query** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Sequence`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – Query text or pre-computed embedding vector
+  * **query** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Sequence`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – Query text or pre-computed embedding vector
   * **candidates** ([`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Candidate texts to compare against
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Embedding model to use
   * **top_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of top results to return
@@ -5305,17 +5423,19 @@ Find most similar texts to a query.
 'Machine learning is a type of AI'
 ```
 
-### aix.generate_image(prompt, , model=None, size=None, quality=None, style=None, response_format='url', api_key=None, \*\*kwargs)
+### aix.generate_image(prompt, , model=None, size=None, quality=None, style=None, response_format=None, api_key=None, \*\*kwargs)
 
 Generate a single image from a text prompt.
 
 * **Parameters:**
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Text description of the image to generate
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘dall-e-2’, ‘dall-e-3’, ‘stable-diffusion’)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘gpt-image-1.5’, ‘gpt-image-1-mini’, ‘stable-diffusion’)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image size (e.g., ‘1024x1024’, ‘512x512’, ‘1792x1024’)
   * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image quality (‘standard’ or ‘hd’ for DALL-E 3)
   * **style** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image style (‘vivid’ or ‘natural’ for DALL-E 3)
-  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response (‘url’ or ‘b64_json’)
+  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response (‘url’ or ‘b64_json’). Left out of the
+    request when None, since some providers and models (OpenAI’s gpt-image
+    models, and the images endpoint as of 2026) reject the parameter.
   * **api_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Explicit API key. If None, resolved from the environment / .env
     / AIX config store for the model’s provider (see aix.credentials).
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -5338,9 +5458,8 @@ Generate a single image from a text prompt.
 >>> # High quality with DALL-E 3
 >>> image = generate_image(
 ...     "Abstract art with vibrant colors",
-...     model="dall-e-3",
-...     quality="hd",
-...     style="vivid"
+...     model="gpt-image-1.5",
+...     quality="high",
 ... )
 ```
 
@@ -5352,7 +5471,7 @@ Generate a single image from a text prompt.
 ... )
 ```
 
-### aix.generate_images(prompt, , n=None, model=None, size=None, quality=None, style=None, response_format='url', api_key=None, \*\*kwargs)
+### aix.generate_images(prompt, , n=None, model=None, size=None, quality=None, style=None, response_format=None, api_key=None, \*\*kwargs)
 
 Generate multiple images from a text prompt.
 
@@ -5363,7 +5482,7 @@ Generate multiple images from a text prompt.
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image size
   * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image quality
   * **style** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image style
-  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response
+  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response, sent only when given
   * **\*\*kwargs** – Additional provider-specific parameters
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage)]
@@ -5524,11 +5643,11 @@ exactly as before.
 
 * **Parameters:**
   * **template** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Prompt template with {var} placeholders for parameters
-  * **output_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output. Can be:
+  * **output_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output. Can be:
     - Dict mapping field names to types: {“name”: str, “age”: int}
     - A single type for simple outputs: str, int, list, etc.
     - None for plain text output (default)
-  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional JSON Schema dict or Pydantic model class for
+  * **response_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional JSON Schema dict or Pydantic model class for
     *enforced, validated* structured output (nested objects, arrays,
     enums, required/optional all work): routed to the provider’s
     strict `json_schema` mode where supported, otherwise JSON mode,
@@ -5606,7 +5725,7 @@ This is an explicit alias for prompt_func with output_schema.
 
 * **Parameters:**
   * **template** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Prompt template
-  * **schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Output schema
+  * **schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Output schema
   * **\*\*kwargs** – Additional parameters for prompt_func
 * **Return type:**
   [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)
@@ -5710,7 +5829,7 @@ True
 Draw `n` answers to `prompt`, each with its finish reason and usage.
 
 * **Parameters:**
-  * **prompt** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string or a list of message dicts, as for [`aix.chat()`](_autosummary/aix.html.md#aix.chat).
+  * **prompt** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string or a list of message dicts, as for [`aix.chat()`](_autosummary/aix.html.md#aix.chat).
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many samples to draw.
   * **temperature** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sampling temperature (`None` = configured default). At
     `0` the samples mostly coincide, which is rarely what you want here.
@@ -5728,7 +5847,7 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
     see [`Samples.fallback_error`](_autosummary/aix.html.md#aix.Samples.fallback_error)),
     `"provider"` (force one `n` request) or `"independent"`.
     `n=1` is always a single plain request, recorded `"independent"`.
-  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
+  * **response_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
     validated per request as in [`aix.complete()`](_autosummary/aix.html.md#aix.complete); each payload is the
     validated value, and a choice still invalid after repairs records its
     `SchemaValidationError` as `error`. Exclusive with `parse`.
@@ -5880,7 +5999,7 @@ SRT/VTT output. The return type is unchanged either way, so existing callers
 are unaffected.
 
 * **Parameters:**
-  * **audio** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes.
+  * **audio** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes.
   * **engine** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional `scribed` backend id (e.g. `"faster-whisper"`,
     `"deepgram"`). When given, transcription is delegated to scribed
     (which resolves that engine’s own credentials); the LiteLLM path is
@@ -5897,7 +6016,7 @@ are unaffected.
   * **\*\*kwargs** – Additional parameters (forwarded to LiteLLM, or to the scribed
     backend — e.g. `diarize=True`).
 * **Return type:**
-  `Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`TranscriptionResult`](_autosummary/aix.audio.html.md#aix.audio.TranscriptionResult)]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`TranscriptionResult`](_autosummary/aix.audio.html.md#aix.audio.TranscriptionResult)]
 * **Returns:**
   `str` for `response_format` in {text, srt, vtt}, else a
   [`TranscriptionResult`](_autosummary/aix.html.md#aix.TranscriptionResult).
@@ -5922,7 +6041,7 @@ are unaffected.
 Transcribe audio with detailed timestamps.
 
 * **Parameters:**
-  * **audio** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
+  * **audio** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
   * **granularity** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Timestamp granularity (‘word’ or ‘segment’)
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Transcription model
   * **\*\*kwargs** – Additional parameters for transcribe()
@@ -5951,7 +6070,7 @@ Translate audio from any language to English.
 Currently uses Whisper’s translation capability which translates to English.
 
 * **Parameters:**
-  * **audio** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
+  * **audio** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Translation model (typically ‘whisper-1’)
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional text to guide translation
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -5981,9 +6100,6 @@ scope into it with [`contextvars.copy_context()`](https://docs.python.org/3/libr
 (`sample`, `batch_chat`…) propagate it. An asyncio task created inside the
 block keeps the scope for its lifetime.
 
-* **Return type:**
-  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)]
-
 ### Examples
 
 ```pycon
@@ -5992,6 +6108,9 @@ block keeps the scope for its lifetime.
 ...     c.chat.temperature
 0.0
 ```
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`AixConfig`](_autosummary/aix.config.html.md#aix.config.AixConfig)]
 
 ### Modules
 
@@ -6050,7 +6169,7 @@ With specific model:
 ```pycon
 >>> image = generate_image(
 ...     "Abstract art with vibrant colors",
-...     model="dall-e-3"
+...     model="gpt-image-1.5"
 ... )
 ```
 
@@ -6078,7 +6197,7 @@ Provides convenient access to image data in various formats.
 ### Examples
 
 ```pycon
->>> img = GeneratedImage(url="https://...", model="dall-e-3")
+>>> img = GeneratedImage(url="https://...", model="gpt-image-1.5")
 >>> img.save("output.png")
 >>> img.show()
 >>> data = img.as_bytes()
@@ -6107,7 +6226,7 @@ Get image as PIL Image object.
 Save image to file.
 
 * **Parameters:**
-  * **path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
+  * **path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
   * **format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image format (e.g., ‘PNG’, ‘JPEG’). Auto-detected from path if None.
 
 ### Examples
@@ -6134,13 +6253,13 @@ Requires PIL (Pillow) to be installed.
 Create variations of an existing image.
 
 * **Parameters:**
-  * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
+  * **image_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.variation_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
 * **Return type:**
-  `Union`[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage)]]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage)]]
 * **Returns:**
   GeneratedImage or list of GeneratedImage objects
 
@@ -6162,15 +6281,15 @@ Create variations of an existing image.
 Edit an existing image based on a prompt.
 
 * **Parameters:**
-  * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the image to edit
+  * **image_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the image to edit
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Description of the desired edit
-  * **mask_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Optional path to mask image (transparent areas will be edited)
+  * **mask_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Optional path to mask image (transparent areas will be edited)
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (`None` = configured `image.edit_model`)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output image size
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of variations to generate
   * **\*\*kwargs** – Additional provider-specific parameters
 * **Return type:**
-  `Union`[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage)]]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage)]]
 * **Returns:**
   GeneratedImage or list of GeneratedImage objects
 
@@ -6186,17 +6305,19 @@ Edit an existing image based on a prompt.
 >>> edited.save("edited_photo.png")
 ```
 
-### aix.image.generate_image(prompt, , model=None, size=None, quality=None, style=None, response_format='url', api_key=None, \*\*kwargs)
+### aix.image.generate_image(prompt, , model=None, size=None, quality=None, style=None, response_format=None, api_key=None, \*\*kwargs)
 
 Generate a single image from a text prompt.
 
 * **Parameters:**
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Text description of the image to generate
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘dall-e-2’, ‘dall-e-3’, ‘stable-diffusion’)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘gpt-image-1.5’, ‘gpt-image-1-mini’, ‘stable-diffusion’)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image size (e.g., ‘1024x1024’, ‘512x512’, ‘1792x1024’)
   * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image quality (‘standard’ or ‘hd’ for DALL-E 3)
   * **style** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image style (‘vivid’ or ‘natural’ for DALL-E 3)
-  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response (‘url’ or ‘b64_json’)
+  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response (‘url’ or ‘b64_json’). Left out of the
+    request when None, since some providers and models (OpenAI’s gpt-image
+    models, and the images endpoint as of 2026) reject the parameter.
   * **api_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Explicit API key. If None, resolved from the environment / .env
     / AIX config store for the model’s provider (see aix.credentials).
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -6219,9 +6340,8 @@ Generate a single image from a text prompt.
 >>> # High quality with DALL-E 3
 >>> image = generate_image(
 ...     "Abstract art with vibrant colors",
-...     model="dall-e-3",
-...     quality="hd",
-...     style="vivid"
+...     model="gpt-image-1.5",
+...     quality="high",
 ... )
 ```
 
@@ -6233,7 +6353,7 @@ Generate a single image from a text prompt.
 ... )
 ```
 
-### aix.image.generate_images(prompt, , n=None, model=None, size=None, quality=None, style=None, response_format='url', api_key=None, \*\*kwargs)
+### aix.image.generate_images(prompt, , n=None, model=None, size=None, quality=None, style=None, response_format=None, api_key=None, \*\*kwargs)
 
 Generate multiple images from a text prompt.
 
@@ -6244,7 +6364,7 @@ Generate multiple images from a text prompt.
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image size
   * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image quality
   * **style** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image style
-  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response
+  * **response_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Format of response, sent only when given
   * **\*\*kwargs** – Additional provider-specific parameters
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GeneratedImage`](_autosummary/aix.image.html.md#aix.image.GeneratedImage)]
@@ -6462,7 +6582,7 @@ Add a function to the collection.
 * **Parameters:**
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Function name (will be accessible as attribute)
   * **template** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Prompt template
-  * **output_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output
+  * **output_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output
   * **\*\*kwargs** – Additional parameters for prompt_func
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -6484,7 +6604,7 @@ as a convenient tool to do response statistics and validation (via n>1).
 
 * **Parameters:**
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The question or prompt to ask the LLM
-  * **valid_answers** (`Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`int`](https://docs.python.org/3/builtins/functions.html#int)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`float`](https://docs.python.org/3/builtins/functions.html#float)], [`type`](https://docs.python.org/3/builtins/functions.html#type), [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – 
+  * **valid_answers** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`int`](https://docs.python.org/3/builtins/functions.html#int)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`float`](https://docs.python.org/3/builtins/functions.html#float)], [`type`](https://docs.python.org/3/builtins/functions.html#type), [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – 
 
     Can be:
     - list[str]: List of valid string options
@@ -6612,11 +6732,11 @@ exactly as before.
 
 * **Parameters:**
   * **template** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Prompt template with {var} placeholders for parameters
-  * **output_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output. Can be:
+  * **output_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional schema for structured output. Can be:
     - Dict mapping field names to types: {“name”: str, “age”: int}
     - A single type for simple outputs: str, int, list, etc.
     - None for plain text output (default)
-  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional JSON Schema dict or Pydantic model class for
+  * **response_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Optional JSON Schema dict or Pydantic model class for
     *enforced, validated* structured output (nested objects, arrays,
     enums, required/optional all work): routed to the provider’s
     strict `json_schema` mode where supported, otherwise JSON mode,
@@ -6694,7 +6814,7 @@ This is an explicit alias for prompt_func with output_schema.
 
 * **Parameters:**
   * **template** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Prompt template
-  * **schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Output schema
+  * **schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – Output schema
   * **\*\*kwargs** – Additional parameters for prompt_func
 * **Return type:**
   [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)
@@ -6792,10 +6912,16 @@ One drawn answer.
 
 The raw text of this choice (`""` if its request failed).
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### payload
 
 `parse(text)` when a `parse` function was given, else `text`;
 `None` if the request or the parsing failed (see `error`).
+
+* **Type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
 
 #### finish_reason
 
@@ -6803,24 +6929,39 @@ Why this choice stopped. `"length"` = truncated,
 `"content_filter"` = refused/filtered; check it before treating the
 payload as a judgement.
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 #### usage
 
 Tokens for the request that produced *only this* sample, or
 `None` when it shared a provider-side `n` request (whose usage
 cannot be split per choice; see [`Samples.usage`](_autosummary/aix.sampling.html.md#aix.sampling.Samples.usage)).
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Usage`](_autosummary/aix.html.md#aix.Usage)]
+
 #### strategy
 
 How this sample was drawn: `"provider_n"` or `"independent"`.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### seed
 
 The seed sent with its request, if any.
 
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]
+
 #### error
 
 The exception this sample’s request raised (with
 `on_error="record"`) or that `parse` raised on its text.
+
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Exception`](https://docs.python.org/3/builtins/exceptions.html#Exception)]
 
 #### system_fingerprint
 
@@ -6828,6 +6969,9 @@ The serving backend’s fingerprint for its request,
 when reported. Seeded samples are only comparable across equal
 fingerprints (see [`aix.supports()`](_autosummary/aix.html.md#aix.supports) for whether `seed` is
 honoured at all).
+
+* **Type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 #### *property* ok *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
 
@@ -6890,9 +7034,6 @@ holds every request that was made, failed ones included (as samples whose
 
 `int(value)` if it is a positive integer (not a bool), else `ValueError`.
 
-* **Return type:**
-  [`int`](https://docs.python.org/3/builtins/functions.html#int)
-
 ```pycon
 >>> check_positive_int("n", 3)
 3
@@ -6902,6 +7043,9 @@ Traceback (most recent call last):
 ValueError: n must be a positive integer, got 0
 ```
 
+* **Return type:**
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
+
 ### aix.sampling.concurrent_map(func, items, , concurrency)
 
 `[func(x) for x in items]`, run on up to `concurrency` threads, in order.
@@ -6910,13 +7054,13 @@ Fails fast like the serial loop would: once a call raises, calls not yet
 started are cancelled (those already running finish), and the first
 exception in item order propagates.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`R`)]
-
 ```pycon
 >>> concurrent_map(lambda x: x * x, range(5), concurrency=3)
 [0, 1, 4, 9, 16]
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[`R`]
 
 ### aix.sampling.forget_n_refusals(model=None)
 
@@ -6928,19 +7072,19 @@ kwargs) and for the life of the process, that a provider refused `n` with a
 `n` *combined with* another argument is remembered too. Call this if a
 provider has since started accepting `n`. `model=None` forgets every model.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> forget_n_refusals()
 ```
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### aix.sampling.sample(prompt, , n, temperature=None, seed=None, concurrency=None, model=None, strategy='auto', parse=None, response_schema=None, on_error='raise', api_key=None, \*\*kwargs)
 
 Draw `n` answers to `prompt`, each with its finish reason and usage.
 
 * **Parameters:**
-  * **prompt** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string or a list of message dicts, as for [`aix.chat()`](_autosummary/aix.html.md#aix.chat).
+  * **prompt** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]]) – A string or a list of message dicts, as for [`aix.chat()`](_autosummary/aix.html.md#aix.chat).
   * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many samples to draw.
   * **temperature** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sampling temperature (`None` = configured default). At
     `0` the samples mostly coincide, which is rarely what you want here.
@@ -6958,7 +7102,7 @@ Draw `n` answers to `prompt`, each with its finish reason and usage.
     see [`Samples.fallback_error`](_autosummary/aix.sampling.html.md#aix.sampling.Samples.fallback_error)),
     `"provider"` (force one `n` request) or `"independent"`.
     `n=1` is always a single plain request, recorded `"independent"`.
-  * **response_schema** (`Union`[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
+  * **response_schema** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`type`](https://docs.python.org/3/builtins/functions.html#type)]) – A JSON Schema dict or Pydantic model class, enforced and
     validated per request as in [`aix.complete()`](_autosummary/aix.html.md#aix.complete); each payload is the
     validated value, and a choice still invalid after repairs records its
     `SchemaValidationError` as `error`. Exclusive with `parse`.
@@ -7080,26 +7224,44 @@ from `response_schema=`.
 
 The schema name sent to the provider.
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### json_schema
 
 The caller’s JSON Schema dict (what a value must match).
+
+* **Type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 #### wire_schema
 
 What is sent: `json_schema` itself, or wrapped as
 `{"value": json_schema}` when its root is not an object.
 
+* **Type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
 #### strict_compatible
 
 Whether `wire_schema` satisfies strict-mode rules.
+
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### wrapped
 
 Whether `wire_schema` is the `{"value": ...}` wrapper.
 
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
 #### source
 
 What the caller passed (a dict or a Pydantic model class).
+
+* **Type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
 
 #### *classmethod* from_schema(schema)
 
@@ -7247,7 +7409,7 @@ Get video as bytes.
 Save video to file.
 
 * **Parameters:**
-  **path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
+  **path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
 
 ### Examples
 
@@ -7271,7 +7433,7 @@ Wait for video generation to complete (for async operations).
 Animate a static image into a video.
 
 * **Parameters:**
-  * **image_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
+  * **image_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source image
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional text prompt to guide the animation
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Video generation model to use
   * **duration** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Animation duration in seconds
@@ -7321,7 +7483,7 @@ Estimate the cost of video generation.
 Extend an existing video with additional generated content.
 
 * **Parameters:**
-  * **video_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source video
+  * **video_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source video
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional text prompt to guide the extension
   * **extend_duration** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – How many seconds to add
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Video generation model
@@ -7460,7 +7622,7 @@ Get list of available video generation providers.
 Interpolate frames to create smoother video.
 
 * **Parameters:**
-  * **video_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source video
+  * **video_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to the source video
   * **target_fps** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Target frames per second
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Frame interpolation model
   * **\*\*kwargs** – Additional provider-specific parameters
@@ -7586,7 +7748,7 @@ resolved from `aix.config` at call time (see [`aix.config.VisionConfig`](_autosu
 
 Default instruction when the caller doesn’t supply one.
 
-### *class* aix.vision.ImageComparison(match, confidence, explanation, aspects=<factory>, model=None, usage=None)
+### *class* aix.vision.ImageComparison(match, confidence, explanation, aspects=tuple(), model=None, usage=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7600,27 +7762,45 @@ lookups read naturally, while also carrying the overall verdict.
 
 Overall pass/fail across the whole rubric.
 
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
 #### confidence
 
 Overall confidence in `[0.0, 1.0]`.
 
+* **Type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 #### explanation
 
 A short overall summary of the comparison.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### aspects
 
 The per-aspect verdicts, one [`RubricVerdict`](_autosummary/aix.vision.html.md#aix.vision.RubricVerdict) per
 rubric item, in rubric order.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`RubricVerdict`](_autosummary/aix.vision.html.md#aix.vision.RubricVerdict), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### model
 
 The vision model id that produced the verdict.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### usage
 
 Tokens billed for the comparison request (see
 [`aix.Usage`](_autosummary/aix.html.md#aix.Usage)), or `None` if the provider did not report it.
+
+* **Type:**
+  [`Usage`](_autosummary/aix.html.md#aix.Usage) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get(aspect, default=None)
 
@@ -7639,17 +7819,29 @@ A vision model’s verdict on a single rubric aspect.
 
 The rubric item this verdict is about (e.g. `"identity"`).
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### match
 
 Whether the candidate matches the reference for this aspect.
+
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### confidence
 
 The model’s self-reported confidence in `[0.0, 1.0]`.
 
+* **Type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 #### note
 
 A short free-text explanation of the verdict.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### aix.vision.compare_images(candidate, reference, , rubric=('identity', 'costume', 'setting', 'lighting', 'props'), model=None, api_key=None, max_tokens=None, temperature=0.0, detail=None, instruction='You are a strict visual continuity supervisor. The FIRST image is the CANDIDATE; the remaining image(s) are the locked REFERENCE the candidate must match. Judge each rubric aspect INDEPENDENTLY (do not let one aspect color another). For each aspect decide whether the candidate matches the reference, give a confidence in [0.0, 1.0], and a short note explaining what matches or drifts. Then give an overall match (true only if every important aspect matches), an overall confidence, and a one-sentence explanation.', \*\*kwargs)
 
@@ -7667,9 +7859,9 @@ The comparison is *pointwise* (each aspect judged on its own), not a ranked
 pairwise comparison, to avoid position bias.
 
 * **Parameters:**
-  * **candidate** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image under review (URL / path / bytes / PIL image /
+  * **candidate** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image under review (URL / path / bytes / PIL image /
     `data:` URI — anything [`to_image_content()`](_autosummary/aix.vision.html.md#aix.vision.to_image_content) accepts).
-  * **reference** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any), [`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – The locked reference — a single image *or* a sequence of
+  * **reference** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any), [`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – The locked reference — a single image *or* a sequence of
     images (a locked set) in the same flexible formats. An empty
     sequence is an error.
   * **rubric** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The aspects to evaluate, one verdict per item. Defaults to
@@ -7731,7 +7923,7 @@ the instruction (default: a generic “describe this image”); pass a question
 for VQA or a rubric for a judgement. Everything past `image` is keyword.
 
 * **Parameters:**
-  * **image** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image (URL / path / bytes / PIL image / `data:` URI).
+  * **image** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image (URL / path / bytes / PIL image / `data:` URI).
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The text instruction accompanying the image.
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – Vision-capable model id (e.g. `gpt-4o`, `claude-sonnet-4-6`,
     `gemini/gemini-1.5-pro`) or an alias. `None` → the configured
@@ -7797,16 +7989,18 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.
 
 # About this build
 
-This documentation was built on **2026-10-13 07:17 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/12cee7696063f1137a4ec4115019f940f1d152ee"><code>12cee76</code></a> on branch <code>master</code>, for **aix 0.0.52** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-06 11:10 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/6a239e935305b2fad301c70bdd332fa491314bcf"><code>6a239e9</code></a> on branch <code>master</code>, for **aix 0.0.53** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.53) is behind the latest release on PyPI (0.0.54): `pip install aix` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/12cee7696063f1137a4ec4115019f940f1d152ee"><code>12cee7696063f1137a4ec4115019f940f1d152ee</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/6a239e935305b2fad301c70bdd332fa491314bcf"><code>6a239e935305b2fad301c70bdd332fa491314bcf</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -7817,18 +8011,18 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/38361465520">38361465520</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/42207895587">42207895587</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>12cee7696063f1137a4ec4115019f940f1d152ee</code> (in the history of the built commit) |
+| Event commit | <code>6a239e935305b2fad301c70bdd332fa491314bcf</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.14  |
-| Sphinx   | 9.1.0   |
+| epythet  | 0.2.22  |
+| Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
-| Python   | 3.12.15 |
+| Python   | 3.12.16 |
 
 ## Configuration as resolved
 
@@ -7844,14 +8038,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.52/">0.0.52</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/aix/0.0.54/">0.0.54</a>, newer than the documented version (0.0.53).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout 12cee7696063f1137a4ec4115019f940f1d152ee
-pip install "epythet==0.2.14"
+git checkout 6a239e935305b2fad301c70bdd332fa491314bcf
+pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

@@ -9,10 +9,11 @@
 <link rel="alternate" type="text/markdown" href="aix.sampling.html.md">
 <link rel="describedby" href="llms.txt"><link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="aix.stores" href="aix.stores.html"><link rel="prev" title="aix.prompts" href="aix.prompts.html">
 
-    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+    <!-- Generated with Sphinx 9.1.1 and Furo 2025.12.19 -->
         <title>aix.sampling - aix</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -347,6 +348,11 @@ independently and the batch is marked <code class="docutils literal notranslate"
 <dt class="sig sig-object py" id="aix.sampling.Sample.text">
 <span class="sig-name descname"><span class="pre">text</span></span><a class="headerlink" href="#aix.sampling.Sample.text" title="Link to this definition">¶</a></dt>
 <dd><p>The raw text of this choice (<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> if its request failed).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -354,6 +360,11 @@ independently and the batch is marked <code class="docutils literal notranslate"
 <span class="sig-name descname"><span class="pre">payload</span></span><a class="headerlink" href="#aix.sampling.Sample.payload" title="Link to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">parse(text)</span></code> when a <code class="docutils literal notranslate"><span class="pre">parse</span></code> function was given, else <code class="docutils literal notranslate"><span class="pre">text</span></code>;
 <code class="docutils literal notranslate"><span class="pre">None</span></code> if the request or the parsing failed (see <code class="docutils literal notranslate"><span class="pre">error</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -362,6 +373,11 @@ independently and the batch is marked <code class="docutils literal notranslate"
 <dd><p>Why this choice stopped. <code class="docutils literal notranslate"><span class="pre">&quot;length&quot;</span></code> = truncated,
 <code class="docutils literal notranslate"><span class="pre">&quot;content_filter&quot;</span></code> = refused/filtered; check it before treating the
 payload as a judgement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -370,18 +386,33 @@ payload as a judgement.</p>
 <dd><p>Tokens for the request that produced <em>only this</em> sample, or
 <code class="docutils literal notranslate"><span class="pre">None</span></code> when it shared a provider-side <code class="docutils literal notranslate"><span class="pre">n</span></code> request (whose usage
 cannot be split per choice; see <a class="reference internal" href="#aix.sampling.Samples.usage" title="aix.sampling.Samples.usage"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Samples.usage</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="aix.html#aix.Usage" title="aix.chat.Usage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Usage</span></code></a>]</span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="aix.sampling.Sample.strategy">
 <span class="sig-name descname"><span class="pre">strategy</span></span><a class="headerlink" href="#aix.sampling.Sample.strategy" title="Link to this definition">¶</a></dt>
 <dd><p>How this sample was drawn: <code class="docutils literal notranslate"><span class="pre">&quot;provider_n&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;independent&quot;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="aix.sampling.Sample.seed">
 <span class="sig-name descname"><span class="pre">seed</span></span><a class="headerlink" href="#aix.sampling.Sample.seed" title="Link to this definition">¶</a></dt>
 <dd><p>The seed sent with its request, if any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -389,6 +420,11 @@ cannot be split per choice; see <a class="reference internal" href="#aix.samplin
 <span class="sig-name descname"><span class="pre">error</span></span><a class="headerlink" href="#aix.sampling.Sample.error" title="Link to this definition">¶</a></dt>
 <dd><p>The exception this sample’s request raised (with
 <code class="docutils literal notranslate"><span class="pre">on_error=&quot;record&quot;</span></code>) or that <code class="docutils literal notranslate"><span class="pre">parse</span></code> raised on its text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a>]</span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -398,6 +434,11 @@ cannot be split per choice; see <a class="reference internal" href="#aix.samplin
 when reported. Seeded samples are only comparable across equal
 fingerprints (see <a class="reference internal" href="aix.html#aix.supports" title="aix.supports"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.supports()</span></code></a> for whether <code class="docutils literal notranslate"><span class="pre">seed</span></code> is
 honoured at all).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -481,11 +522,6 @@ holds every request that was made, failed ones included (as samples whose
 <dt class="sig sig-object py" id="aix.sampling.check_positive_int">
 <span class="sig-prename descclassname"><span class="pre">aix.sampling.</span></span><span class="sig-name descname"><span class="pre">check_positive_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aix/sampling.html#check_positive_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aix.sampling.check_positive_int" title="Link to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">int(value)</span></code> if it is a positive integer (not a bool), else <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">check_positive_int</span><span class="p">(</span><span class="s2">"n"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="go">3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">check_positive_int</span><span class="p">(</span><span class="s2">"n"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -494,6 +530,11 @@ holds every request that was made, failed ones included (as samples whose
 <span class="gr">ValueError</span>: <span class="n">n must be a positive integer, got 0</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -503,15 +544,15 @@ holds every request that was made, failed ones included (as samples whose
 <p>Fails fast like the serial loop would: once a call raises, calls not yet
 started are cancelled (those already running finish), and the first
 exception in item order propagates.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypeVar" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code></a>(<code class="docutils literal notranslate"><span class="pre">R</span></code>)]</span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">concurrent_map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">concurrency</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="go">[0, 1, 4, 9, 16]</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<code class="docutils literal notranslate"><span class="pre">R</span></code>]</span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -523,14 +564,14 @@ kwargs) and for the life of the process, that a provider refused <code class="do
 400 and a plain request then succeeded. That is a heuristic: a 400 caused by
 <code class="docutils literal notranslate"><span class="pre">n</span></code> <em>combined with</em> another argument is remembered too. Call this if a
 provider has since started accepting <code class="docutils literal notranslate"><span class="pre">n</span></code>. <code class="docutils literal notranslate"><span class="pre">model=None</span></code> forgets every model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">forget_n_refusals</span><span class="p">()</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -540,7 +581,7 @@ provider has since started accepting <code class="docutils literal notranslate">
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prompt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]]</span>) – A string or a list of message dicts, as for <a class="reference internal" href="aix.html#aix.chat" title="aix.chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.chat()</span></code></a>.</p></li>
+<li><p><strong>prompt</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]]</span>) – A string or a list of message dicts, as for <a class="reference internal" href="aix.html#aix.chat" title="aix.chat"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.chat()</span></code></a>.</p></li>
 <li><p><strong>n</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – How many samples to draw.</p></li>
 <li><p><strong>temperature</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Sampling temperature (<code class="docutils literal notranslate"><span class="pre">None</span></code> = configured default). At
 <code class="docutils literal notranslate"><span class="pre">0</span></code> the samples mostly coincide, which is rarely what you want here.</p></li>
@@ -551,20 +592,20 @@ base seeds do not overlap. Support is provider-dependent.</p></li>
 <li><p><strong>concurrency</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Max simultaneous independent requests (<code class="docutils literal notranslate"><span class="pre">None</span></code> = config
 <code class="docutils literal notranslate"><span class="pre">chat.sample_concurrency</span></code>).</p></li>
 <li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Model id or alias (<code class="docutils literal notranslate"><span class="pre">None</span></code> = configured default).</p></li>
-<li><p><strong>strategy</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'auto'</span></code>, <code class="docutils literal notranslate"><span class="pre">'provider'</span></code>, <code class="docutils literal notranslate"><span class="pre">'independent'</span></code>]</span>) – <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> (provider <code class="docutils literal notranslate"><span class="pre">n</span></code> when supported, else independent;
+<li><p><strong>strategy</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<span class="highlight sphinx_autodoc_typehints-value"><code class="docutils literal notranslate"><span class="s1"><span class="pre">'auto'</span></span></code></span>, <span class="highlight sphinx_autodoc_typehints-value"><code class="docutils literal notranslate"><span class="s1"><span class="pre">'provider'</span></span></code></span>, <span class="highlight sphinx_autodoc_typehints-value"><code class="docutils literal notranslate"><span class="s1"><span class="pre">'independent'</span></span></code></span>]</span>) – <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> (provider <code class="docutils literal notranslate"><span class="pre">n</span></code> when supported, else independent;
 also falls back to independent if LiteLLM or the provider refuses
 <code class="docutils literal notranslate"><span class="pre">n</span></code> – for a provider 400 the first independent request is sent
 alone as a probe, and if it fails too the original 400 is raised;
 see <a class="reference internal" href="#aix.sampling.Samples.fallback_error" title="aix.sampling.Samples.fallback_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Samples.fallback_error</span></code></a>),
 <code class="docutils literal notranslate"><span class="pre">&quot;provider&quot;</span></code> (force one <code class="docutils literal notranslate"><span class="pre">n</span></code> request) or <code class="docutils literal notranslate"><span class="pre">&quot;independent&quot;</span></code>.
 <code class="docutils literal notranslate"><span class="pre">n=1</span></code> is always a single plain request, recorded <code class="docutils literal notranslate"><span class="pre">&quot;independent&quot;</span></code>.</p></li>
-<li><p><strong>response_schema</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#type" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>]</span>) – A JSON Schema dict or Pydantic model class, enforced and
+<li><p><strong>response_schema</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#type" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>]</span>) – A JSON Schema dict or Pydantic model class, enforced and
 validated per request as in <a class="reference internal" href="aix.html#aix.complete" title="aix.complete"><code class="xref py py-func docutils literal notranslate"><span class="pre">aix.complete()</span></code></a>; each payload is the
 validated value, and a choice still invalid after repairs records its
 <code class="docutils literal notranslate"><span class="pre">SchemaValidationError</span></code> as <code class="docutils literal notranslate"><span class="pre">error</span></code>. Exclusive with <code class="docutils literal notranslate"><span class="pre">parse</span></code>.</p></li>
 <li><p><strong>parse</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Optional <code class="docutils literal notranslate"><span class="pre">text</span> <span class="pre">-&gt;</span> <span class="pre">payload</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">json.loads</span></code>). A failure is
 recorded on that sample (<code class="docutils literal notranslate"><span class="pre">payload=None</span></code>, <code class="docutils literal notranslate"><span class="pre">error=...</span></code>), not raised.</p></li>
-<li><p><strong>on_error</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'raise'</span></code>, <code class="docutils literal notranslate"><span class="pre">'record'</span></code>]</span>) – When a request fails: <code class="docutils literal notranslate"><span class="pre">&quot;raise&quot;</span></code> (default) raises
+<li><p><strong>on_error</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<span class="highlight sphinx_autodoc_typehints-value"><code class="docutils literal notranslate"><span class="s1"><span class="pre">'raise'</span></span></code></span>, <span class="highlight sphinx_autodoc_typehints-value"><code class="docutils literal notranslate"><span class="s1"><span class="pre">'record'</span></span></code></span>]</span>) – When a request fails: <code class="docutils literal notranslate"><span class="pre">&quot;raise&quot;</span></code> (default) raises
 <a class="reference internal" href="#aix.sampling.SamplingError" title="aix.sampling.SamplingError"><code class="xref py py-class docutils literal notranslate"><span class="pre">SamplingError</span></code></a> once the launched requests finish, carrying
 the partial batch; <code class="docutils literal notranslate"><span class="pre">&quot;record&quot;</span></code> returns the batch with the failure on
 that sample’s <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p></li>
@@ -680,7 +721,7 @@ that sample’s <code class="docutils literal notranslate"><span class="pre">err
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3e38c7be"></script>
+</div><script src="../_static/documentation_options.js?v=9778b3d8"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

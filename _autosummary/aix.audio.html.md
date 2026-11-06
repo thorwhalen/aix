@@ -79,7 +79,7 @@ Requires a system audio player or library like pygame/pyaudio.
 Save audio to file.
 
 * **Parameters:**
-  **path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
+  **path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Output file path
 
 ### Examples
 
@@ -160,7 +160,7 @@ SRT/VTT output. The return type is unchanged either way, so existing callers
 are unaffected.
 
 * **Parameters:**
-  * **audio** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes.
+  * **audio** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes.
   * **engine** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional `scribed` backend id (e.g. `"faster-whisper"`,
     `"deepgram"`). When given, transcription is delegated to scribed
     (which resolves that engine’s own credentials); the LiteLLM path is
@@ -177,7 +177,7 @@ are unaffected.
   * **\*\*kwargs** – Additional parameters (forwarded to LiteLLM, or to the scribed
     backend — e.g. `diarize=True`).
 * **Return type:**
-  `Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`TranscriptionResult`](#aix.audio.TranscriptionResult)]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`TranscriptionResult`](#aix.audio.TranscriptionResult)]
 * **Returns:**
   `str` for `response_format` in {text, srt, vtt}, else a
   [`TranscriptionResult`](#aix.audio.TranscriptionResult).
@@ -202,7 +202,7 @@ are unaffected.
 Transcribe audio with detailed timestamps.
 
 * **Parameters:**
-  * **audio** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
+  * **audio** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
   * **granularity** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Timestamp granularity (‘word’ or ‘segment’)
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Transcription model
   * **\*\*kwargs** – Additional parameters for transcribe()
@@ -231,7 +231,7 @@ Translate audio from any language to English.
 Currently uses Whisper’s translation capability which translates to English.
 
 * **Parameters:**
-  * **audio** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
+  * **audio** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – Audio file path, file object, or bytes
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Translation model (typically ‘whisper-1’)
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Optional text to guide translation
   * **\*\*kwargs** – Additional provider-specific parameters

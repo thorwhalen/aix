@@ -102,7 +102,7 @@ resolved from `aix.config` at call time (see [`aix.config.VisionConfig`](aix.con
 
 Default instruction when the caller doesn’t supply one.
 
-### *class* aix.vision.ImageComparison(match, confidence, explanation, aspects=<factory>, model=None, usage=None)
+### *class* aix.vision.ImageComparison(match, confidence, explanation, aspects=tuple(), model=None, usage=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -116,27 +116,45 @@ lookups read naturally, while also carrying the overall verdict.
 
 Overall pass/fail across the whole rubric.
 
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
 #### confidence
 
 Overall confidence in `[0.0, 1.0]`.
 
+* **Type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 #### explanation
 
 A short overall summary of the comparison.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### aspects
 
 The per-aspect verdicts, one [`RubricVerdict`](#aix.vision.RubricVerdict) per
 rubric item, in rubric order.
 
+* **Type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`RubricVerdict`](#aix.vision.RubricVerdict), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
+
 #### model
 
 The vision model id that produced the verdict.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### usage
 
 Tokens billed for the comparison request (see
 [`aix.Usage`](aix.html.md#aix.Usage)), or `None` if the provider did not report it.
+
+* **Type:**
+  [`Usage`](aix.html.md#aix.Usage) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get(aspect, default=None)
 
@@ -155,17 +173,29 @@ A vision model’s verdict on a single rubric aspect.
 
 The rubric item this verdict is about (e.g. `"identity"`).
 
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 #### match
 
 Whether the candidate matches the reference for this aspect.
+
+* **Type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### confidence
 
 The model’s self-reported confidence in `[0.0, 1.0]`.
 
+* **Type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 #### note
 
 A short free-text explanation of the verdict.
+
+* **Type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### aix.vision.compare_images(candidate, reference, , rubric=('identity', 'costume', 'setting', 'lighting', 'props'), model=None, api_key=None, max_tokens=None, temperature=0.0, detail=None, instruction='You are a strict visual continuity supervisor. The FIRST image is the CANDIDATE; the remaining image(s) are the locked REFERENCE the candidate must match. Judge each rubric aspect INDEPENDENTLY (do not let one aspect color another). For each aspect decide whether the candidate matches the reference, give a confidence in [0.0, 1.0], and a short note explaining what matches or drifts. Then give an overall match (true only if every important aspect matches), an overall confidence, and a one-sentence explanation.', \*\*kwargs)
 
@@ -183,9 +213,9 @@ The comparison is *pointwise* (each aspect judged on its own), not a ranked
 pairwise comparison, to avoid position bias.
 
 * **Parameters:**
-  * **candidate** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image under review (URL / path / bytes / PIL image /
+  * **candidate** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image under review (URL / path / bytes / PIL image /
     `data:` URI — anything [`to_image_content()`](#aix.vision.to_image_content) accepts).
-  * **reference** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any), [`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – The locked reference — a single image *or* a sequence of
+  * **reference** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any), [`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – The locked reference — a single image *or* a sequence of
     images (a locked set) in the same flexible formats. An empty
     sequence is an error.
   * **rubric** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The aspects to evaluate, one verdict per item. Defaults to
@@ -247,7 +277,7 @@ the instruction (default: a generic “describe this image”); pass a question
 for VQA or a rubric for a judgement. Everything past `image` is keyword.
 
 * **Parameters:**
-  * **image** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image (URL / path / bytes / PIL image / `data:` URI).
+  * **image** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – The image (URL / path / bytes / PIL image / `data:` URI).
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The text instruction accompanying the image.
   * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – Vision-capable model id (e.g. `gpt-4o`, `claude-sonnet-4-6`,
     `gemini/gemini-1.5-pro`) or an alias. `None` → the configured

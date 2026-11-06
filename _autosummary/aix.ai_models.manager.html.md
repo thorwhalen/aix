@@ -33,9 +33,6 @@ Combines model registry, sources, and connectors into a single facade.
 
 Add tags to a model.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -44,6 +41,9 @@ Add tags to a model.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### *property* connectors *: [ConnectorRegistry](aix.ai_models.base.html.md#aix.ai_models.base.ConnectorRegistry)*
 
 Access to connector registry.
@@ -51,9 +51,6 @@ Access to connector registry.
 #### create_model_group(group_name, model_ids)
 
 Create a named group of models using tags.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -64,6 +61,9 @@ Create a named group of models using tags.
 >>> len(premium)
 2
 ```
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### discover_all(, auto_register=True)
 
@@ -111,9 +111,6 @@ Get formatted metadata for a specific connector.
 
 Get a specific model by ID.
 
-* **Return type:**
-  [`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -121,6 +118,9 @@ Get a specific model by ID.
 >>> model.id
 'gpt-4'
 ```
+
+* **Return type:**
+  [`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)
 
 #### list_model_groups()
 
@@ -135,9 +135,6 @@ List all model groups.
 
 List models with optional filtering.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)]
-
 ```pycon
 >>> manager = ModelManager()
 >>> manager.models["gpt-4"] = Model(id="gpt-4", provider="openai")
@@ -148,6 +145,9 @@ List models with optional filtering.
 >>> local[0].id
 'llama2'
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Model`](aix.ai_models.base.html.md#aix.ai_models.base.Model)]
 
 #### list_sources()
 
@@ -171,9 +171,6 @@ True
 
 Register a model connector.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> manager = ModelManager()
 >>> connector = OpenAIConnector()
@@ -182,12 +179,12 @@ Register a model connector.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### register_source(name, source)
 
 Register a model discovery source.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -197,12 +194,12 @@ Register a model discovery source.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### set_custom_metadata(model_id, key, value)
 
 Set custom metadata on a model.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> manager = ModelManager()
@@ -212,15 +209,18 @@ Set custom metadata on a model.
 'Use for production'
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### aix.ai_models.manager.get_manager(storage_path=None)
 
 Get a pre-configured model manager.
-
-* **Return type:**
-  [`ModelManager`](#aix.ai_models.manager.ModelManager)
 
 ```pycon
 >>> manager = get_manager()
 >>> len(manager.connectors) > 0
 True
 ```
+
+* **Return type:**
+  [`ModelManager`](#aix.ai_models.manager.ModelManager)
