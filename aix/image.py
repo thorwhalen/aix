@@ -211,7 +211,7 @@ def generate_image(
 
     Args:
         prompt: Text description of the image to generate
-        model: Model to use (e.g., 'gpt-image-1.5', 'gpt-image-1-mini', 'stable-diffusion')
+        model: Model to use (e.g., 'openai/gpt-image-1.5', 'openai/gpt-image-1-mini', 'stable-diffusion')
         size: Image size (e.g., '1024x1024', '512x512', '1792x1024')
         quality: Image quality ('standard' or 'hd' for DALL-E 3)
         style: Image style ('vivid' or 'natural' for DALL-E 3)
