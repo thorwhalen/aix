@@ -20,7 +20,7 @@ Examples:
     With specific model:
     >>> image = generate_image(
     ...     "Abstract art with vibrant colors",
-    ...     model="dall-e-3"
+    ...     model="gpt-image-1.5"
     ... )  # doctest: +SKIP
 """
 
@@ -83,7 +83,7 @@ class GeneratedImage:
     Provides convenient access to image data in various formats.
 
     Examples:
-        >>> img = GeneratedImage(url="https://...", model="dall-e-3")  # doctest: +SKIP
+        >>> img = GeneratedImage(url="https://...", model="gpt-image-1.5")  # doctest: +SKIP
         >>> img.save("output.png")  # doctest: +SKIP
         >>> img.show()  # doctest: +SKIP
         >>> data = img.as_bytes()  # doctest: +SKIP
@@ -203,7 +203,7 @@ def generate_image(
     size: str = None,
     quality: str = None,
     style: str = None,
-    response_format: str = "url",
+    response_format: str = None,
     api_key: str = None,
     **kwargs,
 ) -> GeneratedImage:
@@ -211,11 +211,13 @@ def generate_image(
 
     Args:
         prompt: Text description of the image to generate
-        model: Model to use (e.g., 'dall-e-2', 'dall-e-3', 'stable-diffusion')
+        model: Model to use (e.g., 'gpt-image-1.5', 'gpt-image-1-mini', 'stable-diffusion')
         size: Image size (e.g., '1024x1024', '512x512', '1792x1024')
         quality: Image quality ('standard' or 'hd' for DALL-E 3)
         style: Image style ('vivid' or 'natural' for DALL-E 3)
-        response_format: Format of response ('url' or 'b64_json')
+        response_format: Format of response ('url' or 'b64_json'). Left out of the
+            request when None, since some providers and models (OpenAI's gpt-image
+            models, and the images endpoint as of 2026) reject the parameter.
         api_key: Explicit API key. If None, resolved from the environment / .env
             / AIX config store for the model's provider (see aix.credentials).
         **kwargs: Additional provider-specific parameters
@@ -234,9 +236,8 @@ def generate_image(
         >>> # High quality with DALL-E 3
         >>> image = generate_image(
         ...     "Abstract art with vibrant colors",
-        ...     model="dall-e-3",
-        ...     quality="hd",
-        ...     style="vivid"
+        ...     model="gpt-image-1.5",
+        ...     quality="high",
         ... )  # doctest: +SKIP
 
         >>> # Specific size
@@ -263,8 +264,9 @@ def generate_image(
         "prompt": prompt,
         "n": 1,
         "size": size,
-        "response_format": response_format,
     }
+    if response_format:
+        params["response_format"] = response_format
 
     if quality:
         params["quality"] = quality
@@ -303,7 +305,7 @@ def generate_images(
     size: str = None,
     quality: str = None,
     style: str = None,
-    response_format: str = "url",
+    response_format: str = None,
     api_key: str = None,
     **kwargs,
 ) -> list[GeneratedImage]:
@@ -316,7 +318,7 @@ def generate_images(
         size: Image size
         quality: Image quality
         style: Image style
-        response_format: Format of response
+        response_format: Format of response, sent only when given
         **kwargs: Additional provider-specific parameters
 
     Returns:
@@ -351,8 +353,9 @@ def generate_images(
         "prompt": prompt,
         "n": n,
         "size": size,
-        "response_format": response_format,
     }
+    if response_format:
+        params["response_format"] = response_format
 
     if quality:
         params["quality"] = quality
