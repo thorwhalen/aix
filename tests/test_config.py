@@ -24,7 +24,7 @@ def test_shipped_defaults():
     assert c.chat.model == ChatConfig().model
     assert c.chat.temperature == 1.0
     assert c.embeddings.model == "text-embedding-3-small"
-    assert c.image.model == "gpt-image-1.5"
+    assert c.image.model == "openai/gpt-image-1.5"
     assert c.audio.tts_model == "gpt-4o-mini-tts"
     assert c.audio.transcription_model == "whisper-1"
     assert c.aliases == DEFAULT_ALIASES
