@@ -157,17 +157,18 @@ class ImageConfig:
 
     OpenAI retired the DALL-E models from its images endpoint (``dall-e-3`` returns
     "does not exist" as of late 2026), so the defaults are the ``gpt-image`` family:
-    ``gpt-image-1.5`` for generation and edits. ``quality`` for that family is one of
+    ``openai/gpt-image-1.5`` for generation and edits (the provider prefix is explicit
+    because LiteLLM's model map does not yet know the name). ``quality`` for that family is one of
     ``low``, ``medium``, ``high`` or ``auto`` (DALL-E's ``standard``/``hd`` are
     rejected). Variations are still a DALL-E 2 feature with no gpt-image equivalent;
     ``variation_model`` is kept for callers whose provider still serves it.
     """
 
-    model: str = _opt("gpt-image-1.5", flat="image_model")
+    model: str = _opt("openai/gpt-image-1.5", flat="image_model")
     size: str = _opt("1024x1024", flat="image_size")
     quality: str = _opt("auto", flat="image_quality")
     num_images: int = _opt(1, flat="image_num_images", cast=int)
-    edit_model: str = _opt("gpt-image-1.5", flat="image_edit_model")
+    edit_model: str = _opt("openai/gpt-image-1.5", flat="image_edit_model")
     variation_model: str = _opt("dall-e-2", flat="image_variation_model")
 
 
