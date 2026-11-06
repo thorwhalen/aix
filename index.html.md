@@ -128,9 +128,9 @@ temperature = 1.0
 model = "text-embedding-3-small"
 
 [image]
-model = "gpt-image-1.5"
+model = "openai/gpt-image-1.5"
 size = "1024x1024"
-edit_model = "gpt-image-1.5"
+edit_model = "openai/gpt-image-1.5"
 
 [audio]
 tts_model = "gpt-4o-mini-tts"
@@ -512,7 +512,7 @@ image.save("landscape.png")
 
 # High quality with DALL-E 3
 image = generate_image(
-    "Abstract art with vibrant colors", model="gpt-image-1.5", quality="high"
+    "Abstract art with vibrant colors", model="openai/gpt-image-1.5", quality="high"
 )
 
 # Generate multiple variations

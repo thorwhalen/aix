@@ -173,7 +173,7 @@ Generate a single image from a text prompt.
 
 * **Parameters:**
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Text description of the image to generate
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘gpt-image-1.5’, ‘gpt-image-1-mini’, ‘stable-diffusion’)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘openai/gpt-image-1.5’, ‘openai/gpt-image-1-mini’, ‘stable-diffusion’)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image size (e.g., ‘1024x1024’, ‘512x512’, ‘1792x1024’)
   * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image quality (‘standard’ or ‘hd’ for DALL-E 3)
   * **style** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image style (‘vivid’ or ‘natural’ for DALL-E 3)

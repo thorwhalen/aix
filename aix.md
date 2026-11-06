@@ -1,4 +1,4 @@
-> built 2026-11-06 11:10 UTC from 6a239e9 (master) · aix 0.0.53. Details: build_info.json
+> built 2026-11-06 11:15 UTC from ecc5986 (master) · aix 0.0.54. Details: build_info.json
 
 # index.html.md
 
@@ -132,9 +132,9 @@ temperature = 1.0
 model = "text-embedding-3-small"
 
 [image]
-model = "gpt-image-1.5"
+model = "openai/gpt-image-1.5"
 size = "1024x1024"
-edit_model = "gpt-image-1.5"
+edit_model = "openai/gpt-image-1.5"
 
 [audio]
 tts_model = "gpt-4o-mini-tts"
@@ -516,7 +516,7 @@ image.save("landscape.png")
 
 # High quality with DALL-E 3
 image = generate_image(
-    "Abstract art with vibrant colors", model="gpt-image-1.5", quality="high"
+    "Abstract art with vibrant colors", model="openai/gpt-image-1.5", quality="high"
 )
 
 # Generate multiple variations
@@ -2751,7 +2751,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `embeddings` / `embed`.
 
-### *class* aix.config.ImageConfig(model='gpt-image-1.5', size='1024x1024', quality='auto', num_images=1, edit_model='gpt-image-1.5', variation_model='dall-e-2')
+### *class* aix.config.ImageConfig(model='openai/gpt-image-1.5', size='1024x1024', quality='auto', num_images=1, edit_model='openai/gpt-image-1.5', variation_model='dall-e-2')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2759,7 +2759,8 @@ Defaults for `generate_image` / `generate_images` and the edit/variation calls.
 
 OpenAI retired the DALL-E models from its images endpoint (`dall-e-3` returns
 “does not exist” as of late 2026), so the defaults are the `gpt-image` family:
-`gpt-image-1.5` for generation and edits. `quality` for that family is one of
+`openai/gpt-image-1.5` for generation and edits (the provider prefix is explicit
+because LiteLLM’s model map does not yet know the name). `quality` for that family is one of
 `low`, `medium`, `high` or `auto` (DALL-E’s `standard`/`hd` are
 rejected). Variations are still a DALL-E 2 feature with no gpt-image equivalent;
 `variation_model` is kept for callers whose provider still serves it.
@@ -5429,7 +5430,7 @@ Generate a single image from a text prompt.
 
 * **Parameters:**
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Text description of the image to generate
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘gpt-image-1.5’, ‘gpt-image-1-mini’, ‘stable-diffusion’)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘openai/gpt-image-1.5’, ‘openai/gpt-image-1-mini’, ‘stable-diffusion’)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image size (e.g., ‘1024x1024’, ‘512x512’, ‘1792x1024’)
   * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image quality (‘standard’ or ‘hd’ for DALL-E 3)
   * **style** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image style (‘vivid’ or ‘natural’ for DALL-E 3)
@@ -6311,7 +6312,7 @@ Generate a single image from a text prompt.
 
 * **Parameters:**
   * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Text description of the image to generate
-  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘gpt-image-1.5’, ‘gpt-image-1-mini’, ‘stable-diffusion’)
+  * **model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Model to use (e.g., ‘openai/gpt-image-1.5’, ‘openai/gpt-image-1-mini’, ‘stable-diffusion’)
   * **size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image size (e.g., ‘1024x1024’, ‘512x512’, ‘1792x1024’)
   * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image quality (‘standard’ or ‘hd’ for DALL-E 3)
   * **style** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Image style (‘vivid’ or ‘natural’ for DALL-E 3)
@@ -7989,18 +7990,18 @@ block is the OpenAI/LiteLLM multimodal shape understood across providers.
 
 # About this build
 
-This documentation was built on **2026-11-06 11:10 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/6a239e935305b2fad301c70bdd332fa491314bcf"><code>6a239e9</code></a> on branch <code>master</code>, for **aix 0.0.53** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-06 11:15 UTC** from commit <a href="https://github.com/thorwhalen/aix/commit/ecc59864a480cc1cc453a557e7602f6d14a71025"><code>ecc5986</code></a> on branch <code>master</code>, for **aix 0.0.54** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.0.53) is behind the latest release on PyPI (0.0.54): `pip install aix` gives newer code than these docs describe.
+- The documented version (0.0.54) is behind the latest release on PyPI (0.0.55): `pip install aix` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                       |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/aix/commit/6a239e935305b2fad301c70bdd332fa491314bcf"><code>6a239e935305b2fad301c70bdd332fa491314bcf</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/aix/commit/ecc59864a480cc1cc453a557e7602f6d14a71025"><code>ecc59864a480cc1cc453a557e7602f6d14a71025</code></a> |
 | Branch              | <code>master</code>                                                                                                                                   |
 | Tags at this commit | none                                                                                                                                                  |
 | Working tree        | clean                                                                                                                                                 |
@@ -8011,9 +8012,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/aix</code>                                                                |
-| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/42207895587">42207895587</a>       |
+| Run          | <a href="https://github.com/thorwhalen/aix/actions/runs/42208576292">42208576292</a>       |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>6a239e935305b2fad301c70bdd332fa491314bcf</code> (in the history of the built commit) |
+| Event commit | <code>ecc59864a480cc1cc453a557e7602f6d14a71025</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -8038,13 +8039,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/aix/0.0.54/">0.0.54</a>, newer than the documented version (0.0.53).
+Latest release: <a href="https://pypi.org/project/aix/0.0.55/">0.0.55</a>, newer than the documented version (0.0.54).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/aix && cd aix
-git checkout 6a239e935305b2fad301c70bdd332fa491314bcf
+git checkout ecc59864a480cc1cc453a557e7602f6d14a71025
 pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

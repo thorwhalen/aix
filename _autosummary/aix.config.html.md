@@ -119,7 +119,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Defaults for `embeddings` / `embed`.
 
-### *class* aix.config.ImageConfig(model='gpt-image-1.5', size='1024x1024', quality='auto', num_images=1, edit_model='gpt-image-1.5', variation_model='dall-e-2')
+### *class* aix.config.ImageConfig(model='openai/gpt-image-1.5', size='1024x1024', quality='auto', num_images=1, edit_model='openai/gpt-image-1.5', variation_model='dall-e-2')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -127,7 +127,8 @@ Defaults for `generate_image` / `generate_images` and the edit/variation calls.
 
 OpenAI retired the DALL-E models from its images endpoint (`dall-e-3` returns
 “does not exist” as of late 2026), so the defaults are the `gpt-image` family:
-`gpt-image-1.5` for generation and edits. `quality` for that family is one of
+`openai/gpt-image-1.5` for generation and edits (the provider prefix is explicit
+because LiteLLM’s model map does not yet know the name). `quality` for that family is one of
 `low`, `medium`, `high` or `auto` (DALL-E’s `standard`/`hd` are
 rejected). Variations are still a DALL-E 2 feature with no gpt-image equivalent;
 `variation_model` is kept for callers whose provider still serves it.
